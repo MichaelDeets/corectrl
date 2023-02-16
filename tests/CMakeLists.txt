@@ -7,7 +7,7 @@ list(APPEND TESTS_COMPILE_DEFINITIONS
   ELPP_DISABLE_LOGS
 )
 
-# inlude directories for all tests
+# include directories for all tests
 list(APPEND TESTS_INCLUDE_DIRECTORIES
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/catch>"
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/trompeloeil>"
