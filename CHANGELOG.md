@@ -15,6 +15,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Implement resizable graph and sensors regions. Both regions are configurable by dragging their split handles and the sizes persist between sessions (#309).
 
+### Removed
+- `BUILD_SPLIT_TESTS` configuration option.
+
 
 ## CoreCtrl 1.3.1 (2022-10-08)
 

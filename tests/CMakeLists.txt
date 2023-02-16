@@ -1,5 +1,3 @@
-option(BUILD_SPLIT_TESTS "Build one test executable per test file" OFF)
-
 # Compile definitions
 list(APPEND TESTS_COMPILE_DEFINITIONS
   # https://github.com/catchorg/Catch2/blob/master/docs/configuration.md
@@ -35,21 +33,3 @@ target_link_libraries(test_all PRIVATE Qt5::Core corectrl_lib)
 add_test(NAME "test_all"
          COMMAND test_all
          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-
-# generate one executable per test_* file
-if(BUILD_SPLIT_TESTS)
-  foreach(file ${test_files})
-    get_filename_component(file_name ${file} NAME_WE)
-    string(REGEX REPLACE "test_([^$]+)" "test_\\1" test_name ${file_name})
-
-    add_executable(${test_name} $<TARGET_OBJECTS:catch_main> ${file})
-    target_include_directories(${test_name} PRIVATE ${TESTS_INCLUDE_DIRECTORIES})
-    target_compile_features(${test_name} PRIVATE ${TARGET_COMMON_COMPILE_FEATURES})
-    target_compile_definitions(${test_name} PRIVATE ${TESTS_COMPILE_DEFINITIONS})
-    target_link_libraries(test_all PRIVATE Qt5::Core corectrl_lib)
-
-    add_test(NAME "${test_name}"
-             COMMAND ${test_name}
-             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-  endforeach()
-endif()
