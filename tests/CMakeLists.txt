@@ -18,7 +18,6 @@ list(APPEND TESTS_INCLUDE_DIRECTORIES
 # catch main
 add_library(catch_main OBJECT "src/main.cpp")
 target_include_directories(catch_main PRIVATE ${TESTS_INCLUDE_DIRECTORIES})
-target_compile_features(catch_main PRIVATE ${TARGET_COMMON_COMPILE_FEATURES})
 
 # test_* files
 file(GLOB test_files "src/test_*.cpp")
@@ -26,7 +25,6 @@ file(GLOB test_files "src/test_*.cpp")
 # generate test_all executable
 add_executable(test_all $<TARGET_OBJECTS:catch_main> ${test_files})
 target_include_directories(test_all PRIVATE ${TESTS_INCLUDE_DIRECTORIES})
-target_compile_features(test_all PRIVATE ${TARGET_COMMON_COMPILE_FEATURES})
 target_compile_definitions(test_all PRIVATE ${TESTS_COMPILE_DEFINITIONS})
 target_link_libraries(test_all PRIVATE Qt5::Core corectrl_lib)
 

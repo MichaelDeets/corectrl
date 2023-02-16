@@ -383,7 +383,6 @@ target_include_directories(corectrl_lib PRIVATE
   ${QUAZIP_INCLUDE_DIRS}
   ${Botan_INCLUDE_DIRS}
 )
-target_compile_features(corectrl_lib PRIVATE ${TARGET_COMMON_COMPILE_FEATURES})
 target_compile_definitions(corectrl_lib PRIVATE ${3RDPARTY_DEFINITIONS})
 target_link_libraries(corectrl_lib PRIVATE
   Qt5::Quick
@@ -407,7 +406,6 @@ target_include_directories(corectrl PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${Botan_INCLUDE_DIRS}
 )
-target_compile_features(corectrl PRIVATE ${TARGET_COMMON_COMPILE_FEATURES})
 target_compile_definitions(corectrl PRIVATE ${3RDPARTY_DEFINITIONS})
 target_link_libraries(corectrl PRIVATE
   corectrl_lib
