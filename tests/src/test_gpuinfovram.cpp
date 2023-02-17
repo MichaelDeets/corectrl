@@ -7,8 +7,8 @@
 #include "common/hwidtranslatorstub.h"
 #include "core/idatasource.h"
 #include "core/info/amd/gpuinfovram.h"
-#include "units/units.h"
 #include <memory>
+#include <units.h>
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 

@@ -4,10 +4,10 @@
 #pragma once
 
 #include "../igpuinfo.h"
-#include "units/units.h"
 #include <filesystem>
 #include <memory>
 #include <string>
+#include <units.h>
 #include <vector>
 
 template<typename...>

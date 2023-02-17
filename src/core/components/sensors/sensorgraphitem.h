@@ -6,10 +6,10 @@
 #include "core/exportable.h"
 #include "graphitem.h"
 #include "sensor.h"
-#include "units/units.h"
 #include <functional>
 #include <optional>
 #include <string_view>
+#include <units.h>
 #include <utility>
 
 template<typename Unit, typename T>

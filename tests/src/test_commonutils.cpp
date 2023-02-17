@@ -4,7 +4,7 @@
 #include "catch.hpp"
 
 #include "core/components/commonutils.h"
-#include "units/units.h"
+#include <units.h>
 
 namespace Tests {
 namespace Utils {

@@ -4,7 +4,7 @@
 #include "catch.hpp"
 
 #include "core/components/amdutils.h"
-#include "units/units.h"
+#include <units.h>
 
 namespace Tests {
 namespace Utils {

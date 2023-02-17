@@ -52,8 +52,11 @@ if(NOT pugixml_FOUND)
   list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/pugixml/pugixml.cpp)
 endif()
 
-list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty)
-list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc)
+find_package(units 2.3.1 QUIET)
+if(NOT units_FOUND)
+  message("Using bundled units library")
+  list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty/units)
+endif()
 list(APPEND 3RDPARTY_DEFINITIONS
   UNIT_LIB_DISABLE_IOSTREAM
   DISABLE_PREDEFINED_UNITS
@@ -68,6 +71,9 @@ list(APPEND 3RDPARTY_DEFINITIONS
   ENABLE_PREDEFINED_CONVERT_UNITS
   ENABLE_PREDEFINED_CONCENTRATION_UNITS
 )
+
+list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty)
+list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc)
 
 # Allow pci.ids path customization using -DWITH_PCI_IDS_PATH=<path-to-pci.ids-file> (#136)
 set(WITH_PCI_IDS_PATH "/usr/share/hwdata/pci.ids" CACHE FILEPATH "Path to pci.ids file")

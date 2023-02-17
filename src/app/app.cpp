@@ -11,7 +11,6 @@
 #include "helper/ihelpercontrol.h"
 #include "settings.h"
 #include "systray.h"
-#include "units/units.h"
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QIcon>
@@ -24,6 +23,7 @@
 #include <QtGlobal>
 #include <algorithm>
 #include <fmt/format.h>
+#include <units.h>
 #include <utility>
 
 #if defined(_DEBUG)

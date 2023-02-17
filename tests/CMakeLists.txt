@@ -7,6 +7,8 @@ list(APPEND TESTS_COMPILE_DEFINITIONS
   ELPP_DISABLE_LOGS
   ELPP_NO_LOG_TO_FILE
   ELPP_NO_DEFAULT_LOG_FILE
+
+  ${3RDPARTY_DEFINITIONS}
 )
 
 # include directories for all tests
@@ -28,7 +30,11 @@ file(GLOB test_files "src/test_*.cpp")
 add_executable(test_all $<TARGET_OBJECTS:catch_main> ${test_files} ${3RDPARTY_SRC})
 target_include_directories(test_all PRIVATE ${TESTS_INCLUDE_DIRECTORIES})
 target_compile_definitions(test_all PRIVATE ${TESTS_COMPILE_DEFINITIONS})
-target_link_libraries(test_all PRIVATE Qt5::Core corectrl_lib)
+target_link_libraries(test_all PRIVATE
+  corectrl_lib
+  Qt5::Core
+  $<$<BOOL:${units_FOUND}>:units::units>
+)
 
 add_test(NAME "test_all"
          COMMAND test_all

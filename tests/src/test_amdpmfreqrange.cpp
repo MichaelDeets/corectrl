@@ -7,7 +7,7 @@
 #include "common/commandqueuestub.h"
 #include "common/vectorstringdatasourcestub.h"
 #include "core/components/controls/amd/pm/advanced/overdrive/freqrange/pmfreqrange.h"
-#include "units/units.h"
+#include <units.h>
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
