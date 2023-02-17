@@ -5,6 +5,8 @@ list(APPEND TESTS_COMPILE_DEFINITIONS
 
   # https://github.com/zuhd-org/easyloggingpp/blob/master/README.md
   ELPP_DISABLE_LOGS
+  ELPP_NO_LOG_TO_FILE
+  ELPP_NO_DEFAULT_LOG_FILE
 )
 
 # include directories for all tests

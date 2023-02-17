@@ -32,6 +32,13 @@ if(NOT POLKIT_POLICY_INSTALL_DIR_RESULT EQUAL "0")
   message(FATAL_ERROR "Failed to retrieve Polkit `policydir` variable using pkg-config")
 endif()
 
+list(APPEND HELPER_COMPILE_DEFINITIONS
+  ELPP_THREAD_SAFE
+  ELPP_FORCE_USE_STD_THREAD
+  ELPP_NO_LOG_TO_FILE
+  ELPP_NO_DEFAULT_LOG_FILE
+)
+
 list(APPEND PROCESS_MONITOR_SRC
   pmon/processmonitor.cpp
   pmon/procpidsolver.cpp
@@ -59,7 +66,7 @@ target_include_directories(corectrl_helperkiller PRIVATE
   ${POLKIT_INCLUDE_DIRS}
   ${3RDPARTY_INCLUDE_DIRECTORIES}
 )
-target_compile_definitions(corectrl_helperkiller PRIVATE ${3RDPARTY_COMMON_DEFINITIONS})
+target_compile_definitions(corectrl_helperkiller PRIVATE ${HELPER_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_helperkiller PRIVATE
   Qt5::Core
   Qt5::DBus
@@ -89,7 +96,7 @@ target_include_directories(corectrl_helper PRIVATE
   ${3RDPARTY_INCLUDE_DIRECTORIES}
   ${PROJECT_SOURCE_DIR}/src
 )
-target_compile_definitions(corectrl_helper PRIVATE ${3RDPARTY_COMMON_DEFINITIONS})
+target_compile_definitions(corectrl_helper PRIVATE ${HELPER_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_helper PRIVATE
   Qt5::Core
   Qt5::DBus
