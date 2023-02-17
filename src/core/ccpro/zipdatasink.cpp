@@ -4,11 +4,11 @@
 #include "zipdatasink.h"
 
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include <QByteArray>
 #include <QIODevice>
 #include <QString>
 #include <exception>
+#include <fmt/format.h>
 #include <quazip.h>
 #include <quazipfile.h>
 #include <quazipnewinfo.h>

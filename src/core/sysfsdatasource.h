@@ -4,9 +4,9 @@
 #pragma once
 
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "idatasource.h"
 #include <filesystem>
+#include <fmt/format.h>
 #include <fstream>
 #include <functional>
 #include <string>

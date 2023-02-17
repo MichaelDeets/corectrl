@@ -5,11 +5,11 @@
 
 #include "common/fileutils.h"
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "iprofilefileparser.h"
 #include "iprofileiconcache.h"
 #include "iprofileparser.h"
 #include <exception>
+#include <fmt/format.h>
 #include <stdexcept>
 #include <utility>
 

@@ -4,8 +4,8 @@
 #pragma once
 
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include <exception>
+#include <fmt/format.h>
 #include <optional>
 #include <string>
 #include <tuple>

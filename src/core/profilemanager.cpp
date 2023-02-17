@@ -5,9 +5,9 @@
 
 #include "core/isysmodel.h"
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "iprofile.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <iterator>
 #include <regex>
 #include <utility>

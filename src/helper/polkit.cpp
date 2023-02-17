@@ -7,7 +7,7 @@
 #include <polkit/polkit.h>
 
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
+#include <fmt/format.h>
 
 namespace Polkit {
 

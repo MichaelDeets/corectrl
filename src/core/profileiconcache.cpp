@@ -4,8 +4,8 @@
 #include "profileiconcache.h"
 
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "ifilecache.h"
+#include <fmt/format.h>
 #include <utility>
 
 ProfileIconCache::ProfileIconCache(std::unique_ptr<IFileCache> &&cache) noexcept

@@ -4,7 +4,6 @@
 #include "cryptolayer.h"
 
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include <botan/base64.h>
 #include <botan/data_src.h>
 #include <botan/ed25519.h>
@@ -14,6 +13,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <exception>
+#include <fmt/format.h>
 
 void CryptoLayer::init()
 {

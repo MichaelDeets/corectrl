@@ -4,12 +4,12 @@
 #include "profilexmlparser.h"
 
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "iprofile.h"
 #include "isyscomponentprofilepart.h"
 #include "pugixml/pugixml.hpp"
 #include <algorithm>
 #include <cctype>
+#include <fmt/format.h>
 #include <utility>
 
 ProfileXMLParser::Factory::Factory(

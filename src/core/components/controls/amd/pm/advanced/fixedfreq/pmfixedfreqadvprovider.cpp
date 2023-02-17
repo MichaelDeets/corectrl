@@ -12,9 +12,9 @@
 #include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "pmfixedfreq.h"
 #include <filesystem>
+#include <fmt/format.h>
 #include <memory>
 #include <string>
 #include <tuple>

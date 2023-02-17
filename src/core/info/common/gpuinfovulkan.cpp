@@ -6,9 +6,9 @@
 #include "../infoproviderregistry.h"
 #include "core/idatasource.h"
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include <QProcess>
 #include <QStringList>
+#include <fmt/format.h>
 #include <utility>
 
 class GPUInfoVulkanDataSource : public IDataSource<std::string>

@@ -3,11 +3,11 @@
 
 #include "zipdatasource.h"
 
-#include "fmt/format.h"
 #include <QByteArray>
 #include <QIODevice>
 #include <QString>
 #include <algorithm>
+#include <fmt/format.h>
 #include <iterator>
 #include <quazip.h>
 #include <quazipfile.h>

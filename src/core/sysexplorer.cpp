@@ -6,8 +6,8 @@
 #include "common/fileutils.h"
 #include "common/stringutils.h"
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <utility>
 
 SysExplorer::SysExplorer(std::vector<Vendor> gpuVendors) noexcept

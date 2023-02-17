@@ -11,9 +11,9 @@
 #include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "pmoverdrive.h"
 #include <filesystem>
+#include <fmt/format.h>
 #include <iterator>
 #include <tuple>
 #include <utility>

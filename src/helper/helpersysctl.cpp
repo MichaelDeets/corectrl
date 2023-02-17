@@ -5,13 +5,13 @@
 
 #include "common/icryptolayer.h"
 #include "core/icommandqueue.h"
-#include "fmt/format.h"
 #include "helperids.h"
 #include <QByteArray>
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusPendingCall>
 #include <QString>
+#include <fmt/format.h>
 #include <stdexcept>
 #include <utility>
 

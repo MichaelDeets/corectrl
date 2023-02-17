@@ -5,8 +5,8 @@
 
 #include "common/fileutils.h"
 #include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include <exception>
+#include <fmt/format.h>
 #include <ostream>
 
 void SysfsWriter::write(std::filesystem::path const &sysfsEntry,

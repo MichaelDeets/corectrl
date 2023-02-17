@@ -364,6 +364,7 @@ target_link_libraries(corectrl_lib PRIVATE
   pthread
   ${QUAZIP_LIBRARIES}
   ${Botan_LIBRARIES}
+  $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
 )
 set_target_properties(corectrl_lib PROPERTIES OUTPUT_NAME corectrl)
 
@@ -383,6 +384,7 @@ target_link_libraries(corectrl PRIVATE
   Qt5::Core
   Qt5::Network
   Qt5::Widgets
+  $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
 )
 
 install(TARGETS corectrl corectrl_lib
