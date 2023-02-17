@@ -1,20 +1,10 @@
 configure_file(config.h.in config.h)
 
-list (APPEND 3RDPARTY_COMMON_SRC
-  ${PROJECT_SOURCE_DIR}/3rdparty/fmt/format.cc
-  ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc
-)
-
 list (APPEND 3RDPARTY_COMMON_DEFINITIONS
   ELPP_THREAD_SAFE
   ELPP_FORCE_USE_STD_THREAD
   ELPP_NO_LOG_TO_FILE
   ELPP_NO_DEFAULT_LOG_FILE
-)
-
-list (APPEND 3RDPARTY_SRC
-  ${3RDPARTY_COMMON_SRC}
-  ${PROJECT_SOURCE_DIR}/3rdparty/pugixml/pugixml.cpp
 )
 
 list (APPEND 3RDPARTY_DEFINITIONS

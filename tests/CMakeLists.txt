@@ -23,7 +23,7 @@ target_include_directories(catch_main PRIVATE ${TESTS_INCLUDE_DIRECTORIES})
 file(GLOB test_files "src/test_*.cpp")
 
 # generate test_all executable
-add_executable(test_all $<TARGET_OBJECTS:catch_main> ${test_files})
+add_executable(test_all $<TARGET_OBJECTS:catch_main> ${test_files} ${3RDPARTY_SRC})
 target_include_directories(test_all PRIVATE ${TESTS_INCLUDE_DIRECTORIES})
 target_compile_definitions(test_all PRIVATE ${TESTS_COMPILE_DEFINITIONS})
 target_link_libraries(test_all PRIVATE Qt5::Core corectrl_lib)

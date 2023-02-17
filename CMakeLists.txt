@@ -39,6 +39,11 @@ find_package(QuaZip REQUIRED)
 find_package(Botan REQUIRED)
 
 list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty)
+list(APPEND 3RDPARTY_SRC
+  ${PROJECT_SOURCE_DIR}/3rdparty/fmt/format.cc
+  ${PROJECT_SOURCE_DIR}/3rdparty/pugixml/pugixml.cpp
+  ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc
+)
 
 # Allow pci.ids path customization using -DWITH_PCI_IDS_PATH=<path-to-pci.ids-file> (#136)
 set(WITH_PCI_IDS_PATH "/usr/share/hwdata/pci.ids" CACHE FILEPATH "Path to pci.ids file")

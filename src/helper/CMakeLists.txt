@@ -51,7 +51,7 @@ set(CMAKE_AUTOMOC ON)
 add_executable(corectrl_helperkiller
   helperkiller.cpp
   polkit.cpp
-  ${3RDPARTY_COMMON_SRC}
+  ${3RDPARTY_SRC}
 )
 set(CMAKE_AUTOMOC OFF)
 
@@ -76,7 +76,7 @@ set(CMAKE_AUTOMOC ON)
 add_executable(corectrl_helper
   helper.cpp
   polkit.cpp
-  ${3RDPARTY_COMMON_SRC}
+  ${3RDPARTY_SRC}
   ${COMMON_SRC}
   ${PROCESS_MONITOR_SRC}
   ${SYSTEM_CONTROL_SRC}
