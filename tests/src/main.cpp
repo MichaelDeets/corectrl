@@ -2,8 +2,8 @@
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
 #include "trompeloeil.hpp"
+#include <catch2/catch.hpp>
 
 namespace trompeloeil {
 template<>

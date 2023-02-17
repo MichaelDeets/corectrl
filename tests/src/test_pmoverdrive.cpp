@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include "catch.hpp"
+#include <catch2/catch.hpp>
 
 #include "common/commandqueuestub.h"
 #include "common/controlmock.h"

@@ -1,3 +1,9 @@
+find_package(Catch2 2.6 QUIET)
+if(NOT Catch2_FOUND)
+  message("Using bundled Catch2 library")
+  list(APPEND TESTS_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/catch2>)
+endif()
+
 # Compile definitions
 list(APPEND TESTS_COMPILE_DEFINITIONS
   # https://github.com/catchorg/Catch2/blob/master/docs/configuration.md
@@ -14,7 +20,6 @@ list(APPEND TESTS_COMPILE_DEFINITIONS
 # include directories for all tests
 list(APPEND TESTS_INCLUDE_DIRECTORIES
   ${3RDPARTY_INCLUDE_DIRECTORIES}
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/catch>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/trompeloeil>
   ${PROJECT_SOURCE_DIR}/src
 )
@@ -34,6 +39,7 @@ target_link_libraries(test_all PRIVATE
   corectrl_lib
   Qt5::Core
   $<$<BOOL:${units_FOUND}>:units::units>
+  $<$<BOOL:${Catch2_FOUND}>:Catch2::Catch2>
 )
 
 add_test(NAME "test_all"
