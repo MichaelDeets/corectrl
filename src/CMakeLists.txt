@@ -1,12 +1,8 @@
 configure_file(config.h.in config.h)
 
-list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES
-  ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty
-)
-
 list (APPEND 3RDPARTY_COMMON_SRC
-  ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/fmt/format.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc
+  ${PROJECT_SOURCE_DIR}/3rdparty/fmt/format.cc
+  ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc
 )
 
 list (APPEND 3RDPARTY_COMMON_DEFINITIONS
@@ -18,7 +14,7 @@ list (APPEND 3RDPARTY_COMMON_DEFINITIONS
 
 list (APPEND 3RDPARTY_SRC
   ${3RDPARTY_COMMON_SRC}
-  ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/pugixml/pugixml.cpp
+  ${PROJECT_SOURCE_DIR}/3rdparty/pugixml/pugixml.cpp
 )
 
 list (APPEND 3RDPARTY_DEFINITIONS

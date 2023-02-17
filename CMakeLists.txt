@@ -38,6 +38,8 @@ find_package(Qt5LinguistTools REQUIRED)
 find_package(QuaZip REQUIRED)
 find_package(Botan REQUIRED)
 
+list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty)
+
 # Allow pci.ids path customization using -DWITH_PCI_IDS_PATH=<path-to-pci.ids-file> (#136)
 set(WITH_PCI_IDS_PATH "/usr/share/hwdata/pci.ids" CACHE FILEPATH "Path to pci.ids file")
 
