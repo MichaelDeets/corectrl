@@ -5,10 +5,10 @@
 
 #include "../infoproviderregistry.h"
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
 #include <QProcess>
 #include <QString>
 #include <QStringList>
+#include <easylogging++.h>
 #include <fmt/format.h>
 #include <utility>
 

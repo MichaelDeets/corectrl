@@ -8,7 +8,7 @@
 #include "common/fileutils.h"
 #include "core/components/cpuutils.h"
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
+#include <easylogging++.h>
 #include <fmt/format.h>
 
 class CPUInfoProcCpuInfoDataSource : public IDataSource<std::vector<std::string>>

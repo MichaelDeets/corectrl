@@ -7,7 +7,6 @@
 #include "core/isession.h"
 #include "core/isysmodelsyncer.h"
 #include "core/iuifactory.h"
-#include "easyloggingpp/easylogging++.h"
 #include "helper/ihelpercontrol.h"
 #include "settings.h"
 #include "systray.h"
@@ -22,6 +21,7 @@
 #include <Qt>
 #include <QtGlobal>
 #include <algorithm>
+#include <easylogging++.h>
 #include <fmt/format.h>
 #include <units.h>
 #include <utility>

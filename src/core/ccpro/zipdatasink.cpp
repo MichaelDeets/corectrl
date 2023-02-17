@@ -3,10 +3,10 @@
 
 #include "zipdatasink.h"
 
-#include "easyloggingpp/easylogging++.h"
 #include <QByteArray>
 #include <QIODevice>
 #include <QString>
+#include <easylogging++.h>
 #include <exception>
 #include <fmt/format.h>
 #include <quazip.h>

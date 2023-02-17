@@ -4,9 +4,9 @@
 #include "hwidtranslator.h"
 
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
 #include <algorithm>
 #include <cctype>
+#include <easylogging++.h>
 #include <exception>
 #include <fmt/format.h>
 #include <sstream>

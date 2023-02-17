@@ -4,7 +4,7 @@
 #pragma once
 
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
+#include <easylogging++.h>
 #include <fcntl.h>
 #include <filesystem>
 #include <fmt/format.h>

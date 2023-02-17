@@ -4,7 +4,7 @@
 #include "filecache.h"
 
 #include "common/fileutils.h"
-#include "easyloggingpp/easylogging++.h"
+#include <easylogging++.h>
 #include <exception>
 #include <fmt/format.h>
 #include <stdexcept>

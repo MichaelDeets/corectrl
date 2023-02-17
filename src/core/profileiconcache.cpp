@@ -3,8 +3,8 @@
 
 #include "profileiconcache.h"
 
-#include "easyloggingpp/easylogging++.h"
 #include "ifilecache.h"
+#include <easylogging++.h>
 #include <fmt/format.h>
 #include <utility>
 

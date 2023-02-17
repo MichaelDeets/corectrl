@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "easyloggingpp/easylogging++.h"
 #include "idatasource.h"
+#include <easylogging++.h>
 #include <filesystem>
 #include <fmt/format.h>
 #include <fstream>

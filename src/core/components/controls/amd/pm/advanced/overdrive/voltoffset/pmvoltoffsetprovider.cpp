@@ -9,8 +9,8 @@
 #include "core/info/amd/gpuinfopmoverdrive.h"
 #include "core/info/igpuinfo.h"
 #include "core/sysfsdatasource.h"
-#include "easyloggingpp/easylogging++.h"
 #include "pmvoltoffset.h"
+#include <easylogging++.h>
 #include <filesystem>
 #include <fmt/format.h>
 #include <memory>

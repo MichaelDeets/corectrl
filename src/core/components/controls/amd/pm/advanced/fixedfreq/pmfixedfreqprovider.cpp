@@ -11,8 +11,8 @@
 #include "core/info/igpuinfo.h"
 #include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
-#include "easyloggingpp/easylogging++.h"
 #include "pmfixedfreq.h"
+#include <easylogging++.h>
 #include <filesystem>
 #include <fmt/format.h>
 #include <memory>

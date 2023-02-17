@@ -72,8 +72,14 @@ list(APPEND 3RDPARTY_DEFINITIONS
   ENABLE_PREDEFINED_CONCENTRATION_UNITS
 )
 
-list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty)
-list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc)
+find_package(easyloggingpp 9.96.7 QUIET)
+if(NOT easyloggingpp_FOUND)
+  message("Using bundled easyloggingpp library")
+  list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp)
+  list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc)
+else()
+  list(APPEND 3RDPARTY_SRC ${easyloggingpp_INCLUDE_DIR}/easylogging++.cc)
+endif()
 
 # Allow pci.ids path customization using -DWITH_PCI_IDS_PATH=<path-to-pci.ids-file> (#136)
 set(WITH_PCI_IDS_PATH "/usr/share/hwdata/pci.ids" CACHE FILEPATH "Path to pci.ids file")

@@ -7,9 +7,9 @@
 #include "common/fileutils.h"
 #include "common/stringutils.h"
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
 #include <algorithm>
 #include <cctype>
+#include <easylogging++.h>
 #include <fmt/format.h>
 #include <utility>
 

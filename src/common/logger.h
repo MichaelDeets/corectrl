@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "easyloggingpp/easylogging++.h"
+#include <easylogging++.h>
 #include <filesystem>
 #include <string>
 

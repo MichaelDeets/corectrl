@@ -18,7 +18,7 @@
 #include "core/profilepartprovider.h"
 #include "core/profilepartxmlparserprovider.h"
 #include "core/sysfsdatasource.h"
-#include "easyloggingpp/easylogging++.h"
+#include <easylogging++.h>
 #include <filesystem>
 #include <fmt/format.h>
 #include <memory>

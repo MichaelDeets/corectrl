@@ -3,11 +3,11 @@
 
 #include "profilexmlparser.h"
 
-#include "easyloggingpp/easylogging++.h"
 #include "iprofile.h"
 #include "isyscomponentprofilepart.h"
 #include <algorithm>
 #include <cctype>
+#include <easylogging++.h>
 #include <fmt/format.h>
 #include <pugixml.hpp>
 #include <utility>

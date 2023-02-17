@@ -10,10 +10,10 @@
 #include "core/info/amd/gpuinfopmoverdrive.h"
 #include "core/info/igpuinfo.h"
 #include "core/sysfsdatasource.h"
-#include "easyloggingpp/easylogging++.h"
 #include "pmfreqvolt.h"
 #include <algorithm>
 #include <cctype>
+#include <easylogging++.h>
 #include <filesystem>
 #include <fmt/format.h>
 #include <memory>

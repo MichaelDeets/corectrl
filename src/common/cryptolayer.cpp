@@ -3,7 +3,6 @@
 
 #include "cryptolayer.h"
 
-#include "easyloggingpp/easylogging++.h"
 #include <botan/base64.h>
 #include <botan/data_src.h>
 #include <botan/ed25519.h>
@@ -12,6 +11,7 @@
 #include <botan/x509_key.h>
 #include <cstddef>
 #include <cstdint>
+#include <easylogging++.h>
 #include <exception>
 #include <fmt/format.h>
 

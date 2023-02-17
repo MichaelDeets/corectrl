@@ -4,12 +4,12 @@
 #include "msgdispatcher.h"
 
 #include "common/icryptolayer.h"
-#include "easyloggingpp/easylogging++.h"
 #include "iappregistry.h"
 #include <QByteArray>
 #include <QDBusConnection>
 #include <QDBusError>
 #include <QString>
+#include <easylogging++.h>
 #include <fmt/format.h>
 #include <stdexcept>
 #include <utility>

@@ -4,7 +4,6 @@
 #include "helpercontrol.h"
 
 #include "common/icryptolayer.h"
-#include "easyloggingpp/easylogging++.h"
 #include "helperids.h"
 #include <QDBusConnection>
 #include <QDBusError>
@@ -14,6 +13,7 @@
 #include <QString>
 #include <QVariant>
 #include <algorithm>
+#include <easylogging++.h>
 #include <fmt/format.h>
 #include <limits>
 #include <stdexcept>

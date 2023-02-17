@@ -5,8 +5,8 @@
 
 #include "common/fileutils.h"
 #include "common/stringutils.h"
-#include "easyloggingpp/easylogging++.h"
 #include <algorithm>
+#include <easylogging++.h>
 #include <fmt/format.h>
 #include <utility>
 

@@ -6,10 +6,10 @@
 #include "../ihwidtranslator.h"
 #include "../infoproviderregistry.h"
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
 #include "gpuinfoueventdatasource.h"
 #include <algorithm>
 #include <cctype>
+#include <easylogging++.h>
 #include <string_view>
 #include <utility>
 

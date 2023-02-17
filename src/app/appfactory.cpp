@@ -33,13 +33,13 @@
 #include "core/sysmodelfactory.h"
 #include "core/sysmodelsyncer.h"
 #include "core/uifactory.h"
-#include "easyloggingpp/easylogging++.h"
 #include "helper/helpercontrol.h"
 #include "helper/helpermonitor.h"
 #include "helper/helpersysctl.h"
 #include <QStandardPaths>
 #include <algorithm>
 #include <cctype>
+#include <easylogging++.h>
 #include <exception>
 #include <fmt/format.h>
 #include <system_error>
