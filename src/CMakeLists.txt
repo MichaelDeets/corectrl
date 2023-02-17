@@ -365,6 +365,7 @@ target_link_libraries(corectrl_lib PRIVATE
   ${QUAZIP_LIBRARIES}
   ${Botan_LIBRARIES}
   $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
+  $<$<BOOL:${pugixml_FOUND}>:pugixml::pugixml>
 )
 set_target_properties(corectrl_lib PROPERTIES OUTPUT_NAME corectrl)
 

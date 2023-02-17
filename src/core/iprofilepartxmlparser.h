@@ -6,8 +6,8 @@
 #include "exportable.h"
 #include "importable.h"
 #include "item.h"
-#include "pugixml/pugixml.hpp"
 #include <memory>
+#include <pugixml.hpp>
 
 class IProfilePartXMLParserProvider;
 

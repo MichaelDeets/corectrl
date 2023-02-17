@@ -45,11 +45,15 @@ if(NOT fmt_FOUND)
   list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/fmt/src/format.cc)
 endif()
 
+find_package(pugixml 1.11 QUIET)
+if(NOT pugixml_FOUND)
+  message("Using bundled pugixml library")
+  list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty/pugixml)
+  list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/pugixml/pugixml.cpp)
+endif()
+
 list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty)
-list(APPEND 3RDPARTY_SRC
-  ${PROJECT_SOURCE_DIR}/3rdparty/pugixml/pugixml.cpp
-  ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc
-)
+list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc)
 list(APPEND 3RDPARTY_DEFINITIONS
   UNIT_LIB_DISABLE_IOSTREAM
   DISABLE_PREDEFINED_UNITS

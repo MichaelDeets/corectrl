@@ -6,10 +6,10 @@
 #include "easyloggingpp/easylogging++.h"
 #include "iprofile.h"
 #include "isyscomponentprofilepart.h"
-#include "pugixml/pugixml.hpp"
 #include <algorithm>
 #include <cctype>
 #include <fmt/format.h>
+#include <pugixml.hpp>
 #include <utility>
 
 ProfileXMLParser::Factory::Factory(

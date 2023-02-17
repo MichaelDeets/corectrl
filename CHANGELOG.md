@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Require Qt 5.15.
 - Prefer external third-party libraries over the bundled ones. This should help package maintainers to follow their distribution policies (#13, #346). Version requirements for the external libraries:
   - fmt 5.0 or later.
+  - pugixml 1.11 or later.
 - Replace file headers license section with [SPDX unique license identifiers](https://spdx.dev/ids/).
 
 ### Added
