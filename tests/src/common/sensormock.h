@@ -4,7 +4,7 @@
 #pragma once
 
 #include "core/components/sensors/isensor.h"
-#include "trompeloeil.hpp"
+#include <catch2/trompeloeil.hpp>
 
 class SensorMock : public ISensor
 {

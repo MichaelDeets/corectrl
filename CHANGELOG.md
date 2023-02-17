@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
   - pugixml 1.11 or later.
   - units 2.3.1 or later.
   - catch2 2.6 to <3.0 when compiling tests.
+  - trompeloeil 40 or later when compiling tests.
 - Replace file headers license section with [SPDX unique license identifiers](https://spdx.dev/ids/).
 
 ### Added

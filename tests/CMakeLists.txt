@@ -4,6 +4,12 @@ if(NOT Catch2_FOUND)
   list(APPEND TESTS_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/catch2>)
 endif()
 
+find_package(trompeloeil 40 QUIET)
+if(NOT trompeloeil_FOUND)
+  message("Using bundled trompeloeil library")
+  list(APPEND TESTS_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/trompeloeil>)
+endif()
+
 # Compile definitions
 list(APPEND TESTS_COMPILE_DEFINITIONS
   # https://github.com/catchorg/Catch2/blob/master/docs/configuration.md
@@ -20,7 +26,6 @@ list(APPEND TESTS_COMPILE_DEFINITIONS
 # include directories for all tests
 list(APPEND TESTS_INCLUDE_DIRECTORIES
   ${3RDPARTY_INCLUDE_DIRECTORIES}
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/trompeloeil>
   ${PROJECT_SOURCE_DIR}/src
 )
 
@@ -40,6 +45,7 @@ target_link_libraries(test_all PRIVATE
   Qt5::Core
   $<$<BOOL:${units_FOUND}>:units::units>
   $<$<BOOL:${Catch2_FOUND}>:Catch2::Catch2>
+  $<$<BOOL:${trompeloeil_FOUND}>:trompeloeil::trompeloeil>
 )
 
 add_test(NAME "test_all"
