@@ -10,8 +10,8 @@
 #include "core/devfsdatasource.h"
 #include "core/idatasource.h"
 #include "core/info/infoproviderregistry.h"
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
+#include <easylogging++.h>
+#include <fmt/format.h>
 #include <tuple>
 #include <utility>
 

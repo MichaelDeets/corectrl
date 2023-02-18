@@ -5,8 +5,8 @@
 
 #include "core/profilepartxmlparser.h"
 #include "icpuprofilepart.h"
-#include "pugixml/pugixml.hpp"
 #include <memory>
+#include <pugixml.hpp>
 #include <string>
 #include <unordered_map>
 

@@ -4,12 +4,12 @@
 #pragma once
 
 #include "ihelpercontrol.h"
-#include "units/units.h"
 #include <QByteArray>
 #include <QObject>
 #include <QTimer>
 #include <memory>
 #include <optional>
+#include <units.h>
 
 class ICryptoLayer;
 class QDBusInterface;

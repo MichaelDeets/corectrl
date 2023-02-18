@@ -14,8 +14,6 @@
 #include "components/sensors/icpusensorprovider.h"
 #include "components/sensors/igpusensorprovider.h"
 #include "components/sensors/isensor.h"
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "info/cpuinfo.h"
 #include "info/gpuinfo.h"
 #include "info/ihwidtranslator.h"
@@ -24,6 +22,8 @@
 #include "isysexplorer.h"
 #include "sysmodel.h"
 #include <algorithm>
+#include <easylogging++.h>
+#include <fmt/format.h>
 #include <iterator>
 #include <memory>
 #include <optional>

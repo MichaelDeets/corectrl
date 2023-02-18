@@ -5,7 +5,7 @@
 
 #include "core/profilepartxmlparser.h"
 #include "graphitemprofilepart.h"
-#include "pugixml/pugixml.hpp"
+#include <pugixml.hpp>
 #include <string>
 #include <string_view>
 

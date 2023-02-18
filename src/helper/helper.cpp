@@ -5,7 +5,6 @@
 
 #include "common/cryptolayer.h"
 #include "common/logger.h"
-#include "fmt/format.h"
 #include "helperids.h"
 #include "pmon/appregistry.h"
 #include "pmon/msgdispatcher.h"
@@ -22,6 +21,7 @@
 #include <QString>
 #include <exception>
 #include <filesystem>
+#include <fmt/format.h>
 
 INITIALIZE_EASYLOGGINGPP
 

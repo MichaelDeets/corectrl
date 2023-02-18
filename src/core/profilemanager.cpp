@@ -4,10 +4,10 @@
 #include "profilemanager.h"
 
 #include "core/isysmodel.h"
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "iprofile.h"
 #include <algorithm>
+#include <easylogging++.h>
+#include <fmt/format.h>
 #include <iterator>
 #include <regex>
 #include <utility>

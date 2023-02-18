@@ -4,8 +4,8 @@
 #include "../sensorgraphitem.h"
 #include "core/qmlcomponentregistry.h"
 #include "fanspeedperc.h"
-#include "units/units.h"
 #include <QtGlobal>
+#include <units.h>
 
 namespace AMD {
 namespace FanSpeedPerc {

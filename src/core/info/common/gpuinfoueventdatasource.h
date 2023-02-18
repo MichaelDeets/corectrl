@@ -5,9 +5,9 @@
 
 #include "common/fileutils.h"
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
+#include <easylogging++.h>
 #include <filesystem>
+#include <fmt/format.h>
 #include <string>
 #include <utility>
 #include <vector>

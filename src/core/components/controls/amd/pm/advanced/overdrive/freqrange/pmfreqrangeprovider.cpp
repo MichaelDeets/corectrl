@@ -9,11 +9,11 @@
 #include "core/info/amd/gpuinfopmoverdrive.h"
 #include "core/info/igpuinfo.h"
 #include "core/sysfsdatasource.h"
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "pmfreqrange.h"
 #include <algorithm>
+#include <easylogging++.h>
 #include <filesystem>
+#include <fmt/format.h>
 #include <memory>
 #include <string>
 #include <vector>

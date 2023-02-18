@@ -7,12 +7,9 @@
 #include "core/isession.h"
 #include "core/isysmodelsyncer.h"
 #include "core/iuifactory.h"
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "helper/ihelpercontrol.h"
 #include "settings.h"
 #include "systray.h"
-#include "units/units.h"
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QIcon>
@@ -24,6 +21,9 @@
 #include <Qt>
 #include <QtGlobal>
 #include <algorithm>
+#include <easylogging++.h>
+#include <fmt/format.h>
+#include <units.h>
 #include <utility>
 
 #if defined(_DEBUG)

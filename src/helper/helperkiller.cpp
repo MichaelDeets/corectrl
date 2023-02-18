@@ -3,7 +3,6 @@
 
 #include "helperkiller.h"
 
-#include "easyloggingpp/easylogging++.h"
 #include "helperids.h"
 #include "polkit.h"
 #include <QCoreApplication>
@@ -13,6 +12,7 @@
 #include <QString>
 #include <QStringList>
 #include <QTimer>
+#include <easylogging++.h>
 #include <exception>
 #include <signal.h>
 #include <string>

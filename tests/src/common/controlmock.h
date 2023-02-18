@@ -4,7 +4,7 @@
 #pragma once
 
 #include "core/components/controls/icontrol.h"
-#include "trompeloeil.hpp"
+#include <catch2/trompeloeil.hpp>
 
 class ControlMock : public IControl
 {

@@ -1,40 +1,11 @@
 configure_file(config.h.in config.h)
 
-list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES
-  ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty
-)
-
-list (APPEND 3RDPARTY_COMMON_SRC
-  ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/fmt/format.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc
-)
-
-list (APPEND 3RDPARTY_COMMON_DEFINITIONS
+list(APPEND APP_COMPILE_DEFINITIONS
+  ${3RDPARTY_DEFINITIONS}
   ELPP_THREAD_SAFE
   ELPP_FORCE_USE_STD_THREAD
   ELPP_NO_LOG_TO_FILE
   ELPP_NO_DEFAULT_LOG_FILE
-)
-
-list (APPEND 3RDPARTY_SRC
-  ${3RDPARTY_COMMON_SRC}
-  ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/pugixml/pugixml.cpp
-)
-
-list (APPEND 3RDPARTY_DEFINITIONS
-  ${3RDPARTY_COMMON_DEFINITIONS}
-  UNIT_LIB_DISABLE_IOSTREAM
-  DISABLE_PREDEFINED_UNITS
-  ENABLE_PREDEFINED_DATA_UNITS
-  ENABLE_PREDEFINED_ANGLE_UNITS
-  ENABLE_PREDEFINED_TIME_UNITS
-  ENABLE_PREDEFINED_ANGULAR_VELOCITY_UNITS
-  ENABLE_PREDEFINED_FREQUENCY_UNITS
-  ENABLE_PREDEFINED_VOLTAGE_UNITS
-  ENABLE_PREDEFINED_POWER_UNITS
-  ENABLE_PREDEFINED_TEMPERATURE_UNITS
-  ENABLE_PREDEFINED_CONVERT_UNITS
-  ENABLE_PREDEFINED_CONCENTRATION_UNITS
 )
 
 list(APPEND COMMON_SRC
@@ -383,7 +354,7 @@ target_include_directories(corectrl_lib PRIVATE
   ${QUAZIP_INCLUDE_DIRS}
   ${Botan_INCLUDE_DIRS}
 )
-target_compile_definitions(corectrl_lib PRIVATE ${3RDPARTY_DEFINITIONS})
+target_compile_definitions(corectrl_lib PRIVATE ${APP_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_lib PRIVATE
   Qt5::Quick
   Qt5::Charts
@@ -393,6 +364,9 @@ target_link_libraries(corectrl_lib PRIVATE
   pthread
   ${QUAZIP_LIBRARIES}
   ${Botan_LIBRARIES}
+  $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
+  $<$<BOOL:${pugixml_FOUND}>:pugixml::pugixml>
+  $<$<BOOL:${units_FOUND}>:units::units>
 )
 set_target_properties(corectrl_lib PROPERTIES OUTPUT_NAME corectrl)
 
@@ -406,12 +380,13 @@ target_include_directories(corectrl PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${Botan_INCLUDE_DIRS}
 )
-target_compile_definitions(corectrl PRIVATE ${3RDPARTY_DEFINITIONS})
+target_compile_definitions(corectrl PRIVATE ${APP_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl PRIVATE
   corectrl_lib
   Qt5::Core
   Qt5::Network
   Qt5::Widgets
+  $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
 )
 
 install(TARGETS corectrl corectrl_lib

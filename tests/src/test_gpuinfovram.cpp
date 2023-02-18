@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2021 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include "catch.hpp"
-#include "trompeloeil.hpp"
+#include <catch2/catch.hpp>
+#include <catch2/trompeloeil.hpp>
 
 #include "common/hwidtranslatorstub.h"
 #include "core/idatasource.h"
 #include "core/info/amd/gpuinfovram.h"
-#include "units/units.h"
 #include <memory>
+#include <units.h>
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 

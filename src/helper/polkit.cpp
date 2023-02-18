@@ -6,8 +6,8 @@
 #define QT_NO_KEYWORDS
 #include <polkit/polkit.h>
 
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
+#include <easylogging++.h>
+#include <fmt/format.h>
 
 namespace Polkit {
 

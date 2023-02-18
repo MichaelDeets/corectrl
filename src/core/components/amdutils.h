@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "units/units.h"
 #include <cstdint>
 #include <libdrm/amdgpu_drm.h>
 #include <libdrm/radeon_drm.h>
@@ -12,6 +11,7 @@
 #include <string_view>
 #include <sys/ioctl.h>
 #include <tuple>
+#include <units.h>
 #include <utility>
 #include <vector>
 

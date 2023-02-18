@@ -4,10 +4,10 @@
 #pragma once
 
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
+#include <easylogging++.h>
 #include <fcntl.h>
 #include <filesystem>
+#include <fmt/format.h>
 #include <functional>
 #include <string>
 #include <unistd.h>

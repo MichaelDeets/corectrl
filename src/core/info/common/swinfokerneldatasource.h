@@ -5,7 +5,7 @@
 
 #include "common/fileutils.h"
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
+#include <easylogging++.h>
 #include <string>
 
 class SWInfoKernelDataSource : public IDataSource<std::string>

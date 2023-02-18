@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2022 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include "catch.hpp"
+#include <catch2/catch.hpp>
 
 #include "common/hwidtranslatorstub.h"
 #include "common/stringpathdatasourcestub.h"

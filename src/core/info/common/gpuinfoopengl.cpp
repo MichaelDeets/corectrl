@@ -5,11 +5,11 @@
 
 #include "../infoproviderregistry.h"
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include <QProcess>
 #include <QString>
 #include <QStringList>
+#include <easylogging++.h>
+#include <fmt/format.h>
 #include <utility>
 
 class GPUInfoOpenGLDataSource : public IDataSource<std::string, int const>

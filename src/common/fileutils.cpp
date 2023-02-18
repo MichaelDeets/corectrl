@@ -3,10 +3,10 @@
 
 #include "fileutils.h"
 
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include <QFile>
+#include <easylogging++.h>
 #include <exception>
+#include <fmt/format.h>
 #include <fstream>
 #include <utility>
 

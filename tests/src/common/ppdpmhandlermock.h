@@ -4,7 +4,7 @@
 #pragma once
 
 #include "core/components/controls/amd/pm/handlers/ippdpmhandler.h"
-#include "trompeloeil.hpp"
+#include <catch2/trompeloeil.hpp>
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 

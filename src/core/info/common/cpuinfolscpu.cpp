@@ -6,11 +6,11 @@
 #include "../infoproviderregistry.h"
 #include "common/stringutils.h"
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include <QProcess>
 #include <QStringList>
 #include <algorithm>
+#include <easylogging++.h>
+#include <fmt/format.h>
 
 class CPUInfoLsCpuDataSource : public IDataSource<std::vector<std::string>>
 {

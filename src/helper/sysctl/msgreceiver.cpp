@@ -4,13 +4,13 @@
 #include "msgreceiver.h"
 
 #include "common/icryptolayer.h"
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "isysfswriter.h"
 #include <QByteArray>
 #include <QDBusConnection>
 #include <QDBusError>
 #include <QString>
+#include <easylogging++.h>
+#include <fmt/format.h>
 #include <stdexcept>
 #include <utility>
 

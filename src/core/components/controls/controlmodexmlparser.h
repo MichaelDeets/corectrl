@@ -5,8 +5,8 @@
 
 #include "controlmodeprofilepart.h"
 #include "core/profilepartxmlparser.h"
-#include "pugixml/pugixml.hpp"
 #include <memory>
+#include <pugixml.hpp>
 #include <string>
 #include <string_view>
 #include <unordered_map>

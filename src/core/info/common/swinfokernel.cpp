@@ -6,8 +6,8 @@
 #include "../infoproviderregistry.h"
 #include "common/stringutils.h"
 #include "core/idatasource.h"
-#include "easyloggingpp/easylogging++.h"
 #include "swinfokerneldatasource.h"
+#include <easylogging++.h>
 #include <string_view>
 #include <utility>
 

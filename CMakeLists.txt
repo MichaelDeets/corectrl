@@ -38,6 +38,49 @@ find_package(Qt5LinguistTools REQUIRED)
 find_package(QuaZip REQUIRED)
 find_package(Botan REQUIRED)
 
+find_package(fmt 5 QUIET)
+if(NOT fmt_FOUND)
+  message("Using bundled fmt library")
+  list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty/fmt)
+  list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/fmt/src/format.cc)
+endif()
+
+find_package(pugixml 1.11 QUIET)
+if(NOT pugixml_FOUND)
+  message("Using bundled pugixml library")
+  list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty/pugixml)
+  list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/pugixml/pugixml.cpp)
+endif()
+
+find_package(units 2.3.1 QUIET)
+if(NOT units_FOUND)
+  message("Using bundled units library")
+  list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty/units)
+endif()
+list(APPEND 3RDPARTY_DEFINITIONS
+  UNIT_LIB_DISABLE_IOSTREAM
+  DISABLE_PREDEFINED_UNITS
+  ENABLE_PREDEFINED_DATA_UNITS
+  ENABLE_PREDEFINED_ANGLE_UNITS
+  ENABLE_PREDEFINED_TIME_UNITS
+  ENABLE_PREDEFINED_ANGULAR_VELOCITY_UNITS
+  ENABLE_PREDEFINED_FREQUENCY_UNITS
+  ENABLE_PREDEFINED_VOLTAGE_UNITS
+  ENABLE_PREDEFINED_POWER_UNITS
+  ENABLE_PREDEFINED_TEMPERATURE_UNITS
+  ENABLE_PREDEFINED_CONVERT_UNITS
+  ENABLE_PREDEFINED_CONCENTRATION_UNITS
+)
+
+find_package(easyloggingpp 9.96.7 QUIET)
+if(NOT easyloggingpp_FOUND)
+  message("Using bundled easyloggingpp library")
+  list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp)
+  list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc)
+else()
+  list(APPEND 3RDPARTY_SRC ${easyloggingpp_INCLUDE_DIR}/easylogging++.cc)
+endif()
+
 # Allow pci.ids path customization using -DWITH_PCI_IDS_PATH=<path-to-pci.ids-file> (#136)
 set(WITH_PCI_IDS_PATH "/usr/share/hwdata/pci.ids" CACHE FILEPATH "Path to pci.ids file")
 

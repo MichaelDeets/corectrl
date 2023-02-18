@@ -3,7 +3,7 @@
 
 #include "controlgroupxmlparser.h"
 
-#include "pugixml/pugixml.hpp"
+#include <pugixml.hpp>
 #include <utility>
 
 class ControlGroupXMLParser::Factory final

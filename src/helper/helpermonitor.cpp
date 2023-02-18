@@ -4,13 +4,13 @@
 #include "helpermonitor.h"
 
 #include "common/icryptolayer.h"
-#include "easyloggingpp/easylogging++.h"
-#include "fmt/format.h"
 #include "helperids.h"
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QString>
 #include <algorithm>
+#include <easylogging++.h>
+#include <fmt/format.h>
 #include <stdexcept>
 #include <utility>
 

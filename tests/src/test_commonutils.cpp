@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include "catch.hpp"
+#include <catch2/catch.hpp>
 
 #include "core/components/commonutils.h"
-#include "units/units.h"
+#include <units.h>
 
 namespace Tests {
 namespace Utils {
