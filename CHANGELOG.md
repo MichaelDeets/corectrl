@@ -5,11 +5,21 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - QML Connections deprecation warning (#123).
+
+### Changed
+- Require Qt 5.15.
+
+### Added
+- Implement resizable graph and sensors regions. Both regions are configurable by dragging their split handles and the sizes persist between sessions (#309).
+
+
+## CoreCtrl 1.3.2 (2023-02-19)
+
+### Fixed
 - Automatic profiles are not activated using the default wine packages in Pop!_OS (#161).
 - Crash due to kernel driver reporting bogus power limit range bound values (#337). The power limit control won't be created in the affected kernel versions.
 
 ### Changed
-- Require Qt 5.15.
 - Prefer external third-party libraries over the bundled ones. This should help package maintainers to follow their distribution policies (#13, #346). Version requirements for the external libraries:
   - fmt 5.0 or later.
   - pugixml 1.11 or later.
@@ -18,9 +28,6 @@ All notable changes to this project will be documented in this file.
   - catch2 2.6 to <3.0 when compiling tests.
   - trompeloeil 40 or later when compiling tests.
 - Replace file headers license section with [SPDX unique license identifiers](https://spdx.dev/ids/).
-
-### Added
-- Implement resizable graph and sensors regions. Both regions are configurable by dragging their split handles and the sizes persist between sessions (#309).
 
 ### Removed
 - `BUILD_SPLIT_TESTS` configuration option.
