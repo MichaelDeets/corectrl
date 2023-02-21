@@ -45,7 +45,7 @@
 #include <system_error>
 #include <utility>
 
-INITIALIZE_EASYLOGGINGPP
+SHARE_EASYLOGGINGPP(el::Helpers::storage());
 
 namespace fs = std::filesystem;
 

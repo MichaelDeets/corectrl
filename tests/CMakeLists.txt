@@ -12,15 +12,9 @@ endif()
 
 # Compile definitions
 list(APPEND TESTS_COMPILE_DEFINITIONS
-  # https://github.com/catchorg/Catch2/blob/master/docs/configuration.md
-  CATCH_CONFIG_FAST_COMPILE
-
-  # https://github.com/zuhd-org/easyloggingpp/blob/master/README.md
-  ELPP_DISABLE_LOGS
-  ELPP_NO_LOG_TO_FILE
-  ELPP_NO_DEFAULT_LOG_FILE
-
   ${3RDPARTY_DEFINITIONS}
+  CATCH_CONFIG_FAST_COMPILE
+  ELPP_DISABLE_LOGS
 )
 
 # include directories for all tests
