@@ -5,13 +5,18 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - QML Connections deprecation warning (#123).
-- Tests segfault on Release build (#351).
 
 ### Changed
 - Require Qt 5.15.
 
 ### Added
 - Implement resizable graph and sensors regions. Both regions are configurable by dragging their split handles and the sizes persist between sessions (#309).
+
+
+## CoreCtrl 1.3.3 (2023-02-26)
+
+### Fixed
+- Tests segfault on Release build (#351).
 
 
 ## CoreCtrl 1.3.2 (2023-02-19)
