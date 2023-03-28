@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - QML Connections deprecation warning (#123).
+- Crash due to kernel driver reporting bogus power limit range bound values (#337). The power limit control won't be created in the affected kernel versions.
 
 ### Changed
 - Require Qt 5.15.
