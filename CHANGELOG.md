@@ -5,13 +5,18 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - QML Connections deprecation warning (#123).
-- Crash due to kernel driver reporting bogus power limit range bound values (#337). The power limit control won't be created in the affected kernel versions.
 
 ### Changed
 - Require Qt 5.15.
 
 ### Added
 - Implement resizable graph and sensors regions. Both regions are configurable by dragging their split handles and the sizes persist between sessions (#309).
+
+
+## CoreCtrl 1.3.4 (2023-03-28)
+
+### Fixed
+- Crash due to kernel driver reporting bogus power limit range bound values (#337). The power limit control won't be created in the affected kernel versions.
 
 
 ## CoreCtrl 1.3.3 (2023-02-26)
