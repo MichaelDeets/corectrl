@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - QML Connections deprecation warning (#123).
+- No power limit control available (#356).
 
 ### Changed
 - Require Qt 5.15.
