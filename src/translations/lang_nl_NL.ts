@@ -723,6 +723,11 @@ Het bestand is mogelijk ongeldig of beschadigd.</translation>
         <source>CPU_FREQ_PACK</source>
         <translation>Frequentiereeks</translation>
     </message>
+    <message>
+        <location filename="../core/components/sensors/cpu/cpuusagegraphitem.cpp" line="19"/>
+        <source>CPU_USAGE</source>
+        <translation>Gebruik</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>

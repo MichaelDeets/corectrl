@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Implement resizable graph and sensors regions. Both regions are configurable by dragging their split handles and the sizes persist between sessions (#309).
+- CPU usage sensor. Based on the work done by Milan Čermák (!38).
 
 
 ## CoreCtrl 1.3.4 (2023-03-28)

@@ -723,6 +723,11 @@ Check the permissions of the destination file and directory.</translation>
         <source>AMD_GPU_MEMORY_TEMP</source>
         <translation>Temperature (memory)</translation>
     </message>
+    <message>
+        <location filename="../core/components/sensors/cpu/cpuusagegraphitem.cpp" line="19"/>
+        <source>CPU_USAGE</source>
+        <translation>Usage</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>

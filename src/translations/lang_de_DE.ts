@@ -722,6 +722,11 @@ Ungültige oder fehlerhafte Datei.</translation>
         <source>CPU_FREQ_PACK</source>
         <translation>CPU</translation>
     </message>
+    <message>
+        <location filename="../core/components/sensors/cpu/cpuusagegraphitem.cpp" line="19"/>
+        <source>CPU_USAGE</source>
+        <translation>Verwendung</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>

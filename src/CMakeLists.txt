@@ -196,6 +196,7 @@ list(APPEND SENSORS_SRC
   core/components/sensors/amd/fanspeedperc.cpp
   core/components/sensors/cpusensorprovider.cpp
   core/components/sensors/cpu/cpufreqpack.cpp
+  core/components/sensors/cpu/cpuusage.cpp
 )
 
 list(APPEND UI_COMPONENTS_SRC
@@ -221,6 +222,7 @@ list(APPEND UI_COMPONENTS_SRC
   core/components/sensors/amd/fanspeedrpmgraphitem.cpp
   core/components/sensors/amd/fanspeedpercgraphitem.cpp
   core/components/sensors/cpu/cpufreqpackgraphitem.cpp
+  core/components/sensors/cpu/cpuusagegraphitem.cpp
   core/components/controls/controlmodeqmlitem.cpp
   core/components/controls/controlgroupqmlitem.cpp
   core/components/controls/noopqmlitem.cpp

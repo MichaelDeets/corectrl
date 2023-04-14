@@ -723,6 +723,11 @@ Zkontrolujte přístupová práva k cílovému souboru a adresáři.</translatio
         <source>AMD_GPU_MEMORY_TEMP</source>
         <translation>Teplota (pamět)</translation>
     </message>
+    <message>
+        <location filename="../core/components/sensors/cpu/cpuusagegraphitem.cpp" line="19"/>
+        <source>CPU_USAGE</source>
+        <translation>Využití</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>

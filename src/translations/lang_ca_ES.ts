@@ -723,6 +723,11 @@ Comprova els permisos del fitxer i del directori de destí.</translation>
         <source>AMD_GPU_MEMORY_TEMP</source>
         <translation>Temperatura (memòria)</translation>
     </message>
+    <message>
+        <location filename="../core/components/sensors/cpu/cpuusagegraphitem.cpp" line="19"/>
+        <source>CPU_USAGE</source>
+        <translation>Ús</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>
