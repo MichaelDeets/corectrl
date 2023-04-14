@@ -727,6 +727,11 @@ Ungültige oder fehlerhafte Datei.</translation>
         <source>CPU_USAGE</source>
         <translation>Verwendung</translation>
     </message>
+    <message>
+        <location filename="../core/components/sensors/cpu/cpucoretempgraphitem.cpp" line="19"/>
+        <source>CPU_CORE_TEMP</source>
+        <translation>Temperatur</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>

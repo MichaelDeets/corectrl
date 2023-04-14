@@ -728,6 +728,11 @@ Zkontrolujte přístupová práva k cílovému souboru a adresáři.</translatio
         <source>CPU_USAGE</source>
         <translation>Využití</translation>
     </message>
+    <message>
+        <location filename="../core/components/sensors/cpu/cpucoretempgraphitem.cpp" line="19"/>
+        <source>CPU_CORE_TEMP</source>
+        <translation>Teplota</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>

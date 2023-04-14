@@ -728,6 +728,11 @@ Het bestand is mogelijk ongeldig of beschadigd.</translation>
         <source>CPU_USAGE</source>
         <translation>Gebruik</translation>
     </message>
+    <message>
+        <location filename="../core/components/sensors/cpu/cpucoretempgraphitem.cpp" line="19"/>
+        <source>CPU_CORE_TEMP</source>
+        <translation>Temperatuur</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>

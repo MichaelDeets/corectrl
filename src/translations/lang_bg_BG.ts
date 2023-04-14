@@ -728,6 +728,11 @@ Check the permissions of the destination file and directory.</source>
         <source>CPU_USAGE</source>
         <translation>Използване</translation>
     </message>
+    <message>
+        <location filename="../core/components/sensors/cpu/cpucoretempgraphitem.cpp" line="19"/>
+        <source>CPU_CORE_TEMP</source>
+        <translation>Температура</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>

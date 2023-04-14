@@ -728,6 +728,11 @@ Comprova els permisos del fitxer i del directori de destí.</translation>
         <source>CPU_USAGE</source>
         <translation>Ús</translation>
     </message>
+    <message>
+        <location filename="../core/components/sensors/cpu/cpucoretempgraphitem.cpp" line="19"/>
+        <source>CPU_CORE_TEMP</source>
+        <translation>Temperatura</translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>
