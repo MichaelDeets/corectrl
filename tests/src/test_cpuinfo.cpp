@@ -30,12 +30,12 @@ class ProviderStub : public ICPUInfo::IProvider
 
 TEST_CASE("CPUInfo tests", "[Info][CPUInfo]")
 {
-  int socketId{0};
-  ::CPUInfo ts(socketId, {{0, 0, "/proc/cpu0"}});
+  int physicalId{0};
+  ::CPUInfo ts(physicalId, {{0, 0, "/proc/cpu0"}});
 
-  SECTION("Has CPU socket id")
+  SECTION("Has CPU physical id")
   {
-    REQUIRE(ts.socketId() == socketId);
+    REQUIRE(ts.physicalId() == physicalId);
   }
 
   SECTION("Has execution units")

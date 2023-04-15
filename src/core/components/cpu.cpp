@@ -16,7 +16,7 @@ CPU::CPU(std::unique_ptr<ICPUInfo> &&info,
 , controls_(std::move(controls))
 , sensors_(std::move(sensors))
 {
-  key_ = "CPU" + std::to_string(info_->socketId());
+  key_ = "CPU" + std::to_string(info_->physicalId());
 }
 
 bool CPU::active() const
@@ -42,7 +42,7 @@ CPU::componentInfo() const
   auto name(info_->info(ICPUInfo::Keys::modelName));
   if (!name.empty())
     name.append("\n");
-  name.append("[CPU ").append(std::to_string(info_->socketId())).append("]");
+  name.append("[CPU ").append(std::to_string(info_->physicalId())).append("]");
   info.first = name;
 
   auto infoKeys = info_->keys();

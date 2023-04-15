@@ -54,11 +54,11 @@ class ICPUInfo
   {
    public:
     virtual std::vector<std::pair<std::string, std::string>>
-    provideInfo(int socketId,
+    provideInfo(int physicalId,
                 std::vector<ICPUInfo::ExecutionUnit> const &executionUnits) = 0;
 
     virtual std::vector<std::string> provideCapabilities(
-        int socketId,
+        int physicalId,
         std::vector<ICPUInfo::ExecutionUnit> const &executionUnits) = 0;
 
     virtual ~IProvider() = default;
@@ -73,8 +73,8 @@ class ICPUInfo
     virtual ~IProviderRegistry() = default;
   };
 
-  /// @return socket id
-  virtual int socketId() const = 0;
+  /// @return physical id
+  virtual int physicalId() const = 0;
 
   /// @return available execution units
   virtual std::vector<ICPUInfo::ExecutionUnit> const &executionUnits() const = 0;

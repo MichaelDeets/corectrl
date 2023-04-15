@@ -30,8 +30,8 @@ class CPUXMLParser final
   void takeActive(bool active) override;
   bool provideActive() const override;
 
-  void takeSocketId(int id) override;
-  int provideSocketId() const override;
+  void takePhysicalId(int id) override;
+  int providePhysicalId() const override;
 
   void appendTo(pugi::xml_node &parentNode) override;
 
@@ -48,8 +48,8 @@ class CPUXMLParser final
   bool active_;
   bool activeDefault_;
 
-  int socketId_;
-  int socketIdDefault_;
+  int physicalId_;
+  int physicalIdDefault_;
 
   static bool const registered_;
 };

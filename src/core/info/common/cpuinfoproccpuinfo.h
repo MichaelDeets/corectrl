@@ -20,11 +20,11 @@ class CPUInfoProcCpuInfo final : public ICPUInfo::IProvider
                          &&dataSource) noexcept;
 
   std::vector<std::pair<std::string, std::string>> provideInfo(
-      int socketId,
+      int physicalId,
       std::vector<ICPUInfo::ExecutionUnit> const &executionUnits) override;
 
   std::vector<std::string> provideCapabilities(
-      int socketId,
+      int physicalId,
       std::vector<ICPUInfo::ExecutionUnit> const &executionUnits) override;
 
  private:

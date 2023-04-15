@@ -44,7 +44,7 @@ class CPUProfilePart final
   std::vector<std::unique_ptr<IProfilePart>> parts_;
   std::string const id_;
 
-  int socketId_;
+  int physicalId_;
   std::string key_;
 
   static bool const registered_;

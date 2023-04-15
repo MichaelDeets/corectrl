@@ -54,7 +54,7 @@ CPUProfilePart::Factory::provideExporter(Item const &i)
 void CPUProfilePart::Factory::takeInfo(ICPUInfo const &info)
 {
   // NOTE info and system component key must be initialized here
-  outer_.socketId_ = info.socketId();
+  outer_.physicalId_ = info.physicalId();
   outer_.updateKey();
 }
 
@@ -144,7 +144,7 @@ bool CPUProfilePart::belongsTo(Item const &i) const
 {
   auto cpu = dynamic_cast<ICPU const *>(&i);
   if (cpu != nullptr)
-    return cpu->info().socketId() == socketId_;
+    return cpu->info().physicalId() == physicalId_;
 
   return false;
 }
@@ -177,12 +177,12 @@ bool CPUProfilePart::provideActive() const
 
 void CPUProfilePart::importProfilePart(IProfilePart::Importer &i)
 {
-  int oldSocketId = socketId_;
+  int oldPhysicalId = physicalId_;
 
   auto &partImporter = dynamic_cast<ICPUProfilePart::Importer &>(i);
-  socketId_ = partImporter.provideSocketId();
+  physicalId_ = partImporter.providePhysicalId();
 
-  if (oldSocketId != socketId_)
+  if (oldPhysicalId != physicalId_)
     updateKey();
 
   for (auto &part : parts_)
@@ -192,7 +192,7 @@ void CPUProfilePart::importProfilePart(IProfilePart::Importer &i)
 void CPUProfilePart::exportProfilePart(IProfilePart::Exporter &e) const
 {
   auto &partExporter = dynamic_cast<ICPUProfilePart::Exporter &>(e);
-  partExporter.takeSocketId(socketId_);
+  partExporter.takePhysicalId(physicalId_);
 
   for (auto &part : parts_)
     part->exportWith(e);
@@ -201,7 +201,7 @@ void CPUProfilePart::exportProfilePart(IProfilePart::Exporter &e) const
 std::unique_ptr<IProfilePart> CPUProfilePart::cloneProfilePart() const
 {
   auto clone = std::make_unique<CPUProfilePart>();
-  clone->socketId_ = socketId_;
+  clone->physicalId_ = physicalId_;
   clone->key_ = key_;
   clone->parts_.reserve(parts_.size());
   std::transform(parts_.cbegin(), parts_.cend(),
@@ -213,7 +213,7 @@ std::unique_ptr<IProfilePart> CPUProfilePart::cloneProfilePart() const
 
 void CPUProfilePart::updateKey()
 {
-  key_ = "CPU" + std::to_string(socketId_);
+  key_ = "CPU" + std::to_string(physicalId_);
 }
 
 bool const CPUProfilePart::registered_ = ProfilePartProvider::registerProvider(

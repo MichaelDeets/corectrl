@@ -12,10 +12,10 @@
 class CPUInfo final : public ICPUInfo
 {
  public:
-  CPUInfo(int socketId,
+  CPUInfo(int physicalId,
           std::vector<ICPUInfo::ExecutionUnit> &&executionUnits) noexcept;
 
-  int socketId() const override;
+  int physicalId() const override;
   std::vector<ICPUInfo::ExecutionUnit> const &executionUnits() const override;
   std::vector<std::string> keys() const override;
   std::string info(std::string_view key) const override;
@@ -26,7 +26,7 @@ class CPUInfo final : public ICPUInfo
   void addExecutionUnit(ICPUInfo::ExecutionUnit &&unit);
 
  private:
-  int const socketId_;
+  int const physicalId_;
   std::vector<ICPUInfo::ExecutionUnit> executionUnits_;
   std::unordered_map<std::string, std::string> info_;
   std::unordered_set<std::string> capabilities_;

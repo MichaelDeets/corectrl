@@ -15,7 +15,7 @@ class CPUQMLItem
 , public ICPUProfilePart::Exporter
 {
   Q_OBJECT
-  Q_PROPERTY(int socketId READ provideSocketId)
+  Q_PROPERTY(int physicalId READ providePhysicalId)
 
  public:
   void activate(bool active) override;
@@ -26,10 +26,10 @@ class CPUQMLItem
   provideExporter(Item const &i) override;
 
   bool provideActive() const override;
-  int provideSocketId() const override;
+  int providePhysicalId() const override;
 
   void takeActive(bool active) override;
-  void takeSocketId(int id) override;
+  void takePhysicalId(int id) override;
 
   std::unique_ptr<Exportable::Exporter>
   initializer(IQMLComponentFactory const &qmlComponentFactory,
@@ -42,7 +42,7 @@ class CPUQMLItem
   class Initializer;
 
   bool active_;
-  int socketId_;
+  int physicalId_;
 
   static bool register_();
   static bool const registered_;

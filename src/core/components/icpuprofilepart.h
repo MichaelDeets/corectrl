@@ -12,13 +12,13 @@ class ICPUProfilePart : public ISysComponentProfilePart
   class Importer : public IProfilePart::Importer
   {
    public:
-    virtual int provideSocketId() const = 0;
+    virtual int providePhysicalId() const = 0;
   };
 
   class Exporter : public IProfilePart::Exporter
   {
    public:
-    virtual void takeSocketId(int id) = 0;
+    virtual void takePhysicalId(int id) = 0;
   };
 
   virtual ~ICPUProfilePart() = default;

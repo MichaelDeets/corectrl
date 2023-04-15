@@ -14,7 +14,7 @@ CPU {
 
   onNewGraphItem: {
     sensorGraph.addItem(item)
-    Settings.addComponentData("CPU" + cpu.socketId, "CPU " + cpu.socketId,
+    Settings.addComponentData("CPU" + cpu.physicalId, "CPU " + cpu.physicalId,
                               item.name,
                               qsTranslate("SensorGraph", item.name))
   }
@@ -24,7 +24,7 @@ CPU {
 
     function onSettingChanged(key, value) {
       if (key === "Workarounds/ignoredSensors") {
-        var sensors = Settings.componentIgnoredSensors("CPU" + cpu.socketId,
+        var sensors = Settings.componentIgnoredSensors("CPU" + cpu.physicalId,
                                                         value)
         sensorGraph.ignoredSensors(sensors)
       }

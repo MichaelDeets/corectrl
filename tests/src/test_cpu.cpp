@@ -18,7 +18,7 @@ namespace CPU {
 class CPUInfoStub : public ICPUInfo
 {
  public:
-  int socketId() const override
+  int physicalId() const override
   {
     return 0;
   }
@@ -121,7 +121,7 @@ TEST_CASE("CPU tests", "[CPU]")
 
   SECTION("Has a unique key in a system component scope")
   {
-    // 'CPU' + socket combination seems to be good enough to differentiate
+    // 'CPU' + physical id combination seems to be good enough to differentiate
     // between system components.
     REQUIRE_THAT(ts.key(), Catch::Contains("CPU") && Catch::Contains("0"));
   }

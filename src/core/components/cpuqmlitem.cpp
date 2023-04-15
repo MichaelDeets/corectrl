@@ -58,10 +58,10 @@ void CPUQMLItem::Initializer::takeInfo(ICPUInfo const &info)
   auto name(info.info(ICPUInfo::Keys::modelName));
   if (!name.empty())
     name.append("\n");
-  name.append("[CPU ").append(std::to_string(info.socketId())).append("]");
+  name.append("[CPU ").append(std::to_string(info.physicalId())).append("]");
   outer_.setName(QString::fromStdString(name));
 
-  outer_.takeSocketId(info.socketId());
+  outer_.takePhysicalId(info.physicalId());
 }
 
 void CPUQMLItem::Initializer::takeSensor(ISensor const &sensor)
@@ -106,9 +106,9 @@ bool CPUQMLItem::provideActive() const
   return active_;
 }
 
-int CPUQMLItem::provideSocketId() const
+int CPUQMLItem::providePhysicalId() const
 {
-  return socketId_;
+  return physicalId_;
 }
 
 void CPUQMLItem::takeActive(bool active)
@@ -117,9 +117,9 @@ void CPUQMLItem::takeActive(bool active)
   setEnabled(active);
 }
 
-void CPUQMLItem::takeSocketId(int id)
+void CPUQMLItem::takePhysicalId(int id)
 {
-  socketId_ = id;
+  physicalId_ = id;
 }
 
 std::unique_ptr<Exportable::Exporter>

@@ -30,7 +30,7 @@ class CPUXMLParser::Factory final
   {
   }
 
-  void takeSocketId(int) override
+  void takePhysicalId(int) override
   {
   }
 
@@ -65,7 +65,7 @@ class CPUXMLParser::Initializer final : public ICPUProfilePart::Exporter
   provideExporter(Item const &i) override;
 
   void takeActive(bool active) override;
-  void takeSocketId(int id) override;
+  void takePhysicalId(int id) override;
 
  private:
   CPUXMLParser &outer_;
@@ -96,9 +96,9 @@ void CPUXMLParser::Initializer::takeActive(bool active)
   outer_.active_ = outer_.activeDefault_ = active;
 }
 
-void CPUXMLParser::Initializer::takeSocketId(int id)
+void CPUXMLParser::Initializer::takePhysicalId(int id)
 {
-  outer_.socketId_ = outer_.socketIdDefault_ = id;
+  outer_.physicalId_ = outer_.physicalIdDefault_ = id;
 }
 
 CPUXMLParser::CPUXMLParser() noexcept
@@ -148,21 +148,21 @@ bool CPUXMLParser::provideActive() const
   return active_;
 }
 
-void CPUXMLParser::takeSocketId(int id)
+void CPUXMLParser::takePhysicalId(int id)
 {
-  socketId_ = id;
+  physicalId_ = id;
 }
 
-int CPUXMLParser::provideSocketId() const
+int CPUXMLParser::providePhysicalId() const
 {
-  return socketId_;
+  return physicalId_;
 }
 
 void CPUXMLParser::appendTo(pugi::xml_node &parentNode)
 {
   auto cpuNode = parentNode.append_child(ID().c_str());
   cpuNode.append_attribute("active") = active_;
-  cpuNode.append_attribute("socketId") = socketId_;
+  cpuNode.append_attribute("physicalId") = physicalId_;
 
   for (auto &[key, component] : parsers_)
     component->appendTo(cpuNode);
@@ -171,7 +171,7 @@ void CPUXMLParser::appendTo(pugi::xml_node &parentNode)
 void CPUXMLParser::resetAttributes()
 {
   active_ = activeDefault_;
-  socketId_ = socketIdDefault_;
+  physicalId_ = physicalIdDefault_;
 }
 
 void CPUXMLParser::loadPartFrom(pugi::xml_node const &parentNode)
@@ -182,7 +182,12 @@ void CPUXMLParser::loadPartFrom(pugi::xml_node const &parentNode)
       return false;
 
     // match specific cpu
-    return node.attribute("socketId").as_int(-1) == socketId_;
+    auto physicalIdAttr = node.attribute("physicalId");
+    if (physicalIdAttr.empty())
+      // try the legacy "socketId" attribute node
+      physicalIdAttr = node.attribute("socketId");
+
+    return physicalIdAttr.as_int(-1) == physicalId_;
   });
 
   active_ = cpuNode.attribute("active").as_bool(activeDefault_);

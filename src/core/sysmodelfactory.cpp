@@ -166,14 +166,14 @@ std::vector<std::unique_ptr<ICPUInfo>> SysModelFactory::parseCPUInfo() const
   for (auto &line : cpuInfoLines) {
 
     if (line.empty()) { // push collected info
-      std::optional<int> socketId;
+      std::optional<int> physicalId;
       std::optional<int> coreId;
 
-      auto socketIdStr = Utils::CPU::parseProcCpuInfo(cpuInfoLines, *cpuId,
-                                                      "physical id");
-      if (socketIdStr.has_value() &&
-          Utils::String::toNumber<int>(value, *socketIdStr))
-        socketId = value;
+      auto physicalIdStr = Utils::CPU::parseProcCpuInfo(cpuInfoLines, *cpuId,
+                                                        "physical id");
+      if (physicalIdStr.has_value() &&
+          Utils::String::toNumber<int>(value, *physicalIdStr))
+        physicalId = value;
 
       auto coreIdStr = Utils::CPU::parseProcCpuInfo(cpuInfoLines, *cpuId,
                                                     "core id");
@@ -181,14 +181,14 @@ std::vector<std::unique_ptr<ICPUInfo>> SysModelFactory::parseCPUInfo() const
           Utils::String::toNumber<int>(value, *coreIdStr))
         coreId = value;
 
-      if (cpuId.has_value() && socketId.has_value() && coreId.has_value()) {
+      if (cpuId.has_value() && physicalId.has_value() && coreId.has_value()) {
         std::string cpuDir{"cpu"};
         cpuDir.append(std::to_string(*cpuId));
         auto executionUnitPath = basePath / cpuDir;
 
         auto infoIt = std::find_if(
             cpuInfo.cbegin(), cpuInfo.cend(),
-            [=](auto &info) { return info->socketId() == *socketId; });
+            [=](auto &info) { return info->physicalId() == *physicalId; });
         if (infoIt != cpuInfo.cend())
           static_cast<CPUInfo *>(infoIt->get())
               ->addExecutionUnit(
@@ -198,10 +198,10 @@ std::vector<std::unique_ptr<ICPUInfo>> SysModelFactory::parseCPUInfo() const
               ICPUInfo::ExecutionUnit(*cpuId, *coreId, executionUnitPath)};
 
           cpuInfo.emplace_back(
-              std::make_unique<CPUInfo>(*socketId, std::move(units)));
+              std::make_unique<CPUInfo>(*physicalId, std::move(units)));
         }
 
-        socketId = cpuId = coreId = std::nullopt;
+        physicalId = cpuId = coreId = std::nullopt;
       }
       else {
         LOG(ERROR) << "Cannot parse some data from /proc/cpuinfo";

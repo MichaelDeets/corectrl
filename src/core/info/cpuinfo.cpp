@@ -7,16 +7,16 @@
 #include <iterator>
 #include <utility>
 
-CPUInfo::CPUInfo(int socketId,
+CPUInfo::CPUInfo(int physicalId,
                  std::vector<ICPUInfo::ExecutionUnit> &&executionUnits) noexcept
-: socketId_(socketId)
+: physicalId_(physicalId)
 , executionUnits_(std::move(executionUnits))
 {
 }
 
-int CPUInfo::socketId() const
+int CPUInfo::physicalId() const
 {
-  return socketId_;
+  return physicalId_;
 }
 
 std::vector<ICPUInfo::ExecutionUnit> const &CPUInfo::executionUnits() const
@@ -59,11 +59,12 @@ void CPUInfo::initialize(
     std::vector<std::unique_ptr<ICPUInfo::IProvider>> const &providers)
 {
   for (auto &provider : providers) {
-    auto infos = provider->provideInfo(socketId_, executionUnits_);
+    auto infos = provider->provideInfo(physicalId_, executionUnits_);
     for (auto &info : infos)
       info_.emplace(std::move(info));
 
-    auto capabilities = provider->provideCapabilities(socketId_, executionUnits_);
+    auto capabilities = provider->provideCapabilities(physicalId_,
+                                                      executionUnits_);
     for (auto &capability : capabilities)
       capabilities_.emplace(std::move(capability));
   }
