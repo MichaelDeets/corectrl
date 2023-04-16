@@ -42,9 +42,11 @@ Then run:
 
 Install the [corectrl](https://software.opensuse.org/download.html?project=home%3ADead_Mozay&package=corectrl) package from OBS.
 
-#### Ubuntu
+#### Debian / Ubuntu
 
-Add the [`Ernst ppa-mesarc`](https://launchpad.net/~ernstp/+archive/ubuntu/mesarc) PPA.
+    sudo apt install corectrl
+
+If you are running an old version of Ubuntu that doesn't have corectrl in their repository, you can install it from the [`Ernst ppa-mesarc`](https://launchpad.net/~ernstp/+archive/ubuntu/mesarc) PPA.
 
 **WARNING:** This repository also hosts **release candidate and development versions** of many other packages. Notice that, by installing such packages, you can run into bugs that could break your system.
 
