@@ -7,9 +7,7 @@
 #include "common/stringdatasourcestub.h"
 #include "core/components/controls/amd/pm/auto/pmautolegacy.h"
 
-namespace Tests {
-namespace AMD {
-namespace PMAutoLegacy {
+namespace Tests::AMD::PMAutoLegacy {
 
 class PMAutoLegacyTestAdapter : public ::AMD::PMAutoLegacy
 {
@@ -84,6 +82,5 @@ TEST_CASE("AMD PMAutoLegacy tests", "[GPU][AMD][PM][PMAuto][Legacy]")
     }
   }
 }
-} // namespace PMAutoLegacy
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMAutoLegacy

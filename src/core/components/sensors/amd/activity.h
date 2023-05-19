@@ -5,10 +5,8 @@
 
 #include <string_view>
 
-namespace AMD {
-namespace Activity {
+namespace AMD::Activity {
 
 static constexpr std::string_view ItemID{"AMD_ACTIVITY"};
 
-} // namespace Activity
-} // namespace AMD
+} // namespace AMD::Activity

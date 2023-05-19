@@ -9,9 +9,7 @@
 #include "common/vectorstringdatasourcestub.h"
 #include "core/components/controls/amd/pm/advanced/overdrive/pmoverdrive.h"
 
-namespace Tests {
-namespace AMD {
-namespace PMOverdrive {
+namespace Tests::AMD::PMOverdrive {
 
 class PMOverdriveTestAdapter : public ::AMD::PMOverdrive
 {
@@ -254,6 +252,5 @@ TEST_CASE("AMD PMOverdrive tests", "[GPU][AMD][PM][PMOverdrive]")
     }
   }
 }
-} // namespace PMOverdrive
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMOverdrive

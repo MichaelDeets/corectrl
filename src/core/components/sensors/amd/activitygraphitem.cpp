@@ -7,8 +7,7 @@
 #include <QtGlobal>
 #include <units.h>
 
-namespace AMD {
-namespace Activity {
+namespace AMD::Activity {
 
 bool const registered_ = QMLComponentRegistry::addQuickItemProvider(
     AMD::Activity::ItemID, []() {
@@ -20,5 +19,4 @@ char const *const trStrings[] = {
     QT_TRANSLATE_NOOP("SensorGraph", "AMD_ACTIVITY"),
 };
 
-} // namespace Activity
-} // namespace AMD
+} // namespace AMD::Activity

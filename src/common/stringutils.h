@@ -12,8 +12,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace Utils {
-namespace String {
+namespace Utils::String {
 
 /// Cleans a prefix from a string.
 ///
@@ -84,5 +83,4 @@ std::vector<std::string> split(std::string const &src, char delim = ' ');
 /// @returns a string containing the kernel version following semver format
 std::optional<std::string> parseKernelProcVersion(std::string const &data);
 
-} // namespace String
-} // namespace Utils
+} // namespace Utils::String

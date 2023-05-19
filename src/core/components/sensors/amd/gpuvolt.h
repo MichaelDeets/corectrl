@@ -5,10 +5,8 @@
 
 #include <string_view>
 
-namespace AMD {
-namespace GPUVolt {
+namespace AMD::GPUVolt {
 
 static constexpr std::string_view ItemID{"AMD_GPU_VOLT"};
 
-} // namespace GPUVolt
-} // namespace AMD
+} // namespace AMD::GPUVolt

@@ -15,8 +15,7 @@
 #include <utility>
 #include <vector>
 
-namespace Utils {
-namespace AMD {
+namespace Utils::AMD {
 
 template<typename Data>
 bool readAMDGPUInfoSensor(int deviceFD, Data *value, std::uint32_t sensor)
@@ -178,5 +177,4 @@ bool hasOverdriveVoltCurveControl(std::vector<std::string> const &data);
 /// Returns true when overdrive voltage offset control is available.
 bool hasOverdriveVoltOffsetControl(std::vector<std::string> const &data);
 
-} // namespace AMD
-} // namespace Utils
+} // namespace Utils::AMD

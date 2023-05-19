@@ -7,8 +7,7 @@
 #include <QtGlobal>
 #include <units.h>
 
-namespace AMD {
-namespace GPUFreq {
+namespace AMD::GPUFreq {
 
 bool const registered_ = QMLComponentRegistry::addQuickItemProvider(
     AMD::GPUFreq::ItemID, []() {
@@ -20,5 +19,4 @@ char const *const trStrings[] = {
     QT_TRANSLATE_NOOP("SensorGraph", "AMD_GPU_FREQ"),
 };
 
-} // namespace GPUFreq
-} // namespace AMD
+} // namespace AMD::GPUFreq

@@ -12,8 +12,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace GPU {
+namespace Tests::GPU {
 
 class GPUInfoStub : public IGPUInfo
 {
@@ -227,5 +226,5 @@ TEST_CASE("GPU tests", "[GPU]")
     ts.exportWith(e);
   }
 }
-} // namespace GPU
-} // namespace Tests
+
+} // namespace Tests::GPU

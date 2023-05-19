@@ -8,7 +8,9 @@
 #include <cstddef>
 #include <iterator>
 
-void Utils::Common::normalizePoints(
+namespace Utils::Common {
+
+void normalizePoints(
     std::vector<std::pair<units::temperature::celsius_t,
                           units::concentration::percent_t>> &points,
     std::pair<units::temperature::celsius_t, units::temperature::celsius_t> range)
@@ -46,3 +48,5 @@ void Utils::Common::normalizePoints(
       temp = units::temperature::celsius_t(temps[i]);
   }
 }
+
+} // namespace Utils::Common

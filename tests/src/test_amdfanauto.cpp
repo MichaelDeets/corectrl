@@ -7,9 +7,7 @@
 #include "common/uintdatasourcestub.h"
 #include "core/components/controls/amd/fan/auto/fanauto.h"
 
-namespace Tests {
-namespace AMD {
-namespace FanAuto {
+namespace Tests::AMD::FanAuto {
 
 class FanAutoTestAdapter : public ::AMD::FanAuto
 {
@@ -81,6 +79,5 @@ TEST_CASE("AMD FanAuto tests", "[GPU][AMD][Fan][FanAuto]")
     REQUIRE(value == "2"); // 2 == automatic
   }
 }
-} // namespace FanAuto
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::FanAuto

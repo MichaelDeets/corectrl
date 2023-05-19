@@ -7,9 +7,7 @@
 #include "common/stringdatasourcestub.h"
 #include "core/components/controls/amd/pm/auto/pmautor600.h"
 
-namespace Tests {
-namespace AMD {
-namespace PMAutoR600 {
+namespace Tests::AMD::PMAutoR600 {
 
 class PMAutoR600TestAdapter : public ::AMD::PMAutoR600
 {
@@ -54,6 +52,5 @@ TEST_CASE("AMD PMAutoR600 tests", "[GPU][AMD][PM][PMAuto][R600]")
     REQUIRE(value == "auto");
   }
 }
-} // namespace PMAutoR600
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMAutoR600

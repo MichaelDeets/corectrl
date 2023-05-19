@@ -7,8 +7,7 @@
 #include <utility>
 #include <vector>
 
-namespace Utils {
-namespace Math {
+namespace Utils::Math {
 
 /// Performs a linear normalization to a collection of values from an old range
 /// to a new range.
@@ -67,5 +66,4 @@ X lerpY(Y value, std::pair<X, Y> const &p1, std::pair<X, Y> const &p2)
       p1.first);
 }
 
-} // namespace Math
-} // namespace Utils
+} // namespace Utils::Math

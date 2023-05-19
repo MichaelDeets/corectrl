@@ -11,8 +11,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace SysModel {
+namespace Tests::SysModel {
 
 class SWInfoStub : public ISWInfo
 {
@@ -171,5 +170,5 @@ TEST_CASE("SysModel tests", "[SysModel]")
     ts.exportWith(e);
   }
 }
-} // namespace SysModel
-} // namespace Tests
+
+} // namespace Tests::SysModel

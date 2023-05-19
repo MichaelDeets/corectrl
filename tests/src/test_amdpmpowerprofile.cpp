@@ -11,9 +11,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace AMD {
-namespace PMPowerProfile {
+namespace Tests::AMD::PMPowerProfile {
 
 class PMPowerProfileTestAdapter : public ::AMD::PMPowerProfile
 {
@@ -272,6 +270,4 @@ TEST_CASE("AMD PMPowerProfile tests",
   }
 }
 
-} // namespace PMPowerProfile
-} // namespace AMD
-} // namespace Tests
+} // namespace Tests::AMD::PMPowerProfile

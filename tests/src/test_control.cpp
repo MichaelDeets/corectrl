@@ -9,8 +9,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace Control {
+namespace Tests::Control {
 
 class ControlMock : public ::Control
 {
@@ -146,5 +145,5 @@ TEST_CASE("Control tests", "[GPU][Control]")
     ts.sync(ctlCmds);
   }
 }
-} // namespace Control
-} // namespace Tests
+
+} // namespace Tests::Control

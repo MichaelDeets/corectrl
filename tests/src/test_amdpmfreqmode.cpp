@@ -5,9 +5,7 @@
 
 #include "core/components/controls/amd/pm/advanced/freqmode/pmfreqmode.h"
 
-namespace Tests {
-namespace AMD {
-namespace PMFreqMode {
+namespace Tests::AMD::PMFreqMode {
 
 TEST_CASE("AMD PMFreqMode tests", "[GPU][AMD][PM][PMAdvanced][PMFreqMode]")
 {
@@ -25,6 +23,5 @@ TEST_CASE("AMD PMFreqMode tests", "[GPU][AMD][PM][PMAdvanced][PMFreqMode]")
     REQUIRE(ts.active());
   }
 }
-} // namespace PMFreqMode
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMFreqMode

@@ -12,9 +12,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace AMD {
-namespace PMFreqVolt {
+namespace Tests::AMD::PMFreqVolt {
 
 class PMFreqVoltTestAdapter : public ::AMD::PMFreqVolt
 {
@@ -421,6 +419,4 @@ TEST_CASE("AMD PMFreqVolt tests",
   }
 }
 
-} // namespace PMFreqVolt
-} // namespace AMD
-} // namespace Tests
+} // namespace Tests::AMD::PMFreqVolt

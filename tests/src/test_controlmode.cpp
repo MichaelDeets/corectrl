@@ -10,8 +10,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace ControlMode {
+namespace Tests::ControlMode {
 
 class ControlModeTestAdapter : public ::ControlMode
 {
@@ -275,5 +274,5 @@ TEST_CASE("ControlMode tests", "[GPU][ControlMode]")
     ts.syncControl(ctlCmds);
   }
 }
-} // namespace ControlMode
-} // namespace Tests
+
+} // namespace Tests::ControlMode

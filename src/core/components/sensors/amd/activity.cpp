@@ -24,8 +24,7 @@
 #include <utility>
 #include <vector>
 
-namespace AMD {
-namespace Activity {
+namespace AMD::Activity {
 
 class Provider final : public IGPUSensorProvider::IProvider
 {
@@ -85,5 +84,4 @@ static bool register_()
 
 static bool const registered_ = register_();
 
-} // namespace Activity
-} // namespace AMD
+} // namespace AMD::Activity

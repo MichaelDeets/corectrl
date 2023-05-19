@@ -6,8 +6,7 @@
 #include "common/stringdatasourcestub.h"
 #include "core/info/common/swinfomesa.h"
 
-namespace Tests {
-namespace SWInfoMesa {
+namespace Tests::SWInfoMesa {
 
 TEST_CASE("SWInfoMesa tests", "[Info][SWInfo][SWInfoMesa]")
 {
@@ -29,5 +28,5 @@ Extended renderer info (GLX_MESA_query_renderer):\n\
     REQUIRE_THAT(output, Catch::VectorContains(mesaVersion));
   }
 }
-} // namespace SWInfoMesa
-} // namespace Tests
+
+} // namespace Tests::SWInfoMesa

@@ -6,8 +6,7 @@
 #include "core/idatasource.h"
 #include "core/info/hwidtranslator.h"
 
-namespace Tests {
-namespace HWIDTranslator {
+namespace Tests::HWIDTranslator {
 
 class HWIDDataSourceStub : public IDataSource<std::vector<char>>
 {
@@ -65,5 +64,5 @@ TEST_CASE("HWIDTranslator tests", "[Info][HWIDTranslator]")
     }
   }
 }
-} // namespace HWIDTranslator
-} // namespace Tests
+
+} // namespace Tests::HWIDTranslator

@@ -5,10 +5,8 @@
 
 #include <string_view>
 
-namespace AMD {
-namespace JunctionTemp {
+namespace AMD::JunctionTemp {
 
 static constexpr std::string_view ItemID{"AMD_GPU_JUNCTION_TEMP"};
 
-} // namespace JunctionTemp
-} // namespace AMD
+} // namespace AMD::JunctionTemp

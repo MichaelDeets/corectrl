@@ -5,9 +5,7 @@
 
 #include "core/components/controls/amd/pm/advanced/overclock/pmoverclock.h"
 
-namespace Tests {
-namespace AMD {
-namespace PMOverclock {
+namespace Tests::AMD::PMOverclock {
 
 TEST_CASE("AMD PMOverclock tests", "[GPU][AMD][PM][PMAdvanced][PMOverclock]")
 {
@@ -25,6 +23,5 @@ TEST_CASE("AMD PMOverclock tests", "[GPU][AMD][PM][PMAdvanced][PMOverclock]")
     REQUIRE(ts.active());
   }
 }
-} // namespace PMOverclock
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMOverclock

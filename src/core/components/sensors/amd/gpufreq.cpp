@@ -28,8 +28,7 @@
 #include <utility>
 #include <vector>
 
-namespace AMD {
-namespace GPUFreq {
+namespace AMD::GPUFreq {
 
 class Provider final : public IGPUSensorProvider::IProvider
 {
@@ -123,5 +122,4 @@ static bool register_()
 
 static bool const registered_ = register_();
 
-} // namespace GPUFreq
-} // namespace AMD
+} // namespace AMD::GPUFreq

@@ -29,8 +29,7 @@
 #include <utility>
 #include <vector>
 
-namespace AMD {
-namespace JunctionTemp {
+namespace AMD::JunctionTemp {
 
 class Provider final : public IGPUSensorProvider::IProvider
 {
@@ -119,5 +118,4 @@ static bool register_()
 
 static bool const registered_ = register_();
 
-} // namespace JunctionTemp
-} // namespace AMD
+} // namespace AMD::JunctionTemp

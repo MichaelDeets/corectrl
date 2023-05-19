@@ -7,8 +7,7 @@
 #include <QtGlobal>
 #include <units.h>
 
-namespace AMD {
-namespace FanSpeedPerc {
+namespace AMD::FanSpeedPerc {
 
 bool const registered_ = QMLComponentRegistry::addQuickItemProvider(
     AMD::FanSpeedPerc::ItemID, []() {
@@ -20,5 +19,4 @@ char const *const trStrings[] = {
     QT_TRANSLATE_NOOP("SensorGraph", "AMD_FAN_SPEED_PERC"),
 };
 
-} // namespace FanSpeedPerc
-} // namespace AMD
+} // namespace AMD::FanSpeedPerc

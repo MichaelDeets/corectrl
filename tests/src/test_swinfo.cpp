@@ -5,8 +5,7 @@
 
 #include "core/info/swinfo.h"
 
-namespace Tests {
-namespace SWInfo {
+namespace Tests::SWInfo {
 
 class ProviderStub : public ISWInfo::IProvider
 {
@@ -38,5 +37,5 @@ TEST_CASE("SWInfo tests", "[Info][SWInfo]")
     REQUIRE(ts.info("info_key") == "info");
   }
 }
-} // namespace SWInfo
-} // namespace Tests
+
+} // namespace Tests::SWInfo

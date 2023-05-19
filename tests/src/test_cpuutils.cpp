@@ -5,9 +5,7 @@
 
 #include "core/components/cpuutils.h"
 
-namespace Tests {
-namespace Utils {
-namespace CPU {
+namespace Tests::Utils::CPU {
 
 TEST_CASE("CPU utils tests", "[Utils][CPU]")
 {
@@ -101,6 +99,4 @@ TEST_CASE("CPU utils tests", "[Utils][CPU]")
   }
 }
 
-} // namespace CPU
-} // namespace Utils
-} // namespace Tests
+} // namespace Tests::Utils::CPU

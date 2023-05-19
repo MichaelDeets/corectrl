@@ -7,8 +7,7 @@
 #include <QtGlobal>
 #include <units.h>
 
-namespace AMD {
-namespace JunctionTemp {
+namespace AMD::JunctionTemp {
 
 bool const registered_ = QMLComponentRegistry::addQuickItemProvider(
     AMD::JunctionTemp::ItemID, []() {
@@ -20,5 +19,4 @@ char const *const trStrings[] = {
     QT_TRANSLATE_NOOP("SensorGraph", "AMD_GPU_JUNCTION_TEMP"),
 };
 
-} // namespace JunctionTemp
-} // namespace AMD
+} // namespace AMD::JunctionTemp

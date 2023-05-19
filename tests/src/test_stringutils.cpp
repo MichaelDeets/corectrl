@@ -8,9 +8,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace Utils {
-namespace String {
+namespace Tests::Utils::String {
 
 TEST_CASE("StringUtils tests", "[Utils][String]")
 {
@@ -147,6 +145,5 @@ TEST_CASE("StringUtils tests", "[Utils][String]")
     }
   }
 }
-} // namespace String
-} // namespace Utils
-} // namespace Tests
+
+} // namespace Tests::Utils::String

@@ -7,8 +7,7 @@
 #include <QtGlobal>
 #include <units.h>
 
-namespace AMD {
-namespace GPUVolt {
+namespace AMD::GPUVolt {
 
 bool const registered_ = QMLComponentRegistry::addQuickItemProvider(
     AMD::GPUVolt::ItemID, []() {
@@ -20,5 +19,4 @@ char const *const trStrings[] = {
     QT_TRANSLATE_NOOP("SensorGraph", "AMD_GPU_VOLT"),
 };
 
-} // namespace GPUVolt
-} // namespace AMD
+} // namespace AMD::GPUVolt

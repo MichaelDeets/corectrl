@@ -29,8 +29,7 @@
 #include <utility>
 #include <vector>
 
-namespace AMD {
-namespace FanSpeedPerc {
+namespace AMD::FanSpeedPerc {
 
 // NOTE FanSpeedPerc is a last resort fan speed sensor.
 //
@@ -116,5 +115,4 @@ static bool register_()
 
 static bool const registered_ = register_();
 
-} // namespace FanSpeedPerc
-} // namespace AMD
+} // namespace AMD::FanSpeedPerc

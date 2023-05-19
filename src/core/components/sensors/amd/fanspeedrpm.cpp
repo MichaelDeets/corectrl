@@ -26,8 +26,7 @@
 #include <utility>
 #include <vector>
 
-namespace AMD {
-namespace FanSpeedRPM {
+namespace AMD::FanSpeedRPM {
 
 // NOTE FanSpeedRPM is the preferred fan speed sensor.
 //
@@ -162,5 +161,4 @@ static bool register_()
 
 static bool const registered_ = register_();
 
-} // namespace FanSpeedRPM
-} // namespace AMD
+} // namespace AMD::FanSpeedRPM

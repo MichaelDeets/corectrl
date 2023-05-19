@@ -5,9 +5,7 @@
 
 #include "core/components/controls/amd/pm/pmperfmode.h"
 
-namespace Tests {
-namespace AMD {
-namespace PMPerfMode {
+namespace Tests::AMD::PMPerfMode {
 
 TEST_CASE("AMD PMPerfMode tests", "[GPU][AMD][PM][PMPerfMode]")
 {
@@ -25,6 +23,5 @@ TEST_CASE("AMD PMPerfMode tests", "[GPU][AMD][PM][PMPerfMode]")
     REQUIRE(ts.active());
   }
 }
-} // namespace PMPerfMode
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMPerfMode

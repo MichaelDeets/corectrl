@@ -5,9 +5,7 @@
 
 #include "core/components/controls/amd/pm/powerstate/pmpowerstatemode.h"
 
-namespace Tests {
-namespace AMD {
-namespace PMPowerStateMode {
+namespace Tests::AMD::PMPowerStateMode {
 
 TEST_CASE("AMD PMPowerStateMode tests", "[GPU][AMD][PM][PMPowerStateMode]")
 {
@@ -25,6 +23,5 @@ TEST_CASE("AMD PMPowerStateMode tests", "[GPU][AMD][PM][PMPowerStateMode]")
     REQUIRE(ts.active());
   }
 }
-} // namespace PMPowerStateMode
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMPowerStateMode

@@ -5,9 +5,7 @@
 
 #include "core/components/controls/amd/fan/fanmode.h"
 
-namespace Tests {
-namespace AMD {
-namespace FanMode {
+namespace Tests::AMD::FanMode {
 
 TEST_CASE("AMD FanMode tests", "[GPU][AMD][Fan][FanMode]")
 {
@@ -25,6 +23,5 @@ TEST_CASE("AMD FanMode tests", "[GPU][AMD][Fan][FanMode]")
     REQUIRE(ts.active());
   }
 }
-} // namespace FanMode
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::FanMode

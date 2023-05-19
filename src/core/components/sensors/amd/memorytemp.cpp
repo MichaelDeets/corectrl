@@ -29,8 +29,7 @@
 #include <utility>
 #include <vector>
 
-namespace AMD {
-namespace MemoryTemp {
+namespace AMD::MemoryTemp {
 
 class Provider final : public IGPUSensorProvider::IProvider
 {
@@ -119,5 +118,4 @@ static bool register_()
 
 static bool const registered_ = register_();
 
-} // namespace MemoryTemp
-} // namespace AMD
+} // namespace AMD::MemoryTemp

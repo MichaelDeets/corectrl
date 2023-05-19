@@ -5,9 +5,7 @@
 
 #include "core/components/controls/amd/pm/advanced/pmadvanced.h"
 
-namespace Tests {
-namespace AMD {
-namespace PMAdvanced {
+namespace Tests::AMD::PMAdvanced {
 
 TEST_CASE("AMD PMAdvanced tests", "[GPU][AMD][PM][PMAdvanced]")
 {
@@ -25,6 +23,5 @@ TEST_CASE("AMD PMAdvanced tests", "[GPU][AMD][PM][PMAdvanced]")
     REQUIRE_FALSE(ts.active());
   }
 }
-} // namespace PMAdvanced
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMAdvanced

@@ -10,9 +10,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace AMD {
-namespace FanFixed {
+namespace Tests::AMD::FanFixed {
 
 class FanFixedTestAdapter : public ::AMD::FanFixed
 {
@@ -312,6 +310,5 @@ TEST_CASE("AMD FanFixed tests", "[GPU][AMD][Fan][FanFixed]")
     REQUIRE(cmdValue == "0");
   }
 }
-} // namespace FanFixed
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::FanFixed

@@ -7,9 +7,7 @@
 #include "common/stringdatasourcestub.h"
 #include "core/components/controls/amd/pm/fixed/pmfixedlegacy.h"
 
-namespace Tests {
-namespace AMD {
-namespace PMFixedLegacy {
+namespace Tests::AMD::PMFixedLegacy {
 
 class PMFixedLegacyTestAdapter : public ::AMD::PMFixedLegacy
 {
@@ -126,6 +124,5 @@ TEST_CASE("AMD PMFixedLegacy tests", "[GPU][AMD][PM][PMFixed][Legacy]")
     REQUIRE(cmd1Value == "low");
   }
 }
-} // namespace PMFixedLegacy
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMFixedLegacy

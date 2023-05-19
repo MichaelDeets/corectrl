@@ -6,8 +6,7 @@
 #include "common/commandqueuestub.h"
 #include "core/components/controls/noop.h"
 
-namespace Tests {
-namespace Noop {
+namespace Tests::Noop {
 
 class NoopTestAdapter : public ::Noop
 {
@@ -68,5 +67,5 @@ TEST_CASE("Noop control tests", "[Noop]")
     REQUIRE(ctlCmds.commands().empty());
   }
 }
-} // namespace Noop
-} // namespace Tests
+
+} // namespace Tests::Noop

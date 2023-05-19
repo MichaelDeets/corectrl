@@ -11,9 +11,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace AMD {
-namespace PMFixedFreq {
+namespace Tests::AMD::PMFixedFreq {
 
 class PMFixedFreqTestAdapter : public ::AMD::PMFixedFreq
 {
@@ -204,6 +202,4 @@ TEST_CASE("AMD PMFixedFreq tests", "[GPU][AMD][PM][PMAdvanced][PMFixedFreq]")
   }
 }
 
-} // namespace PMFixedFreq
-} // namespace AMD
-} // namespace Tests
+} // namespace Tests::AMD::PMFixedFreq

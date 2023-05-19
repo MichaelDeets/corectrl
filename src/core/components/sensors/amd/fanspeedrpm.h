@@ -5,10 +5,8 @@
 
 #include <string_view>
 
-namespace AMD {
-namespace FanSpeedRPM {
+namespace AMD::FanSpeedRPM {
 
 static constexpr std::string_view ItemID{"AMD_FAN_SPEED_RPM"};
 
-} // namespace FanSpeedRPM
-} // namespace AMD
+} // namespace AMD::FanSpeedRPM

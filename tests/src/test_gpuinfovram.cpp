@@ -12,8 +12,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace GPUInfoVRam {
+namespace Tests::GPUInfoVRam {
 
 class KernelSWInfoDataSourceStub : public IDataSource<std::string>
 {
@@ -243,5 +242,5 @@ TEST_CASE("GPUInfoVRam tests", "[Info][GPUInfo][GPUInfoVRam]")
     REQUIRE(output.empty());
   }
 }
-} // namespace GPUInfoVRam
-} // namespace Tests
+
+} // namespace Tests::GPUInfoVRam

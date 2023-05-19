@@ -5,10 +5,8 @@
 
 #include <string_view>
 
-namespace AMD {
-namespace MemFreq {
+namespace AMD::MemFreq {
 
 static constexpr std::string_view ItemID{"AMD_MEM_FREQ"};
 
-} // namespace MemFreq
-} // namespace AMD
+} // namespace AMD::MemFreq

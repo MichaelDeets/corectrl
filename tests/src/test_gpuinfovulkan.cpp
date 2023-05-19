@@ -7,8 +7,7 @@
 #include "common/stringdatasourcestub.h"
 #include "core/info/common/gpuinfovulkan.h"
 
-namespace Tests {
-namespace GPUInfoVulkan {
+namespace Tests::GPUInfoVulkan {
 
 TEST_CASE("GPUInfoVulkan tests", "[Info][GPUInfo][GPUInfoVulkan]")
 {
@@ -57,5 +56,5 @@ VkPhysicalDeviceProperties:\n\
     REQUIRE_THAT(output, Catch::VectorContains(apiVersion));
   }
 }
-} // namespace GPUInfoVulkan
-} // namespace Tests
+
+} // namespace Tests::GPUInfoVulkan

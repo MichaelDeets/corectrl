@@ -9,9 +9,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace AMD {
-namespace PMAuto {
+namespace Tests::AMD::PMAuto {
 
 class PMAutoTestAdapter : public ::AMD::PMAuto
 {
@@ -48,6 +46,5 @@ TEST_CASE("AMD PMAuto tests", "[GPU][AMD][PM][PMAuto]")
     REQUIRE(cmds.commands().empty());
   }
 }
-} // namespace PMAuto
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMAuto

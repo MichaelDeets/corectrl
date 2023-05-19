@@ -5,8 +5,7 @@
 
 #include "core/components/controls/cpu/cpufreqmode.h"
 
-namespace Tests {
-namespace CPUFreqMode {
+namespace Tests::CPUFreqMode {
 
 TEST_CASE("AMD CPUFreqMode tests", "[CPU][CPUFreqMode]")
 {
@@ -24,5 +23,5 @@ TEST_CASE("AMD CPUFreqMode tests", "[CPU][CPUFreqMode]")
     REQUIRE(ts.active());
   }
 }
-} // namespace CPUFreqMode
-} // namespace Tests
+
+} // namespace Tests::CPUFreqMode

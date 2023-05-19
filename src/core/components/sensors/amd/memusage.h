@@ -5,10 +5,8 @@
 
 #include <string_view>
 
-namespace AMD {
-namespace MemUsage {
+namespace AMD::MemUsage {
 
 static constexpr std::string_view ItemID{"AMD_MEM_USAGE"};
 
-} // namespace MemUsage
-} // namespace AMD
+} // namespace AMD::MemUsage

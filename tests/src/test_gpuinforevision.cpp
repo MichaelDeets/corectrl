@@ -7,8 +7,7 @@
 #include "common/stringpathdatasourcestub.h"
 #include "core/info/common/gpuinforevision.h"
 
-namespace Tests {
-namespace GPUInfoRevision {
+namespace Tests::GPUInfoRevision {
 
 TEST_CASE("GPUInfoRevision tests", "[Info][GPUInfo][GPUInfoRevision]")
 {
@@ -30,5 +29,5 @@ TEST_CASE("GPUInfoRevision tests", "[Info][GPUInfo][GPUInfoRevision]")
     REQUIRE_THAT(output, Catch::VectorContains(revision));
   }
 }
-} // namespace GPUInfoRevision
-} // namespace Tests
+
+} // namespace Tests::GPUInfoRevision

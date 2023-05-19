@@ -5,8 +5,7 @@
 
 #include "core/info/cpuinfo.h"
 
-namespace Tests {
-namespace CPUInfo {
+namespace Tests::CPUInfo {
 
 class ProviderStub : public ICPUInfo::IProvider
 {
@@ -65,5 +64,5 @@ TEST_CASE("CPUInfo tests", "[Info][CPUInfo]")
     REQUIRE(ts.hasCapability("capability"));
   }
 }
-} // namespace CPUInfo
-} // namespace Tests
+
+} // namespace Tests::CPUInfo

@@ -5,10 +5,8 @@
 
 #include <string_view>
 
-namespace AMD {
-namespace GPUFreq {
+namespace AMD::GPUFreq {
 
 static constexpr std::string_view ItemID{"AMD_GPU_FREQ"};
 
-} // namespace GPUFreq
-} // namespace AMD
+} // namespace AMD::GPUFreq

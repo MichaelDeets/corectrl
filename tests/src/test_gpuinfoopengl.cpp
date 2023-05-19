@@ -7,8 +7,7 @@
 #include "core/idatasource.h"
 #include "core/info/common/gpuinfoopengl.h"
 
-namespace Tests {
-namespace GPUInfoOpenGL {
+namespace Tests::GPUInfoOpenGL {
 
 class GPUInfoOpenGLDataSourceStub : public IDataSource<std::string, int const>
 {
@@ -70,5 +69,5 @@ Extended renderer info (GLX_MESA_query_renderer):\n\
     REQUIRE_THAT(output, Catch::VectorContains(compatVersion));
   }
 }
-} // namespace GPUInfoOpenGL
-} // namespace Tests
+
+} // namespace Tests::GPUInfoOpenGL

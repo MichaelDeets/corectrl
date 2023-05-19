@@ -5,10 +5,8 @@
 
 #include <string_view>
 
-namespace AMD {
-namespace Power {
+namespace AMD::Power {
 
 static constexpr std::string_view ItemID{"AMD_POWER"};
 
-} // namespace Power
-} // namespace AMD
+} // namespace AMD::Power

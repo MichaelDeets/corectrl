@@ -6,9 +6,7 @@
 #include "common/mathutils.h"
 #include <units.h>
 
-namespace Tests {
-namespace Utils {
-namespace Math {
+namespace Tests::Utils::Math {
 
 TEST_CASE("MathUtils tests", "[Utils][Math]")
 {
@@ -39,6 +37,5 @@ TEST_CASE("MathUtils tests", "[Utils][Math]")
     REQUIRE(::Utils::Math::lerpY(5, p1, p2) == 5);
   }
 }
-} // namespace Math
-} // namespace Utils
-} // namespace Tests
+
+} // namespace Tests::Utils::Math

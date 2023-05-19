@@ -7,8 +7,7 @@
 #include <QtGlobal>
 #include <units.h>
 
-namespace AMD {
-namespace MemUsage {
+namespace AMD::MemUsage {
 
 bool const registered_ = QMLComponentRegistry::addQuickItemProvider(
     AMD::MemUsage::ItemID, []() {
@@ -20,5 +19,4 @@ char const *const trStrings[] = {
     QT_TRANSLATE_NOOP("SensorGraph", "AMD_MEM_USAGE"),
 };
 
-} // namespace MemUsage
-} // namespace AMD
+} // namespace AMD::MemUsage

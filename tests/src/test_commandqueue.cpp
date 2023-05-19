@@ -6,8 +6,7 @@
 #include "core/commandqueue.h"
 #include <QString>
 
-namespace Tests {
-namespace CommandQueue {
+namespace Tests::CommandQueue {
 
 class CommandQueueTestAdapter : public ::CommandQueue
 {
@@ -153,5 +152,5 @@ TEST_CASE("CommandQueue tests", "[CommandQueue]")
     }
   }
 }
-} // namespace CommandQueue
-} // namespace Tests
+
+} // namespace Tests::CommandQueue

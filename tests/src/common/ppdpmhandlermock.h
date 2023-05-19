@@ -8,8 +8,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace AMD {
+namespace Tests::AMD {
 
 class PpDpmHandlerMock : public ::AMD::IPpDpmHandler
 {
@@ -38,5 +37,4 @@ class PpDpmHandlerMock : public ::AMD::IPpDpmHandler
   std::vector<std::pair<unsigned int, units::frequency::megahertz_t>> const states_;
 };
 
-} // namespace AMD
-} // namespace Tests
+} // namespace Tests::AMD

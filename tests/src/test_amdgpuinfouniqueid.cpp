@@ -7,9 +7,7 @@
 #include "common/stringpathdatasourcestub.h"
 #include "core/info/amd/gpuinfouniqueid.h"
 
-namespace Tests {
-namespace AMD {
-namespace GPUInfoUniqueID {
+namespace Tests::AMD::GPUInfoUniqueID {
 
 TEST_CASE("GPUInfoUniqueID tests", "[AMD][Info][GPUInfo][GPUInfoUniqueID]")
 {
@@ -29,6 +27,5 @@ TEST_CASE("GPUInfoUniqueID tests", "[AMD][Info][GPUInfo][GPUInfoUniqueID]")
     REQUIRE_THAT(output, Catch::VectorContains(type));
   }
 }
-} // namespace GPUInfoUniqueID
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::GPUInfoUniqueID

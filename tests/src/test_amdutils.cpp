@@ -6,9 +6,7 @@
 #include "core/components/amdutils.h"
 #include <units.h>
 
-namespace Tests {
-namespace Utils {
-namespace AMD {
+namespace Tests::Utils::AMD {
 
 TEST_CASE("AMD utils tests", "[Utils][AMD]")
 {
@@ -863,6 +861,5 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
     }
   }
 }
-} // namespace AMD
-} // namespace Utils
-} // namespace Tests
+
+} // namespace Tests::Utils::AMD

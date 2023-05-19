@@ -5,10 +5,8 @@
 
 #include <string_view>
 
-namespace AMD {
-namespace GPUTemp {
+namespace AMD::GPUTemp {
 
 static constexpr std::string_view ItemID{"AMD_GPU_TEMP"};
 
-} // namespace GPUTemp
-} // namespace AMD
+} // namespace AMD::GPUTemp

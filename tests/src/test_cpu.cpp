@@ -12,8 +12,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace CPU {
+namespace Tests::CPU {
 
 class CPUInfoStub : public ICPUInfo
 {
@@ -221,5 +220,5 @@ TEST_CASE("CPU tests", "[CPU]")
     ts.exportWith(e);
   }
 }
-} // namespace CPU
-} // namespace Tests
+
+} // namespace Tests::CPU

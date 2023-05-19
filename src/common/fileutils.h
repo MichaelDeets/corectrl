@@ -10,8 +10,7 @@
 #include <string_view>
 #include <vector>
 
-namespace Utils {
-namespace File {
+namespace Utils::File {
 
 /// Reads the contents of a file.
 /// @param path path to the file to read
@@ -70,5 +69,4 @@ bool isSysFSEntryValid(std::filesystem::path const &path);
 /// @return file contents or no contents on error
 std::vector<char> readQrcFile(std::string_view qrcPath);
 
-} // namespace File
-} // namespace Utils
+} // namespace Utils::File

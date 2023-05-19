@@ -7,9 +7,7 @@
 #include "common/stringdatasourcestub.h"
 #include "core/components/controls/amd/pm/fixed/pmfixedr600.h"
 
-namespace Tests {
-namespace AMD {
-namespace PMFixedR600 {
+namespace Tests::AMD::PMFixedR600 {
 
 class PMFixedR600TestAdapter : public ::AMD::PMFixedR600
 {
@@ -78,6 +76,4 @@ TEST_CASE("AMD PMFixedR600 tests", "[GPU][AMD][PM][PMFixed][R600]")
   }
 }
 
-} // namespace PMFixedR600
-} // namespace AMD
-} // namespace Tests
+} // namespace Tests::AMD::PMFixedR600

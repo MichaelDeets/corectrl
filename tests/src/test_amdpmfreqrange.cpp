@@ -11,9 +11,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace AMD {
-namespace PMFreqRange {
+namespace Tests::AMD::PMFreqRange {
 
 class PMFreqRangeTestAdapter : public ::AMD::PMFreqRange
 {
@@ -359,6 +357,4 @@ TEST_CASE("AMD PMFreqRange tests",
   }
 }
 
-} // namespace PMFreqRange
-} // namespace AMD
-} // namespace Tests
+} // namespace Tests::AMD::PMFreqRange

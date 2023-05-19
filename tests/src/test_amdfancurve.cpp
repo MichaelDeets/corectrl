@@ -10,9 +10,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace AMD {
-namespace FanCurve {
+namespace Tests::AMD::FanCurve {
 
 class FanCurveTestAdapter : public ::AMD::FanCurve
 {
@@ -637,6 +635,5 @@ TEST_CASE("AMD FanCurve tests", "[GPU][AMD][Fan][FanCurve]")
     }
   }
 }
-} // namespace FanCurve
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::FanCurve

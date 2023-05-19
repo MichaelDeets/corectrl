@@ -10,8 +10,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace ControlGroup {
+namespace Tests::ControlGroup {
 
 class ControlGroupTestAdapter : public ::ControlGroup
 {
@@ -225,5 +224,5 @@ TEST_CASE("ControlGroup tests", "[GPU][ControlGroup]")
     ts.syncControl(ctlCmds);
   }
 }
-} // namespace ControlGroup
-} // namespace Tests
+
+} // namespace Tests::ControlGroup

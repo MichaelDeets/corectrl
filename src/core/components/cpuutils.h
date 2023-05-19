@@ -9,8 +9,7 @@
 #include <string_view>
 #include <vector>
 
-namespace Utils {
-namespace CPU {
+namespace Utils::CPU {
 
 /// Returns a piece of information from /proc/cpuinfo.
 /// @param procCpuInfoLines /proc/cpuinfo data source contents lines
@@ -45,5 +44,4 @@ std::optional<Stat> parseProcStat(std::vector<std::string> const &procStatLines)
 /// @returns percentage of the CPU used in the time interval.
 unsigned int computeCPUUsage(Stat const &statT0, Stat const &statT1);
 
-} // namespace CPU
-} // namespace Utils
+} // namespace Utils::CPU

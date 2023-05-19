@@ -8,8 +8,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace Sensor {
+namespace Tests::Sensor {
 
 class SensorTestAdapter
 : public ::Sensor<units::frequency::megahertz_t, unsigned int>
@@ -91,5 +90,5 @@ TEST_CASE("Sensor tests", "[GPU][Sensor]")
     }
   }
 }
-} // namespace Sensor
-} // namespace Tests
+
+} // namespace Tests::Sensor

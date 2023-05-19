@@ -7,8 +7,7 @@
 #include "common/vectorstringdatasourcestub.h"
 #include "core/info/common/cpuinfolscpu.h"
 
-namespace Tests {
-namespace CPUInfoLsCpu {
+namespace Tests::CPUInfoLsCpu {
 
 TEST_CASE("CPUInfoLsCpu tests", "[Info][CPUInfo][CPUInfoLsCpu]")
 {
@@ -115,5 +114,5 @@ TEST_CASE("CPUInfoLsCpu tests", "[Info][CPUInfo][CPUInfoLsCpu]")
     REQUIRE_THAT(output, Catch::VectorContains(data));
   }
 }
-} // namespace CPUInfoLsCpu
-} // namespace Tests
+
+} // namespace Tests::CPUInfoLsCpu

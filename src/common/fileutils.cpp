@@ -12,8 +12,7 @@
 
 namespace fs = std::filesystem;
 
-namespace Utils {
-namespace File {
+namespace Utils::File {
 
 std::vector<char> readFile(std::filesystem::path const &path)
 {
@@ -153,5 +152,4 @@ std::vector<char> readQrcFile(std::string_view qrcPath)
   return {};
 }
 
-} // namespace File
-} // namespace Utils
+} // namespace Utils::File

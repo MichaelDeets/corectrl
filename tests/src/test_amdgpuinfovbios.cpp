@@ -7,9 +7,7 @@
 #include "common/stringpathdatasourcestub.h"
 #include "core/info/amd/gpuinfovbios.h"
 
-namespace Tests {
-namespace AMD {
-namespace GPUInfoVbios {
+namespace Tests::AMD::GPUInfoVbios {
 
 TEST_CASE("GPUInfoVbios tests", "[AMD][Info][GPUInfo][GPUInfoVbios]")
 {
@@ -29,6 +27,5 @@ TEST_CASE("GPUInfoVbios tests", "[AMD][Info][GPUInfo][GPUInfoVbios]")
     REQUIRE_THAT(output, Catch::VectorContains(type));
   }
 }
-} // namespace GPUInfoVbios
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::GPUInfoVbios

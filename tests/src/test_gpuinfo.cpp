@@ -6,8 +6,7 @@
 #include "core/info/gpuinfo.h"
 #include "core/info/ihwidtranslator.h"
 
-namespace Tests {
-namespace GPUInfo {
+namespace Tests::GPUInfo {
 
 class ProviderStub : public IGPUInfo::IProvider
 {
@@ -89,5 +88,5 @@ TEST_CASE("GPUInfo tests", "[Info][GPUInfo]")
     REQUIRE(ts.hasCapability("capability"));
   }
 }
-} // namespace GPUInfo
-} // namespace Tests
+
+} // namespace Tests::GPUInfo

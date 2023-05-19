@@ -7,8 +7,7 @@
 #include <QtGlobal>
 #include <units.h>
 
-namespace AMD {
-namespace Power {
+namespace AMD::Power {
 
 bool const registered_ = QMLComponentRegistry::addQuickItemProvider(
     AMD::Power::ItemID, []() {
@@ -20,5 +19,4 @@ char const *const trStrings[] = {
     QT_TRANSLATE_NOOP("SensorGraph", "AMD_POWER"),
 };
 
-} // namespace Power
-} // namespace AMD
+} // namespace AMD::Power

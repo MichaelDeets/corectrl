@@ -12,8 +12,7 @@
 #include <unordered_map>
 #include <utility>
 
-namespace Utils {
-namespace AMD {
+namespace Utils::AMD {
 
 bool readAMDGPUVRamSize(int deviceFD, units::data::megabyte_t *size)
 {
@@ -686,5 +685,4 @@ bool hasOverdriveVoltOffsetControl(std::vector<std::string> const &data)
   return offsetIt != data.cend();
 }
 
-} // namespace AMD
-} // namespace Utils
+} // namespace Utils::AMD

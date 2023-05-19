@@ -6,9 +6,7 @@
 #include "core/idatasource.h"
 #include "core/info/amd/gpuinfopmoverdrive.h"
 
-namespace Tests {
-namespace AMD {
-namespace GPUInfoPMOverdrive {
+namespace Tests::AMD::GPUInfoPMOverdrive {
 
 class VectorStringPathDataSourceStub
 : public IDataSource<std::vector<std::string>, std::filesystem::path const>
@@ -107,6 +105,5 @@ TEST_CASE("GPUInfoPMOverdrive tests",
     REQUIRE(output.front() == ::AMD::GPUInfoPMOverdrive::VoltOffset);
   }
 }
-} // namespace GPUInfoPMOverdrive
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::GPUInfoPMOverdrive

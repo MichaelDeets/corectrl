@@ -9,9 +9,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace AMD {
-namespace PMFixed {
+namespace Tests::AMD::PMFixed {
 
 class PMFixedTestAdapter : public ::AMD::PMFixed
 {
@@ -127,6 +125,4 @@ TEST_CASE("AMD PMFixed tests", "[GPU][AMD][PM][PMFixed]")
   }
 }
 
-} // namespace PMFixed
-} // namespace AMD
-} // namespace Tests
+} // namespace Tests::AMD::PMFixed

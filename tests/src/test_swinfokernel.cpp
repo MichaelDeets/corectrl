@@ -6,8 +6,7 @@
 #include "common/stringdatasourcestub.h"
 #include "core/info/common/swinfokernel.h"
 
-namespace Tests {
-namespace SWInfoKernel {
+namespace Tests::SWInfoKernel {
 
 TEST_CASE("SWInfoKernel tests", "[Info][SWInfo][SWInfoKernel]")
 {
@@ -51,5 +50,5 @@ TEST_CASE("SWInfoKernel tests", "[Info][SWInfo][SWInfoKernel]")
     }
   }
 }
-} // namespace SWInfoKernel
-} // namespace Tests
+
+} // namespace Tests::SWInfoKernel

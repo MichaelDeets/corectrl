@@ -10,8 +10,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace CPUFreq {
+namespace Tests::CPUFreq {
 
 class CPUFreqTestAdapter : public ::CPUFreq
 {
@@ -208,5 +207,4 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
   }
 }
 
-} // namespace CPUFreq
-} // namespace Tests
+} // namespace Tests::CPUFreq

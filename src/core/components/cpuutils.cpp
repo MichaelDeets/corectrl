@@ -8,8 +8,7 @@
 #include <iterator>
 #include <regex>
 
-namespace Utils {
-namespace CPU {
+namespace Utils::CPU {
 
 std::optional<std::string>
 parseProcCpuInfo(std::vector<std::string> const &procCpuInfoLines, int cpuId,
@@ -95,5 +94,4 @@ unsigned int computeCPUUsage(Stat const &statT0, Stat const &statT1)
   return (100.0 * used) / total;
 }
 
-} // namespace CPU
-} // namespace Utils
+} // namespace Utils::CPU

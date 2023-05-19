@@ -7,9 +7,7 @@
 #include "common/stringdatasourcestub.h"
 #include "core/components/controls/amd/pm/advanced/dynamicfreq/pmdynamicfreq.h"
 
-namespace Tests {
-namespace AMD {
-namespace PMDynamicFreq {
+namespace Tests::AMD::PMDynamicFreq {
 
 class PMDynamicFreqTestAdapter : public ::AMD::PMDynamicFreq
 {
@@ -83,6 +81,5 @@ TEST_CASE("AMD PMDynamicFreq tests",
     REQUIRE(value == "auto");
   }
 }
-} // namespace PMDynamicFreq
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMDynamicFreq

@@ -6,9 +6,7 @@
 #include "common/stringpathdatasourcestub.h"
 #include "core/info/amd/gpuinfopm.h"
 
-namespace Tests {
-namespace AMD {
-namespace GPUInfoPM {
+namespace Tests::AMD::GPUInfoPM {
 
 TEST_CASE("GPUInfoPM tests", "[AMD][Info][GPUInfo][GPUInfoPM]")
 {
@@ -56,6 +54,5 @@ TEST_CASE("GPUInfoPM tests", "[AMD][Info][GPUInfo][GPUInfoPM]")
     REQUIRE(output.front() == ::AMD::GPUInfoPM::Amdgpu);
   }
 }
-} // namespace GPUInfoPM
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::GPUInfoPM

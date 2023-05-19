@@ -8,8 +8,7 @@
 #include <regex>
 #include <sstream>
 
-namespace Utils {
-namespace String {
+namespace Utils::String {
 
 std::string cleanPrefix(std::string const &str, std::string const &prefix)
 {
@@ -76,5 +75,4 @@ std::optional<std::string> parseKernelProcVersion(std::string const &data)
   return version;
 }
 
-} // namespace String
-} // namespace Utils
+} // namespace Utils::String

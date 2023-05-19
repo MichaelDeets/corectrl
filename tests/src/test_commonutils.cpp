@@ -6,9 +6,7 @@
 #include "core/components/commonutils.h"
 #include <units.h>
 
-namespace Tests {
-namespace Utils {
-namespace Common {
+namespace Tests::Utils::Common {
 
 TEST_CASE("CommonUtils tests", "[Utils][Common]")
 {
@@ -72,6 +70,5 @@ TEST_CASE("CommonUtils tests", "[Utils][Common]")
     }
   }
 }
-} // namespace Common
-} // namespace Utils
-} // namespace Tests
+
+} // namespace Tests::Utils::Common

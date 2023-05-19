@@ -11,9 +11,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace AMD {
-namespace PMVoltCurve {
+namespace Tests::AMD::PMVoltCurve {
 
 class PMVoltCurveTestAdapter : public ::AMD::PMVoltCurve
 {
@@ -371,6 +369,4 @@ TEST_CASE("AMD PMVoltCurve tests",
   }
 }
 
-} // namespace PMVoltCurve
-} // namespace AMD
-} // namespace Tests
+} // namespace Tests::AMD::PMVoltCurve

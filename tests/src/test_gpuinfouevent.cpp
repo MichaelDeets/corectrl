@@ -12,8 +12,7 @@ extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
 using trompeloeil::_;
 
-namespace Tests {
-namespace GPUInfoUevent {
+namespace Tests::GPUInfoUevent {
 
 class GPUInfoUeventDataSourceStub
 : public IDataSource<std::vector<std::string>, std::filesystem::path const>
@@ -148,5 +147,5 @@ TEST_CASE("GPUInfoUevent tests", "[Info][GPUInfo][GPUInfoUevent]")
     REQUIRE_THAT(output, Catch::VectorContains(subdeviceName));
   }
 }
-} // namespace GPUInfoUevent
-} // namespace Tests
+
+} // namespace Tests::GPUInfoUevent

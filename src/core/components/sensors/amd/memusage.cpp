@@ -28,8 +28,7 @@
 #include <utility>
 #include <vector>
 
-namespace AMD {
-namespace MemUsage {
+namespace AMD::MemUsage {
 
 class Provider final : public IGPUSensorProvider::IProvider
 {
@@ -115,5 +114,4 @@ static bool register_()
 
 static bool const registered_ = register_();
 
-} // namespace MemUsage
-} // namespace AMD
+} // namespace AMD::MemUsage

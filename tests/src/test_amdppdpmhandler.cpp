@@ -8,9 +8,7 @@
 #include "common/vectorstringdatasourcestub.h"
 #include "core/components/controls/amd/pm/handlers/ppdpmhandler.h"
 
-namespace Tests {
-namespace AMD {
-namespace PpDpmHandler {
+namespace Tests::AMD::PpDpmHandler {
 
 TEST_CASE("AMD PpDpmHandler tests",
           "[GPU][AMD][PM][DataSourceHandler][PpDpmHandler]")
@@ -189,6 +187,4 @@ TEST_CASE("AMD PpDpmHandler tests",
   }
 }
 
-} // namespace PpDpmHandler
-} // namespace AMD
-} // namespace Tests
+} // namespace Tests::AMD::PpDpmHandler

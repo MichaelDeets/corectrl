@@ -10,9 +10,7 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests {
-namespace AMD {
-namespace PMPowerCap {
+namespace Tests::AMD::PMPowerCap {
 
 class ULongDataSourceStub : public IDataSource<unsigned long>
 {
@@ -252,6 +250,5 @@ TEST_CASE("AMD PMPowerCap tests", "[GPU][AMD][PM][PMPowerCap]")
     REQUIRE(cmdValue == "80000000");
   }
 }
-} // namespace PMPowerCap
-} // namespace AMD
-} // namespace Tests
+
+} // namespace Tests::AMD::PMPowerCap
