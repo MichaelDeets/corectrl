@@ -559,9 +559,9 @@
     </message>
     <message>
         <location filename="../qml/Profiles.qml" line="386"/>
-        <source>This action is permantent.
+        <source>This action is permanent.
 Do you really want to remove %1?</source>
-        <translation>This action is permantent.
+        <translation>This action is permanent.
 Do you really want to remove %1?</translation>
     </message>
     <message>
