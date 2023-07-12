@@ -672,7 +672,12 @@ bool hasOverdriveVoltCurveControl(std::vector<std::string> const &data)
         return line.find("OD_VDDC_CURVE:") != std::string::npos;
       });
 
-  return curveIt != data.cend();
+  if (curveIt != data.cend() && std::next(curveIt) != data.cend()) {
+    auto point = parseOverdriveClkVoltLine(*std::next(curveIt));
+    return point.has_value();
+  }
+
+  return false;
 }
 
 bool hasOverdriveVoltOffsetControl(std::vector<std::string> const &data)

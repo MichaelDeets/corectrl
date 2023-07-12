@@ -46,7 +46,10 @@ TEST_CASE("GPUInfoPMOverdrive tests",
 
   SECTION("Provides voltage curve capability")
   {
-    std::vector<std::string> ppOdClkVoltageData{"OD_VDDC_CURVE:"};
+    // clang-format off
+      std::vector<std::string> ppOdClkVoltageData{"OD_VDDC_CURVE:",
+                                                  "0: 700Mhz 800mV",};
+    // clang-format on
 
     ::AMD::GPUInfoPMOverdrive ts(std::make_unique<VectorStringPathDataSourceStub>(
         "pp_od_clk_voltage", std::move(ppOdClkVoltageData)));
@@ -55,6 +58,22 @@ TEST_CASE("GPUInfoPMOverdrive tests",
 
     REQUIRE(output.size() == 1);
     REQUIRE(output.front() == ::AMD::GPUInfoPMOverdrive::VoltCurve);
+  }
+
+  SECTION("Does not provide voltage curve capability when the curve points "
+          "have missing coordinates")
+  {
+    // clang-format off
+      std::vector<std::string> ppOdClkVoltageData{"OD_VDDC_CURVE:",
+                                                  "0: 800mV"};
+    // clang-format on
+
+    ::AMD::GPUInfoPMOverdrive ts(std::make_unique<VectorStringPathDataSourceStub>(
+        "pp_od_clk_voltage", std::move(ppOdClkVoltageData)));
+
+    auto output = ts.provideCapabilities(vendor, gpuIndex, path);
+
+    REQUIRE(output.empty());
   }
 
   SECTION("Provides clock + voltage capability")

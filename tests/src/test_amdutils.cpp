@@ -830,16 +830,33 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
   {
     SECTION("Returns true when overdrive has voltage curve control")
     {
-      std::vector<std::string> data{"OD_VDDC_CURVE:"};
+      // clang-format off
+      std::vector<std::string> data{"OD_VDDC_CURVE:",
+                                    "0: 700Mhz 800mV",};
+      // clang-format on
 
       REQUIRE(::Utils::AMD::hasOverdriveVoltCurveControl(data));
     }
 
-    SECTION("Returns false when overdrive has no voltage curve control")
+    SECTION("Returns false...")
     {
-      std::vector<std::string> noClkControlData{"OTHER_DATA"};
+      SECTION("When overdrive has no voltage curve control")
+      {
+        std::vector<std::string> data{"OTHER_DATA"};
 
-      REQUIRE_FALSE(::Utils::AMD::hasOverdriveVoltCurveControl(noClkControlData));
+        REQUIRE_FALSE(::Utils::AMD::hasOverdriveVoltCurveControl(data));
+      }
+
+      SECTION("When overdrive has no valid voltage curve points")
+      {
+        // clang-format off
+        std::vector<std::string> data{"OD_VDDC_CURVE:",
+                                      "0: 800mV",
+                                      "OD_RANGE:"};
+        // clang-format on
+
+        REQUIRE_FALSE(::Utils::AMD::hasOverdriveVoltCurveControl(data));
+      }
     }
   }
 

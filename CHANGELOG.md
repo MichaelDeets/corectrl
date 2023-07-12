@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - QML Connections deprecation warning (#123).
 - No power limit control available (#356).
+- Voltage curve control creation failing on RX 7000 series. Do not attempt to create such control when the overdrive voltage curve is not really a frequency/voltage curve.
 
 ### Changed
 - Require Qt 5.15.
