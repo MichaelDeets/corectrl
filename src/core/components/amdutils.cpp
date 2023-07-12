@@ -439,7 +439,8 @@ parseOverdriveVoltCurve(std::vector<std::string> const &ppOdClkVoltageLines)
       targetIt = std::next(targetIt);
     }
 
-    return std::move(points);
+    if (!points.empty())
+      return std::move(points);
   }
 
   return {};

@@ -463,17 +463,33 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
       REQUIRE(p1Volt == units::voltage::millivolt_t(900));
     }
 
-    SECTION("Returns nothing when there is no OD_VDDC_CURVE: in input")
+    SECTION("Returns nothing...")
     {
-      // clang-format off
+      SECTION("When there is no OD_VDDC_CURVE: in input")
+      {
+        // clang-format off
       std::vector<std::string> input{"OTHER:",
                                      "0: 700Mhz 800mV",
                                      "2: 800Mhz 900mV",
                                      "OD_RANGE:"};
-      // clang-format on
+        // clang-format on
 
-      auto empty = ::Utils::AMD::parseOverdriveVoltCurve(input);
-      REQUIRE_FALSE(empty.has_value());
+        auto empty = ::Utils::AMD::parseOverdriveVoltCurve(input);
+        REQUIRE_FALSE(empty.has_value());
+      }
+
+      SECTION("When the voltage curve points have missing coordinates")
+      {
+        // clang-format off
+      std::vector<std::string> input{"OD_VDDC_CURVE:",
+                                     "0: 800mV",
+                                     "1: 800Mhz",
+                                     "OD_RANGE:"};
+        // clang-format on
+
+        auto empty = ::Utils::AMD::parseOverdriveVoltCurve(input);
+        REQUIRE_FALSE(empty.has_value());
+      }
     }
   }
 
