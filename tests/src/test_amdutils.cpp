@@ -887,10 +887,9 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
 
     SECTION("Returns false when overdrive has no voltage curve control")
     {
-      std::vector<std::string> noClkControlData{"OTHER_DATA"};
+      std::vector<std::string> data{"OTHER_DATA"};
 
-      REQUIRE_FALSE(
-          ::Utils::AMD::hasOverdriveVoltOffsetControl(noClkControlData));
+      REQUIRE_FALSE(::Utils::AMD::hasOverdriveVoltOffsetControl(data));
     }
   }
 }
