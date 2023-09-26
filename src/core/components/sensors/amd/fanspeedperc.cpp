@@ -60,7 +60,7 @@ class Provider final : public IGPUSensorProvider::IProvider
           auto fileLines = Utils::File::readFileLines(pwm);
           if (Utils::String::toNumber<unsigned int>(value, fileLines.front())) {
 
-            // Prefer fanspeedrpm control over this one if the former it's available on the system
+            // When available, prefer fanspeedrpm sensor over this one
             auto fanInput = path.value() / "fan1_input";
             if (!(Utils::File::isSysFSEntryValid(fanInput) &&
                   Utils::String::toNumber<unsigned int>(
