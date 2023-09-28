@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.22)
 
 project(CoreCtrl LANGUAGES CXX)
 set(PROJECT_VERSION 1.4.0-dev)
