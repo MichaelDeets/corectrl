@@ -181,7 +181,7 @@ QAction *SysTray::createManualProfileAction(QMenu *menu,
   action->setCheckable(true);
 
   connect(action, &QAction::triggered, this,
-          [=]() { onManualProfileMenuTriggered(action->text()); });
+          [=, this]() { onManualProfileMenuTriggered(action->text()); });
 
   return action;
 }
