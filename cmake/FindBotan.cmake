@@ -7,8 +7,8 @@
 #   Botan_INCLUDE_DIRS  -  The directory where to find the header file
 #   Botan_LIBRARIES  -  Where to find the library file
 #
-# For conveniance, these variables are also set. They have the same values
-# than the variables above.  The user can thus choose his/her prefered way
+# For convenience, these variables are also set. They have the same values
+# than the variables above.  The user can thus choose his/her preferred way
 # to write them.
 #   Botan_LIBRARY
 #   Botan_INCLUDE_DIR
