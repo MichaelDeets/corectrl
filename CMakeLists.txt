@@ -36,7 +36,11 @@ endif()
 find_package(Qt5 5.15 COMPONENTS Core DBus Quick Charts Widgets Network Svg REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 find_package(QuaZip REQUIRED)
-find_package(Botan REQUIRED)
+
+find_package(Botan QUIET)
+if(NOT Botan_FOUND)
+  message(FATAL_ERROR "Botan library not found")
+endif()
 
 find_package(fmt 5 QUIET)
 if(NOT fmt_FOUND)

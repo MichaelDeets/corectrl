@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Implement resizable graph and sensors regions. Both regions are configurable by dragging their split handles and the sizes persist between sessions (#309).
 - CPU usage sensor. Based on the work done by Milan Čermák (!38).
 - Intel CPU temperature sensor for `coretemp` driver. Thanks to Milan Čermák (!38).
+- Botan 3 compilation support (#373). Botan 2 is still supported. Botan 3 takes precedence over Botan 2 when both versions are installed in the system.
 
 
 ## CoreCtrl 1.3.4 (2023-03-28)

@@ -16,14 +16,13 @@
 # This file is in the public domain
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(Botan botan-2)
 
-if(NOT Botan_FOUND)
-  find_path(Botan_INCLUDE_DIRS NAMES botan/botan.h
-      PATH_SUFFIXES botan-2
+macro(FIND_BOTAN_IN_FS BOTAN_VER)
+  find_path(Botan_INCLUDE_DIRS NAMES botan/types.h
+      PATH_SUFFIXES ${BOTAN_VER}
       DOC "The botan include directory")
 
-  find_library(Botan_LIBRARIES NAMES botan botan-2
+  find_library(Botan_LIBRARIES NAMES botan ${BOTAN_VER}
       DOC "The botan library")
 
   # Use some standard module to handle the QUIETLY and REQUIRED arguments, and
@@ -35,6 +34,19 @@ if(NOT Botan_FOUND)
     set(Botan_LIBRARY ${Botan_LIBRARIES} CACHE INTERNAL "")
     set(Botan_INCLUDE_DIR ${Botan_INCLUDE_DIRS} CACHE INTERNAL "")
     set(Botan_FOUND ${Botan_FOUND} CACHE INTERNAL "")
+  endif()
+endmacro()
+
+pkg_check_modules(Botan botan-3)
+if(NOT Botan_FOUND)
+  find_botan_in_fs(botan-3)
+endif()
+
+if(NOT Botan_FOUND)
+  pkg_check_modules(Botan botan-2)
+
+  if(NOT Botan_FOUND)
+    find_botan_in_fs(botan-2)
   endif()
 endif()
 

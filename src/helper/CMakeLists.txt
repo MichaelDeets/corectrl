@@ -1,6 +1,11 @@
 find_package(PkgConfig REQUIRED)
 find_package(Qt5 5.15 COMPONENTS Core DBus REQUIRED)
-find_package(Botan REQUIRED)
+
+find_package(Botan QUIET)
+if(NOT Botan_FOUND)
+  message(FATAL_ERROR "Botan library not found")
+endif()
+
 
 set(DBUS_DATADIR_PREFIX_DIR ${CMAKE_INSTALL_FULL_DATADIR})
 option(INSTALL_DBUS_FILES_IN_PREFIX "Use installation prefix for D-Bus files" OFF)
