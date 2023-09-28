@@ -28,4 +28,4 @@ Before starting to work on a merge request, please follow these instructions:
 ## Coding style
 * Format your code with clang-format. You can do it with your editor or running `./format.sh` on the root project directory, then pick the formatted files that you are working on.
 * Use [east const](https://mariusbancila.ro/blog/2018/11/23/join-the-east-const-revolution/).
-* Use plain C++17 as much as possible. Don't use Qt functionality unless you have to.
+* Use plain C++20 as much as possible. Don't use Qt functionality unless you have to.
