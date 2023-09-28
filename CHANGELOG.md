@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Require Qt 5.15.
 - Require a C++20 compiler.
+- Require CMake 3.22.
 
 ### Added
 - Implement resizable graph and sensors regions. Both regions are configurable by dragging their split handles and the sizes persist between sessions (#309).
