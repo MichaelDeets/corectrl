@@ -80,7 +80,7 @@ class App final : public QObject
   void saveMainWindowGeometry();
 
  private:
-  bool toSysTray();
+  void initSysTrayWindowState();
   void setupCmdParser(QCommandLineParser &parser, int minHelperTimeout,
                       int helperTimeout) const;
   void buildUI(QQmlApplicationEngine &qmlEngine);
