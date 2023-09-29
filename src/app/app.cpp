@@ -119,6 +119,7 @@ int App::exec(int argc, char **argv)
     settings_->signalSettings();
 
     initSysTrayWindowState();
+    handleToggleManualProfileCmd();
 
     return app.exec();
   }
@@ -204,7 +205,8 @@ void App::setupCmdParser(QCommandLineParser &parser, int minHelperTimeout,
        "en_EN.",
        "language"},
       {{"m", "toggle-manual-profile"},
-       "When an instance of the application is already running, it will toggle "
+       "Activate the manual profile whose name is <\"profile name\">.\nWhen an "
+       "instance of the application is already running, it will toggle "
        "the manual profile whose name is <\"profile name\">.",
        "\"profile name\""},
       {"minimize-systray",
