@@ -86,6 +86,8 @@ class App final : public QObject
   void buildUI(QQmlApplicationEngine &qmlEngine);
   void setupMainWindowGeometry();
   void restoreMainWindowGeometry();
+  bool handleToggleManualProfileCmd();
+  bool handleWindowVisibilityCmds();
 
   AppInfo appInfo_;
   SingleInstance singleInstance_;

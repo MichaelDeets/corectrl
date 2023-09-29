@@ -159,27 +159,14 @@ void App::onNewInstance(QStringList args)
 {
   cmdParser_.parse(args);
 
-  if (cmdParser_.isSet("toggle-manual-profile")) {
-    auto profileName = cmdParser_.value("toggle-manual-profile");
-    if (!profileName.isEmpty() && profileName.length() < 512)
-      session_->toggleManualProfile(profileName.toStdString());
-  }
-  else {
-    auto show = true;
+  bool runtimeCmds{false};
+  runtimeCmds |= handleToggleManualProfileCmd();
+  runtimeCmds |= handleWindowVisibilityCmds();
 
-    if (cmdParser_.isSet("minimize-systray"))
-      show = false;
-    else if (cmdParser_.isSet("toggle-window-visibility")) {
-      // When the window is minimized, calling show() will raise it.
-      auto minimized =
-          ((mainWindow_->windowState() & Qt::WindowState::WindowMinimized) ==
-           Qt::WindowState::WindowMinimized);
-
-      show = minimized ? true : !mainWindow_->isVisible();
-    }
-
-    showMainWindow(show);
-  }
+  // No runtime commands were used as arguments.
+  // Show the main window unconditionally.
+  if (!runtimeCmds)
+    showMainWindow(true);
 }
 
 void App::onSysTrayActivated()
@@ -336,4 +323,46 @@ void App::restoreMainWindowGeometry()
           .toInt();
 
   mainWindow_->setGeometry(x, y, width, height);
+}
+
+bool App::handleToggleManualProfileCmd()
+{
+  auto cmdHandled{false};
+  if (cmdParser_.isSet("toggle-manual-profile")) {
+
+    auto profileName = cmdParser_.value("toggle-manual-profile");
+    if (!profileName.isEmpty() && profileName.length() < 512)
+      session_->toggleManualProfile(profileName.toStdString());
+
+    cmdHandled = true;
+  }
+
+  return cmdHandled;
+}
+
+bool App::handleWindowVisibilityCmds()
+{
+  auto cmdHandled{false};
+  auto show{false};
+
+  // Minimize to system tray takes precedence over any other window visibility
+  // command.
+  if (cmdParser_.isSet("minimize-systray")) {
+    cmdHandled = true;
+  }
+  else if (cmdParser_.isSet("toggle-window-visibility")) {
+
+    // When the window is minimized, calling show() will raise it.
+    auto minimized =
+        ((mainWindow_->windowState() & Qt::WindowState::WindowMinimized) ==
+         Qt::WindowState::WindowMinimized);
+
+    show = minimized ? true : !mainWindow_->isVisible();
+    cmdHandled = true;
+  }
+
+  if (cmdHandled)
+    showMainWindow(show);
+
+  return cmdHandled;
 }
