@@ -51,17 +51,17 @@ class Provider final : public IGPUSensorProvider::IProvider
             std::pair<units::frequency::megahertz_t, units::frequency::megahertz_t>>
             range;
 
-        // get range from dpm mclk states (4.6+)
-        auto ppDPMMclkData =
+        // get range from dpm sclk states (4.6+)
+        auto dpmData =
             Utils::File::readFileLines(gpuInfo.path().sys / "pp_dpm_sclk");
-        auto gpuStates = Utils::AMD::parseDPMStates(ppDPMMclkData);
+        auto gpuStates = Utils::AMD::parseDPMStates(dpmData);
         if (gpuStates.has_value() && !gpuStates->empty())
           range = {gpuStates->front().second, gpuStates->back().second};
 
-        // enlarge range if needed using mem clk range
-        auto ppDPMSclkData =
+        // expand range using dpm mclk states
+        dpmData =
             Utils::File::readFileLines(gpuInfo.path().sys / "pp_dpm_mclk");
-        auto memStates = Utils::AMD::parseDPMStates(ppDPMSclkData);
+        auto memStates = Utils::AMD::parseDPMStates(dpmData);
         if (memStates.has_value() && !memStates->empty()) {
           if (range.has_value())
             range = {std::min(memStates->front().second, range->first),
