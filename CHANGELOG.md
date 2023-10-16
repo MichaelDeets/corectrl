@@ -5,7 +5,6 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - QML Connections deprecation warning (#123).
-- No power limit control available (#356).
 - Voltage curve control creation failing on RX 7000 series. Do not attempt to create such control when the overdrive voltage curve is not really a frequency/voltage curve.
 - Crash due to kernel driver reporting bogus data on `pp_dpm_sclk` or `pp_dpm_mclk` (#387).
 - English translation typo. Thanks to Flora Aubry (!40).
@@ -22,6 +21,12 @@ All notable changes to this project will be documented in this file.
 - Intel CPU temperature sensor for `coretemp` driver. Thanks to Milan Čermák (!38).
 - Botan 3 compilation support (#373). Botan 2 is still supported. Botan 3 takes precedence over Botan 2 when both versions are installed in the system.
 - Manual profile activation at application startup using the command line argument `-m, --toggle-manual-profile` (#366).
+
+
+## CoreCtrl 1.3.5 (2023-04-01)
+
+### Fixed
+- No power limit control available (#356).
 
 
 ## CoreCtrl 1.3.4 (2023-03-28)
