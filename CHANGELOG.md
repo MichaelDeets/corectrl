@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - QML Connections deprecation warning (#123).
 - No power limit control available (#356).
 - Voltage curve control creation failing on RX 7000 series. Do not attempt to create such control when the overdrive voltage curve is not really a frequency/voltage curve.
+- Crash due to kernel driver reporting bogus data on `pp_dpm_sclk` or `pp_dpm_mclk` (#387).
 - English translation typo. Thanks to Flora Aubry (!40).
 
 ### Changed

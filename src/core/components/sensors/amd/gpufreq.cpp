@@ -62,9 +62,13 @@ class Provider final : public IGPUSensorProvider::IProvider
         auto ppDPMSclkData =
             Utils::File::readFileLines(gpuInfo.path().sys / "pp_dpm_mclk");
         auto memStates = Utils::AMD::parseDPMStates(ppDPMSclkData);
-        if (memStates.has_value() && !memStates->empty())
-          range = {std::min(memStates->front().second, range->first),
-                   std::max(memStates->back().second, range->second)};
+        if (memStates.has_value() && !memStates->empty()) {
+          if (range.has_value())
+            range = {std::min(memStates->front().second, range->first),
+                     std::max(memStates->back().second, range->second)};
+          else // gpu clock range not available
+            range = {memStates->front().second, memStates->back().second};
+        }
 
         std::vector<std::unique_ptr<IDataSource<unsigned int>>> dataSources;
         dataSources.emplace_back(std::make_unique<DevFSDataSource<unsigned int>>(
