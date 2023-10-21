@@ -50,20 +50,17 @@ list(APPEND SYSTEM_CONTROL_SRC
 set(CMAKE_AUTOMOC ON)
 add_executable(corectrl_helperkiller
   helperkiller.cpp
-  polkit.cpp
   ${3RDPARTY_SRC}
 )
 set(CMAKE_AUTOMOC OFF)
 
 target_include_directories(corectrl_helperkiller PRIVATE
-  ${POLKIT_INCLUDE_DIRS}
   ${3RDPARTY_INCLUDE_DIRECTORIES}
 )
 target_compile_definitions(corectrl_helperkiller PRIVATE ${HELPER_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_helperkiller PRIVATE
   Qt5::Core
   Qt5::DBus
-  ${POLKIT_LIBRARIES}
   $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
 )
 
@@ -75,7 +72,6 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/org.corectrl.helperkiller.service" DE
 set(CMAKE_AUTOMOC ON)
 add_executable(corectrl_helper
   helper.cpp
-  polkit.cpp
   ${3RDPARTY_SRC}
   ${COMMON_SRC}
   ${PROCESS_MONITOR_SRC}
@@ -85,7 +81,6 @@ set(CMAKE_AUTOMOC OFF)
 
 target_include_directories(corectrl_helper PRIVATE
   ${Botan_INCLUDE_DIRS}
-  ${POLKIT_INCLUDE_DIRS}
   ${3RDPARTY_INCLUDE_DIRECTORIES}
   ${PROJECT_SOURCE_DIR}/src
 )
@@ -96,7 +91,6 @@ target_link_libraries(corectrl_helper PRIVATE
   stdc++fs
   pthread
   ${Botan_LIBRARIES}
-  ${POLKIT_LIBRARIES}
   $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
 )
 
