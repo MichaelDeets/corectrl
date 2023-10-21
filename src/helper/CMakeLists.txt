@@ -71,7 +71,6 @@ configure_file(org.corectrl.helperkiller.service.in org.corectrl.helperkiller.se
 install(TARGETS corectrl_helperkiller DESTINATION "${CMAKE_INSTALL_FULL_LIBEXECDIR}/corectrl")
 install(FILES org.corectrl.helperkiller.conf DESTINATION "${DBUS_DATADIR_PREFIX_DIR}/dbus-1/system.d")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/org.corectrl.helperkiller.service" DESTINATION "${DBUS_DATADIR_PREFIX_DIR}/dbus-1/system-services")
-install(FILES org.corectrl.helperkiller.policy DESTINATION "${POLKIT_POLICY_INSTALL_DIR}")
 
 set(CMAKE_AUTOMOC ON)
 add_executable(corectrl_helper
