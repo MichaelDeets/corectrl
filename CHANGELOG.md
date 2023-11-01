@@ -5,8 +5,6 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - QML Connections deprecation warning (#123).
-- Window association with the application desktop file under Wayland. Thanks to Reilly Brogan (!41).
-- Compilation with gcc 14. Thanks to Kostadin (!42).
 
 ### Changed
 - Require Qt 5.15.
@@ -21,6 +19,13 @@ All notable changes to this project will be documented in this file.
 - Intel CPU temperature sensor for `coretemp` driver. Thanks to Milan Čermák (!38).
 - Botan 3 compilation support (#373). Botan 2 is still supported. Botan 3 takes precedence over Botan 2 when both versions are installed in the system.
 - Manual profile activation at application startup using the command line argument `-m, --toggle-manual-profile` (#366).
+
+
+## CoreCtrl 1.3.7 (2023-11-01)
+
+### Fixed
+- Window association with the application desktop file under Wayland. Thanks to Reilly Brogan (!41).
+- Compilation with gcc 14. Thanks to Kostadin (!42).
 
 
 ## CoreCtrl 1.3.6 (2023-10-16)
