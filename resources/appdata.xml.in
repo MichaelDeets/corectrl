@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id>org.corectrl.corectrl</id>
+  <id>@PROJECT_FQDN@</id>
   <!-- Copyright 2019 Artem Polishchuk <ego.cordatus@gmail.com> -->
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
-  <name>CoreCtrl</name>
+  <name>@PROJECT_NAME@</name>
   <summary>A friendly hardware control</summary>
   <description>
     <p>CoreCtrl is a Free and Open Source GNU/Linux application that allows you
@@ -16,12 +16,12 @@
   </provides>
   <screenshots>
     <screenshot type="default">
-      <image>https://gitlab.com/corectrl/corectrl/wikis/img/screenshot1.png</image>
+      <image>@PROJECT_HOMEPAGE_URL@/wikis/img/screenshot1.png</image>
     </screenshot>
   </screenshots>
   <developer_name>Juan Palacios</developer_name>
-  <url type="homepage">https://gitlab.com/corectrl/corectrl</url>
-  <url type="bugtracker">https://gitlab.com/corectrl/corectrl/issues</url>
-  <url type="translate">https://gitlab.com/corectrl/corectrl/tree/master/src/translations</url>
-  <url type="help">https://gitlab.com/corectrl/corectrl/wikis</url>
+  <url type="homepage">@PROJECT_HOMEPAGE_URL@</url>
+  <url type="bugtracker">@PROJECT_HOMEPAGE_URL@/issues</url>
+  <url type="translate">@PROJECT_HOMEPAGE_URL@/tree/master/src/translations</url>
+  <url type="help">@PROJECT_HOMEPAGE_URL@/wikis</url>
 </component>

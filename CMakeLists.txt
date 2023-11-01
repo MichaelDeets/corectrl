@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(CoreCtrl LANGUAGES CXX)
+project(CoreCtrl
+        HOMEPAGE_URL "https://gitlab.com/corectrl/corectrl"
+        LANGUAGES CXX)
+set(PROJECT_FQDN "org.corectrl.CoreCtrl")
 set(PROJECT_VERSION 1.4.0-dev)
 
 include(GNUInstallDirs)
@@ -114,11 +117,13 @@ endforeach()
 install(
   FILES resources/launcher.desktop
   DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/applications
-  RENAME org.corectrl.corectrl.desktop
+  RENAME ${PROJECT_FQDN}.desktop
 )
 
 # AppStream metadata
+configure_file(resources/appdata.xml.in resources/appdata.xml)
 install(
-  FILES resources/org.corectrl.corectrl.appdata.xml
+  FILES ${CMAKE_BINARY_DIR}/resources/appdata.xml
   DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/metainfo
+  RENAME ${PROJECT_FQDN}.appdata.xml
 )
