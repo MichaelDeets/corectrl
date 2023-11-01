@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - QML Connections deprecation warning (#123).
+- Compilation with gcc 14. Thanks to Kostadin (!42).
 
 ### Changed
 - Require Qt 5.15.
