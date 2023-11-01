@@ -52,6 +52,7 @@ int App::exec(int argc, char **argv)
   QCoreApplication::setApplicationVersion(App::VersionStr.data());
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+  QGuiApplication::setDesktopFileName(QString(App::Fqdn.data()));
 
   // Ignore QT_STYLE_OVERRIDE. It breaks the qml theme.
   if (qEnvironmentVariableIsSet("QT_STYLE_OVERRIDE")) {

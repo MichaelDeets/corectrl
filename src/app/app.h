@@ -60,6 +60,7 @@ class App final : public QObject
  public:
   static constexpr std::string_view Name{PROJECT_NAME};
   static constexpr std::string_view VersionStr{PROJECT_VERSION};
+  static constexpr std::string_view Fqdn{PROJECT_FQDN};
   static constexpr QRect DefaultWindowGeometry{0, 0, 970, 600};
 
   App(std::unique_ptr<IHelperControl> &&helperControl,
