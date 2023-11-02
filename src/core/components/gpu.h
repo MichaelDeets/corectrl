@@ -16,8 +16,7 @@ class GPU final : public IGPU
  public:
   GPU(std::unique_ptr<IGPUInfo> &&info,
       std::vector<std::unique_ptr<IControl>> &&controls,
-      std::vector<std::unique_ptr<ISensor>> &&sensors)
-  noexcept;
+      std::vector<std::unique_ptr<ISensor>> &&sensors) noexcept;
 
   bool active() const override;
   void activate(bool active) override;

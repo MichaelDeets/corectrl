@@ -16,8 +16,7 @@ class CPU final : public ICPU
  public:
   CPU(std::unique_ptr<ICPUInfo> &&info,
       std::vector<std::unique_ptr<IControl>> &&controls,
-      std::vector<std::unique_ptr<ISensor>> &&sensors)
-  noexcept;
+      std::vector<std::unique_ptr<ISensor>> &&sensors) noexcept;
 
   bool active() const override;
   void activate(bool active) override;

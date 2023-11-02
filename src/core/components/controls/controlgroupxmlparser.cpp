@@ -3,9 +3,9 @@
 
 #include "controlgroupxmlparser.h"
 
+#include <algorithm>
 #include <pugixml.hpp>
 #include <utility>
-#include <algorithm>
 
 class ControlGroupXMLParser::Factory final
 : public ProfilePartXMLParser::Factory
