@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - QML Connections deprecation warning (#123).
+- Compilation issues with Linux 6.6 API headers (#393). From now own a C compiler is also needed to build the application.
 
 ### Changed
 - Require Qt 5.15.

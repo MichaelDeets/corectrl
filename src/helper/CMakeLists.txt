@@ -52,6 +52,7 @@ list(APPEND PROCESS_MONITOR_SRC
   pmon/processregistry.cpp
   pmon/appregistry.cpp
   pmon/msgdispatcher.cpp
+  pmon/processeventconnector.c
 )
 
 list(APPEND SYSTEM_CONTROL_SRC
