@@ -390,8 +390,10 @@ target_link_libraries(corectrl PRIVATE
   $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
 )
 
-install(TARGETS corectrl corectrl_lib
-        RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
+install(
+  TARGETS corectrl corectrl_lib
+  RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
+)
 
 add_subdirectory(helper)

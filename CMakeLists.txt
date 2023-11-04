@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(CoreCtrl
-        HOMEPAGE_URL "https://gitlab.com/corectrl/corectrl")
+project(CoreCtrl HOMEPAGE_URL "https://gitlab.com/corectrl/corectrl")
 set(PROJECT_FQDN "org.corectrl.CoreCtrl")
 set(PROJECT_VERSION 1.4.0-dev)
 
@@ -12,13 +11,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # add uninstall target
 if(NOT TARGET uninstall)
- configure_file(
-   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
-   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-   IMMEDIATE @ONLY)
+  configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
 
- add_custom_target(uninstall
-   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+  add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 endif()
 
 set(CMAKE_CXX_STANDARD 20)
@@ -105,11 +104,11 @@ endif()
 # Icons
 string(TOLOWER "${PROJECT_NAME}" ICON_NAME)
 foreach(ICON_SIZE 16 22 24 32 48 64 72 96 128 192 256)
-    install(
-        FILES resources/icon/app_${ICON_SIZE}.svg
-        DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/${ICON_SIZE}x${ICON_SIZE}/apps
-        RENAME ${ICON_NAME}.svg
-    )
+  install(
+    FILES resources/icon/app_${ICON_SIZE}.svg
+    DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/${ICON_SIZE}x${ICON_SIZE}/apps
+    RENAME ${ICON_NAME}.svg
+  )
 endforeach()
 
 # .desktop file
