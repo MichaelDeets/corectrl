@@ -41,6 +41,14 @@ AMD::PMFreqRangeProvider::provideGPUControls(IGPUInfo const &gpuInfo,
             Utils::AMD::ppOdClkVoltageFreqRangeOutOfRangeStates(
                 controlName, ppOdClkVoltLines);
 
+        if (outOfRangeStates.has_value()) {
+          for (auto stateIndex : outOfRangeStates.value()) {
+            LOG(WARNING) << fmt::format(
+                "Detected out of range state index {} on control {}",
+                stateIndex, controlName);
+          }
+        }
+
         auto controlIsValid =
             !(outOfRangeStates.has_value() && outOfRangeStates->size() > 1) &&
             Utils::AMD::parseOverdriveClkRange(controlName, ppOdClkVoltLines)
@@ -53,11 +61,6 @@ AMD::PMFreqRangeProvider::provideGPUControls(IGPUInfo const &gpuInfo,
           auto controlCmdId =
               Utils::AMD::getOverdriveClkControlCmdId(controlName);
           if (controlCmdId.has_value()) {
-
-            if (outOfRangeStates.has_value())
-              LOG(WARNING) << fmt::format(
-                  "Detected out of range state index {} on control {}",
-                  outOfRangeStates->at(0), controlName);
 
             auto disabledBound =
                 outOfRangeStates.has_value()
