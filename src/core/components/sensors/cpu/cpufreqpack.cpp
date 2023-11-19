@@ -85,7 +85,7 @@ class Provider final : public ICPUSensorProvider::IProvider
             else {
               LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           curFreqPath.string());
-              LOG(ERROR) << curFreqLines.front().c_str();
+              LOG(ERROR) << curFreqLines.front();
             }
           }
         }

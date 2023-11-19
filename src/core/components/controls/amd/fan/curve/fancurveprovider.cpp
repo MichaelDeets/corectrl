@@ -94,19 +94,19 @@ AMD::FanCurveProvider::provideGPUControls(IGPUInfo const &gpuInfo,
             if (!pwmEnableValid) {
               LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           pwmEnable.string());
-              LOG(ERROR) << pwmEnableLines.front().c_str();
+              LOG(ERROR) << pwmEnableLines.front();
             }
 
             if (!pwmValid) {
               LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           pwm.string());
-              LOG(ERROR) << pwmLines.front().c_str();
+              LOG(ERROR) << pwmLines.front();
             }
 
             if (!tempInputValid) {
               LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           tempInput.string());
-              LOG(ERROR) << tempInputLines.front().c_str();
+              LOG(ERROR) << tempInputLines.front();
             }
           }
         }

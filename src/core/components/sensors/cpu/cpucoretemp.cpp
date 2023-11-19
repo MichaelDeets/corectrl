@@ -83,7 +83,7 @@ class Provider final : public ICPUSensorProvider::IProvider
         else {
           LOG(WARNING) << fmt::format("Unknown data format on {}",
                                       tempInput.string());
-          LOG(ERROR) << tempInputLines.front().c_str();
+          LOG(ERROR) << tempInputLines.front();
         }
       }
     }

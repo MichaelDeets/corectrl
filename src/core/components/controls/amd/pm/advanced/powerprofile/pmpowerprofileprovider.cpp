@@ -50,7 +50,7 @@ AMD::PMPowerProfileProvider::provideGPUControls(IGPUInfo const &gpuInfo,
           LOG(WARNING) << fmt::format("Unknown data format on {}",
                                       profileMode.string());
           for (auto &line : modeLines)
-            LOG(ERROR) << line.c_str();
+            LOG(ERROR) << line;
         }
       }
     }

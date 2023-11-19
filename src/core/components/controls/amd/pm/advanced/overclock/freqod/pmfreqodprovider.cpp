@@ -78,27 +78,27 @@ AMD::PMFreqOdProvider::provideGPUControls(IGPUInfo const &gpuInfo,
           if (!sclkOdValid) {
             LOG(WARNING) << fmt::format("Unknown data format on {}",
                                         sclkOd.string());
-            LOG(ERROR) << sclkOdLines.front().c_str();
+            LOG(ERROR) << sclkOdLines.front();
           }
 
           if (!mclkOdValid) {
             LOG(WARNING) << fmt::format("Unknown data format on {}",
                                         mclkOd.string());
-            LOG(ERROR) << mclkOdLines.front().c_str();
+            LOG(ERROR) << mclkOdLines.front();
           }
 
           if (!sclkStates.has_value()) {
             LOG(WARNING) << fmt::format("Unknown data format on {}",
                                         dpmSclk.string());
             for (auto &line : dpmSclkLines)
-              LOG(ERROR) << line.c_str();
+              LOG(ERROR) << line;
           }
 
           if (!mclkStates.has_value()) {
             LOG(WARNING) << fmt::format("Unknown data format on {}",
                                         dpmMclk.string());
             for (auto &line : dpmMclkLines)
-              LOG(ERROR) << line.c_str();
+              LOG(ERROR) << line;
           }
         }
       }

@@ -87,7 +87,7 @@ AMD::PMFreqVoltProvider::provideGPUControls(IGPUInfo const &gpuInfo,
               LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           dpmControl.string());
               for (auto &line : dpmLines)
-                LOG(ERROR) << line.c_str();
+                LOG(ERROR) << line;
             }
           }
         }
@@ -95,7 +95,7 @@ AMD::PMFreqVoltProvider::provideGPUControls(IGPUInfo const &gpuInfo,
 
       if (logPPOdClkVoltContents) {
         for (auto &line : ppOdClkVoltLines)
-          LOG(ERROR) << line.c_str();
+          LOG(ERROR) << line;
       }
     }
   }

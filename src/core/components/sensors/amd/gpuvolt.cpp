@@ -78,7 +78,7 @@ class Provider final : public IGPUSensorProvider::IProvider
             else {
               LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           voltInput.string());
-              LOG(ERROR) << voltInputLines.front().c_str();
+              LOG(ERROR) << voltInputLines.front();
             }
           }
         }
