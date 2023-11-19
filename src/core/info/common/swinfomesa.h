@@ -15,7 +15,7 @@ class SWInfoMesa final : public ISWInfo::IProvider
  public:
   SWInfoMesa(std::unique_ptr<IDataSource<std::string>> &&dataSource) noexcept;
 
-  std::vector<std::pair<std::string, std::string>> provideInfo() override;
+  std::vector<std::pair<std::string, std::string>> provideInfo() const override;
 
  private:
   std::unique_ptr<IDataSource<std::string>> const dataSource_;

@@ -22,7 +22,8 @@ class ISWInfo
   class IProvider
   {
    public:
-    virtual std::vector<std::pair<std::string, std::string>> provideInfo() = 0;
+    virtual std::vector<std::pair<std::string, std::string>>
+    provideInfo() const = 0;
     virtual ~IProvider() = default;
   };
 

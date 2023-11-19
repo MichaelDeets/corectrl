@@ -17,7 +17,7 @@ SWInfoKernel::SWInfoKernel(
 {
 }
 
-std::vector<std::pair<std::string, std::string>> SWInfoKernel::provideInfo()
+std::vector<std::pair<std::string, std::string>> SWInfoKernel::provideInfo() const
 {
   std::vector<std::pair<std::string, std::string>> info;
 

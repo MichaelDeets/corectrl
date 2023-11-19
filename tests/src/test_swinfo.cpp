@@ -10,7 +10,7 @@ namespace Tests::SWInfo {
 class ProviderStub : public ISWInfo::IProvider
 {
  public:
-  std::vector<std::pair<std::string, std::string>> provideInfo() override
+  std::vector<std::pair<std::string, std::string>> provideInfo() const override
   {
     std::vector<std::pair<std::string, std::string>> info;
     info.emplace_back("info_key", "info");

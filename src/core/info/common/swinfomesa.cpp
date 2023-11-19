@@ -45,7 +45,7 @@ SWInfoMesa::SWInfoMesa(std::unique_ptr<IDataSource<std::string>> &&dataSource) n
 {
 }
 
-std::vector<std::pair<std::string, std::string>> SWInfoMesa::provideInfo()
+std::vector<std::pair<std::string, std::string>> SWInfoMesa::provideInfo() const
 {
   std::vector<std::pair<std::string, std::string>> info;
 
