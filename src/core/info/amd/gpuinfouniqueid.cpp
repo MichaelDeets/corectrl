@@ -45,7 +45,7 @@ AMD::GPUInfoUniqueID::GPUInfoUniqueID(
 
 std::vector<std::pair<std::string, std::string>>
 AMD::GPUInfoUniqueID::provideInfo(Vendor vendor, int, IGPUInfo::Path const &path,
-                                  IHWIDTranslator const &)
+                                  IHWIDTranslator const &) const
 {
   std::vector<std::pair<std::string, std::string>> info;
 
@@ -61,7 +61,8 @@ AMD::GPUInfoUniqueID::provideInfo(Vendor vendor, int, IGPUInfo::Path const &path
 }
 
 std::vector<std::string>
-AMD::GPUInfoUniqueID::provideCapabilities(Vendor, int, IGPUInfo::Path const &)
+AMD::GPUInfoUniqueID::provideCapabilities(Vendor, int,
+                                          IGPUInfo::Path const &) const
 {
   return {};
 }

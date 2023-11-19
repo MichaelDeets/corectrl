@@ -88,7 +88,7 @@ GPUInfoVRam::GPUInfoVRam(
 
 std::vector<std::pair<std::string, std::string>>
 GPUInfoVRam::provideInfo(Vendor, int, IGPUInfo::Path const &path,
-                         IHWIDTranslator const &)
+                         IHWIDTranslator const &) const
 {
   std::vector<std::pair<std::string, std::string>> info;
 
@@ -151,8 +151,8 @@ std::string GPUInfoVRam::readDriver(std::filesystem::path const &path) const
   return driver;
 }
 
-std::vector<std::string> GPUInfoVRam::provideCapabilities(Vendor, int,
-                                                          IGPUInfo::Path const &)
+std::vector<std::string>
+GPUInfoVRam::provideCapabilities(Vendor, int, IGPUInfo::Path const &) const
 {
   return {};
 }

@@ -48,11 +48,11 @@ class IGPUInfo
    public:
     virtual std::vector<std::pair<std::string, std::string>>
     provideInfo(Vendor vendor, int gpuIndex, IGPUInfo::Path const &path,
-                IHWIDTranslator const &hwIDTranslator) = 0;
+                IHWIDTranslator const &hwIDTranslator) const = 0;
 
     virtual std::vector<std::string>
     provideCapabilities(Vendor vendor, int gpuIndex,
-                        IGPUInfo::Path const &path) = 0;
+                        IGPUInfo::Path const &path) const = 0;
 
     virtual ~IProvider() = default;
   };

@@ -21,10 +21,11 @@ class GPUInfoUevent final : public IGPUInfo::IProvider
 
   std::vector<std::pair<std::string, std::string>>
   provideInfo(Vendor vendor, int gpuIndex, IGPUInfo::Path const &path,
-              IHWIDTranslator const &hwIDTranslator) override;
+              IHWIDTranslator const &hwIDTranslator) const override;
 
   std::vector<std::string>
-  provideCapabilities(Vendor vendor, int, IGPUInfo::Path const &path) override;
+  provideCapabilities(Vendor vendor, int,
+                      IGPUInfo::Path const &path) const override;
 
  private:
   std::unique_ptr<IDataSource<std::vector<std::string>,

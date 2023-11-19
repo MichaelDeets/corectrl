@@ -13,15 +13,15 @@ class ProviderStub : public IGPUInfo::IProvider
  public:
   std::vector<std::pair<std::string, std::string>>
   provideInfo(Vendor, int, IGPUInfo::Path const &,
-              IHWIDTranslator const &) override
+              IHWIDTranslator const &) const override
   {
     std::vector<std::pair<std::string, std::string>> info;
     info.emplace_back("info_key", "info");
     return info;
   }
 
-  std::vector<std::string> provideCapabilities(Vendor, int,
-                                               IGPUInfo::Path const &) override
+  std::vector<std::string>
+  provideCapabilities(Vendor, int, IGPUInfo::Path const &) const override
   {
     std::vector<std::string> cap;
     cap.emplace_back("capability");

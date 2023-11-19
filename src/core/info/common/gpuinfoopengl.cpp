@@ -67,7 +67,7 @@ GPUInfoOpenGL::GPUInfoOpenGL(
 
 std::vector<std::pair<std::string, std::string>>
 GPUInfoOpenGL::provideInfo(Vendor, int gpuIndex, IGPUInfo::Path const &,
-                           IHWIDTranslator const &)
+                           IHWIDTranslator const &) const
 {
   std::vector<std::pair<std::string, std::string>> info;
 
@@ -105,7 +105,7 @@ GPUInfoOpenGL::provideInfo(Vendor, int gpuIndex, IGPUInfo::Path const &,
 }
 
 std::vector<std::string>
-GPUInfoOpenGL::provideCapabilities(Vendor, int, IGPUInfo::Path const &)
+GPUInfoOpenGL::provideCapabilities(Vendor, int, IGPUInfo::Path const &) const
 {
   return {};
 }

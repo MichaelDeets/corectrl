@@ -47,7 +47,7 @@ GPUInfoVulkan::GPUInfoVulkan(
 
 std::vector<std::pair<std::string, std::string>>
 GPUInfoVulkan::provideInfo(Vendor, int gpuIndex, IGPUInfo::Path const &,
-                           IHWIDTranslator const &)
+                           IHWIDTranslator const &) const
 {
   std::vector<std::pair<std::string, std::string>> info;
 
@@ -77,7 +77,7 @@ GPUInfoVulkan::provideInfo(Vendor, int gpuIndex, IGPUInfo::Path const &,
 }
 
 std::vector<std::string>
-GPUInfoVulkan::provideCapabilities(Vendor, int, IGPUInfo::Path const &)
+GPUInfoVulkan::provideCapabilities(Vendor, int, IGPUInfo::Path const &) const
 {
   return {};
 }

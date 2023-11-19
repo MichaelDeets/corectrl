@@ -46,7 +46,7 @@ GPUInfoRevision::GPUInfoRevision(
 
 std::vector<std::pair<std::string, std::string>>
 GPUInfoRevision::provideInfo(Vendor, int, IGPUInfo::Path const &path,
-                             IHWIDTranslator const &)
+                             IHWIDTranslator const &) const
 {
   std::vector<std::pair<std::string, std::string>> info;
 
@@ -61,7 +61,7 @@ GPUInfoRevision::provideInfo(Vendor, int, IGPUInfo::Path const &path,
 }
 
 std::vector<std::string>
-GPUInfoRevision::provideCapabilities(Vendor, int, IGPUInfo::Path const &)
+GPUInfoRevision::provideCapabilities(Vendor, int, IGPUInfo::Path const &) const
 {
   return {};
 }

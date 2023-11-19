@@ -49,14 +49,14 @@ AMD::GPUInfoPMOverdrive::GPUInfoPMOverdrive(
 
 std::vector<std::pair<std::string, std::string>>
 AMD::GPUInfoPMOverdrive::provideInfo(Vendor, int, IGPUInfo::Path const &,
-                                     IHWIDTranslator const &)
+                                     IHWIDTranslator const &) const
 {
   return {};
 }
 
 std::vector<std::string>
 AMD::GPUInfoPMOverdrive::provideCapabilities(Vendor vendor, int,
-                                             IGPUInfo::Path const &path)
+                                             IGPUInfo::Path const &path) const
 {
   std::vector<std::string> cap;
 

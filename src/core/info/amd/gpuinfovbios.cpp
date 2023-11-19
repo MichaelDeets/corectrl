@@ -47,7 +47,7 @@ AMD::GPUInfoVbios::GPUInfoVbios(
 
 std::vector<std::pair<std::string, std::string>>
 AMD::GPUInfoVbios::provideInfo(Vendor vendor, int, IGPUInfo::Path const &path,
-                               IHWIDTranslator const &)
+                               IHWIDTranslator const &) const
 {
   std::vector<std::pair<std::string, std::string>> info;
 
@@ -63,7 +63,7 @@ AMD::GPUInfoVbios::provideInfo(Vendor vendor, int, IGPUInfo::Path const &path,
 }
 
 std::vector<std::string>
-AMD::GPUInfoVbios::provideCapabilities(Vendor, int, IGPUInfo::Path const &)
+AMD::GPUInfoVbios::provideCapabilities(Vendor, int, IGPUInfo::Path const &) const
 {
   return {};
 }

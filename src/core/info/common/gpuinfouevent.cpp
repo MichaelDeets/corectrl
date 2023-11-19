@@ -22,7 +22,7 @@ GPUInfoUevent::GPUInfoUevent(
 
 std::vector<std::pair<std::string, std::string>>
 GPUInfoUevent::provideInfo(Vendor, int, IGPUInfo::Path const &path,
-                           IHWIDTranslator const &hwIDTranslator)
+                           IHWIDTranslator const &hwIDTranslator) const
 {
   std::vector<std::pair<std::string, std::string>> info;
 
@@ -110,7 +110,7 @@ GPUInfoUevent::provideInfo(Vendor, int, IGPUInfo::Path const &path,
 }
 
 std::vector<std::string>
-GPUInfoUevent::provideCapabilities(Vendor, int, IGPUInfo::Path const &)
+GPUInfoUevent::provideCapabilities(Vendor, int, IGPUInfo::Path const &) const
 {
   return {};
 }

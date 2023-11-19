@@ -69,14 +69,14 @@ AMD::GPUInfoPM::GPUInfoPM(
 
 std::vector<std::pair<std::string, std::string>>
 AMD::GPUInfoPM::provideInfo(Vendor, int, IGPUInfo::Path const &,
-                            IHWIDTranslator const &)
+                            IHWIDTranslator const &) const
 {
   return {};
 }
 
 std::vector<std::string>
 AMD::GPUInfoPM::provideCapabilities(Vendor vendor, int,
-                                    IGPUInfo::Path const &path)
+                                    IGPUInfo::Path const &path) const
 {
   std::vector<std::string> caps;
 
