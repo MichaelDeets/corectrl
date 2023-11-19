@@ -121,9 +121,10 @@ std::string const &ControlGroupProfilePart::ID() const
 std::optional<std::reference_wrapper<Importable::Importer>>
 ControlGroupProfilePart::provideImporter(Item const &i)
 {
-  auto partIter = std::find_if(parts_.cbegin(), parts_.cend(), [&](auto &part) {
-    return part->ID() == i.ID() && part->instanceID() == i.instanceID();
-  });
+  auto partIter = std::find_if(
+      parts_.cbegin(), parts_.cend(), [&](auto const &part) {
+        return part->ID() == i.ID() && part->instanceID() == i.instanceID();
+      });
 
   if (partIter != parts_.cend()) {
     auto importer = dynamic_cast<Importable::Importer *>(partIter->get());
@@ -151,7 +152,7 @@ void ControlGroupProfilePart::importProfilePart(IProfilePart::Importer &i)
 
 void ControlGroupProfilePart::exportProfilePart(IProfilePart::Exporter &e) const
 {
-  for (auto &part : parts_)
+  for (auto const &part : parts_)
     part->exportWith(e);
 }
 

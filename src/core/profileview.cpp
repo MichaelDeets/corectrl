@@ -58,17 +58,17 @@ ProfileView::Initializer::provideExporter(Item const &i)
     auto &pView = dynamic_cast<IProfileView::View const &>(i);
     profileView_.name_ = pView.name();
 
-    auto &parts = pView.parts();
-    for (auto &part : parts) {
+    auto const &parts = pView.parts();
+    for (auto const &part : parts) {
       std::shared_ptr<IProfilePart> profilePart;
       std::string partProfileName;
 
       if (!part->active() && base_.has_value()) { // compose from base_
         partProfileName = base_->get().name();
 
-        auto &baseParts = base_->get().parts();
+        auto const &baseParts = base_->get().parts();
         auto const basePartIter = std::find_if(
-            baseParts.cbegin(), baseParts.cend(), [&](auto &partView) {
+            baseParts.cbegin(), baseParts.cend(), [&](auto const &partView) {
               return partView->part()->ID() == part->ID();
             });
         if (basePartIter != baseParts.cend())

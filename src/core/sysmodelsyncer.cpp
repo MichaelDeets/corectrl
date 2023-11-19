@@ -27,8 +27,8 @@ void SysModelSyncer::settingChanged(QString const &key, QVariant const &value)
     std::lock_guard<std::mutex> lock(sensorsMutex_);
     ignoredSensors_.clear();
 
-    auto sensorList = value.toStringList();
-    for (auto &sensor : sensorList) {
+    auto const sensorList = value.toStringList();
+    for (auto const &sensor : sensorList) {
       auto componentSensorIdList = sensor.split('/');
       if (componentSensorIdList.size() == 2) {
         auto component = componentSensorIdList.at(0).toStdString();

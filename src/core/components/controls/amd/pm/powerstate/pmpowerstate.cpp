@@ -69,7 +69,7 @@ void AMD::PMPowerState::mode(std::string const &mode)
   // only assign known modes
   auto iter = std::find_if(
       modes().cbegin(), modes().cend(),
-      [&](auto &availableMode) { return mode == availableMode; });
+      [&](auto const &availableMode) { return mode == availableMode; });
   if (iter != modes().cend())
     mode_ = mode;
 }

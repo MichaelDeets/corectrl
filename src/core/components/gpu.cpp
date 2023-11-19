@@ -127,10 +127,10 @@ void GPU::exportWith(Exportable::Exporter &e) const
     gpuExporter.takeActive(active());
     gpuExporter.takeInfo(info());
 
-    for (auto &sensor : sensors_)
+    for (auto const &sensor : sensors_)
       gpuExporter.takeSensor(*sensor);
 
-    for (auto &control : controls_)
+    for (auto const &control : controls_)
       control->exportWith(*exporter);
   }
 }

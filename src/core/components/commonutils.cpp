@@ -17,11 +17,12 @@ void normalizePoints(
 {
   std::vector<double> temps;
 
-  if (std::any_of(points.cbegin(), points.cend(), [&](auto &point) {
+  if (std::any_of(points.cbegin(), points.cend(), [&](auto const &point) {
         return point.first < range.first || point.first > range.second;
       })) {
-    std::transform(points.cbegin(), points.cend(), std::back_inserter(temps),
-                   [](auto &point) { return point.first.template to<double>(); });
+    std::transform(
+        points.cbegin(), points.cend(), std::back_inserter(temps),
+        [](auto const &point) { return point.first.template to<double>(); });
 
     auto [minTemp, maxTemp] = std::minmax_element(temps.cbegin(), temps.cend());
 

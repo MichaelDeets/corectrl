@@ -21,14 +21,14 @@ std::vector<std::string> SysExplorer::renderers()
   std::vector<std::string> devices;
 
   fs::path renderBasePath{"/sys/class/drm"};
-  for (auto &drmEntry : fs::directory_iterator(renderBasePath)) {
-    auto &renderDPath = drmEntry.path();
+  for (auto const &drmEntry : fs::directory_iterator(renderBasePath)) {
+    auto const &renderDPath = drmEntry.path();
 
     // use the entries starting with "renderD"
     auto const renderDName = renderDPath.filename().string();
     if (renderDName.find("renderD") == 0) {
 
-      auto sysPath = renderDPath / "device";
+      auto const sysPath = renderDPath / "device";
       if (Utils::File::isDirectoryPathValid(sysPath)) {
 
         // skip unsupported devices

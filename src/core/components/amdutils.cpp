@@ -63,7 +63,7 @@ parseDPMStates(std::vector<std::string> const &ppDpmLines)
                          std::regex::icase);
   std::vector<std::pair<unsigned int, units::frequency::megahertz_t>> states;
 
-  for (auto &line : ppDpmLines) {
+  for (auto const &line : ppDpmLines) {
     std::smatch result;
     if (!std::regex_search(line, result, regex))
       return {};
@@ -93,7 +93,7 @@ parseDPMCurrentStateIndex(std::vector<std::string> const &ppDpmLines)
   // '*' marks the current state
   std::regex const regex(R"(^(\d+)\s*:\s*\d+\s*Mhz\s*\*\s*$)", std::regex::icase);
 
-  for (auto &line : ppDpmLines) {
+  for (auto const &line : ppDpmLines) {
     std::smatch result;
     if (std::regex_search(line, result, regex)) {
       unsigned int index{0};
@@ -120,7 +120,7 @@ parsePowerProfileModeModes(std::vector<std::string> const &ppPowerProfileModeLin
   std::regex const regex(R"(^\s*(\d+)\s+([^\*\(\s:]+))");
   std::vector<std::pair<std::string, int>> modes;
 
-  for (auto &line : ppPowerProfileModeLines) {
+  for (auto const &line : ppPowerProfileModeLines) {
 
     std::smatch result;
     if (!std::regex_search(line, result, regex))
@@ -154,7 +154,7 @@ std::optional<int> parsePowerProfileModeCurrentModeIndex(
   //   1 3D_FULL_SCREEN*
   std::regex const regex(R"(^\s*(\d+)\s+(?:[^\*\(\s]+)\s*\*)");
 
-  for (auto &line : ppPowerProfileModeLines) {
+  for (auto const &line : ppPowerProfileModeLines) {
 
     std::smatch result;
     if (!std::regex_search(line, result, regex))
@@ -539,7 +539,7 @@ parseOverdriveClkControls(std::vector<std::string> const &ppOdClkVoltageLines)
   std::regex const regex(R"(^OD_(\wCLK):\s*$)", std::regex::icase);
   std::vector<std::string> controlNames;
 
-  for (auto &line : ppOdClkVoltageLines) {
+  for (auto const &line : ppOdClkVoltageLines) {
     std::smatch result;
     if (!std::regex_search(line, result, regex))
       continue;
@@ -584,7 +584,7 @@ std::optional<std::vector<unsigned int>> ppOdClkVoltageFreqRangeOutOfRangeStates
 
   std::vector<unsigned int> states;
   auto [min, max] = *range;
-  for (auto &[index, clk] : *clks) {
+  for (auto const &[index, clk] : *clks) {
     if (!(clk >= min && clk <= max))
       states.push_back(index);
   }

@@ -139,7 +139,7 @@ std::vector<std::string> ProfileManager::profiles() const
   profiles.reserve(profiles_.size());
   std::transform(profiles_.cbegin(), profiles_.cend(),
                  std::back_inserter(profiles),
-                 [](auto &kv) { return kv.first; });
+                 [](auto const &kv) { return kv.first; });
   return profiles;
 }
 
@@ -159,7 +159,7 @@ std::vector<std::string> ProfileManager::unsavedProfiles() const
   profiles.reserve(unsavedProfiles_.size());
   std::transform(unsavedProfiles_.cbegin(), unsavedProfiles_.cend(),
                  std::back_inserter(profiles),
-                 [](auto &profile) { return profile; });
+                 [](auto const &profile) { return profile; });
   return profiles;
 }
 

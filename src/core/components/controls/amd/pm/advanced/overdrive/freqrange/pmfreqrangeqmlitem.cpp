@@ -132,7 +132,7 @@ void AMD::PMFreqRangeQMLItem::takePMFreqRangeStates(
   QVariantList statesList;
   std::map<unsigned int, units::frequency::megahertz_t> newStates;
 
-  for (auto &[index, freq] : states) {
+  for (auto const &[index, freq] : states) {
     newStates.emplace(index, freq);
 
     statesList.push_back(index);

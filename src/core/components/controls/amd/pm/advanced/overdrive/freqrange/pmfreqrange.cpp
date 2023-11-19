@@ -133,8 +133,9 @@ AMD::PMFreqRange::states() const
 {
   std::vector<std::pair<unsigned int, units::frequency::megahertz_t>> states;
   states.reserve(states_.size());
-  std::transform(states_.cbegin(), states_.cend(), std::back_inserter(states),
-                 [](auto &kv) { return std::make_pair(kv.first, kv.second); });
+  std::transform(
+      states_.cbegin(), states_.cend(), std::back_inserter(states),
+      [](auto const &kv) { return std::make_pair(kv.first, kv.second); });
   return states;
 }
 

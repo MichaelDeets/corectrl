@@ -41,6 +41,6 @@ QVariant Settings::getStringList(QString const &key,
 void Settings::signalSettings()
 {
   auto keys = QSettings::allKeys();
-  for (auto &key : keys)
+  for (auto const &key : keys)
     emit settingChanged(key, QSettings::value(key));
 }

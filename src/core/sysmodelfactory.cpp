@@ -83,7 +83,7 @@ SysModelFactory::createCPU(std::unique_ptr<ICPUInfo> &&cpuInfo,
   // create CPU controls
   std::vector<std::unique_ptr<IControl>> controls;
   auto &cpuControlProviders = cpuControlProvider_->cpuControlProviders();
-  for (auto &provider : cpuControlProviders) {
+  for (auto const &provider : cpuControlProviders) {
     auto newControls = provider->provideCPUControls(*cpuInfo, swInfo);
     controls.insert(controls.end(), std::make_move_iterator(newControls.begin()),
                     std::make_move_iterator(newControls.end()));
@@ -92,7 +92,7 @@ SysModelFactory::createCPU(std::unique_ptr<ICPUInfo> &&cpuInfo,
   // create CPU sensors
   std::vector<std::unique_ptr<ISensor>> sensors;
   auto &cpuSensorProviders = cpuSensorProvider_->cpuSensorProviders();
-  for (auto &provider : cpuSensorProviders) {
+  for (auto const &provider : cpuSensorProviders) {
     auto newSensors = provider->provideCPUSensors(*cpuInfo, swInfo);
     sensors.insert(sensors.end(), std::make_move_iterator(newSensors.begin()),
                    std::make_move_iterator(newSensors.end()));
@@ -109,7 +109,7 @@ std::vector<std::unique_ptr<IGPUInfo>> SysModelFactory::createGPUInfo() const
 
   fs::path sysBasePath{"/sys/class/drm"};
   auto deviceNames = sysExplorer_->renderers();
-  for (auto &deviceName : deviceNames) {
+  for (auto const &deviceName : deviceNames) {
 
     auto sysPath = sysBasePath / deviceName / "device";
     auto devPath = fs::path("/dev/dri").append(deviceName);
@@ -133,7 +133,7 @@ SysModelFactory::createGPU(std::unique_ptr<IGPUInfo> &&gpuInfo,
   // create GPU controls
   std::vector<std::unique_ptr<IControl>> controls;
   auto &gpuControlProviders = gpuControlProvider_->gpuControlProviders();
-  for (auto &provider : gpuControlProviders) {
+  for (auto const &provider : gpuControlProviders) {
     auto newControls = provider->provideGPUControls(*gpuInfo, swInfo);
     controls.insert(controls.end(), std::make_move_iterator(newControls.begin()),
                     std::make_move_iterator(newControls.end()));
@@ -142,7 +142,7 @@ SysModelFactory::createGPU(std::unique_ptr<IGPUInfo> &&gpuInfo,
   // create GPU sensors
   std::vector<std::unique_ptr<ISensor>> sensors;
   auto &gpuSensorProviders = gpuSensorProvider_->gpuSensorProviders();
-  for (auto &provider : gpuSensorProviders) {
+  for (auto const &provider : gpuSensorProviders) {
     auto newSensors = provider->provideGPUSensors(*gpuInfo, swInfo);
     sensors.insert(sensors.end(), std::make_move_iterator(newSensors.begin()),
                    std::make_move_iterator(newSensors.end()));
@@ -163,7 +163,7 @@ std::vector<std::unique_ptr<ICPUInfo>> SysModelFactory::parseCPUInfo() const
   std::optional<int> cpuId;
 
   auto cpuInfoLines = Utils::File::readFileLines("/proc/cpuinfo");
-  for (auto &line : cpuInfoLines) {
+  for (auto const &line : cpuInfoLines) {
 
     if (line.empty()) { // push collected info
       std::optional<int> physicalId;
@@ -186,9 +186,10 @@ std::vector<std::unique_ptr<ICPUInfo>> SysModelFactory::parseCPUInfo() const
         cpuDir.append(std::to_string(*cpuId));
         auto executionUnitPath = basePath / cpuDir;
 
-        auto infoIt = std::find_if(
-            cpuInfo.cbegin(), cpuInfo.cend(),
-            [=](auto &info) { return info->physicalId() == *physicalId; });
+        auto infoIt = std::find_if(cpuInfo.cbegin(), cpuInfo.cend(),
+                                   [=](auto const &info) {
+                                     return info->physicalId() == *physicalId;
+                                   });
         if (infoIt != cpuInfo.cend())
           static_cast<CPUInfo *>(infoIt->get())
               ->addExecutionUnit(

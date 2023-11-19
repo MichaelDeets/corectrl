@@ -44,7 +44,7 @@ std::string ProcPIDSolver::lastComponent(std::string const &path) const
 
 std::string ProcPIDSolver::wineAppName(std::vector<std::string> const &cmdline) const
 {
-  for (auto &entry : cmdline) {
+  for (auto const &entry : cmdline) {
 
     // skip wine executable files
     std::filesystem::path const entryPath(entry);

@@ -75,7 +75,7 @@ void CPUFreq::scalingGovernor(std::string const &scalingGovernor)
   // only assign known scalingGovernors
   auto iter = std::find_if(scalingGovernors().cbegin(),
                            scalingGovernors().cend(),
-                           [&](auto &availableScalingGovernor) {
+                           [&](auto const &availableScalingGovernor) {
                              return scalingGovernor == availableScalingGovernor;
                            });
   if (iter != scalingGovernors().cend())

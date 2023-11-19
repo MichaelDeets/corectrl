@@ -72,7 +72,7 @@ void ControlMode::importControl(IControl::Importer &i)
 void ControlMode::exportControl(IControl::Exporter &e) const
 {
   std::vector<std::string> modes;
-  for (auto &control : controls_) {
+  for (auto const &control : controls_) {
     modes.emplace_back(control->ID());
     control->exportWith(e);
   }
@@ -101,8 +101,9 @@ std::string const &ControlMode::mode() const
 
 void ControlMode::mode(std::string const &mode)
 {
-  auto iter = std::find_if(controls_.cbegin(), controls_.cend(),
-                           [&](auto &control) { return mode == control->ID(); });
+  auto iter = std::find_if(
+      controls_.cbegin(), controls_.cend(),
+      [&](auto const &control) { return mode == control->ID(); });
   if (iter != controls_.cend())
     mode_ = mode;
 }

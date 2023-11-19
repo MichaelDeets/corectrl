@@ -60,7 +60,7 @@ std::optional<Stat> parseProcStat(std::vector<std::string> const &procStatLines)
       R"(^cpu\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\d+\s+\d+\s*$)",
       std::regex::icase);
 
-  for (auto &line : procStatLines) {
+  for (auto const &line : procStatLines) {
     std::smatch result;
     if (std::regex_match(line, result, regex)) {
       std::uint64_t user{0}, nice{0}, system{0}, idle{0}, ioWait{0}, irq{0},

@@ -134,9 +134,9 @@ std::string const &AMD::PMFreqVoltProfilePart::providePMFreqVoltVoltMode() const
 std::pair<units::frequency::megahertz_t, units::voltage::millivolt_t>
 AMD::PMFreqVoltProfilePart::providePMFreqVoltState(unsigned int index) const
 {
-  auto stateIt = std::find_if(states_.cbegin(), states_.cend(), [=](auto &state) {
-    return std::get<0>(state) == index;
-  });
+  auto stateIt = std::find_if(
+      states_.cbegin(), states_.cend(),
+      [=](auto const &state) { return std::get<0>(state) == index; });
 
   if (stateIt != states_.cend())
     return std::make_pair(std::get<1>(*stateIt), std::get<2>(*stateIt));
@@ -157,7 +157,7 @@ void AMD::PMFreqVoltProfilePart::importProfilePart(IProfilePart::Importer &i)
 
   voltMode(importer.providePMFreqVoltVoltMode());
 
-  for (auto &[index, _1, _2] : states_)
+  for (auto const &[index, _1, _2] : states_)
     state(index, importer.providePMFreqVoltState(index));
 
   activateStates(importer.providePMFreqVoltActiveStates());
@@ -192,7 +192,7 @@ void AMD::PMFreqVoltProfilePart::voltMode(std::string const &mode)
 {
   auto iter = std::find_if(
       voltModes_.cbegin(), voltModes_.cend(),
-      [&](auto &availableMode) { return mode == availableMode; });
+      [&](auto const &availableMode) { return mode == availableMode; });
 
   if (iter != voltModes_.cend())
     voltMode_ = mode;
@@ -202,9 +202,9 @@ void AMD::PMFreqVoltProfilePart::state(
     unsigned int index,
     std::pair<units::frequency::megahertz_t, units::voltage::millivolt_t> const &value)
 {
-  auto stateIt = std::find_if(states_.begin(), states_.end(), [=](auto &state) {
-    return std::get<0>(state) == index;
-  });
+  auto stateIt = std::find_if(
+      states_.begin(), states_.end(),
+      [=](auto const &state) { return std::get<0>(state) == index; });
 
   if (stateIt != states_.end()) {
     auto &[_, sFreq, sVolt] = *stateIt;
@@ -221,7 +221,7 @@ void AMD::PMFreqVoltProfilePart::activateStates(
                [&](unsigned int index) {
                  // skip unknown state states
                  return std::find_if(states_.cbegin(), states_.cend(),
-                                     [&](auto &state) {
+                                     [&](auto const &state) {
                                        return std::get<0>(state) == index;
                                      }) != states_.cend();
                });

@@ -133,7 +133,7 @@ void AMD::FanCurveXMLParser::appendTo(pugi::xml_node &parentNode)
   pmFixedNode.append_attribute("fanStop") = fanStop_;
   pmFixedNode.append_attribute("fanStartValue") = fanStartValue_;
   auto curveNode = pmFixedNode.append_child(CurveNodeName.data());
-  for (auto &[temp, pwm] : points_) {
+  for (auto const &[temp, pwm] : points_) {
     auto pointNode = curveNode.append_child(PointNodeName.data());
     pointNode.append_attribute("temp") = temp.to<int>();
     pointNode.append_attribute("pwm") =

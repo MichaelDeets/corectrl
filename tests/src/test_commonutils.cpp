@@ -28,15 +28,18 @@ TEST_CASE("CommonUtils tests", "[Utils][Common]")
       ::Utils::Common::normalizePoints(points, tempRange);
 
       // temperature range
-      REQUIRE_FALSE(std::any_of(points.cbegin(), points.cend(), [&](auto &point) {
-        return point.first < tempRange.first || point.first > tempRange.second;
-      }));
+      REQUIRE_FALSE(
+          std::any_of(points.cbegin(), points.cend(), [&](auto const &point) {
+            return point.first < tempRange.first ||
+                   point.first > tempRange.second;
+          }));
 
       // percentage range
-      REQUIRE_FALSE(std::any_of(points.cbegin(), points.cend(), [&](auto &point) {
-        return point.second < units::concentration::percent_t(0) ||
-               point.second > units::concentration::percent_t(100);
-      }));
+      REQUIRE_FALSE(
+          std::any_of(points.cbegin(), points.cend(), [&](auto const &point) {
+            return point.second < units::concentration::percent_t(0) ||
+                   point.second > units::concentration::percent_t(100);
+          }));
     }
 
     SECTION("clamp inner points y-axis coordinates into [prev.y, next.y] range")

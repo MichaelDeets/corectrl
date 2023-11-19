@@ -96,8 +96,8 @@ std::vector<std::filesystem::path> search(std::regex const &regex,
   std::vector<std::filesystem::path> paths;
 
   if (isDirectoryPathValid(path)) {
-    for (auto &entry : fs::directory_iterator(path)) {
-      auto &entryDirPath = entry.path();
+    for (auto const &entry : fs::directory_iterator(path)) {
+      auto const &entryDirPath = entry.path();
       std::string entryDirName((*(--entryDirPath.end())).string());
       if (std::regex_search(entryDirName, regex))
         paths.push_back(entryDirPath);

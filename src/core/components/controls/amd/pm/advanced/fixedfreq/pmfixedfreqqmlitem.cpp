@@ -156,7 +156,7 @@ void AMD::PMFixedFreqQMLItem::takePMFixedFreqSclkStates(
     std::vector<std::pair<unsigned int, units::frequency::megahertz_t>> const &states)
 {
   QVariantList freqStates;
-  for (auto &[index, freq] : states) {
+  for (auto const &[index, freq] : states) {
     freqStates.push_back(index);
     freqStates.push_back(stateLabel(freq.to<unsigned int>()));
   }
@@ -168,7 +168,7 @@ void AMD::PMFixedFreqQMLItem::takePMFixedFreqMclkStates(
     std::vector<std::pair<unsigned int, units::frequency::megahertz_t>> const &states)
 {
   QVariantList freqStates;
-  for (auto &[index, freq] : states) {
+  for (auto const &[index, freq] : states) {
     freqStates.push_back(index);
     freqStates.push_back(stateLabel(freq.to<unsigned int>()));
   }

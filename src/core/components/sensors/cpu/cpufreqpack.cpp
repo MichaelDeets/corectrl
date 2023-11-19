@@ -67,7 +67,7 @@ class Provider final : public ICPUSensorProvider::IProvider
         }
 
         std::vector<std::unique_ptr<IDataSource<unsigned int>>> dataSources;
-        for (auto &executionUnit : cpuInfo.executionUnits()) {
+        for (auto const &executionUnit : cpuInfo.executionUnits()) {
           auto curFreqPath = executionUnit.sysPath / "cpufreq/scaling_cur_freq";
           if (Utils::File::isSysFSEntryValid(curFreqPath)) {
 

@@ -79,7 +79,7 @@ std::string CPUFreqProvider::defatultGovernor(
 
       // clamp governor into available governors
       auto iter = std::find_if(governors.cbegin(), governors.cend(),
-                               [&](auto &availableGovernor) {
+                               [&](auto const &availableGovernor) {
                                  return governor == availableGovernor;
                                });
       if (iter == governors.cend()) // fallback to first available governor
@@ -98,7 +98,7 @@ CPUFreqProvider::createScalingGovernorDataSources(ICPUInfo const &cpuInfo) const
   std::vector<std::unique_ptr<IDataSource<std::string>>> scalingGovernorDataSources;
 
   std::string scalingGovernorPath{"cpufreq/scaling_governor"};
-  for (auto &executionUnit : cpuInfo.executionUnits()) {
+  for (auto const &executionUnit : cpuInfo.executionUnits()) {
     auto unitScalingGovernorPath = executionUnit.sysPath / scalingGovernorPath;
     if (Utils::File::isSysFSEntryValid(unitScalingGovernorPath))
       scalingGovernorDataSources.emplace_back(

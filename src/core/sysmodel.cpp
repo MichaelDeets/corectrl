@@ -55,7 +55,7 @@ SysModel::info() const
 
   info.emplace_back(softwareInfo());
 
-  for (auto &component : components_)
+  for (auto const &component : components_)
     info.emplace_back(component->componentInfo());
 
   return info;
@@ -79,7 +79,7 @@ void SysModel::exportWith(Exportable::Exporter &e) const
 {
   auto exporter = e.provideExporter(*this);
   if (exporter.has_value()) {
-    for (auto &component : components_)
+    for (auto const &component : components_)
       component->exportWith(*exporter);
   }
 }

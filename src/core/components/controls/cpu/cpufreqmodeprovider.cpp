@@ -15,7 +15,7 @@ CPUFreqModeProvider::provideCPUControls(ICPUInfo const &cpuInfo,
   std::vector<std::unique_ptr<IControl>> controls;
   std::vector<std::unique_ptr<IControl>> modeControls;
 
-  for (auto &provider : cpuControlProviders()) {
+  for (auto const &provider : cpuControlProviders()) {
     auto newControls = provider->provideCPUControls(cpuInfo, swInfo);
     modeControls.insert(modeControls.end(),
                         std::make_move_iterator(newControls.begin()),

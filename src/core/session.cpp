@@ -204,7 +204,7 @@ void Session::profileRemoved(std::string const &profileName)
 
     auto const profileIndexIter = std::find_if(
         profileExeIndex_.cbegin(), profileExeIndex_.cend(),
-        [&](auto &indexItem) { return indexItem.second == profileName; });
+        [&](auto const &indexItem) { return indexItem.second == profileName; });
 
     if (profileIndexIter != profileExeIndex_.cend()) {
       helperMonitor_->forgetApp(profileIndexIter->first);
@@ -221,7 +221,7 @@ void Session::profileChanged(std::string const &profileName)
 
   auto const profileViewIter = std::find_if(
       pViews_.cbegin(), pViews_.cend(),
-      [&](auto &pv) { return pv->name() == profileName; });
+      [&](auto const &pv) { return pv->name() == profileName; });
 
   if (profileViewIter != pViews_.cend()) {
     // compute a list with the names of profile views to recreate
@@ -229,7 +229,7 @@ void Session::profileChanged(std::string const &profileName)
     pViewsToRecreate.reserve(pViews_.size());
     std::transform(profileViewIter, pViews_.cend(),
                    std::back_inserter(pViewsToRecreate),
-                   [](auto &pv) { return pv->name(); });
+                   [](auto const &pv) { return pv->name(); });
 
     // remove outdated profile views
     pViews_.erase(profileViewIter, pViews_.cend());
@@ -304,7 +304,7 @@ void Session::profileInfoChanged(IProfile::Info const &oldInfo,
       // find the profile view
       auto profileViewIter = std::find_if(
           pViews_.cbegin(), pViews_.cend(),
-          [&](auto &pv) { return pv->name() == oldInfo.name; });
+          [&](auto const &pv) { return pv->name() == oldInfo.name; });
 
       if (profileViewIter != pViews_.end()) {
         std::vector<std::string> pViewsToRecreate;
@@ -319,7 +319,7 @@ void Session::profileInfoChanged(IProfile::Info const &oldInfo,
         if (nextProfileViewIter != pViews_.end()) {
           std::transform(nextProfileViewIter, pViews_.cend(),
                          std::back_inserter(pViewsToRecreate),
-                         [](auto &pv) { return pv->name(); });
+                         [](auto const &pv) { return pv->name(); });
         }
 
         // remove affected the profile views
@@ -390,7 +390,7 @@ void Session::createProfileViews(
     std::optional<std::reference_wrapper<IProfileView>> baseProfileView,
     std::vector<std::string> const &profileNames)
 {
-  for (auto &profileName : profileNames) {
+  for (auto const &profileName : profileNames) {
     auto profile = profileManager_->profile(profileName);
     if (profile.has_value()) {
       auto profileView = profileViewFactory_->build(*profile, baseProfileView);
@@ -446,7 +446,7 @@ void Session::dequeueProfileView(std::string const &profileName)
 
   auto profileViewIter = std::find_if(
       pViews_.cbegin(), pViews_.cend(),
-      [&](auto &pv) { return pv->name() == profileName; });
+      [&](auto const &pv) { return pv->name() == profileName; });
 
   if (profileViewIter != pViews_.end()) {
     auto nextProfileView = std::next(profileViewIter);
@@ -457,7 +457,7 @@ void Session::dequeueProfileView(std::string const &profileName)
       pViewsToRecreate.reserve(pViews_.size());
       std::transform(nextProfileView, pViews_.cend(),
                      std::back_inserter(pViewsToRecreate),
-                     [](auto &pv) { return pv->name(); });
+                     [](auto const &pv) { return pv->name(); });
     }
 
     // remove profile view and the outdated profile views

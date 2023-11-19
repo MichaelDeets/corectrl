@@ -111,8 +111,9 @@ void AMD::PMFreqRangeXMLParser::takePMFreqRangeStates(
 units::frequency::megahertz_t
 AMD::PMFreqRangeXMLParser::providePMFreqRangeState(unsigned int index) const
 {
-  auto stateIt = std::find_if(states_.cbegin(), states_.cend(),
-                              [=](auto &state) { return state.first == index; });
+  auto stateIt = std::find_if(
+      states_.cbegin(), states_.cend(),
+      [=](auto const &state) { return state.first == index; });
   if (stateIt != states_.cend())
     return stateIt->second;
   else
@@ -181,7 +182,7 @@ void AMD::PMFreqRangeXMLParser::loadStates(pugi::xml_node const &node)
         auto index = indexAttr.as_uint();
         auto indexIt = std::find_if(
             statesDefault_.cbegin(), statesDefault_.cend(),
-            [=](auto &state) { return state.first == index; });
+            [=](auto const &state) { return state.first == index; });
         if (indexIt == statesDefault_.cend())
           continue; // skip unknown index
 

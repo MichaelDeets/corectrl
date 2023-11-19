@@ -72,7 +72,7 @@ QByteArray SingleInstance::toRawData(QStringList const &data) const
 {
   QByteArray result;
 
-  for (auto &item : data) {
+  for (auto const &item : data) {
     result.append(item.toUtf8());
     result.append('\0');
   }

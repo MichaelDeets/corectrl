@@ -131,12 +131,12 @@ void ProfileManagerUI::init(ISession *session, ISysModelUI *sysModelUI)
   // the global profile must be the first element
   auto globalIt = std::find_if(
       profileNames.begin(), profileNames.end(),
-      [](auto &profile) { return profile == IProfile::Info::GlobalID; });
+      [](auto const &profile) { return profile == IProfile::Info::GlobalID; });
   if (globalIt != profileNames.cend())
     std::rotate(profileNames.begin(), globalIt, globalIt + 1);
 
   QVariantList list;
-  for (auto &profileName : profileNames) {
+  for (auto const &profileName : profileNames) {
     addProfileUsedNames(profileName);
 
     auto profile = profileManager_->profile(profileName);

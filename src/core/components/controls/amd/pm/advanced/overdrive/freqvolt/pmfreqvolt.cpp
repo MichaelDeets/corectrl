@@ -183,10 +183,11 @@ AMD::PMFreqVolt::states() const
                          units::voltage::millivolt_t>>
       states;
   states.reserve(states_.size());
-  std::transform(
-      states_.cbegin(), states_.cend(), std::back_inserter(states), [](auto &kv) {
-        return std::make_tuple(kv.first, kv.second.first, kv.second.second);
-      });
+  std::transform(states_.cbegin(), states_.cend(), std::back_inserter(states),
+                 [](auto const &kv) {
+                   return std::make_tuple(kv.first, kv.second.first,
+                                          kv.second.second);
+                 });
   return states;
 }
 

@@ -78,7 +78,7 @@ void ControlGroup::importControl(IControl::Importer &i)
 
 void ControlGroup::exportControl(IControl::Exporter &e) const
 {
-  for (auto &control : controls_)
+  for (auto const &control : controls_)
     control->exportWith(e);
 }
 

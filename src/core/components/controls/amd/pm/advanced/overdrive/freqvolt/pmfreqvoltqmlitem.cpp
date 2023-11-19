@@ -209,7 +209,7 @@ void AMD::PMFreqVoltQMLItem::takePMFreqVoltStates(
 
   QVariantList statesList;
   statesList.reserve(states.size() * 3);
-  for (auto &[index, freq, volt] : states) {
+  for (auto const &[index, freq, volt] : states) {
     newStates.emplace(index, std::make_pair(freq, volt));
 
     statesList.push_back(index);

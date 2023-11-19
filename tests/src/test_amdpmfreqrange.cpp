@@ -55,7 +55,7 @@ class PMFreqRangeImporterStub final : public ::AMD::PMFreqRange::Importer
   {
     auto stateIt = std::find_if(
         states_.cbegin(), states_.cend(),
-        [=](auto &state) { return state.first == index; });
+        [=](auto const &state) { return state.first == index; });
 
     return stateIt->second;
   }

@@ -237,11 +237,11 @@ TEST_CASE("AMD FanCurve tests", "[GPU][AMD][Fan][FanCurve]")
 
     SECTION("Default curve points are normalized into temperature range")
     {
-      REQUIRE_FALSE(
-          std::any_of(ts.curve().cbegin(), ts.curve().cend(), [&](auto &point) {
-            return point.first < tempRange.first ||
-                   point.first > tempRange.second;
-          }));
+      REQUIRE_FALSE(std::any_of(ts.curve().cbegin(), ts.curve().cend(),
+                                [&](auto const &point) {
+                                  return point.first < tempRange.first ||
+                                         point.first > tempRange.second;
+                                }));
     }
   }
 

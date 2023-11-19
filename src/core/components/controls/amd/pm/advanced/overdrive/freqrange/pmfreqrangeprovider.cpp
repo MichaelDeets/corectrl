@@ -86,7 +86,7 @@ AMD::PMFreqRangeProvider::provideGPUControls(IGPUInfo const &gpuInfo,
       }
 
       if (logPPOdClkVoltContents) {
-        for (auto &line : ppOdClkVoltLines)
+        for (auto const &line : ppOdClkVoltLines)
           LOG(ERROR) << line;
       }
     }

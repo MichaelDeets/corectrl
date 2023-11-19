@@ -30,7 +30,7 @@ AMD::PMOverclockProvider::provideGPUControls(IGPUInfo const &gpuInfo,
 
       std::vector<std::unique_ptr<IControl>> modeControls;
 
-      for (auto &provider : providers_()) {
+      for (auto const &provider : providers_()) {
         auto newControls = provider->provideGPUControls(gpuInfo, swInfo);
         modeControls.insert(modeControls.end(),
                             std::make_move_iterator(newControls.begin()),

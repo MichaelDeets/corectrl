@@ -99,8 +99,9 @@ bool AMD::PMFreqRangeProfilePart::provideActive() const
 units::frequency::megahertz_t
 AMD::PMFreqRangeProfilePart::providePMFreqRangeState(unsigned int index) const
 {
-  auto stateIt = std::find_if(states_.cbegin(), states_.cend(),
-                              [=](auto &state) { return state.first == index; });
+  auto stateIt = std::find_if(
+      states_.cbegin(), states_.cend(),
+      [=](auto const &state) { return state.first == index; });
   if (stateIt != states_.cend())
     return stateIt->second;
   else
@@ -134,8 +135,9 @@ std::unique_ptr<IProfilePart> AMD::PMFreqRangeProfilePart::cloneProfilePart() co
 void AMD::PMFreqRangeProfilePart::setState(unsigned int index,
                                            units::frequency::megahertz_t freq)
 {
-  auto stateIt = std::find_if(states_.begin(), states_.end(),
-                              [=](auto &state) { return state.first == index; });
+  auto stateIt = std::find_if(
+      states_.begin(), states_.end(),
+      [=](auto const &state) { return state.first == index; });
   if (stateIt != states_.end())
     stateIt->second = std::clamp(freq, stateRange_.first, stateRange_.second);
 }

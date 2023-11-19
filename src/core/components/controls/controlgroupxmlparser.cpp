@@ -117,7 +117,7 @@ std::optional<std::reference_wrapper<Exportable::Exporter>>
 ControlGroupXMLParser::provideExporter(Item const &i)
 {
   auto parserIt = std::find_if(
-      parsers_.cbegin(), parsers_.cend(), [&](auto &part) {
+      parsers_.cbegin(), parsers_.cend(), [&](auto const &part) {
         return part->ID() == i.ID() && part->instanceID() == i.instanceID();
       });
 
@@ -131,7 +131,7 @@ std::optional<std::reference_wrapper<Importable::Importer>>
 ControlGroupXMLParser::provideImporter(Item const &i)
 {
   auto parserIt = std::find_if(
-      parsers_.cbegin(), parsers_.cend(), [&](auto &part) {
+      parsers_.cbegin(), parsers_.cend(), [&](auto const &part) {
         return part->ID() == i.ID() && part->instanceID() == i.instanceID();
       });
 

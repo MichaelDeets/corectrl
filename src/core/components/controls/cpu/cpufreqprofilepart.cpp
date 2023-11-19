@@ -110,9 +110,10 @@ std::unique_ptr<IProfilePart> CPUFreqProfilePart::cloneProfilePart() const
 void CPUFreqProfilePart::governor(std::string const &governor)
 {
   // only import known governors
-  auto iter = std::find_if(
-      governors_.cbegin(), governors_.cend(),
-      [&](auto &availableGovernor) { return governor == availableGovernor; });
+  auto iter = std::find_if(governors_.cbegin(), governors_.cend(),
+                           [&](auto const &availableGovernor) {
+                             return governor == availableGovernor;
+                           });
   if (iter != governors_.cend())
     governor_ = governor;
 }

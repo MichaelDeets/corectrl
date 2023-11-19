@@ -159,7 +159,7 @@ void AMD::PMVoltCurveProfilePart::mode(std::string const &mode)
 {
   auto iter = std::find_if(
       modes_.cbegin(), modes_.cend(),
-      [&](auto &availableMode) { return mode == availableMode; });
+      [&](auto const &availableMode) { return mode == availableMode; });
   if (iter != modes_.cend())
     mode_ = mode;
 }

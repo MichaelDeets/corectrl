@@ -23,7 +23,7 @@ AMD::PpDpmHandler::PpDpmHandler(
 
     active_.reserve(states_.size());
     std::transform(states_.cbegin(), states_.cend(), std::back_inserter(active_),
-                   [](auto &state) { return state.first; });
+                   [](auto const &state) { return state.first; });
   }
 }
 
@@ -45,7 +45,7 @@ void AMD::PpDpmHandler::activate(std::vector<unsigned int> const &states)
                [&](unsigned int index) {
                  // skip unknown state indices
                  return std::find_if(states_.cbegin(), states_.cend(),
-                                     [&](auto &state) {
+                                     [&](auto const &state) {
                                        return state.first == index;
                                      }) != states_.cend();
                });
@@ -71,7 +71,7 @@ void AMD::PpDpmHandler::restoreState(ICommandQueue &)
 void AMD::PpDpmHandler::reset(ICommandQueue &ctlCmds)
 {
   std::string activeStatesStr;
-  for (auto &state : states_)
+  for (auto const &state : states_)
     activeStatesStr.append(std::to_string(state.first)).append(" ");
   activeStatesStr.pop_back(); // remove trailing space
 
@@ -113,7 +113,7 @@ void AMD::PpDpmHandler::sync(ICommandQueue &ctlCmds)
 void AMD::PpDpmHandler::apply(ICommandQueue &ctlCmds)
 {
   std::string activeStatesStr;
-  for (auto &index : active_)
+  for (auto index : active_)
     activeStatesStr.append(std::to_string(index)).append(" ");
   activeStatesStr.pop_back(); // remove trailing space
 

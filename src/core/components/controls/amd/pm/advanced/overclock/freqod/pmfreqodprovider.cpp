@@ -90,14 +90,14 @@ AMD::PMFreqOdProvider::provideGPUControls(IGPUInfo const &gpuInfo,
           if (!sclkStates.has_value()) {
             LOG(WARNING) << fmt::format("Unknown data format on {}",
                                         dpmSclk.string());
-            for (auto &line : dpmSclkLines)
+            for (auto const &line : dpmSclkLines)
               LOG(ERROR) << line;
           }
 
           if (!mclkStates.has_value()) {
             LOG(WARNING) << fmt::format("Unknown data format on {}",
                                         dpmMclk.string());
-            for (auto &line : dpmMclkLines)
+            for (auto const &line : dpmMclkLines)
               LOG(ERROR) << line;
           }
         }

@@ -68,14 +68,14 @@ AMD::PMFixedFreqAdvProvider::provideGPUControls(IGPUInfo const &gpuInfo,
           if (!dpmSclkValid) {
             LOG(WARNING) << fmt::format("Unknown data format on {}",
                                         dpmSclk.string());
-            for (auto &line : dpmSclkLines)
+            for (auto const &line : dpmSclkLines)
               LOG(ERROR) << line;
           }
 
           if (!dpmMclkValid) {
             LOG(WARNING) << fmt::format("Unknown data format on {}",
                                         dpmMclk.string());
-            for (auto &line : dpmMclkLines)
+            for (auto const &line : dpmMclkLines)
               LOG(ERROR) << line;
           }
         }

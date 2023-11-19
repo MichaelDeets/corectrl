@@ -167,7 +167,7 @@ int AMD::FanCurve::evaluatePwm(units::concentration::percent_t input) const
 {
   if (points_.size() > 1) {
     auto pIt = std::find_if(points_.cbegin(), points_.cend(),
-                            [=](auto &p) { return p.second > input; });
+                            [=](auto const &p) { return p.second > input; });
 
     auto &p1 = (pIt == points_.cbegin()
                     ? *pIt
@@ -200,7 +200,7 @@ unsigned int AMD::FanCurve::evaluateTemp(units::temperature::celsius_t input) co
 {
   if (points_.size() > 1) {
     auto pIt = std::find_if(points_.cbegin(), points_.cend(),
-                            [=](auto &p) { return p.first > input; });
+                            [=](auto const &p) { return p.first > input; });
 
     auto &p1 = (pIt == points_.cbegin()
                     ? *pIt

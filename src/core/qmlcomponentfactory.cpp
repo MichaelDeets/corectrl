@@ -19,8 +19,8 @@ QMLComponentFactory::QMLComponentFactory(
 
 void QMLComponentFactory::registerQMLTypes() const
 {
-  auto &qmlTypeRegisterers = qmlComponentRegistry_->qmlTypeRegisterers();
-  for (auto &qmlTypeRegisterer : qmlTypeRegisterers)
+  auto const &qmlTypeRegisterers = qmlComponentRegistry_->qmlTypeRegisterers();
+  for (auto const &qmlTypeRegisterer : qmlTypeRegisterers)
     qmlTypeRegisterer();
 }
 

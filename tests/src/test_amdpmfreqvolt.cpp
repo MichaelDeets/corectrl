@@ -68,7 +68,7 @@ class PMFreqVoltImporterStub final : public ::AMD::PMFreqVolt::Importer
   {
     auto stateIt = std::find_if(
         states_.cbegin(), states_.cend(),
-        [=](auto &state) { return std::get<0>(state) == index; });
+        [=](auto const &state) { return std::get<0>(state) == index; });
 
     return {std::get<1>(*stateIt), std::get<2>(*stateIt)};
   }

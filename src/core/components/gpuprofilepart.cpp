@@ -175,8 +175,9 @@ std::optional<std::reference_wrapper<Importable::Importer>>
 GPUProfilePart::provideImporter(Item const &i)
 {
   auto &id = i.ID();
-  auto partIter = std::find_if(parts_.cbegin(), parts_.cend(),
-                               [&](auto &part) { return part->ID() == id; });
+  auto partIter = std::find_if(
+      parts_.cbegin(), parts_.cend(),
+      [&](auto const &part) { return part->ID() == id; });
 
   if (partIter != parts_.cend()) {
     auto importer = dynamic_cast<Importable::Importer *>(partIter->get());
@@ -217,7 +218,7 @@ void GPUProfilePart::exportProfilePart(IProfilePart::Exporter &e) const
   gExporter.takeRevision(revision_);
   gExporter.takeUniqueID(uniqueID_);
 
-  for (auto &part : parts_)
+  for (auto const &part : parts_)
     part->exportWith(e);
 }
 
@@ -232,7 +233,7 @@ std::unique_ptr<IProfilePart> GPUProfilePart::cloneProfilePart() const
   clone->parts_.reserve(parts_.size());
   std::transform(parts_.cbegin(), parts_.cend(),
                  std::back_inserter(clone->parts_),
-                 [](auto &part) { return part->clone(); });
+                 [](auto const &part) { return part->clone(); });
 
   return std::move(clone);
 }

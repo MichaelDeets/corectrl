@@ -87,7 +87,7 @@ void AMD::PMPowerProfile::syncControl(ICommandQueue &ctlCmds)
 
 void AMD::PMPowerProfile::mode(std::string const &mode)
 {
-  for (auto &kv : indexMode_) {
+  for (auto const &kv : indexMode_) {
     if (kv.second == mode) {
       currentModeIndex_ = kv.first;
       break;

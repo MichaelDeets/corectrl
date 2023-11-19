@@ -45,9 +45,9 @@ ProfileStorage::profiles(IProfile const &baseProfile)
   std::vector<std::unique_ptr<IProfile>> profiles;
 
   if (profilesDirectoryExist()) {
-    for (auto &pathIt : fs::directory_iterator(path_)) {
+    for (auto const &pathIt : fs::directory_iterator(path_)) {
 
-      auto filePath = pathIt.path();
+      auto const &filePath = pathIt.path();
       if (Utils::File::isFilePathValid(filePath) &&
           filePath.extension() == fileExtension_) {
 

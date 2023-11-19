@@ -65,10 +65,10 @@ void SystemInfoUI::init(ISysModel const *sysModel)
   sysModel_ = sysModel;
   initInfo();
 
-  for (auto &sysModelInfo : info_) {
+  for (auto const &sysModelInfo : info_) {
 
     QVariantList list;
-    for (auto &sysComponentInfo : sysModelInfo.second) {
+    for (auto const &sysComponentInfo : sysModelInfo.second) {
       list.append(sysComponentInfo.first);
       list.append(sysComponentInfo.second);
     }
@@ -85,13 +85,13 @@ void SystemInfoUI::copyToClipboard() const
     text += App::VersionStr.data();
     text += "\n";
 
-    for (auto &sysModelInfo : info_) {
+    for (auto const &sysModelInfo : info_) {
 
       auto sectionTitle = sysModelInfo.first;
       sectionTitle.replace("\n", " ");
       text += "\n==== " + sectionTitle + " ====\n";
 
-      for (auto &sysComponentInfo : sysModelInfo.second)
+      for (auto const &sysComponentInfo : sysModelInfo.second)
         text += sysComponentInfo.first + ": " + sysComponentInfo.second + "\n";
     }
 
@@ -103,19 +103,21 @@ void SystemInfoUI::initInfo()
 {
   auto rawInfo = sysModel_->info();
 
-  for (auto &sysModelInfo : rawInfo) {
+  for (auto const &sysModelInfo : rawInfo) {
     std::vector<std::pair<QString, QString>> processedModelInfo;
 
     // translate keys
     std::transform(sysModelInfo.second.cbegin(), sysModelInfo.second.cend(),
-                   std::back_inserter(processedModelInfo), [](auto &pair) {
+                   std::back_inserter(processedModelInfo), [](auto const &pair) {
                      return std::pair(tr(pair.first.c_str()),
                                       QString::fromStdString(pair.second));
                    });
 
     // sort information elements using the translated keys
     std::sort(processedModelInfo.begin(), processedModelInfo.end(),
-              [](auto &left, auto &right) { return left.first < right.first; });
+              [](auto const &left, auto const &right) {
+                return left.first < right.first;
+              });
 
     info_.emplace_back(QString::fromStdString(sysModelInfo.first),
                        std::move(processedModelInfo));

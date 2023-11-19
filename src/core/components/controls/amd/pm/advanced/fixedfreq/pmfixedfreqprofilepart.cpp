@@ -63,7 +63,7 @@ void AMD::PMFixedFreqProfilePart::Initializer::takePMFixedFreqSclkStates(
   outer_.sclkIndices_.reserve(states.size());
   std::transform(states.cbegin(), states.cend(),
                  std::back_inserter(outer_.sclkIndices_),
-                 [](auto &kv) { return kv.first; });
+                 [](auto const &kv) { return kv.first; });
 }
 
 void AMD::PMFixedFreqProfilePart::Initializer::takePMFixedFreqMclkStates(
@@ -72,7 +72,7 @@ void AMD::PMFixedFreqProfilePart::Initializer::takePMFixedFreqMclkStates(
   outer_.mclkIndices_.reserve(states.size());
   std::transform(states.cbegin(), states.cend(),
                  std::back_inserter(outer_.mclkIndices_),
-                 [](auto &kv) { return kv.first; });
+                 [](auto const &kv) { return kv.first; });
 }
 
 AMD::PMFixedFreqProfilePart::PMFixedFreqProfilePart() noexcept

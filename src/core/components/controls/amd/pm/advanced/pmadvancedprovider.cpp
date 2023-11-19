@@ -18,7 +18,7 @@ AMD::PMAdvancedProvider::provideGPUControls(IGPUInfo const &gpuInfo,
   if (gpuInfo.vendor() == Vendor::AMD) {
     std::vector<std::unique_ptr<IControl>> groupControls;
 
-    for (auto &provider : providers_()) {
+    for (auto const &provider : providers_()) {
       auto newControls = provider->provideGPUControls(gpuInfo, swInfo);
       groupControls.insert(groupControls.end(),
                            std::make_move_iterator(newControls.begin()),

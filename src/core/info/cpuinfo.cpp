@@ -34,7 +34,7 @@ std::vector<std::string> CPUInfo::keys() const
   std::vector<std::string> keys;
   keys.reserve(info_.size());
 
-  auto const keySelector = [](auto &pair) { return pair.first; };
+  auto const keySelector = [](auto const &pair) { return pair.first; };
   std::transform(info_.cbegin(), info_.cend(), std::back_inserter(keys),
                  keySelector);
 

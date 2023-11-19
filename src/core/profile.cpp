@@ -152,7 +152,7 @@ void Profile::exportWith(Exportable::Exporter &e) const
     profileExporter.takeActive(active());
     profileExporter.takeInfo(info());
 
-    for (auto &part : parts_)
+    for (auto const &part : parts_)
       part->exportWith(*exporter);
   }
 }

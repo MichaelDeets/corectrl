@@ -18,7 +18,7 @@ AMD::PMFreqModeProvider::provideGPUControls(IGPUInfo const &gpuInfo,
   if (gpuInfo.vendor() == Vendor::AMD) {
     std::vector<std::unique_ptr<IControl>> modeControls;
 
-    for (auto &provider : gpuControlProviders()) {
+    for (auto const &provider : gpuControlProviders()) {
       auto newControls = provider->provideGPUControls(gpuInfo, swInfo);
       modeControls.insert(modeControls.end(),
                           std::make_move_iterator(newControls.begin()),

@@ -127,10 +127,10 @@ void CPU::exportWith(Exportable::Exporter &e) const
     cpuExporter.takeActive(active());
     cpuExporter.takeInfo(info());
 
-    for (auto &sensor : sensors_)
+    for (auto const &sensor : sensors_)
       cpuExporter.takeSensor(*sensor);
 
-    for (auto &control : controls_)
+    for (auto const &control : controls_)
       control->exportWith(*exporter);
   }
 }

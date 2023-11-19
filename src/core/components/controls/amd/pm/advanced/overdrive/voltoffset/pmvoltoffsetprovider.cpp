@@ -40,7 +40,7 @@ AMD::PMVoltOffsetProvider::provideGPUControls(IGPUInfo const &gpuInfo,
     }
     else {
       LOG(WARNING) << fmt::format("Invalid data on {}", ppOdClkVolt.string());
-      for (auto &line : ppOdClkVoltLines)
+      for (auto const &line : ppOdClkVoltLines)
         LOG(ERROR) << line;
     }
   }

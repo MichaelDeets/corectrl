@@ -40,7 +40,7 @@ GPUInfoUevent::provideInfo(Vendor, int, IGPUInfo::Path const &path,
     std::string pciSlot;
     std::string driver;
 
-    for (auto &line : data) {
+    for (auto const &line : data) {
       if (line.find(driverStr) == 0) {
         driver = line.substr(driverStr.length() + 1, std::string::npos);
       }

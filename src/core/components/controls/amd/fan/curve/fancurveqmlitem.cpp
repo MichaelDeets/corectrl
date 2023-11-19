@@ -203,7 +203,7 @@ void AMD::FanCurveQMLItem::takeFanCurvePoints(
     points_ = points;
 
     qPoints_.clear();
-    for (auto &[temp, pwm] : points_)
+    for (auto const &[temp, pwm] : points_)
       qPoints_.push_back(QPointF(temp.to<qreal>(), pwm.to<qreal>() * 100));
 
     emit curveChanged(qPoints_);

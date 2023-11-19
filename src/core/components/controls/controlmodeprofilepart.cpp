@@ -135,8 +135,9 @@ std::optional<std::reference_wrapper<Importable::Importer>>
 ControlModeProfilePart::provideImporter(Item const &i)
 {
   auto &id = i.ID();
-  auto partIter = std::find_if(parts_.cbegin(), parts_.cend(),
-                               [&](auto &part) { return part->ID() == id; });
+  auto partIter = std::find_if(
+      parts_.cbegin(), parts_.cend(),
+      [&](auto const &part) { return part->ID() == id; });
 
   if (partIter != parts_.cend()) {
     auto importer = dynamic_cast<Importable::Importer *>(partIter->get());
@@ -175,7 +176,7 @@ void ControlModeProfilePart::exportProfilePart(IProfilePart::Exporter &e) const
   auto &pmExporter = dynamic_cast<ControlModeProfilePart::Exporter &>(e);
   pmExporter.takeMode(mode_);
 
-  for (auto &part : parts_)
+  for (auto const &part : parts_)
     part->exportWith(e);
 }
 
@@ -196,7 +197,7 @@ std::unique_ptr<IProfilePart> ControlModeProfilePart::cloneProfilePart() const
 void ControlModeProfilePart::mode(std::string const &mode)
 {
   auto iter = std::find_if(parts_.cbegin(), parts_.cend(),
-                           [&](auto &part) { return mode == part->ID(); });
+                           [&](auto const &part) { return mode == part->ID(); });
   if (iter != parts_.cend())
     mode_ = mode;
 }

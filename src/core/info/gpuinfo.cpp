@@ -34,7 +34,7 @@ std::vector<std::string> GPUInfo::keys() const
   std::vector<std::string> keys;
   keys.reserve(info_.size());
 
-  auto const keySelector = [](auto &pair) { return pair.first; };
+  auto const keySelector = [](auto const &pair) { return pair.first; };
   std::transform(info_.cbegin(), info_.cend(), std::back_inserter(keys),
                  keySelector);
 
@@ -59,7 +59,7 @@ void GPUInfo::initialize(
     std::vector<std::unique_ptr<IGPUInfo::IProvider>> const &providers,
     IHWIDTranslator const &hwidTranslator)
 {
-  for (auto &provider : providers) {
+  for (auto const &provider : providers) {
     auto infos = provider->provideInfo(vendor_, index_, path_, hwidTranslator);
     for (auto &info : infos)
       info_.emplace(std::move(info));

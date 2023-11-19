@@ -31,7 +31,7 @@ std::optional<bool> CommandQueue::packWritesTo(std::string const &file)
   if (packIndex_.has_value()) {
     // find the last queued command that touch the same file
     auto it = std::find_if(commands().crbegin(), commands().crend(),
-                           [&](auto &v) { return v.first == file; });
+                           [&](auto const &v) { return v.first == file; });
     if (it != commands().crend()) {
       auto index = std::distance(commands().cbegin(), it.base()) - 1;
       return index >= *packIndex();
@@ -48,7 +48,7 @@ void CommandQueue::add(std::pair<std::string, std::string> &&cmd)
 {
   // find the last queued command that touch the same file
   auto lastIt = std::find_if(commands().crbegin(), commands().crend(),
-                             [&](auto &v) { return v.first == cmd.first; });
+                             [&](auto const &v) { return v.first == cmd.first; });
 
   if (lastIt != commands().crend() && lastIt->second == cmd.second)
     return; // command already queued
@@ -70,7 +70,7 @@ void CommandQueue::add(std::pair<std::string, std::string> &&cmd)
 QByteArray CommandQueue::toRawData()
 {
   QByteArray data;
-  for (auto &[path, value] : commands()) {
+  for (auto const &[path, value] : commands()) {
     data += path.c_str();
     data += '\0';
     data += value.c_str();

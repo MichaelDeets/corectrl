@@ -143,9 +143,9 @@ std::string const &AMD::PMFreqVoltXMLParser::providePMFreqVoltVoltMode() const
 std::pair<units::frequency::megahertz_t, units::voltage::millivolt_t>
 AMD::PMFreqVoltXMLParser::providePMFreqVoltState(unsigned int index) const
 {
-  auto stateIt = std::find_if(states_.cbegin(), states_.cend(), [=](auto &state) {
-    return std::get<0>(state) == index;
-  });
+  auto stateIt = std::find_if(
+      states_.cbegin(), states_.cend(),
+      [=](auto const &state) { return std::get<0>(state) == index; });
   if (stateIt != states_.cend())
     return std::make_pair(std::get<1>(*stateIt), std::get<2>(*stateIt));
   else
@@ -233,7 +233,7 @@ void AMD::PMFreqVoltXMLParser::loadStates(pugi::xml_node const &node)
         auto index = indexAttr.as_uint();
         auto indexIt = std::find_if(
             statesDefault_.cbegin(), statesDefault_.cend(),
-            [=](auto &state) { return std::get<0>(state) == index; });
+            [=](auto const &state) { return std::get<0>(state) == index; });
         if (indexIt == statesDefault_.cend()) // unknown index
           break;
 

@@ -21,7 +21,7 @@ std::vector<std::string> SWInfo::keys() const
   std::vector<std::string> keys;
   keys.reserve(info_.size());
 
-  auto const keySelector = [](auto &pair) { return pair.first; };
+  auto const keySelector = [](auto const &pair) { return pair.first; };
   std::transform(info_.cbegin(), info_.cend(), std::back_inserter(keys),
                  keySelector);
 
@@ -31,7 +31,7 @@ std::vector<std::string> SWInfo::keys() const
 void SWInfo::initialize(
     std::vector<std::unique_ptr<ISWInfo::IProvider>> const &infoProviders)
 {
-  for (auto &provider : infoProviders) {
+  for (auto const &provider : infoProviders) {
     auto infos = provider->provideInfo();
     for (auto &info : infos)
       info_.insert(std::move(info));
