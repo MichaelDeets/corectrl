@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - QML Connections deprecation warning (#123).
+- Power sensor not working on older AMD GPU models under Linux 6.6 (#398).
 
 ### Changed
 - Require Qt 5.15.
