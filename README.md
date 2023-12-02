@@ -18,7 +18,7 @@ The actual version of **CoreCtrl** automatically apply profiles for native and W
 
 This list may contain unofficial distribution packages, maintained by other people not directly related with this proyect. Please report any problems you find in these packages to them.
 
-For security reasons, always be extra careful on what you install on your system. I you are suspicious about them, you can wait until you distribution packages CoreCtrl officially or you can install it from the [source code](https://gitlab.com/corectrl/corectrl/wikis/Installation).
+For security reasons, always be extra careful on what you install on your system. If you are suspicious about them, you can wait until you distribution packages CoreCtrl officially or you can install it from the [source code](https://gitlab.com/corectrl/corectrl/wikis/Installation).
 
 If you find something malicious on any of them, please open an issue so the list can be updated.
 
