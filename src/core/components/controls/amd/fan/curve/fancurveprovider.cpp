@@ -6,6 +6,7 @@
 #include "../fanmodeprovider.h"
 #include "common/fileutils.h"
 #include "common/stringutils.h"
+#include "core/info/amd/gpuinfoodfanctrl.h"
 #include "core/info/igpuinfo.h"
 #include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
@@ -23,7 +24,8 @@ AMD::FanCurveProvider::provideGPUControls(IGPUInfo const &gpuInfo,
 {
   std::vector<std::unique_ptr<IControl>> controls;
 
-  if (gpuInfo.vendor() == Vendor::AMD) {
+  if (gpuInfo.vendor() == Vendor::AMD &&
+      !gpuInfo.hasCapability(GPUInfoOdFanCtrl::ID)) {
     auto kernel =
         Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
     auto driver = gpuInfo.info(IGPUInfo::Keys::driver);

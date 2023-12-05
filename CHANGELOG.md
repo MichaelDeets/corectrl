@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Require CMake 3.22.
 - Command line arguments that affect a running instance of the application can now be used together. The argument `--minimize-systray` takes precedence over `--toggle-window-visibility`.
 - Use `org.corectrl.CoreCtrl` in both the icon name and the manifest's application ID to better conform to FreeDesktop specifications. Thanks to Reilly Brogan (!41).
+- Disable hwmon based fan controls for RX 7000 series while using Linux 6.7 or later, as these controls no longer work on such hardware.
 
 ### Added
 - Implement resizable graph and sensors regions. Both regions are configurable by dragging their split handles and the sizes persist between sessions (#309).
