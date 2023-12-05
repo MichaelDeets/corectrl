@@ -74,6 +74,7 @@ list(APPEND INFO_SRC
   core/info/amd/gpuinfovbios.cpp
   core/info/amd/gpuinfovram.cpp
   core/info/amd/gpuinfouniqueid.cpp
+  core/info/amd/gpuinfoodfanctrl.cpp
 )
 
 list(APPEND CONTROLS_SRC
