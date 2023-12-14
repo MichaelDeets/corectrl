@@ -691,4 +691,44 @@ bool hasOverdriveVoltOffsetControl(std::vector<std::string> const &data)
   return offsetIt != data.cend();
 }
 
+bool hasOverdriveFanTargetTempControl(std::vector<std::string> const &data)
+{
+  auto offsetIt = std::find_if(
+      data.cbegin(), data.cend(), [&](std::string const &line) {
+        return line.find("FAN_TARGET_TEMPERATURE:") != std::string::npos;
+      });
+
+  return offsetIt != data.cend();
+}
+
+bool hasOverdriveFanMinimumPWMControl(std::vector<std::string> const &data)
+{
+  auto offsetIt = std::find_if(
+      data.cbegin(), data.cend(), [&](std::string const &line) {
+        return line.find("FAN_MINIMUM_PWM:") != std::string::npos;
+      });
+
+  return offsetIt != data.cend();
+}
+
+bool hasOverdriveFanAcousticTargetControl(std::vector<std::string> const &data)
+{
+  auto offsetIt = std::find_if(
+      data.cbegin(), data.cend(), [&](std::string const &line) {
+        return line.find("OD_ACOUSTIC_TARGET:") != std::string::npos;
+      });
+
+  return offsetIt != data.cend();
+}
+
+bool hasOverdriveFanAcousticLimitControl(std::vector<std::string> const &data)
+{
+  auto offsetIt = std::find_if(
+      data.cbegin(), data.cend(), [&](std::string const &line) {
+        return line.find("OD_ACOUSTIC_LIMIT:") != std::string::npos;
+      });
+
+  return offsetIt != data.cend();
+}
+
 } // namespace Utils::AMD

@@ -177,4 +177,18 @@ bool hasOverdriveVoltCurveControl(std::vector<std::string> const &data);
 /// Returns true when overdrive voltage offset control is available.
 bool hasOverdriveVoltOffsetControl(std::vector<std::string> const &data);
 
+/// Returns true when overdrive fan target temperature control is available.
+bool hasOverdriveFanTargetTempControl(std::vector<std::string> const &data);
+
+/// Returns true when overdrive fan minimum pwm control is available.
+bool hasOverdriveFanMinimumPWMControl(std::vector<std::string> const &data);
+
+/// Returns true when overdrive fan acoustic target rpm threshold control is
+/// available.
+bool hasOverdriveFanAcousticTargetControl(std::vector<std::string> const &data);
+
+/// Returns true when overdrive fan acoustic limit rpm threshold control is
+/// available.
+bool hasOverdriveFanAcousticLimitControl(std::vector<std::string> const &data);
+
 } // namespace Utils::AMD

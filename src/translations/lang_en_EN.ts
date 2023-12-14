@@ -367,6 +367,11 @@
         <source>NOOP</source>
         <translation>Do not control</translation>
     </message>
+    <message>
+        <location filename="../core/components/controls/amd/fan/overdrive/auto/odfanautoqmlitem.cpp" line="16"/>
+        <source>AMD_OD_FAN_AUTO</source>
+        <translation>Automatic</translation>
+    </message>
 </context>
 <context>
     <name>FVControl</name>

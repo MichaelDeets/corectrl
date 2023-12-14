@@ -892,6 +892,81 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
       REQUIRE_FALSE(::Utils::AMD::hasOverdriveVoltOffsetControl(data));
     }
   }
+
+  SECTION("hasOverdriveFanTargetTempControl")
+  {
+    SECTION("Returns true when overdrive has fan target temperature control")
+    {
+      std::vector<std::string> data{"FAN_TARGET_TEMPERATURE:"};
+
+      REQUIRE(::Utils::AMD::hasOverdriveFanTargetTempControl(data));
+    }
+
+    SECTION(
+        "Returns false when overdrive has no fan target temperature control")
+    {
+      std::vector<std::string> data{"OTHER_DATA"};
+
+      REQUIRE_FALSE(::Utils::AMD::hasOverdriveFanTargetTempControl(data));
+    }
+  }
+
+  SECTION("hasOverdriveFanMinimumPWMControl")
+  {
+    SECTION("Returns true when overdrive has fan minimum pwm control")
+    {
+      std::vector<std::string> data{"FAN_MINIMUM_PWM:"};
+
+      REQUIRE(::Utils::AMD::hasOverdriveFanMinimumPWMControl(data));
+    }
+
+    SECTION("Returns false when overdrive has no fan minimum pwm control")
+    {
+      std::vector<std::string> data{"OTHER_DATA"};
+
+      REQUIRE_FALSE(::Utils::AMD::hasOverdriveFanMinimumPWMControl(data));
+    }
+  }
+
+  SECTION("hasOverdriveFanAcousticTargetControl")
+  {
+    SECTION("Returns true when overdrive has fan acoustic target rpm threshold "
+            "control")
+    {
+      std::vector<std::string> data{"OD_ACOUSTIC_TARGET:"};
+
+      REQUIRE(::Utils::AMD::hasOverdriveFanAcousticTargetControl(data));
+    }
+
+    SECTION(
+        "Returns false when overdrive has no fan acoustic target rpm threshold "
+        "control")
+    {
+      std::vector<std::string> data{"OTHER_DATA"};
+
+      REQUIRE_FALSE(::Utils::AMD::hasOverdriveFanAcousticTargetControl(data));
+    }
+  }
+
+  SECTION("hasOverdriveFanAcousticLimitControl")
+  {
+    SECTION("Returns true when overdrive has fan acoustic limit rpm threshold "
+            "control")
+    {
+      std::vector<std::string> data{"OD_ACOUSTIC_LIMIT:"};
+
+      REQUIRE(::Utils::AMD::hasOverdriveFanAcousticLimitControl(data));
+    }
+
+    SECTION(
+        "Returns false when overdrive has no fan acoustic limit rpm threshold "
+        "control")
+    {
+      std::vector<std::string> data{"OTHER_DATA"};
+
+      REQUIRE_FALSE(::Utils::AMD::hasOverdriveFanAcousticLimitControl(data));
+    }
+  }
 }
 
 } // namespace Tests::Utils::AMD
