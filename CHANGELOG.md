@@ -21,8 +21,7 @@ All notable changes to this project will be documented in this file.
 - Intel CPU temperature sensor for `coretemp` driver. Thanks to Milan Čermák (!38).
 - Botan 3 compilation support (#373). Botan 2 is still supported. Botan 3 takes precedence over Botan 2 when both versions are installed in the system.
 - Manual profile activation at application startup using the command line argument `-m, --toggle-manual-profile` (#366).
-- Automatic fan control for AMD RX 7000 series (#344).
-
+- Automatic and curve fan controls for AMD RX 7000 series (#344).
 
 ## CoreCtrl 1.3.8 (2023-11-05)
 

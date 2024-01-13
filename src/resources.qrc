@@ -41,6 +41,7 @@
         <file>qml/AMDFanFixedForm.qml</file>
         <file>qml/AMDFanCurveForm.qml</file>
         <file>qml/AMDOdFanAutoForm.qml</file>
+        <file>qml/AMDOdFanCurveForm.qml</file>
         <file>qml/CPUFreqForm.qml</file>
         <file>qml/CPUFreqModeForm.qml</file>
         <file>qml/ProfileButton.qml</file>

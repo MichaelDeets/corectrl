@@ -174,6 +174,10 @@ list(APPEND CONTROLS_SRC
   core/components/controls/amd/fan/overdrive/auto/odfanautoprovider.cpp
   core/components/controls/amd/fan/overdrive/auto/odfanautoprofilepart.cpp
   core/components/controls/amd/fan/overdrive/auto/odfanautoxmlparser.cpp
+  core/components/controls/amd/fan/overdrive/curve/odfancurve.cpp
+  core/components/controls/amd/fan/overdrive/curve/odfancurveprovider.cpp
+  core/components/controls/amd/fan/overdrive/curve/odfancurveprofilepart.cpp
+  core/components/controls/amd/fan/overdrive/curve/odfancurvexmlparser.cpp
   core/components/controls/cpucontrolprovider.cpp
   core/components/controls/cpu/cpufreq.cpp
   core/components/controls/cpu/cpufreqprovider.cpp
@@ -256,6 +260,7 @@ list(APPEND UI_COMPONENTS_SRC
   core/components/controls/amd/fan/fixed/fanfixedqmlitem.cpp
   core/components/controls/amd/fan/curve/fancurveqmlitem.cpp
   core/components/controls/amd/fan/overdrive/auto/odfanautoqmlitem.cpp
+  core/components/controls/amd/fan/overdrive/curve/odfancurveqmlitem.cpp
   core/components/controls/cpu/cpufreqqmlitem.cpp
   core/components/controls/cpu/cpufreqmodeqmlitem.cpp
 )
@@ -312,6 +317,7 @@ list (APPEND TRANSLATABLE_FILES
   qml/AMDFanFixedForm.qml
   qml/AMDFanCurveForm.qml
   qml/AMDOdFanAutoForm.qml
+  qml/AMDOdFanCurveForm.qml
   qml/CPUFreqForm.qml
   qml/CPUFreqModeForm.qml
 )

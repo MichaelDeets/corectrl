@@ -630,6 +630,186 @@ bool ppOdClkVoltageHasKnownVoltCurveQuirks(
   return false;
 }
 
+std::optional<std::tuple<unsigned int, units::temperature::celsius_t,
+                         units::concentration::percent_t>>
+parseOverdriveFanCurveLine(std::string const &line)
+{
+  // Relevant lines format (kernel 6.7+):
+  // ...
+  // 0: 45C 15%
+  // ...
+  std::regex const regex(R"((\d+)\s*:\s*(\d+)\s*C\s*(\d+)\s*%\s*$)",
+                         std::regex::icase);
+  std::smatch result;
+
+  if (std::regex_search(line, result, regex)) {
+    unsigned int index{0}, temp{0}, speed{0};
+    if (Utils::String::toNumber<unsigned int>(index, result[1]) &&
+        Utils::String::toNumber<unsigned int>(temp, result[2]) &&
+        Utils::String::toNumber<unsigned int>(speed, result[3]))
+      return std::make_tuple(index, units::temperature::celsius_t(temp),
+                             units::concentration::percent_t(speed));
+  }
+
+  return {};
+}
+
+std::optional<std::vector<std::tuple<unsigned int, units::temperature::celsius_t,
+                                     units::concentration::percent_t>>>
+parseOverdriveFanCurve(std::vector<std::string> const &fanCurveLines)
+{
+  // Relevant lines format (kernel 6.7+):
+  // OD_FAN_CURVE:
+  // 0: 0C 0%
+  // 1: 45C 15%
+  // 2: 50C 30%
+  // 3: 55C 70%
+  // 4: 65C 100%
+  // OD_RANGE:
+
+  auto targetIt = std::find_if(
+      fanCurveLines.cbegin(), fanCurveLines.cend(), [&](std::string const &line) {
+        return line.find("OD_FAN_CURVE:") != std::string::npos;
+      });
+  if (targetIt != fanCurveLines.cend() &&
+      std::next(targetIt) != fanCurveLines.cend()) {
+    targetIt = std::next(targetIt);
+
+    auto endIt = std::find_if(targetIt, fanCurveLines.cend(),
+                              [&](std::string const &line) {
+                                return line.find("OD_") != std::string::npos;
+                              });
+
+    bool invalidPointData = false;
+    std::vector<std::tuple<unsigned int, units::temperature::celsius_t,
+                           units::concentration::percent_t>>
+        points;
+
+    while (targetIt != endIt) {
+      auto point = parseOverdriveFanCurveLine(*targetIt);
+      if (point.has_value()) {
+        points.emplace_back(std::move(*point));
+      }
+      else {
+        invalidPointData = true;
+        break;
+      }
+
+      targetIt = std::next(targetIt);
+    }
+
+    if (!points.empty() && !invalidPointData)
+      return std::move(points);
+  }
+
+  return {};
+}
+
+std::optional<std::pair<units::temperature::celsius_t, units::temperature::celsius_t>>
+parseOverdriveFanCurveTempRangeLine(std::string const &line)
+{
+  // Relevant lines format (kernel 6.7+):
+  // ...
+  // FAN_CURVE(hotspot temp): 25C 100C
+  // ...
+  std::regex const regex(R"(^.+\s*:\s*(\d+)\s*C\s*(\d+)\s*C\s*$)",
+                         std::regex::icase);
+  std::smatch result;
+
+  if (std::regex_search(line, result, regex)) {
+    int min{0}, max{0};
+    if (Utils::String::toNumber<int>(min, result[1]) &&
+        Utils::String::toNumber<int>(max, result[2]))
+      return std::make_pair(units::make_unit<units::temperature::celsius_t>(min),
+                            units::make_unit<units::temperature::celsius_t>(max));
+  }
+
+  return {};
+}
+
+std::optional<std::pair<units::temperature::celsius_t, units::temperature::celsius_t>>
+parseOverdriveFanCurveTempRange(std::vector<std::string> const &fanCurveLines)
+{
+  // Relevant lines format (kernel 6.7+):
+  // ...
+  // OD_RANGE:
+  // ...
+  // FAN_CURVE(hotspot temp): 25C 100C
+  // ...
+  auto rangeIt = std::find_if(
+      fanCurveLines.cbegin(), fanCurveLines.cend(), [&](std::string const &line) {
+        return line.find("OD_RANGE:") != std::string::npos;
+      });
+  if (rangeIt != fanCurveLines.cend()) {
+    std::regex const regex(R"(^FAN_CURVE\s*\(\w+\s+temp\)\s*:)",
+                           std::regex::icase);
+    auto targetIt = std::find_if(
+        rangeIt, fanCurveLines.cend(), [&](std::string const &line) {
+          std::smatch result;
+          return std::regex_search(line, result, regex);
+        });
+
+    if (targetIt != fanCurveLines.cend())
+      return parseOverdriveFanCurveTempRangeLine(*targetIt);
+  }
+
+  return {};
+}
+
+std::optional<
+    std::pair<units::concentration::percent_t, units::concentration::percent_t>>
+parseOverdriveFanCurveSpeedRangeLine(std::string const &line)
+{
+  // Relevant lines format (kernel 6.7+):
+  // ...
+  // FAN_CURVE(fan speed): 0% 100%
+  // ...
+  std::regex const regex(R"(^.+\s*:\s*(\d+)\s*%\s*(\d+)\s*%\s*$)",
+                         std::regex::icase);
+  std::smatch result;
+
+  if (std::regex_search(line, result, regex)) {
+    int min{0}, max{0};
+    if (Utils::String::toNumber<int>(min, result[1]) &&
+        Utils::String::toNumber<int>(max, result[2]))
+      return std::make_pair(
+          units::make_unit<units::concentration::percent_t>(min),
+          units::make_unit<units::concentration::percent_t>(max));
+  }
+
+  return {};
+}
+
+std::optional<
+    std::pair<units::concentration::percent_t, units::concentration::percent_t>>
+parseOverdriveFanCurveSpeedRange(std::vector<std::string> const &fanCurveLines)
+{
+  // Relevant lines format (kernel 6.7+):
+  // ...
+  // OD_RANGE:
+  // ...
+  // FAN_CURVE(fan speed): 0% 100%
+  // ...
+  auto rangeIt = std::find_if(
+      fanCurveLines.cbegin(), fanCurveLines.cend(), [&](std::string const &line) {
+        return line.find("OD_RANGE:") != std::string::npos;
+      });
+  if (rangeIt != fanCurveLines.cend()) {
+    std::regex const regex(R"(^FAN_CURVE\s*\(\w+\s+speed\)\s*:)",
+                           std::regex::icase);
+    auto targetIt = std::find_if(
+        rangeIt, fanCurveLines.cend(), [&](std::string const &line) {
+          std::smatch result;
+          return std::regex_search(line, result, regex);
+        });
+
+    if (targetIt != fanCurveLines.cend())
+      return parseOverdriveFanCurveSpeedRangeLine(*targetIt);
+  }
+
+  return {};
+}
+
 bool hasOverdriveClkVoltControl(std::vector<std::string> const &data)
 {
   std::regex const clkRegex(R"(^OD_\wCLK:)", std::regex::icase);
@@ -726,6 +906,16 @@ bool hasOverdriveFanAcousticLimitControl(std::vector<std::string> const &data)
   auto offsetIt = std::find_if(
       data.cbegin(), data.cend(), [&](std::string const &line) {
         return line.find("OD_ACOUSTIC_LIMIT:") != std::string::npos;
+      });
+
+  return offsetIt != data.cend();
+}
+
+bool hasOverdriveFanCurveControl(std::vector<std::string> const &data)
+{
+  auto offsetIt = std::find_if(
+      data.cbegin(), data.cend(), [&](std::string const &line) {
+        return line.find("OD_FAN_CURVE:") != std::string::npos;
       });
 
   return offsetIt != data.cend();

@@ -126,6 +126,19 @@
     </message>
 </context>
 <context>
+    <name>AMDOdFanCurveForm</name>
+    <message>
+        <location filename="../qml/AMDOdFanCurveForm.qml" line="24"/>
+        <source>Temperature</source>
+        <translation>Teplota</translation>
+    </message>
+    <message>
+        <location filename="../qml/AMDOdFanCurveForm.qml" line="25"/>
+        <source>Speed</source>
+        <translation>Rychlost</translation>
+    </message>
+</context>
+<context>
     <name>AMDPMFixedFreqForm</name>
     <message>
         <location filename="../qml/AMDPMFixedFreqForm.qml" line="89"/>
@@ -371,6 +384,11 @@
         <location filename="../core/components/controls/amd/fan/overdrive/auto/odfanautoqmlitem.cpp" line="16"/>
         <source>AMD_OD_FAN_AUTO</source>
         <translation>Automatický</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/amd/fan/overdrive/curve/odfancurveqmlitem.cpp" line="18"/>
+        <source>AMD_OD_FAN_CURVE</source>
+        <translation>Křivka</translation>
     </message>
 </context>
 <context>
