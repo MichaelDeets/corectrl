@@ -126,6 +126,19 @@
     </message>
 </context>
 <context>
+    <name>AMDOdFanCurveForm</name>
+    <message>
+        <location filename="../qml/AMDOdFanCurveForm.qml" line="24"/>
+        <source>Temperature</source>
+        <translation>Temperatuur</translation>
+    </message>
+    <message>
+        <location filename="../qml/AMDOdFanCurveForm.qml" line="25"/>
+        <source>Speed</source>
+        <translation>Snelheid</translation>
+    </message>
+</context>
+<context>
     <name>AMDPMFixedFreqForm</name>
     <message>
         <location filename="../qml/AMDPMFixedFreqForm.qml" line="89"/>
@@ -366,6 +379,16 @@
         <location filename="../core/components/controls/noopqmlitem.cpp" line="30"/>
         <source>NOOP</source>
         <translation>Noop</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/amd/fan/overdrive/auto/odfanautoqmlitem.cpp" line="16"/>
+        <source>AMD_OD_FAN_AUTO</source>
+        <translation>Automatische ventilatie</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/amd/fan/overdrive/curve/odfancurveqmlitem.cpp" line="18"/>
+        <source>AMD_OD_FAN_CURVE</source>
+        <translation>Ventilatiecurve</translation>
     </message>
 </context>
 <context>

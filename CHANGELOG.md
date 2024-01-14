@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Require CMake 3.22.
 - Command line arguments that affect a running instance of the application can now be used together. The argument `--minimize-systray` takes precedence over `--toggle-window-visibility`.
 - Use `org.corectrl.CoreCtrl` in both the icon name and the manifest's application ID to better conform to FreeDesktop specifications. Thanks to Reilly Brogan (!41).
+- Disable hwmon based fan controls for RX 7000 series while using Linux 6.7 or later, as these controls no longer work on such hardware.
 
 ### Added
 - Implement resizable graph and sensors regions. Both regions are configurable by dragging their split handles and the sizes persist between sessions (#309).
@@ -20,7 +21,7 @@ All notable changes to this project will be documented in this file.
 - Intel CPU temperature sensor for `coretemp` driver. Thanks to Milan Čermák (!38).
 - Botan 3 compilation support (#373). Botan 2 is still supported. Botan 3 takes precedence over Botan 2 when both versions are installed in the system.
 - Manual profile activation at application startup using the command line argument `-m, --toggle-manual-profile` (#366).
-
+- Automatic and curve fan controls for AMD RX 7000 series (#344).
 
 ## CoreCtrl 1.3.8 (2023-11-05)
 

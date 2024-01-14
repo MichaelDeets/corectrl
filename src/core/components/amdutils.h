@@ -165,6 +165,23 @@ bool ppOdClkVoltageHasKnownFreqVoltQuirks(
 bool ppOdClkVoltageHasKnownVoltCurveQuirks(
     std::vector<std::string> const &ppOdClkVoltageLines);
 
+/// Returns the fan curve points for the overdrive based fan control. (6.7+, RDNA3+)
+/// @param fanCurveLines fan_curve data source contents
+std::optional<std::vector<std::tuple<unsigned int, units::temperature::celsius_t,
+                                     units::concentration::percent_t>>>
+parseOverdriveFanCurve(std::vector<std::string> const &fanCurveLines);
+
+/// Returns the fan curve temperature range for the overdrive based fan control. (6.7+, RDNA3+)
+/// @param fanCurveLines fan_curve data source contents
+std::optional<std::pair<units::temperature::celsius_t, units::temperature::celsius_t>>
+parseOverdriveFanCurveTempRange(std::vector<std::string> const &fanCurveLines);
+
+/// Returns the fan curve speed range for the overdrive based fan control. (6.7+, RDNA3+)
+/// @param fanCurveLines fan_curve data source contents
+std::optional<
+    std::pair<units::concentration::percent_t, units::concentration::percent_t>>
+parseOverdriveFanCurveSpeedRange(std::vector<std::string> const &fanCurveLines);
+
 /// Returns true when overdrive clock + voltage state control is available.
 bool hasOverdriveClkVoltControl(std::vector<std::string> const &data);
 
@@ -176,5 +193,22 @@ bool hasOverdriveVoltCurveControl(std::vector<std::string> const &data);
 
 /// Returns true when overdrive voltage offset control is available.
 bool hasOverdriveVoltOffsetControl(std::vector<std::string> const &data);
+
+/// Returns true when overdrive fan target temperature control is available.
+bool hasOverdriveFanTargetTempControl(std::vector<std::string> const &data);
+
+/// Returns true when overdrive fan minimum pwm control is available.
+bool hasOverdriveFanMinimumPWMControl(std::vector<std::string> const &data);
+
+/// Returns true when overdrive fan acoustic target rpm threshold control is
+/// available.
+bool hasOverdriveFanAcousticTargetControl(std::vector<std::string> const &data);
+
+/// Returns true when overdrive fan acoustic limit rpm threshold control is
+/// available.
+bool hasOverdriveFanAcousticLimitControl(std::vector<std::string> const &data);
+
+/// Returns true when overdrive fan curve control is available.
+bool hasOverdriveFanCurveControl(std::vector<std::string> const &data);
 
 } // namespace Utils::AMD

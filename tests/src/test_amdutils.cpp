@@ -790,6 +790,125 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
     }
   }
 
+  SECTION("parseOverdriveFanCurve")
+  {
+    // clang-format off
+    std::vector<std::string> input{"OD_FAN_CURVE:",
+                                   "0: 0C 0%",
+                                   "1: 45C 15%",
+                                   // "2: 50C 30%",
+                                   // "3: 55C 70%",
+                                   // "4: 65C 100%",
+                                   "OD_RANGE:"};
+    // clang-format on
+
+    SECTION("Returns the available fan curve points")
+    {
+      auto values = ::Utils::AMD::parseOverdriveFanCurve(input);
+      REQUIRE(values.has_value());
+      REQUIRE(values->size() == 2);
+
+      auto [p0Index, p0Temp, p0Speed] = values->at(0);
+      REQUIRE(p0Index == 0);
+      REQUIRE(p0Temp == units::temperature::celsius_t(0));
+      REQUIRE(p0Speed == units::concentration::percent_t(0));
+
+      auto [p1Index, p1Temp, p1Speed] = values->at(1);
+      REQUIRE(p1Index == 1);
+      REQUIRE(p1Temp == units::temperature::celsius_t(45));
+      REQUIRE(p1Speed == units::concentration::percent_t(15));
+    }
+
+    SECTION("Returns nothing...")
+    {
+      SECTION("When there is no OD_FAN_CURVE: in input")
+      {
+        // clang-format off
+        std::vector<std::string> input{"OTHER:",
+                                       "0: 0C 0%",
+                                       "1: 45C 15%",
+                                       // "2: 50C 30%",
+                                       // "3: 55C 70%",
+                                       // "4: 65C 100%",
+                                       "OD_RANGE:"};
+        // clang-format on
+
+        auto empty = ::Utils::AMD::parseOverdriveFanCurve(input);
+        REQUIRE_FALSE(empty.has_value());
+      }
+
+      SECTION("When the fan curve points format is not valid")
+      {
+        // clang-format off
+        std::vector<std::string> input{"OD_FAN_CURVE:",
+                                       "0: 0C 0%",
+                                       "45C 15%",
+                                       "2: 50C",
+                                       "3: 70%",
+                                       "4:",
+                                       "OD_RANGE:"};
+        // clang-format on
+
+        auto empty = ::Utils::AMD::parseOverdriveFanCurve(input);
+        REQUIRE_FALSE(empty.has_value());
+      }
+    }
+  }
+
+  SECTION("parseOverdriveFanCurveTempRange")
+  {
+    // clang-format off
+    std::vector<std::string> input{"OD_RANGE:",
+                                   "FAN_CURVE(hotspot temp): 25C 100C"};
+    // clang-format on
+
+    SECTION("Returns minimum and maximum temperature")
+    {
+      auto values = ::Utils::AMD::parseOverdriveFanCurveTempRange(input);
+      REQUIRE(values.has_value());
+      REQUIRE(values->first == units::temperature::celsius_t(25));
+      REQUIRE(values->second == units::temperature::celsius_t(100));
+    }
+
+    SECTION("Returns nothing when there is no OD_RANGE in input")
+    {
+      // clang-format off
+      std::vector<std::string> input{"OTHER:",
+                                     "FAN_CURVE(hotspot temp): 25C 100C"};
+      // clang-format on
+
+      auto empty = ::Utils::AMD::parseOverdriveFanCurveTempRange(input);
+      REQUIRE_FALSE(empty.has_value());
+    }
+  }
+
+  SECTION("parseOverdriveFanCurveSpeedRange")
+  {
+    // clang-format off
+    std::vector<std::string> input{"OD_RANGE:",
+                                   "FAN_CURVE(fan speed): 0% 100%"};
+    // clang-format on
+
+    SECTION("Returns minimum and maximum speed")
+    {
+      auto values = ::Utils::AMD::parseOverdriveFanCurveSpeedRange(input);
+      REQUIRE(values.has_value());
+      REQUIRE(values->first == units::concentration::percent_t(0));
+      REQUIRE(values->second == units::concentration::percent_t(100));
+    }
+
+    SECTION("Returns nothing when there is no OD_RANGE in input")
+    {
+      // clang-format off
+      std::vector<std::string> input{"OTHER:",
+                                     "FAN_CURVE(fan speed): 0% 100%"};
+      // clang-format on
+
+      auto empty = ::Utils::AMD::parseOverdriveFanCurveTempRange(input);
+      REQUIRE_FALSE(empty.has_value());
+    }
+  }
+
   SECTION("hasOverdriveClkVoltControl")
   {
     SECTION("Returns true when overdrive has clock + voltage state controls")
@@ -890,6 +1009,98 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
       std::vector<std::string> data{"OTHER_DATA"};
 
       REQUIRE_FALSE(::Utils::AMD::hasOverdriveVoltOffsetControl(data));
+    }
+  }
+
+  SECTION("hasOverdriveFanTargetTempControl")
+  {
+    SECTION("Returns true when overdrive has fan target temperature control")
+    {
+      std::vector<std::string> data{"FAN_TARGET_TEMPERATURE:"};
+
+      REQUIRE(::Utils::AMD::hasOverdriveFanTargetTempControl(data));
+    }
+
+    SECTION(
+        "Returns false when overdrive has no fan target temperature control")
+    {
+      std::vector<std::string> data{"OTHER_DATA"};
+
+      REQUIRE_FALSE(::Utils::AMD::hasOverdriveFanTargetTempControl(data));
+    }
+  }
+
+  SECTION("hasOverdriveFanMinimumPWMControl")
+  {
+    SECTION("Returns true when overdrive has fan minimum pwm control")
+    {
+      std::vector<std::string> data{"FAN_MINIMUM_PWM:"};
+
+      REQUIRE(::Utils::AMD::hasOverdriveFanMinimumPWMControl(data));
+    }
+
+    SECTION("Returns false when overdrive has no fan minimum pwm control")
+    {
+      std::vector<std::string> data{"OTHER_DATA"};
+
+      REQUIRE_FALSE(::Utils::AMD::hasOverdriveFanMinimumPWMControl(data));
+    }
+  }
+
+  SECTION("hasOverdriveFanAcousticTargetControl")
+  {
+    SECTION("Returns true when overdrive has fan acoustic target rpm threshold "
+            "control")
+    {
+      std::vector<std::string> data{"OD_ACOUSTIC_TARGET:"};
+
+      REQUIRE(::Utils::AMD::hasOverdriveFanAcousticTargetControl(data));
+    }
+
+    SECTION(
+        "Returns false when overdrive has no fan acoustic target rpm threshold "
+        "control")
+    {
+      std::vector<std::string> data{"OTHER_DATA"};
+
+      REQUIRE_FALSE(::Utils::AMD::hasOverdriveFanAcousticTargetControl(data));
+    }
+  }
+
+  SECTION("hasOverdriveFanAcousticLimitControl")
+  {
+    SECTION("Returns true when overdrive has fan acoustic limit rpm threshold "
+            "control")
+    {
+      std::vector<std::string> data{"OD_ACOUSTIC_LIMIT:"};
+
+      REQUIRE(::Utils::AMD::hasOverdriveFanAcousticLimitControl(data));
+    }
+
+    SECTION(
+        "Returns false when overdrive has no fan acoustic limit rpm threshold "
+        "control")
+    {
+      std::vector<std::string> data{"OTHER_DATA"};
+
+      REQUIRE_FALSE(::Utils::AMD::hasOverdriveFanAcousticLimitControl(data));
+    }
+  }
+
+  SECTION("hasOverdriveFanCurveControl")
+  {
+    SECTION("Returns true when overdrive has fan curve control")
+    {
+      std::vector<std::string> data{"OD_FAN_CURVE:"};
+
+      REQUIRE(::Utils::AMD::hasOverdriveFanCurveControl(data));
+    }
+
+    SECTION("Returns false when overdrive has no fan curve control")
+    {
+      std::vector<std::string> data{"OTHER_DATA"};
+
+      REQUIRE_FALSE(::Utils::AMD::hasOverdriveFanCurveControl(data));
     }
   }
 }

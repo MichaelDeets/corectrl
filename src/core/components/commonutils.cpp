@@ -13,12 +13,14 @@ namespace Utils::Common {
 void normalizePoints(
     std::vector<std::pair<units::temperature::celsius_t,
                           units::concentration::percent_t>> &points,
-    std::pair<units::temperature::celsius_t, units::temperature::celsius_t> range)
+    std::pair<units::temperature::celsius_t, units::temperature::celsius_t> tempRange,
+    std::pair<units::concentration::percent_t, units::concentration::percent_t>
+        speedRange)
 {
   std::vector<double> temps;
 
   if (std::any_of(points.cbegin(), points.cend(), [&](auto const &point) {
-        return point.first < range.first || point.first > range.second;
+        return point.first < tempRange.first || point.first > tempRange.second;
       })) {
     std::transform(
         points.cbegin(), points.cend(), std::back_inserter(temps),
@@ -28,15 +30,13 @@ void normalizePoints(
 
     Utils::Math::linearNorm(
         temps, std::make_pair(std::min(0.0, *minTemp), std::max(90.0, *maxTemp)),
-        std::make_pair(range.first.to<double>(), range.second.to<double>()));
+        std::make_pair(tempRange.first.to<double>(),
+                       tempRange.second.to<double>()));
   }
 
   for (size_t i = 0; i < points.size(); ++i) {
     auto &[temp, pwm] = points.at(i);
-
-    // always clamp pwm value into [0, 100] range
-    pwm = std::clamp(pwm, units::concentration::percent_t(0),
-                     units::concentration::percent_t(100));
+    pwm = std::clamp(pwm, speedRange.first, speedRange.second);
 
     // ensure that point.pwm >= prevPoint.pwm
     if (points.size() > 1 && i > 0) {
