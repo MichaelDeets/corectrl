@@ -8,7 +8,7 @@
 #include <QProcess>
 #include <QStringList>
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 #include <utility>
 
 class GPUInfoVulkanDataSource : public IDataSource<std::string>
@@ -108,7 +108,7 @@ std::string GPUInfoVulkan::parseApiVersion(std::string const &src,
     return version;
   }
   else
-    LOG(ERROR) << fmt::format("Cannot find '{}' in vulkaninfo output",
+    LOG(ERROR) << std::format("Cannot find '{}' in vulkaninfo output",
                               apiVerStr.data());
 
   return std::string{};

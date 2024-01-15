@@ -7,7 +7,7 @@
 #include "common/stringutils.h"
 #include <algorithm>
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 #include <utility>
 
 SysExplorer::SysExplorer(std::vector<Vendor> gpuVendors) noexcept
@@ -55,7 +55,7 @@ bool SysExplorer::checkGPUVendor(std::filesystem::path sysPath) const
         return true;
     }
     else
-      LOG(ERROR) << fmt::format("Cannot parse vendor id from file {}.",
+      LOG(ERROR) << std::format("Cannot parse vendor id from file {}.",
                                 vendorPath.c_str());
   }
   return false;

@@ -6,7 +6,7 @@
 #include <QFile>
 #include <easylogging++.h>
 #include <exception>
-#include <fmt/format.h>
+#include <format>
 #include <fstream>
 #include <utility>
 
@@ -25,10 +25,10 @@ std::vector<char> readFile(std::filesystem::path const &path)
       file.read(data.data(), data.size());
     }
     else
-      LOG(ERROR) << fmt::format("Cannot open file {}", path.c_str());
+      LOG(ERROR) << std::format("Cannot open file {}", path.c_str());
   }
   else
-    LOG(ERROR) << fmt::format("Invalid file path {}", path.c_str());
+    LOG(ERROR) << std::format("Invalid file path {}", path.c_str());
 
   return data;
 }
@@ -41,7 +41,7 @@ bool writeFile(std::filesystem::path const &path, std::vector<char> const &data)
     return true;
   }
   else
-    LOG(ERROR) << fmt::format("Cannot open file {}", path.c_str());
+    LOG(ERROR) << std::format("Cannot open file {}", path.c_str());
 
   return false;
 }
@@ -58,10 +58,10 @@ std::vector<std::string> readFileLines(std::filesystem::path const &path,
         entries.emplace_back(std::move(entry));
     }
     else
-      LOG(ERROR) << fmt::format("Cannot open file {}", path.c_str());
+      LOG(ERROR) << std::format("Cannot open file {}", path.c_str());
   }
   else
-    LOG(ERROR) << fmt::format("Invalid file path {}", path.c_str());
+    LOG(ERROR) << std::format("Invalid file path {}", path.c_str());
 
   return entries;
 }
@@ -104,7 +104,7 @@ std::vector<std::filesystem::path> search(std::regex const &regex,
     }
   }
   else
-    LOG(ERROR) << fmt::format("Invalid directory path {}", path.c_str());
+    LOG(ERROR) << std::format("Invalid directory path {}", path.c_str());
 
   return paths;
 }
@@ -116,7 +116,7 @@ findHWMonXDirectory(std::filesystem::path const &path)
   auto paths = Utils::File::search(hwmonXRegex, path);
   if (!paths.empty()) {
     if (paths.size() > 1) {
-      LOG(WARNING) << fmt::format(
+      LOG(WARNING) << std::format(
           "Multiple hwmon directories detected on {}.\nUsing {}", path.c_str(),
           paths.front().c_str());
     }
@@ -134,7 +134,7 @@ bool isSysFSEntryValid(std::filesystem::path const &path)
     return false;
 
   if (readFileLines(path).empty()) {
-    LOG(WARNING) << fmt::format("Empty sysfs entry {}", path.c_str());
+    LOG(WARNING) << std::format("Empty sysfs entry {}", path.c_str());
     return false;
   }
 

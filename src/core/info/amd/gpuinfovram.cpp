@@ -11,7 +11,7 @@
 #include "core/idatasource.h"
 #include "core/info/infoproviderregistry.h"
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 #include <tuple>
 #include <utility>
 
@@ -37,7 +37,7 @@ class AMDGPUInfoVRamDataSource
     if (vramDataSource.read(data))
       return true;
 
-    LOG(WARNING) << fmt::format("Cannot retrieve device memory size from {}",
+    LOG(WARNING) << std::format("Cannot retrieve device memory size from {}",
                                 path.c_str());
     return false;
   }
@@ -65,7 +65,7 @@ class RadeonGPUInfoVRamDataSource
     if (vramDataSource.read(data))
       return true;
 
-    LOG(WARNING) << fmt::format("Cannot retrieve device memory size from {}",
+    LOG(WARNING) << std::format("Cannot retrieve device memory size from {}",
                                 path.c_str());
     return false;
   }
@@ -110,7 +110,7 @@ GPUInfoVRam::provideInfo(Vendor, int, IGPUInfo::Path const &path,
 
     if (success)
       info.emplace_back(IGPUInfo::Keys::memory,
-                        fmt::format("{} {}", memory.template to<unsigned int>(),
+                        std::format("{} {}", memory.template to<unsigned int>(),
                                     memory.abbreviation()));
   }
 

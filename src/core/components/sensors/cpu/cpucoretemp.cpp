@@ -18,7 +18,7 @@
 #include "core/sysfsdatasource.h"
 #include <easylogging++.h>
 #include <filesystem>
-#include <fmt/format.h>
+#include <format>
 #include <memory>
 #include <optional>
 #include <string>
@@ -36,7 +36,7 @@ class Provider final : public ICPUSensorProvider::IProvider
   provideCPUSensors(ICPUInfo const &cpuInfo, ISWInfo const &) const override
   {
     std::vector<std::unique_ptr<ISensor>> sensors;
-    auto hwmonPath = fmt::format("/sys/devices/platform/coretemp.{}/hwmon",
+    auto hwmonPath = std::format("/sys/devices/platform/coretemp.{}/hwmon",
                                  cpuInfo.physicalId());
     auto path = Utils::File::findHWMonXDirectory(hwmonPath);
     if (path.has_value()) {
@@ -81,7 +81,7 @@ class Provider final : public ICPUSensorProvider::IProvider
                   CPUCoreTemp::ItemID, std::move(dataSources), std::move(range)));
         }
         else {
-          LOG(WARNING) << fmt::format("Unknown data format on {}",
+          LOG(WARNING) << std::format("Unknown data format on {}",
                                       tempInput.string());
           LOG(ERROR) << tempInputLines.front();
         }

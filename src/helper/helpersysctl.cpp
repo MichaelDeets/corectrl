@@ -11,7 +11,7 @@
 #include <QDBusInterface>
 #include <QDBusPendingCall>
 #include <QString>
-#include <fmt/format.h>
+#include <format>
 #include <stdexcept>
 #include <utility>
 
@@ -30,7 +30,7 @@ void HelperSysCtl::init()
 
   if (!sysCtlInterface_->isValid()) {
     throw std::runtime_error(
-        fmt::format("Cannot connect to D-Bus interface {} (path: {})",
+        std::format("Cannot connect to D-Bus interface {} (path: {})",
                     DBUS_HELPER_SYSCTL_INTERFACE, DBUS_HELPER_SYSCTL_PATH));
   }
 }

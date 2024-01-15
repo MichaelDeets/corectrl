@@ -6,7 +6,7 @@
 #include "common/fileutils.h"
 #include <easylogging++.h>
 #include <exception>
-#include <fmt/format.h>
+#include <format>
 #include <stdexcept>
 #include <utility>
 
@@ -28,7 +28,7 @@ void FileCache::init()
 
   if (!fs::is_directory(path_))
     throw std::runtime_error(
-        fmt::format("{} is not a directory.", path_.c_str()));
+        std::format("{} is not a directory.", path_.c_str()));
 }
 
 std::optional<std::filesystem::path>
@@ -50,7 +50,7 @@ FileCache::add(std::filesystem::path const &path, std::string const &name)
         return {target};
     }
     else
-      LOG(ERROR) << fmt::format(
+      LOG(ERROR) << std::format(
           "Cannot add {} to cache. Invalid or missing file.", path.c_str());
   }
 
@@ -91,7 +91,7 @@ FileCache::get(std::string const &name,
     if (Utils::File::isFilePathValid(target))
       return {target};
     else
-      LOG(WARNING) << fmt::format(
+      LOG(WARNING) << std::format(
           "Cannot get {} from cache. Invalid or missing file.", target.c_str());
   }
 
@@ -111,7 +111,7 @@ bool FileCache::cacheDirectoryExist() const
   if (Utils::File::isDirectoryPathValid(path_))
     return true;
 
-  LOG(ERROR) << fmt::format("Missing or invalid cache directory {}",
+  LOG(ERROR) << std::format("Missing or invalid cache directory {}",
                             path_.c_str());
   return false;
 }

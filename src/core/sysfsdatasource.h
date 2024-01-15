@@ -6,7 +6,7 @@
 #include "idatasource.h"
 #include <easylogging++.h>
 #include <filesystem>
-#include <fmt/format.h>
+#include <format>
 #include <fstream>
 #include <functional>
 #include <string>
@@ -27,7 +27,7 @@ class SysFSDataSource : public IDataSource<T>
   {
     file_.open(path);
     if (!file_.is_open())
-      LOG(WARNING) << fmt::format("Cannot open {}", path_.c_str());
+      LOG(WARNING) << std::format("Cannot open {}", path_.c_str());
   }
 
   std::string source() const override

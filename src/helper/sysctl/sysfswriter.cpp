@@ -6,19 +6,19 @@
 #include "common/fileutils.h"
 #include <easylogging++.h>
 #include <exception>
-#include <fmt/format.h>
+#include <format>
 #include <ostream>
 
 void SysfsWriter::write(std::filesystem::path const &sysfsEntry,
                         std::string const &value)
 {
   if (!Utils::File::isFilePathValid(sysfsEntry)) {
-    LOG(ERROR) << fmt::format("Invalid file path {}", sysfsEntry.c_str());
+    LOG(ERROR) << std::format("Invalid file path {}", sysfsEntry.c_str());
     return;
   }
 
   if (!isSysfsPath(sysfsEntry)) {
-    LOG(ERROR) << fmt::format(
+    LOG(ERROR) << std::format(
         "{} is not a sysfs path. Value {} wont be written.", sysfsEntry.c_str(),
         value);
     return;
@@ -26,7 +26,7 @@ void SysfsWriter::write(std::filesystem::path const &sysfsEntry,
 
   std::ofstream file(sysfsEntry);
   if (!file.is_open()) {
-    LOG(ERROR) << fmt::format("Cannot write {} to file {}", value,
+    LOG(ERROR) << std::format("Cannot write {} to file {}", value,
                               sysfsEntry.c_str());
     return;
   }

@@ -41,7 +41,7 @@
 #include <cctype>
 #include <easylogging++.h>
 #include <exception>
-#include <fmt/format.h>
+#include <format>
 #include <system_error>
 #include <utility>
 
@@ -146,7 +146,7 @@ void AppFactory::createAppDirectories(std::string const &appDirectory,
 
   if (!fs::is_directory(config))
     throw std::runtime_error(
-        fmt::format("{} is not a directory", config.c_str()));
+        std::format("{} is not a directory", config.c_str()));
 
   fs::path appConfigDir = config / appDirectory;
   if (!fs::exists(appConfigDir)) {
@@ -158,7 +158,7 @@ void AppFactory::createAppDirectories(std::string const &appDirectory,
 
   if (!fs::is_directory(appConfigDir))
     throw std::runtime_error(
-        fmt::format("{} is not a directory", appConfigDir.c_str()));
+        std::format("{} is not a directory", appConfigDir.c_str()));
 
   if (!fs::exists(cache)) {
     fs::create_directory(cache);
@@ -168,7 +168,7 @@ void AppFactory::createAppDirectories(std::string const &appDirectory,
   }
 
   if (!fs::is_directory(cache))
-    throw std::runtime_error(fmt::format("{} is not a directory", cache.c_str()));
+    throw std::runtime_error(std::format("{} is not a directory", cache.c_str()));
 
   fs::path cacheApp = cache / appDirectory;
   if (!fs::exists(cacheApp)) {
@@ -180,5 +180,5 @@ void AppFactory::createAppDirectories(std::string const &appDirectory,
 
   if (!fs::is_directory(cacheApp))
     throw std::runtime_error(
-        fmt::format("{} is not a directory", cacheApp.c_str()));
+        std::format("{} is not a directory", cacheApp.c_str()));
 }

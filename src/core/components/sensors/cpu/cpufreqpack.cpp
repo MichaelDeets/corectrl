@@ -19,7 +19,7 @@
 #include <algorithm>
 #include <easylogging++.h>
 #include <filesystem>
-#include <fmt/format.h>
+#include <format>
 #include <memory>
 #include <optional>
 #include <string>
@@ -83,7 +83,7 @@ class Provider final : public ICPUSensorProvider::IProvider
                       }));
             }
             else {
-              LOG(WARNING) << fmt::format("Unknown data format on {}",
+              LOG(WARNING) << std::format("Unknown data format on {}",
                                           curFreqPath.string());
               LOG(ERROR) << curFreqLines.front();
             }

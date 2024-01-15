@@ -8,7 +8,7 @@
 #include <QProcess>
 #include <QStringList>
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 #include <string_view>
 #include <utility>
 
@@ -67,11 +67,11 @@ std::vector<std::pair<std::string, std::string>> SWInfoMesa::provideInfo() const
         info.emplace_back(ISWInfo::Keys::mesaVersion, std::move(version));
       }
       else
-        LOG(ERROR) << fmt::format("Cannot find '{}' in glxinfo output",
+        LOG(ERROR) << std::format("Cannot find '{}' in glxinfo output",
                                   versionStr.data());
     }
     else
-      LOG(ERROR) << fmt::format("Cannot find '{}' in glxinfo output",
+      LOG(ERROR) << std::format("Cannot find '{}' in glxinfo output",
                                 queryRendererStr.data());
   }
 

@@ -5,7 +5,7 @@
 
 #include "ifilecache.h"
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 #include <utility>
 
 ProfileIconCache::ProfileIconCache(std::unique_ptr<IFileCache> &&cache) noexcept
@@ -60,7 +60,7 @@ std::pair<bool, bool> ProfileIconCache::syncCache(IProfile::Info &info)
     return {true, updateURL};
   }
 
-  LOG(ERROR) << fmt::format("Failed to cache icon for {}", fileName.data());
+  LOG(ERROR) << std::format("Failed to cache icon for {}", fileName.data());
   return {false, false};
 }
 
@@ -81,6 +81,6 @@ ProfileIconCache::cacheIconFromData(std::vector<char> const &iconData,
   if (cacheURL.has_value())
     return cacheURL;
 
-  LOG(ERROR) << fmt::format("Failed to cache icon for {}", fileName.data());
+  LOG(ERROR) << std::format("Failed to cache icon for {}", fileName.data());
   return {};
 }

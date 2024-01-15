@@ -124,13 +124,13 @@ class Provider final : public IGPUSensorProvider::IProvider
               }
               else {
                 LOG(WARNING)
-                    << fmt::format("Unknown data format on {}", pwm.string());
+                    << std::format("Unknown data format on {}", pwm.string());
                 LOG(ERROR) << fileLines.front();
               }
             }
           }
           else {
-            LOG(WARNING) << fmt::format("Unknown data format on {}",
+            LOG(WARNING) << std::format("Unknown data format on {}",
                                         fanInput.string());
             LOG(ERROR) << fileLines.front();
           }

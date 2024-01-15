@@ -13,7 +13,7 @@
 #include "pmfreqod.h"
 #include <easylogging++.h>
 #include <filesystem>
-#include <fmt/format.h>
+#include <format>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -76,26 +76,26 @@ AMD::PMFreqOdProvider::provideGPUControls(IGPUInfo const &gpuInfo,
         }
         else {
           if (!sclkOdValid) {
-            LOG(WARNING) << fmt::format("Unknown data format on {}",
+            LOG(WARNING) << std::format("Unknown data format on {}",
                                         sclkOd.string());
             LOG(ERROR) << sclkOdLines.front();
           }
 
           if (!mclkOdValid) {
-            LOG(WARNING) << fmt::format("Unknown data format on {}",
+            LOG(WARNING) << std::format("Unknown data format on {}",
                                         mclkOd.string());
             LOG(ERROR) << mclkOdLines.front();
           }
 
           if (!sclkStates.has_value()) {
-            LOG(WARNING) << fmt::format("Unknown data format on {}",
+            LOG(WARNING) << std::format("Unknown data format on {}",
                                         dpmSclk.string());
             for (auto const &line : dpmSclkLines)
               LOG(ERROR) << line;
           }
 
           if (!mclkStates.has_value()) {
-            LOG(WARNING) << fmt::format("Unknown data format on {}",
+            LOG(WARNING) << std::format("Unknown data format on {}",
                                         dpmMclk.string());
             for (auto const &line : dpmMclkLines)
               LOG(ERROR) << line;
