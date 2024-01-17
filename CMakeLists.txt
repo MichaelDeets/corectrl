@@ -88,7 +88,15 @@ set(WITH_PCI_IDS_PATH "/usr/share/hwdata/pci.ids" CACHE FILEPATH "Path to pci.id
 add_subdirectory(src)
 
 # Tests
+#
+# NOTE: CTest provides a BUILD_TESTING option set by default to ON. This setting
+# is useful for developers but not for most users, who will only waste time and
+# energy compiling the testing suite when -DBUILD_TESTING=OFF is omitted at
+# configuration time.
+#
+# Do not build the testing suite by default.
 include(CTest)
+option(BUILD_TESTING "Build the testing suite" OFF)
 if(BUILD_TESTING)
   enable_testing()
   add_subdirectory(tests)
