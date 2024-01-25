@@ -146,8 +146,9 @@ int process_event_connector_install_filter(int socket_fd)
       BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_X, 0, 0, 1),
       BPF_STMT(BPF_RET | BPF_K, 0xffffffff),
 
-      // drop any other messages
-      BPF_STMT(BPF_RET | BPF_K, 0x0),
+      // WORKAROUND Process monitor not working anymore with Linux 6.7 and
+      // 6.6.13. Might be caused by a process connector regression.
+      BPF_STMT(BPF_RET | BPF_K, 0xffffffff),
 
       // clang-format on
   };
