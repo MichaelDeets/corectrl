@@ -125,7 +125,7 @@ int process_event_connector_install_filter(int socket_fd)
       BPF_STMT(BPF_LD | BPF_W | BPF_ABS, NLMSG_LENGTH(0) +
                                          offsetof(struct cn_msg, data) +
                                          offsetof(struct proc_event, event_data.exec.process_tgid)),
-      BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_X, 0, 0, 1),
+      BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_X, 0, 0, 9),
       BPF_STMT(BPF_RET | BPF_K, 0xffffffff),
 
       // accept exit messages from processes
