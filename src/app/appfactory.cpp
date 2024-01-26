@@ -45,8 +45,6 @@
 #include <system_error>
 #include <utility>
 
-SHARE_EASYLOGGINGPP(el::Helpers::storage());
-
 namespace fs = std::filesystem;
 
 AppFactory::AppFactory() noexcept

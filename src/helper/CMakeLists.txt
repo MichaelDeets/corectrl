@@ -91,6 +91,7 @@ add_executable(corectrl_helper
   polkit.cpp
   ${3RDPARTY_SRC}
   ${COMMON_SRC}
+  ${CRYPTO_SRC}
   ${PROCESS_MONITOR_SRC}
   ${SYSTEM_CONTROL_SRC}
 )

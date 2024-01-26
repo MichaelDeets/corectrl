@@ -8,6 +8,9 @@ list(APPEND APP_COMPILE_DEFINITIONS
 list(APPEND COMMON_SRC
   ${CMAKE_CURRENT_SOURCE_DIR}/common/fileutils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/common/stringutils.cpp
+)
+
+list(APPEND CRYPTO_SRC
   ${CMAKE_CURRENT_SOURCE_DIR}/common/cryptolayer.cpp
 )
 
@@ -356,8 +359,6 @@ add_library(corectrl_lib SHARED
   ${INFO_SRC}
   ${CONTROLS_SRC}
   ${SENSORS_SRC}
-  ${APP_SRC}
-  ${UI_COMPONENTS_SRC}
 )
 set(CMAKE_AUTOMOC OFF)
 
@@ -366,28 +367,28 @@ target_include_directories(corectrl_lib PRIVATE
   ${3RDPARTY_INCLUDE_DIRECTORIES}
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${QUAZIP_INCLUDE_DIRS}
-  ${Botan_INCLUDE_DIRS}
 )
 target_compile_definitions(corectrl_lib PRIVATE ${APP_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_lib PRIVATE
-  Qt5::Quick
-  Qt5::Charts
-  Qt5::Widgets
-  Qt5::DBus
   stdc++fs
   pthread
   ${QUAZIP_LIBRARIES}
-  ${Botan_LIBRARIES}
   $<$<BOOL:${pugixml_FOUND}>:pugixml::pugixml>
   $<$<BOOL:${units_FOUND}>:units::units>
 )
 set_target_properties(corectrl_lib PROPERTIES OUTPUT_NAME corectrl)
 
+set(CMAKE_AUTOMOC ON)
 add_executable(corectrl
   main.cpp
+  ${CRYPTO_SRC}
+  ${UI_COMPONENTS_SRC}
+  ${APP_SRC}
   ${CPP_QRC}
   ${QM_FILES}
 )
+set(CMAKE_AUTOMOC OFF)
+
 target_include_directories(corectrl PRIVATE
   ${3RDPARTY_INCLUDE_DIRECTORIES}
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -397,8 +398,12 @@ target_compile_definitions(corectrl PRIVATE ${APP_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl PRIVATE
   corectrl_lib
   Qt5::Core
-  Qt5::Network
+  Qt5::Quick
+  Qt5::Charts
   Qt5::Widgets
+  Qt5::Network
+  Qt5::DBus
+  ${Botan_LIBRARIES}
 )
 
 install(
