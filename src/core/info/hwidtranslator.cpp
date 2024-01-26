@@ -3,7 +3,6 @@
 
 #include "hwidtranslator.h"
 
-#include "core/idatasource.h"
 #include <algorithm>
 #include <cctype>
 #include <easylogging++.h>

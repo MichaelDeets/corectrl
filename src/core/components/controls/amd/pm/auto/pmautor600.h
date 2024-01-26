@@ -3,13 +3,11 @@
 
 #pragma once
 
+#include "core/idatasource.h"
 #include "pmauto.h"
 #include <memory>
 #include <string>
 #include <string_view>
-
-template<typename...>
-class IDataSource;
 
 namespace AMD {
 

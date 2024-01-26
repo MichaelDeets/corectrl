@@ -4,15 +4,13 @@
 #pragma once
 
 #include "core/components/controls/control.h"
+#include "core/idatasource.h"
 #include <memory>
 #include <string>
 #include <string_view>
 #include <unordered_map>
 #include <utility>
 #include <vector>
-
-template<typename...>
-class IDataSource;
 
 namespace AMD {
 

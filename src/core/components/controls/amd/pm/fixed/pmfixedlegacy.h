@@ -3,14 +3,12 @@
 
 #pragma once
 
+#include "core/idatasource.h"
 #include "pmfixed.h"
 #include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
-
-template<typename...>
-class IDataSource;
 
 namespace AMD {
 

@@ -7,7 +7,6 @@
 #include "../infoproviderregistry.h"
 #include "common/fileutils.h"
 #include "core/components/cpuutils.h"
-#include "core/idatasource.h"
 #include <easylogging++.h>
 #include <format>
 

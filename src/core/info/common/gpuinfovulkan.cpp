@@ -4,7 +4,6 @@
 #include "gpuinfovulkan.h"
 
 #include "../infoproviderregistry.h"
-#include "core/idatasource.h"
 #include <QProcess>
 #include <QStringList>
 #include <easylogging++.h>

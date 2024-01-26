@@ -4,7 +4,6 @@
 #include "pmoverdrive.h"
 
 #include "core/icommandqueue.h"
-#include "core/idatasource.h"
 #include <utility>
 
 AMD::PMOverdrive::PMOverdrive(

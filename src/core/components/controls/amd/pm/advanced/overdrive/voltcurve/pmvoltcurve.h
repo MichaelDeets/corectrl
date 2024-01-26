@@ -4,6 +4,7 @@
 #pragma once
 
 #include "core/components/controls/control.h"
+#include "core/idatasource.h"
 #include <map>
 #include <memory>
 #include <string>
@@ -11,9 +12,6 @@
 #include <units.h>
 #include <utility>
 #include <vector>
-
-template<typename...>
-class IDataSource;
 
 namespace AMD {
 

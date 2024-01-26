@@ -4,7 +4,6 @@
 #include "fanauto.h"
 
 #include "core/icommandqueue.h"
-#include "core/idatasource.h"
 #include <utility>
 
 AMD::FanAuto::FanAuto(std::unique_ptr<IDataSource<unsigned int>> &&dataSource) noexcept

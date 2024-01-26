@@ -4,7 +4,6 @@
 #include "pmautor600.h"
 
 #include "core/icommandqueue.h"
-#include "core/idatasource.h"
 #include <utility>
 
 AMD::PMAutoR600::PMAutoR600(

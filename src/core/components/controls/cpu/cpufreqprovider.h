@@ -4,12 +4,10 @@
 #pragma once
 
 #include "core/components/controls/icpucontrolprovider.h"
+#include "core/idatasource.h"
 #include <memory>
 #include <string>
 #include <vector>
-
-template<typename...>
-class IDataSource;
 
 class CPUFreqProvider final : public ICPUControlProvider::IProvider
 {

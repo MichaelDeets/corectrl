@@ -5,7 +5,6 @@
 
 #include "../infoproviderregistry.h"
 #include "common/stringutils.h"
-#include "core/idatasource.h"
 #include <QProcess>
 #include <QStringList>
 #include <algorithm>

@@ -4,13 +4,11 @@
 #pragma once
 
 #include "../igpuinfo.h"
+#include "core/idatasource.h"
 #include <filesystem>
 #include <memory>
 #include <string>
 #include <vector>
-
-template<typename...>
-class IDataSource;
 
 class GPUInfoUevent final : public IGPUInfo::IProvider
 {

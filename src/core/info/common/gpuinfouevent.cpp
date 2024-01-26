@@ -5,7 +5,6 @@
 
 #include "../ihwidtranslator.h"
 #include "../infoproviderregistry.h"
-#include "core/idatasource.h"
 #include "gpuinfoueventdatasource.h"
 #include <algorithm>
 #include <cctype>

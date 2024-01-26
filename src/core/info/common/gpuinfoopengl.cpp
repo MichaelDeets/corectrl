@@ -4,7 +4,6 @@
 #include "gpuinfoopengl.h"
 
 #include "../infoproviderregistry.h"
-#include "core/idatasource.h"
 #include <QProcess>
 #include <QString>
 #include <QStringList>

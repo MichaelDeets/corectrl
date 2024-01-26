@@ -5,7 +5,6 @@
 
 #include "common/fileutils.h"
 #include "core/components/amdutils.h"
-#include "core/idatasource.h"
 #include "core/info/infoproviderregistry.h"
 #include <algorithm>
 #include <easylogging++.h>

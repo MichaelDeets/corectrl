@@ -4,7 +4,6 @@
 #include "pmfixedlegacy.h"
 
 #include "core/icommandqueue.h"
-#include "core/idatasource.h"
 #include <utility>
 
 AMD::PMFixedLegacy::PMFixedLegacy(

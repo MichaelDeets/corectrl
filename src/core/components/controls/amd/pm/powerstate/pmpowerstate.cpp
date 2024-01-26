@@ -4,7 +4,6 @@
 #include "pmpowerstate.h"
 
 #include "core/icommandqueue.h"
-#include "core/idatasource.h"
 #include <algorithm>
 #include <utility>
 

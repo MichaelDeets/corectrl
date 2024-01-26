@@ -4,11 +4,9 @@
 #pragma once
 
 #include "../iswinfo.h"
+#include "core/idatasource.h"
 #include <memory>
 #include <string>
-
-template<typename...>
-class IDataSource;
 
 class SWInfoMesa final : public ISWInfo::IProvider
 {

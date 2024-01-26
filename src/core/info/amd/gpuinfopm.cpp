@@ -4,7 +4,6 @@
 #include "gpuinfopm.h"
 
 #include "common/fileutils.h"
-#include "core/idatasource.h"
 #include "core/info/infoproviderregistry.h"
 #include <easylogging++.h>
 #include <format>

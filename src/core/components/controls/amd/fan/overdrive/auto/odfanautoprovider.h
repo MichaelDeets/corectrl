@@ -4,14 +4,12 @@
 #pragma once
 
 #include "core/components/controls/igpucontrolprovider.h"
+#include "core/idatasource.h"
 #include <filesystem>
 #include <memory>
 #include <optional>
 #include <string>
 #include <vector>
-
-template<typename...>
-class IDataSource;
 
 namespace AMD {
 

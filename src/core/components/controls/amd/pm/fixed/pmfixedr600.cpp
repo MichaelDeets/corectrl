@@ -4,7 +4,6 @@
 #include "pmfixedr600.h"
 
 #include "core/icommandqueue.h"
-#include "core/idatasource.h"
 #include <utility>
 
 AMD::PMFixedR600::PMFixedR600(

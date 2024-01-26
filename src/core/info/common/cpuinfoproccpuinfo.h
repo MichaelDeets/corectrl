@@ -4,14 +4,12 @@
 #pragma once
 
 #include "../icpuinfo.h"
+#include "core/idatasource.h"
 #include <memory>
 #include <string>
 #include <string_view>
 #include <utility>
 #include <vector>
-
-template<typename...>
-class IDataSource;
 
 class CPUInfoProcCpuInfo final : public ICPUInfo::IProvider
 {

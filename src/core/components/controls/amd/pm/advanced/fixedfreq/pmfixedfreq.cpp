@@ -5,7 +5,6 @@
 
 #include "core/components/controls/amd/pm/handlers/ippdpmhandler.h"
 #include "core/icommandqueue.h"
-#include "core/idatasource.h"
 
 AMD::PMFixedFreq::PMFixedFreq(std::unique_ptr<IPpDpmHandler> &&ppDpmSclkHandler,
                               std::unique_ptr<IPpDpmHandler> &&ppDpmMclkHandler) noexcept

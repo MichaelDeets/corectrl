@@ -4,7 +4,6 @@
 #include "pmdynamicfreq.h"
 
 #include "core/icommandqueue.h"
-#include "core/idatasource.h"
 #include <utility>
 
 AMD::PMDynamicFreq::PMDynamicFreq(

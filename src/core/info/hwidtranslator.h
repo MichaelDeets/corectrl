@@ -3,15 +3,13 @@
 
 #pragma once
 
+#include "core/idatasource.h"
 #include "ihwidtranslator.h"
 #include "vendor.h"
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
-
-template<typename...>
-class IDataSource;
 
 class HWIDTranslator final : public IHWIDTranslator
 {

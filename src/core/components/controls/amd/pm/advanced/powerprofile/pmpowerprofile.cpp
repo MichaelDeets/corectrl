@@ -5,7 +5,6 @@
 
 #include "core/components/amdutils.h"
 #include "core/icommandqueue.h"
-#include "core/idatasource.h"
 
 AMD::PMPowerProfile::PMPowerProfile(
     std::unique_ptr<IDataSource<std::string>> &&perfLevelDataSource,

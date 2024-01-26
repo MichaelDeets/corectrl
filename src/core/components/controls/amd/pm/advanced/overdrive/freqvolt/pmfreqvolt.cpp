@@ -6,7 +6,6 @@
 #include "core/components/amdutils.h"
 #include "core/components/controls/amd/pm/handlers/ippdpmhandler.h"
 #include "core/icommandqueue.h"
-#include "core/idatasource.h"
 #include <algorithm>
 #include <iterator>
 

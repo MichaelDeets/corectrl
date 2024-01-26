@@ -3,15 +3,13 @@
 
 #pragma once
 
+#include "core/idatasource.h"
 #include "ippdpmhandler.h"
 #include <memory>
 #include <string>
 #include <units.h>
 #include <utility>
 #include <vector>
-
-template<typename...>
-class IDataSource;
 
 namespace AMD {
 

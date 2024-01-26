@@ -5,7 +5,6 @@
 
 #include "../infoproviderregistry.h"
 #include "common/stringutils.h"
-#include "core/idatasource.h"
 #include "swinfokerneldatasource.h"
 #include <easylogging++.h>
 #include <string_view>

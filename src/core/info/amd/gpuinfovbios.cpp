@@ -4,7 +4,6 @@
 #include "gpuinfovbios.h"
 
 #include "common/fileutils.h"
-#include "core/idatasource.h"
 #include "core/info/infoproviderregistry.h"
 #include <algorithm>
 #include <cctype>

@@ -8,7 +8,6 @@
 #include "common/stringutils.h"
 #include "core/components/amdutils.h"
 #include "core/devfsdatasource.h"
-#include "core/idatasource.h"
 #include "core/info/infoproviderregistry.h"
 #include <easylogging++.h>
 #include <format>

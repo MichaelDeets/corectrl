@@ -4,7 +4,6 @@
 #include "odfanauto.h"
 
 #include "core/icommandqueue.h"
-#include "core/idatasource.h"
 #include <utility>
 
 AMD::OdFanAuto::OdFanAuto(
