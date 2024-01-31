@@ -59,8 +59,8 @@ AMD::PMPowerCapProvider::provideGPUControls(IGPUInfo const &gpuInfo,
 
           if (valueValid && minValueValid && maxValueValid &&
               // Drivers might report bogus values for either (or both) upper
-              // and lower range bounds. See #331.
-              power1CapMinValue == 0 && power1CapMaxValue > power1CapMinValue) {
+              // and lower range bounds. See #337.
+              power1CapMaxValue > power1CapMinValue) {
 
             controls.emplace_back(std::make_unique<AMD::PMPowerCap>(
                 std::make_unique<SysFSDataSource<unsigned long>>(
