@@ -370,6 +370,7 @@ target_include_directories(corectrl_lib PRIVATE
 )
 target_compile_definitions(corectrl_lib PRIVATE ${APP_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_lib PRIVATE
+  Qt5::Core
   stdc++fs
   pthread
   ${QUAZIP_LIBRARIES}
