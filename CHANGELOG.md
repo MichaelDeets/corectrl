@@ -6,8 +6,6 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - QML Connections deprecation warning (#123).
 - Typo in README. Thanks to paintdev (!43).
-- Compilation with clang and linking errors (#417).
-- Missing power limit control on Linux 6.7 (#415).
 
 ### Changed
 - Require Qt 5.15.
@@ -25,6 +23,15 @@ All notable changes to this project will be documented in this file.
 - Botan 3 compilation support (#373). Botan 2 is still supported. Botan 3 takes precedence over Botan 2 when both versions are installed in the system.
 - Manual profile activation at application startup using the command line argument `-m, --toggle-manual-profile` (#366).
 - Automatic and curve fan controls for AMD RX 7000 series (#344).
+
+
+## CoreCtrl 1.3.10 (2024-02-04)
+
+### Fixed
+- Compilation with clang and linking errors (#417).
+- Missing power limit control on Linux 6.7 (#415).
+
+### Added
 - Workaround for automatic profiles not working with Linux 6.7 and Linux 6.6.13 (#416).
 
 
