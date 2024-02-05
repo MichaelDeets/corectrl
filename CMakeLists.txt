@@ -43,6 +43,13 @@ if(NOT Botan_FOUND)
   message(FATAL_ERROR "Botan library not found")
 endif()
 
+find_package(fmt 5 QUIET)
+if(NOT fmt_FOUND)
+  message("Using bundled fmt library")
+  list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty/fmt)
+  list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/fmt/src/format.cc)
+endif()
+
 find_package(pugixml 1.11 QUIET)
 if(NOT pugixml_FOUND)
   message("Using bundled pugixml library")

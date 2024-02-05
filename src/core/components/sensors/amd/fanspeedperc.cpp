@@ -20,7 +20,7 @@
 #include "core/sysfsdatasource.h"
 #include <easylogging++.h>
 #include <filesystem>
-#include <format>
+#include <fmt/format.h>
 #include <memory>
 #include <optional>
 #include <string>
@@ -84,7 +84,7 @@ class Provider final : public IGPUSensorProvider::IProvider
             }
           }
           else {
-            LOG(WARNING) << std::format("Unknown data format on {}",
+            LOG(WARNING) << fmt::format("Unknown data format on {}",
                                         pwm.string());
             LOG(ERROR) << fileLines.front();
           }

@@ -7,7 +7,7 @@
 #include "core/idatasource.h"
 #include <easylogging++.h>
 #include <filesystem>
-#include <format>
+#include <fmt/format.h>
 #include <string>
 #include <utility>
 #include <vector>
@@ -31,7 +31,7 @@ class GPUInfoUeventDataSource
       return true;
     }
 
-    LOG(WARNING) << std::format("Cannot retrieve device information from {}",
+    LOG(WARNING) << fmt::format("Cannot retrieve device information from {}",
                                 filePath.c_str());
     return false;
   }

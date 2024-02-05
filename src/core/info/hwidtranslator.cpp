@@ -7,7 +7,7 @@
 #include <cctype>
 #include <easylogging++.h>
 #include <exception>
-#include <format>
+#include <fmt/format.h>
 #include <sstream>
 #include <utility>
 
@@ -148,9 +148,9 @@ void HWIDTranslator::parseHWIDSFileData(std::vector<char> &data,
         }
       }
       catch (std::exception const &e) {
-        LOG(ERROR) << std::format(
+        LOG(ERROR) << fmt::format(
             "Cannot convert vendor id {} from hwdata file.\nError: {}",
-            vendorID, e.what());
+            vendorID.c_str(), e.what());
         skipVendor = true;
       }
     }

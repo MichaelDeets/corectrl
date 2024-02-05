@@ -8,7 +8,7 @@
 #include "common/fileutils.h"
 #include "core/components/cpuutils.h"
 #include <easylogging++.h>
-#include <format>
+#include <fmt/format.h>
 
 class CPUInfoProcCpuInfoDataSource : public IDataSource<std::vector<std::string>>
 {
@@ -26,8 +26,8 @@ class CPUInfoProcCpuInfoDataSource : public IDataSource<std::vector<std::string>
       return true;
     }
 
-    LOG(WARNING) << std::format("Cannot retrieve device information from {}",
-                                source());
+    LOG(WARNING) << fmt::format("Cannot retrieve device information from {}",
+                                source().c_str());
     return false;
   }
 };

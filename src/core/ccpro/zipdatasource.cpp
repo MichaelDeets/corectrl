@@ -7,7 +7,7 @@
 #include <QIODevice>
 #include <QString>
 #include <algorithm>
-#include <format>
+#include <fmt/format.h>
 #include <iterator>
 #include <quazip.h>
 #include <quazipfile.h>
@@ -47,7 +47,7 @@ bool ZipDataSource::read(std::string const &internalDataPath,
       zip.close();
     }
     else {
-      throw std::runtime_error(std::format("Failed to open file {}", source()));
+      throw std::runtime_error(fmt::format("Failed to open file {}", source()));
     }
   }
 

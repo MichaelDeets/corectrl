@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <easylogging++.h>
 #include <exception>
-#include <format>
+#include <fmt/format.h>
 
 void CryptoLayer::init()
 {

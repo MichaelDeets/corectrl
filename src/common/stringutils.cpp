@@ -34,11 +34,12 @@ std::tuple<int, int, int> parseVersion(std::string const &version)
                 std::stoi(version.substr(firstDot + 1, secondDot)),
                 std::stoi(version.substr(secondDot + 1, std::string::npos))};
     }
-    LOG(ERROR) << std::format("'{}' is not a valid version string", version);
+    LOG(ERROR) << fmt::format("'{}' is not a valid version string",
+                              version.c_str());
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << std::format("Cannot parse version string '{}'. Error: {}",
-                              version, e.what());
+    LOG(ERROR) << fmt::format("Cannot parse version string '{}'. Error: {}",
+                              version.c_str(), e.what());
   }
 
   return {0, 0, 0};

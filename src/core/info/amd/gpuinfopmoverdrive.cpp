@@ -8,7 +8,7 @@
 #include "core/info/infoproviderregistry.h"
 #include <algorithm>
 #include <easylogging++.h>
-#include <format>
+#include <fmt/format.h>
 #include <utility>
 
 namespace AMD {

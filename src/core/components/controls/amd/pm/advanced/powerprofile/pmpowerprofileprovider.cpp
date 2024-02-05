@@ -13,7 +13,7 @@
 #include "pmpowerprofile.h"
 #include <easylogging++.h>
 #include <filesystem>
-#include <format>
+#include <fmt/format.h>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -47,7 +47,7 @@ AMD::PMPowerProfileProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                   profileMode),
               modes.value()));
         else {
-          LOG(WARNING) << std::format("Unknown data format on {}",
+          LOG(WARNING) << fmt::format("Unknown data format on {}",
                                       profileMode.string());
           for (auto const &line : modeLines)
             LOG(ERROR) << line;

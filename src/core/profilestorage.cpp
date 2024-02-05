@@ -9,7 +9,7 @@
 #include "iprofileparser.h"
 #include <easylogging++.h>
 #include <exception>
-#include <format>
+#include <fmt/format.h>
 #include <stdexcept>
 #include <utility>
 
@@ -106,7 +106,7 @@ bool ProfileStorage::loadFrom(IProfile &profile,
   if (Utils::File::isFilePathValid(path) && path.extension() == fileExtension_)
     return loadProfileFrom(path, profile);
   else
-    LOG(ERROR) << std::format("Cannot load {}. Invalid file.", path.c_str());
+    LOG(ERROR) << fmt::format("Cannot load {}. Invalid file.", path.c_str());
 
   return false;
 }
@@ -195,7 +195,7 @@ void ProfileStorage::initProfilesDirectory() const
 
   if (!fs::is_directory(path_))
     throw std::runtime_error(
-        std::format("{} is not a directory.", path_.c_str()));
+        fmt::format("{} is not a directory.", path_.c_str()));
 }
 
 bool ProfileStorage::profilesDirectoryExist() const
@@ -203,7 +203,7 @@ bool ProfileStorage::profilesDirectoryExist() const
   if (Utils::File::isDirectoryPathValid(path_))
     return true;
 
-  LOG(ERROR) << std::format(
+  LOG(ERROR) << fmt::format(
       "Something went wrong with the profile storage directory: ", path_.c_str());
 
   return false;

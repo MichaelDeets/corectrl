@@ -12,7 +12,7 @@
 #include "pmvoltoffset.h"
 #include <easylogging++.h>
 #include <filesystem>
-#include <format>
+#include <fmt/format.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -39,7 +39,7 @@ AMD::PMVoltOffsetProvider::provideGPUControls(IGPUInfo const &gpuInfo,
               ppOdClkVolt)));
     }
     else {
-      LOG(WARNING) << std::format("Invalid data on {}", ppOdClkVolt.string());
+      LOG(WARNING) << fmt::format("Invalid data on {}", ppOdClkVolt.string());
       for (auto const &line : ppOdClkVoltLines)
         LOG(ERROR) << line;
     }

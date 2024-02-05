@@ -14,7 +14,7 @@
 #include "pmfixedfreq.h"
 #include <easylogging++.h>
 #include <filesystem>
-#include <format>
+#include <fmt/format.h>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -66,14 +66,14 @@ AMD::PMFixedFreqAdvProvider::provideGPUControls(IGPUInfo const &gpuInfo,
         }
         else {
           if (!dpmSclkValid) {
-            LOG(WARNING) << std::format("Unknown data format on {}",
+            LOG(WARNING) << fmt::format("Unknown data format on {}",
                                         dpmSclk.string());
             for (auto const &line : dpmSclkLines)
               LOG(ERROR) << line;
           }
 
           if (!dpmMclkValid) {
-            LOG(WARNING) << std::format("Unknown data format on {}",
+            LOG(WARNING) << fmt::format("Unknown data format on {}",
                                         dpmMclk.string());
             for (auto const &line : dpmMclkLines)
               LOG(ERROR) << line;

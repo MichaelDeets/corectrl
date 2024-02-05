@@ -21,7 +21,7 @@
 #include <QString>
 #include <exception>
 #include <filesystem>
-#include <format>
+#include <fmt/format.h>
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -170,7 +170,7 @@ bool initDBusForHelperService(QObject *obj)
   }
 
   if (!bus.registerObject(QStringLiteral(DBUS_HELPER_PATH), obj)) {
-    LOG(ERROR) << std::format("Could not register D-Bus object on path {} "
+    LOG(ERROR) << fmt::format("Could not register D-Bus object on path {} "
                               "using the interface {}\n.Last D-Bus error: {}",
                               DBUS_HELPER_PATH, DBUS_HELPER_INTERFACE,
                               bus.lastError().message().toStdString());
@@ -178,7 +178,7 @@ bool initDBusForHelperService(QObject *obj)
   }
 
   if (!bus.registerService(QStringLiteral(DBUS_HELPER_SERVICE))) {
-    LOG(ERROR) << std::format(
+    LOG(ERROR) << fmt::format(
         "Could not register D-Bus service {}.\nLast D-Bus error: {}",
         DBUS_HELPER_SERVICE, bus.lastError().message().toStdString());
     return false;
@@ -193,7 +193,7 @@ bool endDBusForHelperService()
   bus.unregisterObject(QStringLiteral(DBUS_HELPER_PATH));
   auto success = bus.unregisterService(QStringLiteral(DBUS_HELPER_SERVICE));
   if (!success) {
-    LOG(ERROR) << std::format("D-Bus error unregistering service {}: {}",
+    LOG(ERROR) << fmt::format("D-Bus error unregistering service {}: {}",
                               DBUS_HELPER_SERVICE,
                               bus.lastError().message().toStdString());
   }

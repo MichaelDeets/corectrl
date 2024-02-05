@@ -8,7 +8,7 @@
 #include <QString>
 #include <QStringList>
 #include <easylogging++.h>
-#include <format>
+#include <fmt/format.h>
 #include <utility>
 
 class GPUInfoOpenGLDataSource : public IDataSource<std::string, int const>
@@ -48,7 +48,7 @@ class GPUInfoOpenGLDataSource : public IDataSource<std::string, int const>
           libGLErrorPos + libGLErrorStr.length(),
           endLinePos - libGLErrorPos - libGLErrorStr.length());
 
-      LOG(WARNING) << std::format(
+      LOG(WARNING) << fmt::format(
           "glxinfo command failed for GPU{} with error '{}{}'", gpuIndex,
           libGLErrorStr.data(), libGLError);
     }
@@ -84,7 +84,7 @@ GPUInfoOpenGL::provideInfo(Vendor, int gpuIndex, IGPUInfo::Path const &,
       if (!coreVer.empty())
         info.emplace_back(GPUInfoOpenGL::Keys::coreVersion, std::move(coreVer));
       else
-        LOG(ERROR) << std::format("Cannot find '{}' in glxinfo output",
+        LOG(ERROR) << fmt::format("Cannot find '{}' in glxinfo output",
                                   coreVerStr.data());
 
       auto compatVer = findItem(data, compatVerStr, queryRendererPos);
@@ -92,11 +92,11 @@ GPUInfoOpenGL::provideInfo(Vendor, int gpuIndex, IGPUInfo::Path const &,
         info.emplace_back(GPUInfoOpenGL::Keys::compatVersion,
                           std::move(compatVer));
       else
-        LOG(ERROR) << std::format("Cannot find '{}' in glxinfo output",
+        LOG(ERROR) << fmt::format("Cannot find '{}' in glxinfo output",
                                   compatVerStr.data());
     }
     else
-      LOG(ERROR) << std::format("Cannot find '{}' in glxinfo output",
+      LOG(ERROR) << fmt::format("Cannot find '{}' in glxinfo output",
                                 queryRendererStr.data());
   }
 

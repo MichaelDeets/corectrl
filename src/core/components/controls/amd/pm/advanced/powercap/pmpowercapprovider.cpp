@@ -12,7 +12,7 @@
 #include "pmpowercap.h"
 #include <easylogging++.h>
 #include <filesystem>
-#include <format>
+#include <fmt/format.h>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -73,26 +73,26 @@ AMD::PMPowerCapProvider::provideGPUControls(IGPUInfo const &gpuInfo,
           }
           else {
             if (!valueValid) {
-              LOG(WARNING) << std::format("Unknown data format on {}",
+              LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           power1CapPath.string());
               LOG(ERROR) << power1CapLines.front();
             }
 
             if (!minValueValid) {
-              LOG(WARNING) << std::format("Unknown data format on {}",
+              LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           power1CapMinPath.string());
               LOG(ERROR) << power1CapMinLines.front();
             }
 
             if (!maxValueValid) {
-              LOG(WARNING) << std::format("Unknown data format on {}",
+              LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           power1CapMaxPath.string());
               LOG(ERROR) << power1CapMaxLines.front();
             }
 
             if (power1CapMaxValue == 0 ||
                 power1CapMaxValue <= power1CapMinValue) {
-              LOG(ERROR) << std::format(
+              LOG(ERROR) << fmt::format(
                   "Bogus power cap range bounds detected: "
                   "power1_cap_min ({}), power1_cap_max ({}).",
                   power1CapMinValue, power1CapMaxValue);

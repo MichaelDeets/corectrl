@@ -7,7 +7,7 @@
 #include <easylogging++.h>
 #include <fcntl.h>
 #include <filesystem>
-#include <format>
+#include <fmt/format.h>
 #include <functional>
 #include <string>
 #include <unistd.h>
@@ -24,7 +24,7 @@ class DevFSDataSource : public IDataSource<T>
   {
     fd_ = open(path.c_str(), O_RDONLY);
     if (fd_ < 0)
-      LOG(ERROR) << std::format("Cannot open {}", path.c_str());
+      LOG(ERROR) << fmt::format("Cannot open {}", path.c_str());
   }
 
   ~DevFSDataSource() override

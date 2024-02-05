@@ -10,7 +10,7 @@
 #include <QDBusError>
 #include <QString>
 #include <easylogging++.h>
-#include <format>
+#include <fmt/format.h>
 #include <stdexcept>
 #include <utility>
 
@@ -30,7 +30,7 @@ MsgReceiver::MsgReceiver(std::shared_ptr<ICryptoLayer> cryptoLayer,
           QStringLiteral(DBUS_HELPER_SYSCTL_INTERFACE), this,
           QDBusConnection::ExportScriptableSlots))
     throw std::runtime_error(
-        std::format("Could not register D-Bus object on path {} "
+        fmt::format("Could not register D-Bus object on path {} "
                     "using the interface {}\n.Last D-Bus error: {}",
                     DBUS_HELPER_SYSCTL_PATH, DBUS_HELPER_SYSCTL_INTERFACE,
                     dbusConnection.lastError().message().toStdString()));

@@ -15,7 +15,7 @@
 #include <cctype>
 #include <easylogging++.h>
 #include <filesystem>
-#include <format>
+#include <fmt/format.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -73,18 +73,18 @@ AMD::PMFreqVoltProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                           dpmControl))));
             }
             else {
-              LOG(WARNING) << std::format("Unsupported control {}", controlName);
+              LOG(WARNING) << fmt::format("Unsupported control {}", controlName);
             }
           }
           else {
             if (!controlIsValid) {
-              LOG(WARNING) << std::format("Invalid data on {} for control {}",
+              LOG(WARNING) << fmt::format("Invalid data on {} for control {}",
                                           ppOdClkVolt.string(), controlName);
               logPPOdClkVoltContents = true;
             }
 
             if (!dpmIsValid) {
-              LOG(WARNING) << std::format("Unknown data format on {}",
+              LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           dpmControl.string());
               for (auto const &line : dpmLines)
                 LOG(ERROR) << line;

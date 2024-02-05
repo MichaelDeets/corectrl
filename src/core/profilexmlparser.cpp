@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <cctype>
 #include <easylogging++.h>
-#include <format>
+#include <fmt/format.h>
 #include <pugixml.hpp>
 #include <utility>
 
@@ -129,7 +129,7 @@ bool ProfileXMLParser::load(std::vector<char> const &data, IProfile &profile)
     }
   }
 
-  LOG(ERROR) << std::format("Cannot parse xml data for profile {}.\nError: {}",
+  LOG(ERROR) << fmt::format("Cannot parse xml data for profile {}.\nError: {}",
                             profile.info().name, status.description());
 
   return false;

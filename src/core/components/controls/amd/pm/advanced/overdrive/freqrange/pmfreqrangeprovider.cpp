@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <easylogging++.h>
 #include <filesystem>
-#include <format>
+#include <fmt/format.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -43,7 +43,7 @@ AMD::PMFreqRangeProvider::provideGPUControls(IGPUInfo const &gpuInfo,
 
         if (outOfRangeStates.has_value()) {
           for (auto stateIndex : outOfRangeStates.value()) {
-            LOG(WARNING) << std::format(
+            LOG(WARNING) << fmt::format(
                 "Detected out of range state index {} on control {}",
                 stateIndex, controlName);
           }
@@ -75,11 +75,11 @@ AMD::PMFreqRangeProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                 std::move(disabledBound)));
           }
           else {
-            LOG(WARNING) << std::format("Unsupported control {}", controlName);
+            LOG(WARNING) << fmt::format("Unsupported control {}", controlName);
           }
         }
         else {
-          LOG(WARNING) << std::format("Invalid data on {} for control {}",
+          LOG(WARNING) << fmt::format("Invalid data on {} for control {}",
                                       ppOdClkVolt.string(), controlName);
           logPPOdClkVoltContents = true;
         }

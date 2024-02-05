@@ -13,7 +13,7 @@
 #include "fanfixed.h"
 #include <easylogging++.h>
 #include <filesystem>
-#include <format>
+#include <fmt/format.h>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -67,13 +67,13 @@ AMD::FanFixedProvider::provideGPUControls(IGPUInfo const &gpuInfo,
           }
           else {
             if (!pwmEnableValid) {
-              LOG(WARNING) << std::format("Unknown data format on {}",
+              LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           pwmEnable.string());
               LOG(ERROR) << pwmEnableLines.front();
             }
 
             if (!pwmValid) {
-              LOG(WARNING) << std::format("Unknown data format on {}",
+              LOG(WARNING) << fmt::format("Unknown data format on {}",
                                           pwm.string());
               LOG(ERROR) << pwmLines.front();
             }

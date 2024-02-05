@@ -10,7 +10,7 @@
 #include <QString>
 #include <algorithm>
 #include <easylogging++.h>
-#include <format>
+#include <fmt/format.h>
 #include <stdexcept>
 #include <utility>
 
@@ -46,7 +46,7 @@ void HelperMonitor::init()
 
   if (!monitorInterface_->isValid())
     throw std::runtime_error(
-        std::format("Cannot connect to D-Bus interface {} (path: {})",
+        fmt::format("Cannot connect to D-Bus interface {} (path: {})",
                     DBUS_HELPER_PMON_INTERFACE, DBUS_HELPER_PMON_PATH));
 
   if (!QDBusConnection::systemBus().connect(
@@ -54,7 +54,7 @@ void HelperMonitor::init()
           QStringLiteral(DBUS_HELPER_PMON_PATH),
           QStringLiteral(DBUS_HELPER_PMON_INTERFACE), QStringLiteral("appExec"),
           this, SLOT(notifyAppExec(QByteArray const &, QByteArray const &))))
-    throw std::runtime_error(std::format(
+    throw std::runtime_error(fmt::format(
         "Cannot connect to 'appExec' in D-Bus interface {} (path: {})",
         DBUS_HELPER_PMON_INTERFACE, DBUS_HELPER_PMON_PATH));
 
@@ -63,7 +63,7 @@ void HelperMonitor::init()
           QStringLiteral(DBUS_HELPER_PMON_PATH),
           QStringLiteral(DBUS_HELPER_PMON_INTERFACE), QStringLiteral("appExit"),
           this, SLOT(notifyAppExit(QByteArray const &, QByteArray const &))))
-    throw std::runtime_error(std::format(
+    throw std::runtime_error(fmt::format(
         "Cannot connect to 'appExit' in D-Bus interface {} (path: {})",
         DBUS_HELPER_PMON_INTERFACE, DBUS_HELPER_PMON_PATH));
 }
