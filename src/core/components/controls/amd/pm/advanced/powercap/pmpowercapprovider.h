@@ -4,6 +4,9 @@
 #pragma once
 
 #include "core/components/controls/igpucontrolprovider.h"
+#include <filesystem>
+#include <optional>
+#include <units.h>
 
 namespace AMD {
 
@@ -15,6 +18,9 @@ class PMPowerCapProvider final : public IGPUControlProvider::IProvider
                      ISWInfo const &swInfo) const override;
 
  private:
+  std::optional<units::power::microwatt_t>
+  readPowerFrom(std::filesystem::path const &path) const;
+
   static bool const registered_;
 };
 
