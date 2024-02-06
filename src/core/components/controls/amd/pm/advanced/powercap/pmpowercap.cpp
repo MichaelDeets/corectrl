@@ -9,14 +9,16 @@
 
 AMD::PMPowerCap::PMPowerCap(
     std::unique_ptr<IDataSource<unsigned long>> &&powerCapDataSource,
-    units::power::watt_t min, units::power::watt_t max) noexcept
+    units::power::watt_t min, units::power::watt_t max,
+    std::optional<units::power::watt_t> defaultValue) noexcept
 : Control(true)
 , id_(AMD::PMPowerCap::ItemID)
 , powerCapDataSource_(std::move(powerCapDataSource))
 , powerCapPreInitValue_{0u}
 , min_(min)
 , max_(max)
-, value_(1)
+, defaultValue_(defaultValue)
+, value_(defaultValue ? *defaultValue : units::power::watt_t(1))
 {
   if (min_ == units::power::watt_t(0))
     min_ = units::power::watt_t(1);
@@ -24,18 +26,27 @@ AMD::PMPowerCap::PMPowerCap(
 
 void AMD::PMPowerCap::preInit(ICommandQueue &ctlCmds)
 {
+  if (defaultValue_)
+    return;
+
   powerCapDataSource_->read(powerCapPreInitValue_);
   cleanControl(ctlCmds);
 }
 
 void AMD::PMPowerCap::postInit(ICommandQueue &ctlCmds)
 {
+  if (defaultValue_)
+    return;
+
   ctlCmds.add(
       {powerCapDataSource_->source(), std::to_string(powerCapPreInitValue_)});
 }
 
 void AMD::PMPowerCap::init()
 {
+  if (defaultValue_)
+    return;
+
   unsigned long powerCapValue;
   if (powerCapDataSource_->read(powerCapValue))
     value(units::power::microwatt_t(powerCapValue));
@@ -61,7 +72,10 @@ void AMD::PMPowerCap::exportControl(IControl::Exporter &e) const
 
 void AMD::PMPowerCap::cleanControl(ICommandQueue &ctlCmds)
 {
-  ctlCmds.add({powerCapDataSource_->source(), "0"});
+  auto value = defaultValue_
+                   ? std::to_string((*defaultValue_).to<unsigned long>())
+                   : "0"; // restore default value
+  ctlCmds.add({powerCapDataSource_->source(), value});
 }
 
 void AMD::PMPowerCap::syncControl(ICommandQueue &ctlCmds)

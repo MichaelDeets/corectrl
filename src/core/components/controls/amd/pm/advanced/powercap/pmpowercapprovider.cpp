@@ -62,13 +62,15 @@ AMD::PMPowerCapProvider::provideGPUControls(IGPUInfo const &gpuInfo,
     return controls;
   }
 
+  auto defaultValue = readPowerFrom(path.value() / "power1_cap_default");
+
   controls.emplace_back(std::make_unique<AMD::PMPowerCap>(
       std::make_unique<SysFSDataSource<unsigned long>>(
           power1CapPath,
           [](std::string const &data, unsigned long &output) {
             Utils::String::toNumber<unsigned long>(output, data);
           }),
-      *min, *max));
+      *min, *max, defaultValue));
 
   return controls;
 }

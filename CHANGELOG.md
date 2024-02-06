@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - QML Connections deprecation warning (#123).
 - Typo in README. Thanks to paintdev (!43).
+- Default power limit value when power limit reset support is not available (#422).
 
 ### Changed
 - Require Qt 5.15.

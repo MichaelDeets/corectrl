@@ -6,6 +6,7 @@
 #include "core/components/controls/control.h"
 #include "core/idatasource.h"
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <units.h>
@@ -32,7 +33,8 @@ class PMPowerCap : public Control
   };
 
   PMPowerCap(std::unique_ptr<IDataSource<unsigned long>> &&powerCapDataSource,
-             units::power::watt_t min, units::power::watt_t max) noexcept;
+             units::power::watt_t min, units::power::watt_t max,
+             std::optional<units::power::watt_t> defaultValue = {}) noexcept;
 
   void preInit(ICommandQueue &ctlCmds) final override;
   void postInit(ICommandQueue &ctlCmds) final override;
@@ -61,6 +63,7 @@ class PMPowerCap : public Control
 
   units::power::microwatt_t min_;
   units::power::microwatt_t const max_;
+  std::optional<units::power::microwatt_t> const defaultValue_;
   units::power::microwatt_t value_;
 };
 

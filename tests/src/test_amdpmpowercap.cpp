@@ -140,7 +140,8 @@ TEST_CASE("AMD PMPowerCap tests", "[GPU][AMD][PM][PMPowerCap]")
     REQUIRE(ts.value() == max);
   }
 
-  SECTION("Generate pre-init control commands")
+  SECTION("Generate pre-init control commands when default power cap is not "
+          "available")
   {
     PMPowerCapTestAdapter ts(
         std::make_unique<ULongDataSourceStub>("power1_cap", 10000000), min, max);
@@ -152,22 +153,61 @@ TEST_CASE("AMD PMPowerCap tests", "[GPU][AMD][PM][PMPowerCap]")
     auto &[cmdPath, cmdValue] = commands.at(0);
     REQUIRE(cmdPath == "power1_cap");
     REQUIRE(cmdValue == "0");
-
-    SECTION("Generate post-init control commands")
-    {
-      ctlCmds.clear();
-      ts.postInit(ctlCmds);
-
-      auto &commands = ctlCmds.commands();
-      REQUIRE(commands.size() == 1);
-
-      auto &[cmdPath, cmdValue] = commands.at(0);
-      REQUIRE(cmdPath == "power1_cap");
-      REQUIRE(cmdValue == "10000000"); // restore pre-init value
-    }
   }
 
-  SECTION("Initializes power cap value from power1_cap data source")
+  SECTION("Does not generate pre-init control commands when default power cap "
+          "is available")
+  {
+    PMPowerCapTestAdapter ts(
+        std::make_unique<ULongDataSourceStub>("power1_cap", 10000000), min, max,
+        units::power::watt_t(75));
+    ts.preInit(ctlCmds);
+
+    auto &commands = ctlCmds.commands();
+    REQUIRE(commands.empty());
+  }
+
+  SECTION("Generate post-init control commands when default power cap is not "
+          "available")
+  {
+    PMPowerCapTestAdapter ts(
+        std::make_unique<ULongDataSourceStub>("power1_cap", 10000000), min, max);
+    ts.preInit(ctlCmds);
+    ctlCmds.clear();
+    ts.postInit(ctlCmds);
+
+    auto &commands = ctlCmds.commands();
+    REQUIRE(commands.size() == 1);
+
+    auto &[cmdPath, cmdValue] = commands.at(0);
+    REQUIRE(cmdPath == "power1_cap");
+    REQUIRE(cmdValue == "10000000"); // restore pre-init value
+  }
+
+  SECTION("Does not generate post-init control commands when default power cap "
+          "is available")
+  {
+    PMPowerCapTestAdapter ts(
+        std::make_unique<ULongDataSourceStub>("power1_cap", 10000000), min, max,
+        units::power::watt_t(75));
+    ts.postInit(ctlCmds);
+
+    auto &commands = ctlCmds.commands();
+    REQUIRE(commands.empty());
+  }
+
+  SECTION("Power cap has the value of the default power cap when the later is "
+          "available")
+  {
+    PMPowerCapTestAdapter ts(
+        std::make_unique<ULongDataSourceStub>("power1_cap", 50000000), min, max,
+        units::power::watt_t(75));
+
+    REQUIRE(ts.value() == units::power::watt_t(75));
+  }
+
+  SECTION("Initializes power cap value from power1_cap data source when "
+          "default power cap is not available")
   {
     PMPowerCapTestAdapter ts(
         std::make_unique<ULongDataSourceStub>("power1_cap", 50000000), min, max);
@@ -208,19 +248,41 @@ TEST_CASE("AMD PMPowerCap tests", "[GPU][AMD][PM][PMPowerCap]")
     ts.exportControl(e);
   }
 
-  SECTION("Generate clean control commands")
+  SECTION("Generate clean control commands...")
   {
-    PMPowerCapTestAdapter ts(
-        std::make_unique<ULongDataSourceStub>("power1_cap"), min, max);
+    SECTION(
+        "To restore the default value when default power cap is not available")
+    {
+      PMPowerCapTestAdapter ts(
+          std::make_unique<ULongDataSourceStub>("power1_cap"), min, max);
 
-    ts.cleanControl(ctlCmds);
+      ts.cleanControl(ctlCmds);
 
-    auto &commands = ctlCmds.commands();
-    REQUIRE(commands.size() == 1);
+      auto &commands = ctlCmds.commands();
+      REQUIRE(commands.size() == 1);
 
-    auto &[cmdPath, cmdValue] = commands.at(0);
-    REQUIRE(cmdPath == "power1_cap");
-    REQUIRE(cmdValue == "0");
+      auto &[cmdPath, cmdValue] = commands.at(0);
+      REQUIRE(cmdPath == "power1_cap");
+      REQUIRE(cmdValue == "0");
+    }
+
+    SECTION(
+        "Assigning the default power value when default power cap is available")
+    {
+      units::power::watt_t defaultValue(75);
+      PMPowerCapTestAdapter ts(
+          std::make_unique<ULongDataSourceStub>("power1_cap"), min, max,
+          defaultValue);
+
+      ts.cleanControl(ctlCmds);
+
+      auto &commands = ctlCmds.commands();
+      REQUIRE(commands.size() == 1);
+
+      auto &[cmdPath, cmdValue] = commands.at(0);
+      REQUIRE(cmdPath == "power1_cap");
+      REQUIRE(cmdValue == "75000000");
+    }
   }
 
   SECTION("Does not generate sync control commands when is synced")
