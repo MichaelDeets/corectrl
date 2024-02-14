@@ -14,7 +14,7 @@
 #include <QVariant>
 #include <algorithm>
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 #include <limits>
 #include <stdexcept>
 #include <utility>
@@ -101,7 +101,7 @@ void HelperControl::createHelperInterface()
       QStringLiteral(DBUS_HELPER_INTERFACE), QDBusConnection::systemBus());
 
   if (!helperInterface_->isValid())
-    throw std::runtime_error(fmt::format(
+    throw std::runtime_error(std::format(
         "Cannot connect to D-Bus interface {}: {}", DBUS_HELPER_INTERFACE,
         helperInterface_->lastError().message().toStdString()));
 }
@@ -145,7 +145,7 @@ bool HelperControl::startHelperKiller()
                        QStringLiteral(DBUS_HELPER_KILLER_INTERFACE),
                        QDBusConnection::systemBus());
   if (!iface.isValid()) {
-    LOG(ERROR) << fmt::format("Cannot connect to D-Bus interface {}: {}",
+    LOG(ERROR) << std::format("Cannot connect to D-Bus interface {}: {}",
                               DBUS_HELPER_KILLER_INTERFACE,
                               iface.lastError().message().toStdString());
     return false;
@@ -153,7 +153,7 @@ bool HelperControl::startHelperKiller()
 
   QDBusReply<bool> reply = iface.call(QStringLiteral("start"));
   if (!reply.isValid()) {
-    LOG(ERROR) << fmt::format("Helper killer error: {}",
+    LOG(ERROR) << std::format("Helper killer error: {}",
                               iface.lastError().message().toStdString());
     return false;
   }

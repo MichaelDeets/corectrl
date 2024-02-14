@@ -10,7 +10,7 @@
 #include <QDBusError>
 #include <QString>
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 #include <stdexcept>
 #include <utility>
 
@@ -31,7 +31,7 @@ DBusSignalDispatcher::DBusSignalDispatcher(
                                      QDBusConnection::ExportScriptableSignals |
                                          QDBusConnection::ExportScriptableSlots))
     throw std::runtime_error(
-        fmt::format("Could not register D-Bus object on path {} "
+        std::format("Could not register D-Bus object on path {} "
                     "using the interface {}\n.Last D-Bus error: {}",
                     DBUS_HELPER_PMON_PATH, DBUS_HELPER_PMON_INTERFACE,
                     dbusConnection.lastError().message().toStdString()));

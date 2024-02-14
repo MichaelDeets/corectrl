@@ -8,7 +8,7 @@
 #include <QString>
 #include <easylogging++.h>
 #include <exception>
-#include <fmt/format.h>
+#include <format>
 #include <quazip.h>
 #include <quazipfile.h>
 #include <quazipnewinfo.h>
@@ -55,7 +55,7 @@ bool ZipDataSink::write(
             restorePreWriteFileState();
 
             throw std::runtime_error(
-                fmt::format("Failed to write {} data to file {}",
+                std::format("Failed to write {} data to file {}",
                             dataFilePath.data(), sink().data()));
           }
 
@@ -68,7 +68,7 @@ bool ZipDataSink::write(
     }
     else {
       throw std::runtime_error(
-          fmt::format("Failed to open file {}", sink().data()));
+          std::format("Failed to open file {}", sink().data()));
     }
   }
 

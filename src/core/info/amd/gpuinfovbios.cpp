@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <cctype>
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 #include <utility>
 
 namespace AMD {
@@ -30,7 +30,7 @@ class GPUInfoVbiosDataSource
       return true;
     }
 
-    LOG(WARNING) << fmt::format("Cannot retrieve bios version from {}",
+    LOG(WARNING) << std::format("Cannot retrieve bios version from {}",
                                 filePath.c_str());
     return false;
   }

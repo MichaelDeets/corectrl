@@ -9,7 +9,7 @@
 #include <QStringList>
 #include <algorithm>
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 
 class CPUInfoLsCpuDataSource : public IDataSource<std::vector<std::string>>
 {

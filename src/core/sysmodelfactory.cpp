@@ -23,7 +23,7 @@
 #include "sysmodel.h"
 #include <algorithm>
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 #include <iterator>
 #include <memory>
 #include <optional>
@@ -232,8 +232,8 @@ int SysModelFactory::computeGPUIndex(std::string const &deviceRenderDName) const
   if (Utils::String::toNumber<int>(index, indexStr))
     index -= 128;
   else
-    LOG(ERROR) << fmt::format("Cannot compute GPU index for device {}.",
-                              deviceRenderDName.c_str());
+    LOG(ERROR) << std::format("Cannot compute GPU index for device {}.",
+                              deviceRenderDName);
   return index;
 }
 
@@ -247,7 +247,7 @@ Vendor SysModelFactory::parseVendor(std::filesystem::path const &vendorPath) con
     if (Utils::String::toNumber<int>(dataValue, lines.front(), 16))
       vendor = Vendor{dataValue};
     else
-      LOG(ERROR) << fmt::format("Cannot parse vendor id from file {}.",
+      LOG(ERROR) << std::format("Cannot parse vendor id from file {}.",
                                 vendorPath.c_str());
   }
 

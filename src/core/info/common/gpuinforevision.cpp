@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <cctype>
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 #include <utility>
 
 class GPUInfoRevisionDataSource
@@ -30,7 +30,7 @@ class GPUInfoRevisionDataSource
       return true;
     }
 
-    LOG(WARNING) << fmt::format("Cannot retrieve device revision from {}",
+    LOG(WARNING) << std::format("Cannot retrieve device revision from {}",
                                 filePath.c_str());
     return false;
   }

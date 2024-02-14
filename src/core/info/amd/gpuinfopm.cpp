@@ -6,7 +6,7 @@
 #include "common/fileutils.h"
 #include "core/info/infoproviderregistry.h"
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <format>
 #include <utility>
 
 namespace AMD {
@@ -29,7 +29,7 @@ class GPUInfoPMLegacyDataSource
         return true;
       }
       else {
-        LOG(WARNING) << fmt::format(
+        LOG(WARNING) << std::format(
             "Cannot retrieve device power_method from {}", filePath.c_str());
       }
     }

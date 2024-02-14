@@ -10,7 +10,8 @@
 #include "core/sysfsdatasource.h"
 #include "pmpowercap.h"
 #include <easylogging++.h>
-#include <fmt/format.h>
+#include <filesystem>
+#include <format>
 #include <memory>
 #include <string>
 #include <vector>
@@ -24,7 +25,7 @@ AMD::PMPowerCapProvider::readPowerFrom(std::filesystem::path const &path) const
   unsigned long value;
   auto lines = Utils::File::readFileLines(path);
   if (!Utils::String::toNumber<unsigned long>(value, lines.front())) {
-    LOG(WARNING) << fmt::format("Unknown data format on {}", path.string());
+    LOG(WARNING) << std::format("Unknown data format on {}", path.string());
     LOG(ERROR) << lines.front();
     return {};
   }
@@ -55,7 +56,7 @@ AMD::PMPowerCapProvider::provideGPUControls(IGPUInfo const &gpuInfo,
   // Drivers might report bogus values for either (or both) upper
   // and lower range bounds. See #337.
   if (*max <= *min) {
-    LOG(ERROR) << fmt::format("Bogus power cap range bounds detected: "
+    LOG(ERROR) << std::format("Bogus power cap range bounds detected: "
                               "power1_cap_min ({}), power1_cap_max ({}).",
                               (*min).to<unsigned long>(),
                               (*max).to<unsigned long>());

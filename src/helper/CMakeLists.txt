@@ -77,7 +77,6 @@ target_link_libraries(corectrl_helperkiller PRIVATE
   Qt5::Core
   Qt5::DBus
   ${POLKIT_LIBRARIES}
-  $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
 )
 
 configure_file(org.corectrl.helperkiller.service.in org.corectrl.helperkiller.service)
@@ -112,7 +111,6 @@ target_link_libraries(corectrl_helper PRIVATE
   pthread
   ${Botan_LIBRARIES}
   ${POLKIT_LIBRARIES}
-  $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
 )
 
 configure_file(org.corectrl.helper.service.in org.corectrl.helper.service)

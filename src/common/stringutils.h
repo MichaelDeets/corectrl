@@ -5,7 +5,7 @@
 
 #include <easylogging++.h>
 #include <exception>
-#include <fmt/format.h>
+#include <format>
 #include <optional>
 #include <string>
 #include <tuple>
@@ -63,9 +63,8 @@ bool toNumber(T &value, std::string const &rep, int base = 10)
     return true;
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << fmt::format(
-        "Cannot parse a number from the string '{}'. Error: {}", rep.c_str(),
-        e.what());
+    LOG(ERROR) << std::format(
+        "Cannot parse a number from the string '{}'. Error: {}", rep, e.what());
   }
 
   return false;

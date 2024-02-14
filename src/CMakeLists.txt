@@ -374,7 +374,6 @@ target_link_libraries(corectrl_lib PRIVATE
   stdc++fs
   pthread
   ${QUAZIP_LIBRARIES}
-  $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
   $<$<BOOL:${pugixml_FOUND}>:pugixml::pugixml>
   $<$<BOOL:${units_FOUND}>:units::units>
 )
@@ -406,7 +405,6 @@ target_link_libraries(corectrl PRIVATE
   Qt5::Network
   Qt5::DBus
   ${Botan_LIBRARIES}
-  $<$<BOOL:${fmt_FOUND}>:fmt::fmt>
 )
 
 install(
