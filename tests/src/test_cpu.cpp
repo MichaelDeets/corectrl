@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 #include <catch2/trompeloeil.hpp>
 
 #include "common/commandqueuestub.h"
@@ -122,7 +122,8 @@ TEST_CASE("CPU tests", "[CPU]")
   {
     // 'CPU' + physical id combination seems to be good enough to differentiate
     // between system components.
-    REQUIRE_THAT(ts.key(), Catch::Contains("CPU") && Catch::Contains("0"));
+    REQUIRE_THAT(ts.key(), Catch::Matchers::ContainsSubstring("CPU") &&
+                               Catch::Matchers::ContainsSubstring("0"));
   }
 
   SECTION("Its CPU information can be retrieved")
@@ -133,7 +134,8 @@ TEST_CASE("CPU tests", "[CPU]")
   SECTION("CPU description and information can be retrieved")
   {
     auto [gpuDesc, infos] = ts.componentInfo();
-    REQUIRE_THAT(gpuDesc, Catch::Contains("CPU") && Catch::Contains("0"));
+    REQUIRE_THAT(gpuDesc, Catch::Matchers::ContainsSubstring("CPU") &&
+                              Catch::Matchers::ContainsSubstring("0"));
     REQUIRE_FALSE(infos.empty());
     auto &[infoKey, info] = infos[0];
     REQUIRE(infoKey == "info_k1");

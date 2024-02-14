@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2021 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 #include <catch2/trompeloeil.hpp>
 
 #include "common/hwidtranslatorstub.h"
@@ -128,7 +128,7 @@ TEST_CASE("GPUInfoVRam tests", "[Info][GPUInfo][GPUInfoVRam]")
         auto memory = std::make_pair(std::string(::IGPUInfo::Keys::memory),
                                      std::string("8 MB"));
 
-        REQUIRE_THAT(output, Catch::VectorContains(memory));
+        REQUIRE_THAT(output, Catch::Matchers::VectorContains(memory));
       }
 
       SECTION("Does not provide vram size when kernel < 2.6.31")
@@ -187,7 +187,7 @@ TEST_CASE("GPUInfoVRam tests", "[Info][GPUInfo][GPUInfoVRam]")
         auto memory = std::make_pair(std::string(::IGPUInfo::Keys::memory),
                                      std::string("16 MB"));
 
-        REQUIRE_THAT(output, Catch::VectorContains(memory));
+        REQUIRE_THAT(output, Catch::Matchers::VectorContains(memory));
       }
 
       SECTION("Does not provide vram size when kernel < 4.10")

@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Require Qt 5.15.
 - Require a C++20 compiler (gcc 13.1 or later, clang 17 or later).
 - Require CMake 3.22.
+- Require Catch2 3.0 or later when building tests. Based on the work done by Leonidas Spyropoulos (!44).
 - Remove fmt library dependency.
 - Command line arguments that affect a running instance of the application can now be used together. The argument `--minimize-systray` takes precedence over `--toggle-window-visibility`.
 - Use `org.corectrl.CoreCtrl` in both the icon name and the manifest's application ID to better conform to FreeDesktop specifications. Thanks to Reilly Brogan (!41).
@@ -24,6 +25,9 @@ All notable changes to this project will be documented in this file.
 - Botan 3 compilation support (#373). Botan 2 is still supported. Botan 3 takes precedence over Botan 2 when both versions are installed in the system.
 - Manual profile activation at application startup using the command line argument `-m, --toggle-manual-profile` (#366).
 - Automatic and curve fan controls for AMD RX 7000 series (#344).
+
+### Removed
+- Bundled version of Catch2.
 
 
 ## CoreCtrl 1.3.10 (2024-02-04)

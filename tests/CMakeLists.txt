@@ -1,9 +1,4 @@
-find_package(Catch2 2.6 QUIET)
-if(NOT Catch2_FOUND)
-  message("Using bundled Catch2 library")
-  list(APPEND TESTS_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/catch2>)
-endif()
-
+find_package(Catch2 3.0 REQUIRED)
 find_package(trompeloeil 40 QUIET)
 if(NOT trompeloeil_FOUND)
   message("Using bundled trompeloeil library")
@@ -26,6 +21,7 @@ list(APPEND TESTS_INCLUDE_DIRECTORIES
 # catch main
 add_library(catch_main OBJECT "src/main.cpp")
 target_include_directories(catch_main PRIVATE ${TESTS_INCLUDE_DIRECTORIES})
+target_compile_definitions(catch_main PRIVATE ${TESTS_COMPILE_DEFINITIONS})
 
 # test_* files
 file(GLOB test_files "src/test_*.cpp")

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 #include <catch2/trompeloeil.hpp>
 
 #include "common/commandqueuestub.h"
@@ -143,14 +143,14 @@ TEST_CASE("SysModel tests", "[SysModel]")
       auto swInfo = std::make_pair(std::string("Software"),
                                    std::move(swInfoData));
 
-      REQUIRE_THAT(sysInfo, Catch::VectorContains(swInfo));
+      REQUIRE_THAT(sysInfo, Catch::Matchers::VectorContains(swInfo));
     }
 
     SECTION("Has components info")
     {
       auto compInfo = componentMock.componentInfo();
 
-      REQUIRE_THAT(sysInfo, Catch::VectorContains(compInfo));
+      REQUIRE_THAT(sysInfo, Catch::Matchers::VectorContains(compInfo));
     }
   }
 

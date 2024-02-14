@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2022 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include "common/hwidtranslatorstub.h"
 #include "common/stringpathdatasourcestub.h"
@@ -24,7 +24,7 @@ TEST_CASE("GPUInfoUniqueID tests", "[AMD][Info][GPUInfo][GPUInfoUniqueID]")
 
     auto type = std::make_pair(std::string(::IGPUInfo::Keys::uniqueID),
                                std::string("SOME_UNIQUE_ID"));
-    REQUIRE_THAT(output, Catch::VectorContains(type));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(type));
   }
 }
 

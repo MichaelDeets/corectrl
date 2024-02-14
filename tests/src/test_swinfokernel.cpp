@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include "common/stringdatasourcestub.h"
 #include "core/info/common/swinfokernel.h"
@@ -20,7 +20,7 @@ TEST_CASE("SWInfoKernel tests", "[Info][SWInfo][SWInfoKernel]")
 
     auto kernelVersion = std::make_pair(
         std::string(ISWInfo::Keys::kernelVersion), std::string("1.2.3"));
-    REQUIRE_THAT(output, Catch::VectorContains(kernelVersion));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(kernelVersion));
   }
 
   SECTION("Provides fake kernel version (0.0.0) when...")
@@ -33,7 +33,7 @@ TEST_CASE("SWInfoKernel tests", "[Info][SWInfo][SWInfoKernel]")
 
       auto kernelVersion = std::make_pair(
           std::string(ISWInfo::Keys::kernelVersion), std::string("0.0.0"));
-      REQUIRE_THAT(output, Catch::VectorContains(kernelVersion));
+      REQUIRE_THAT(output, Catch::Matchers::VectorContains(kernelVersion));
     }
 
     SECTION("/proc/version data has an unknown format")
@@ -46,7 +46,7 @@ TEST_CASE("SWInfoKernel tests", "[Info][SWInfo][SWInfoKernel]")
 
       auto kernelVersion = std::make_pair(
           std::string(ISWInfo::Keys::kernelVersion), std::string("0.0.0"));
-      REQUIRE_THAT(output, Catch::VectorContains(kernelVersion));
+      REQUIRE_THAT(output, Catch::Matchers::VectorContains(kernelVersion));
     }
   }
 }

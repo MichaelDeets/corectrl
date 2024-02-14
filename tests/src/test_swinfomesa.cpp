@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include "common/stringdatasourcestub.h"
 #include "core/info/common/swinfomesa.h"
@@ -25,7 +25,7 @@ Extended renderer info (GLX_MESA_query_renderer):\n\
   {
     auto mesaVersion = std::make_pair(std::string(ISWInfo::Keys::mesaVersion),
                                       std::string("1.2.3"));
-    REQUIRE_THAT(output, Catch::VectorContains(mesaVersion));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(mesaVersion));
   }
 }
 
