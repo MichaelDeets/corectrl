@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include "common/hwidtranslatorstub.h"
 #include "common/stringdatasourcestub.h"
@@ -33,7 +33,7 @@ VkPhysicalDeviceProperties:\n\
 
     auto apiVersion = std::make_pair(
         std::string(::GPUInfoVulkan::Keys::apiVersion), std::string("4194306"));
-    REQUIRE_THAT(output, Catch::VectorContains(apiVersion));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(apiVersion));
   }
 
   SECTION("Provides api version (v2)")
@@ -53,7 +53,7 @@ VkPhysicalDeviceProperties:\n\
 
     auto apiVersion = std::make_pair(
         std::string(::GPUInfoVulkan::Keys::apiVersion), std::string("1.1.70"));
-    REQUIRE_THAT(output, Catch::VectorContains(apiVersion));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(apiVersion));
   }
 }
 

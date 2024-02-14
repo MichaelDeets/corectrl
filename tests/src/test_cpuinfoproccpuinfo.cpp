@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include "common/hwidtranslatorstub.h"
 #include "common/vectorstringdatasourcestub.h"
@@ -32,7 +32,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::executionUnits),
                                std::string("1"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides vendor id")
@@ -45,7 +45,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::vendorId),
                                std::string("TheVendor"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides cpu family")
@@ -58,7 +58,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::cpuFamily),
                                std::string("128"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides model")
@@ -71,7 +71,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::model),
                                std::string("8"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides model name")
@@ -84,7 +84,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::modelName),
                                std::string("Potato"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides stepping")
@@ -97,7 +97,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::stepping),
                                std::string("2"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides microcode")
@@ -110,7 +110,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::ucode),
                                std::string("0x01"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides L3 cache size")
@@ -123,7 +123,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::l3Cache),
                                std::string("8192 KB"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides cores count")
@@ -136,7 +136,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::cores),
                                std::string("64"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides flags")
@@ -149,7 +149,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::flags),
                                std::string("a lot"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides bugs")
@@ -162,7 +162,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::bugs),
                                std::string("yes"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides bogomips")
@@ -175,7 +175,7 @@ TEST_CASE("CPUInfoProcCpuInfo tests", "[Info][CPUInfo][CPUInfoProcCpuInfo]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::ICPUInfo::Keys::bogomips),
                                std::string("20.45"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 }
 

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include "common/hwidtranslatorstub.h"
 #include "core/idatasource.h"
@@ -59,14 +59,14 @@ Extended renderer info (GLX_MESA_query_renderer):\n\
   {
     auto coreVersion = std::make_pair(
         std::string(::GPUInfoOpenGL::Keys::coreVersion), std::string("1.1"));
-    REQUIRE_THAT(output, Catch::VectorContains(coreVersion));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(coreVersion));
   }
 
   SECTION("Provides compat version")
   {
     auto compatVersion = std::make_pair(
         std::string(::GPUInfoOpenGL::Keys::compatVersion), std::string("2.2"));
-    REQUIRE_THAT(output, Catch::VectorContains(compatVersion));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(compatVersion));
   }
 }
 

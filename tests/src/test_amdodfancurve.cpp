@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 #include <catch2/trompeloeil.hpp>
 
 #include "common/commandqueuestub.h"
@@ -135,7 +135,7 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
 
     OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>());
     auto output = ts.toCurvePoints(controlCurve);
-    REQUIRE_THAT(output, Catch::Equals(curvePoints));
+    REQUIRE_THAT(output, Catch::Matchers::Equals(curvePoints));
   }
 
   SECTION("setPointCoordinatesFrom")
@@ -172,7 +172,7 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
 
     OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>());
     ts.setPointCoordinatesFrom(curve, values);
-    REQUIRE_THAT(curve, Catch::Equals(targetCurve));
+    REQUIRE_THAT(curve, Catch::Matchers::Equals(targetCurve));
   }
 
   SECTION("isZeroCurve")

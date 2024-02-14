@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include "common/hwidtranslatorstub.h"
 #include "common/vectorstringdatasourcestub.h"
@@ -32,7 +32,7 @@ TEST_CASE("CPUInfoLsCpu tests", "[Info][CPUInfo][CPUInfoLsCpu]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::CPUInfoLsCpu::Keys::arch),
                                std::string("z48"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides operation mode")
@@ -45,7 +45,7 @@ TEST_CASE("CPUInfoLsCpu tests", "[Info][CPUInfo][CPUInfoLsCpu]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::CPUInfoLsCpu::Keys::opMode),
                                std::string("48-bit"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides byte order")
@@ -59,7 +59,7 @@ TEST_CASE("CPUInfoLsCpu tests", "[Info][CPUInfo][CPUInfoLsCpu]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::CPUInfoLsCpu::Keys::byteOrder),
                                std::string("Middle Endian"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides virtualization")
@@ -72,7 +72,7 @@ TEST_CASE("CPUInfoLsCpu tests", "[Info][CPUInfo][CPUInfoLsCpu]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::CPUInfoLsCpu::Keys::virt),
                                std::string("zzz"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides L1d cache size")
@@ -85,7 +85,7 @@ TEST_CASE("CPUInfoLsCpu tests", "[Info][CPUInfo][CPUInfoLsCpu]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::CPUInfoLsCpu::Keys::l1dCache),
                                std::string("320K"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides L1i cache size")
@@ -98,7 +98,7 @@ TEST_CASE("CPUInfoLsCpu tests", "[Info][CPUInfo][CPUInfoLsCpu]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::CPUInfoLsCpu::Keys::l1iCache),
                                std::string("320K"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 
   SECTION("Provides L2 cache size")
@@ -111,7 +111,7 @@ TEST_CASE("CPUInfoLsCpu tests", "[Info][CPUInfo][CPUInfoLsCpu]")
     auto output = ts.provideInfo(0, {{0, 0, "/cpu0"}});
     auto data = std::make_pair(std::string(::CPUInfoLsCpu::Keys::l2Cache),
                                std::string("640K"));
-    REQUIRE_THAT(output, Catch::VectorContains(data));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(data));
   }
 }
 

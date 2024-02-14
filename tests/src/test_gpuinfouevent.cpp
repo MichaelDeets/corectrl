@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 #include <catch2/trompeloeil.hpp>
 
 #include "core/idatasource.h"
@@ -66,7 +66,7 @@ TEST_CASE("GPUInfoUevent tests", "[Info][GPUInfo][GPUInfoUevent]")
     auto driver = std::make_pair(std::string(IGPUInfo::Keys::driver),
                                  std::string("driver"));
 
-    REQUIRE_THAT(output, Catch::VectorContains(driver));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(driver));
   }
 
   SECTION("Provides PCI slot")
@@ -75,7 +75,7 @@ TEST_CASE("GPUInfoUevent tests", "[Info][GPUInfo][GPUInfoUevent]")
     auto driver = std::make_pair(std::string(IGPUInfo::Keys::pciSlot),
                                  std::string("0000:01:00.0"));
 
-    REQUIRE_THAT(output, Catch::VectorContains(driver));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(driver));
   }
 
   SECTION("Provides vendor id")
@@ -84,7 +84,7 @@ TEST_CASE("GPUInfoUevent tests", "[Info][GPUInfo][GPUInfoUevent]")
     auto vendorID = std::make_pair(std::string(IGPUInfo::Keys::vendorID),
                                    std::string("1111"));
 
-    REQUIRE_THAT(output, Catch::VectorContains(vendorID));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(vendorID));
   }
 
   SECTION("Provides vendor name")
@@ -94,7 +94,7 @@ TEST_CASE("GPUInfoUevent tests", "[Info][GPUInfo][GPUInfoUevent]")
     auto vendorName = std::make_pair(std::string(IGPUInfo::Keys::vendorName),
                                      vName);
 
-    REQUIRE_THAT(output, Catch::VectorContains(vendorName));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(vendorName));
   }
 
   SECTION("Provides device id")
@@ -103,7 +103,7 @@ TEST_CASE("GPUInfoUevent tests", "[Info][GPUInfo][GPUInfoUevent]")
     auto deviceID = std::make_pair(std::string(IGPUInfo::Keys::deviceID),
                                    std::string("2222"));
 
-    REQUIRE_THAT(output, Catch::VectorContains(deviceID));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(deviceID));
   }
 
   SECTION("Provides device name")
@@ -114,7 +114,7 @@ TEST_CASE("GPUInfoUevent tests", "[Info][GPUInfo][GPUInfoUevent]")
     auto deviceName = std::make_pair(std::string(IGPUInfo::Keys::deviceName),
                                      dName);
 
-    REQUIRE_THAT(output, Catch::VectorContains(deviceName));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(deviceName));
   }
 
   SECTION("Provides subvendor id")
@@ -123,7 +123,7 @@ TEST_CASE("GPUInfoUevent tests", "[Info][GPUInfo][GPUInfoUevent]")
     auto subvendorID = std::make_pair(std::string(IGPUInfo::Keys::subvendorID),
                                       std::string("3333"));
 
-    REQUIRE_THAT(output, Catch::VectorContains(subvendorID));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(subvendorID));
   }
 
   SECTION("Provides subdevice id")
@@ -132,7 +132,7 @@ TEST_CASE("GPUInfoUevent tests", "[Info][GPUInfo][GPUInfoUevent]")
     auto subdeviceID = std::make_pair(std::string(IGPUInfo::Keys::subdeviceID),
                                       std::string("4444"));
 
-    REQUIRE_THAT(output, Catch::VectorContains(subdeviceID));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(subdeviceID));
   }
 
   SECTION("Provides subdevice name")
@@ -144,7 +144,7 @@ TEST_CASE("GPUInfoUevent tests", "[Info][GPUInfo][GPUInfoUevent]")
     auto subdeviceName = std::make_pair(
         std::string(IGPUInfo::Keys::subdeviceName), sdName);
 
-    REQUIRE_THAT(output, Catch::VectorContains(subdeviceName));
+    REQUIRE_THAT(output, Catch::Matchers::VectorContains(subdeviceName));
   }
 }
 
