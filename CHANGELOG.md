@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Botan 3 compilation support (#373). Botan 2 is still supported. Botan 3 takes precedence over Botan 2 when both versions are installed in the system.
 - Manual profile activation at application startup using the command line argument `-m, --toggle-manual-profile` (#366).
 - Automatic and curve fan controls for AMD RX 7000 series (#344).
+- Swedish translation. Thanks to Jon (!45).
 
 ### Removed
 - Bundled version of Catch2.
