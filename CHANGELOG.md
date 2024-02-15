@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Require a C++20 compiler (gcc 13.1 or later, clang 17 or later).
 - Require CMake 3.22.
 - Require Catch2 3.0 or later when building tests. Based on the work done by Leonidas Spyropoulos (!44).
+- Require QuaZip 1.0 or later.
 - Command line arguments that affect a running instance of the application can now be used together. The argument `--minimize-systray` takes precedence over `--toggle-window-visibility`.
 - Use `org.corectrl.CoreCtrl` in both the icon name and the manifest's application ID to better conform to FreeDesktop specifications. Thanks to Reilly Brogan (!41).
 - Disable building the testing suite by default.

@@ -367,14 +367,13 @@ target_include_directories(corectrl_lib PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}
   ${3RDPARTY_INCLUDE_DIRECTORIES}
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${QUAZIP_INCLUDE_DIRS}
 )
 target_compile_definitions(corectrl_lib PRIVATE ${APP_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_lib PRIVATE
   Qt5::Core
+  QuaZip::QuaZip
   stdc++fs
   pthread
-  ${QUAZIP_LIBRARIES}
   $<$<BOOL:${pugixml_FOUND}>:pugixml::pugixml>
   $<$<BOOL:${units_FOUND}>:units::units>
 )

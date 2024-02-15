@@ -36,7 +36,7 @@ endif()
 
 find_package(Qt5 5.15 COMPONENTS Core DBus Quick Charts Widgets Network Svg REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
-find_package(QuaZip REQUIRED)
+find_package(QuaZip-Qt5 1.0 REQUIRED)
 
 find_package(Botan QUIET)
 if(NOT Botan_FOUND)
