@@ -13,10 +13,9 @@
 #include "pmfreqvolt.h"
 #include <algorithm>
 #include <cctype>
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <vector>
 
@@ -73,21 +72,20 @@ AMD::PMFreqVoltProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                           dpmControl))));
             }
             else {
-              LOG(WARNING) << std::format("Unsupported control {}", controlName);
+              SPDLOG_WARN("Unsupported control {}", controlName);
             }
           }
           else {
             if (!controlIsValid) {
-              LOG(WARNING) << std::format("Invalid data on {} for control {}",
-                                          ppOdClkVolt.string(), controlName);
+              SPDLOG_WARN("Invalid data on {} for control {}",
+                          ppOdClkVolt.string(), controlName);
               logPPOdClkVoltContents = true;
             }
 
             if (!dpmIsValid) {
-              LOG(WARNING) << std::format("Unknown data format on {}",
-                                          dpmControl.string());
+              SPDLOG_WARN("Unknown data format on {}", dpmControl.string());
               for (auto const &line : dpmLines)
-                LOG(ERROR) << line;
+                SPDLOG_DEBUG(line);
             }
           }
         }
@@ -95,7 +93,7 @@ AMD::PMFreqVoltProvider::provideGPUControls(IGPUInfo const &gpuInfo,
 
       if (logPPOdClkVoltContents) {
         for (auto const &line : ppOdClkVoltLines)
-          LOG(ERROR) << line;
+          SPDLOG_DEBUG(line);
       }
     }
   }

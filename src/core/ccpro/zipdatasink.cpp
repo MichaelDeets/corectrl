@@ -6,12 +6,12 @@
 #include <QByteArray>
 #include <QIODevice>
 #include <QString>
-#include <easylogging++.h>
 #include <exception>
 #include <format>
 #include <quazip.h>
 #include <quazipfile.h>
 #include <quazipnewinfo.h>
+#include <spdlog/spdlog.h>
 #include <stdexcept>
 
 namespace fs = std::filesystem;
@@ -82,7 +82,7 @@ void ZipDataSink::backupFile() const
       fs::copy_file(path_, sink() + ".bak", fs::copy_options::overwrite_existing);
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
 }
 
@@ -92,7 +92,7 @@ void ZipDataSink::removeBackupFile() const
     fs::remove(sink() + ".bak");
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
 }
 
@@ -103,7 +103,7 @@ void ZipDataSink::restorePreWriteFileState() const
     fs::remove(path_.string());
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
 
   // restore the backup file
@@ -112,6 +112,6 @@ void ZipDataSink::restorePreWriteFileState() const
       fs::copy_file(sink() + ".bak", path_, fs::copy_options::overwrite_existing);
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
 }

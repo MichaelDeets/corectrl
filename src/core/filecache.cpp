@@ -4,9 +4,9 @@
 #include "filecache.h"
 
 #include "common/fileutils.h"
-#include <easylogging++.h>
 #include <exception>
 #include <format>
+#include <spdlog/spdlog.h>
 #include <stdexcept>
 #include <utility>
 
@@ -43,15 +43,15 @@ FileCache::add(std::filesystem::path const &path, std::string const &name)
           return {target};
         }
         catch (std::exception const &e) {
-          LOG(ERROR) << e.what();
+          SPDLOG_DEBUG(e.what());
         }
       }
       else // file is on cache
         return {target};
     }
     else
-      LOG(ERROR) << std::format(
-          "Cannot add {} to cache. Invalid or missing file.", path.c_str());
+      SPDLOG_DEBUG("Cannot add {} to cache. Invalid or missing file.",
+                   path.c_str());
   }
 
   return {};
@@ -77,7 +77,7 @@ void FileCache::remove(std::string const &name)
       fs::remove(target);
     }
     catch (std::exception const &e) {
-      LOG(ERROR) << e.what();
+      SPDLOG_DEBUG(e.what());
     }
   }
 }
@@ -91,8 +91,8 @@ FileCache::get(std::string const &name,
     if (Utils::File::isFilePathValid(target))
       return {target};
     else
-      LOG(WARNING) << std::format(
-          "Cannot get {} from cache. Invalid or missing file.", target.c_str());
+      SPDLOG_WARN("Cannot get {} from cache. Invalid or missing file.",
+                  target.c_str());
   }
 
   if (!defaultPath.empty())
@@ -111,7 +111,6 @@ bool FileCache::cacheDirectoryExist() const
   if (Utils::File::isDirectoryPathValid(path_))
     return true;
 
-  LOG(ERROR) << std::format("Missing or invalid cache directory {}",
-                            path_.c_str());
+  SPDLOG_DEBUG("Missing or invalid cache directory {}", path_.c_str());
   return false;
 }

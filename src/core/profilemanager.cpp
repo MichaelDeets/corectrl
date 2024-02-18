@@ -6,10 +6,9 @@
 #include "core/isysmodel.h"
 #include "iprofile.h"
 #include <algorithm>
-#include <easylogging++.h>
-#include <format>
 #include <iterator>
 #include <regex>
+#include <spdlog/spdlog.h>
 #include <utility>
 
 ProfileManager::ProfileManager(
@@ -65,54 +64,52 @@ void ProfileManager::init(ISysModel const &model)
     }
 
     if (!globalFound && info.name == IProfile::Info::GlobalID) {
-      LOG(WARNING) << std::format("Ignoring profile with name: '{}', exe: '{}'",
-                                  info.name, info.exe);
-      LOG(WARNING) << std::format(
-          "Used profile name ({}) is reserved for the Global Profile", info.name);
+      SPDLOG_WARN("Ignoring profile with name: '{}', exe: '{}'", info.name,
+                  info.exe);
+      SPDLOG_WARN("Used profile name ({}) is reserved for the Global Profile",
+                  info.name);
       continue;
     }
 
     if (!globalFound && info.exe == IProfile::Info::GlobalID) {
-      LOG(WARNING) << std::format("Ignoring profile with name: '{}', exe: '{}'",
-                                  info.name, info.exe);
-      LOG(WARNING) << std::format("Used profile executable name ({}) is "
-                                  "reserved for the Global Profile",
-                                  info.exe);
+      SPDLOG_WARN("Ignoring profile with name: '{}', exe: '{}'", info.name,
+                  info.exe);
+      SPDLOG_WARN("Used profile executable name ({}) is "
+                  "reserved for the Global Profile",
+                  info.exe);
       continue;
     }
 
     if (std::regex_search(info.name, invalidName)) {
-      LOG(WARNING) << std::format("Ignoring profile with name: '{}', exe: '{}'",
-                                  info.name, info.exe);
-      LOG(WARNING) << std::format("Profile name ({}) has invalid characters",
-                                  info.name);
+      SPDLOG_WARN("Ignoring profile with name: '{}', exe: '{}'", info.name,
+                  info.exe);
+      SPDLOG_WARN("Profile name ({}) has invalid characters", info.name);
       continue;
     }
 
     auto profileIt = profiles_.find(info.name);
     if (profileIt != profiles_.cend()) {
-      LOG(WARNING) << std::format("Ignoring profile with name: '{}', exe: '{}'",
-                                  info.name, info.exe);
-      LOG(WARNING) << std::format(
-          "There is another profile with the same name ({})", info.name);
+      SPDLOG_WARN("Ignoring profile with name: '{}', exe: '{}'", info.name,
+                  info.exe);
+      SPDLOG_WARN("There is another profile with the same name ({})", info.name);
       continue;
     }
 
     if (info.exe != IProfile::Info::ManualID) {
       if (std::regex_search(info.exe, invalidExe)) {
-        LOG(WARNING) << std::format(
-            "Ignoring profile with name: '{}', exe: '{}'", info.name, info.exe);
-        LOG(WARNING) << std::format(
-            "Profile executable name ({}) has invalid characters", info.exe);
+        SPDLOG_WARN("Ignoring profile with name: '{}', exe: '{}'", info.name,
+                    info.exe);
+        SPDLOG_WARN("Profile executable name ({}) has invalid characters",
+                    info.exe);
         continue;
       }
 
       auto exeIt = exes.find(info.exe);
       if (exeIt != exes.cend()) {
-        LOG(WARNING) << std::format(
-            "Ignoring profile with name: '{}', exe: '{}'", info.name, info.exe);
-        LOG(WARNING) << std::format(
-            "There is another profile for the same executable ({})", info.exe);
+        SPDLOG_WARN("Ignoring profile with name: '{}', exe: '{}'", info.name,
+                    info.exe);
+        SPDLOG_WARN("There is another profile for the same executable ({})",
+                    info.exe);
         continue;
       }
 

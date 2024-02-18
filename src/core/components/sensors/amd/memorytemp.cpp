@@ -9,7 +9,6 @@
 #include "../sensor.h"
 #include "common/fileutils.h"
 #include "common/stringutils.h"
-#include "core/components/amdutils.h"
 #include "core/info/igpuinfo.h"
 #include "core/info/iswinfo.h"
 #include "core/info/vendor.h"
@@ -18,11 +17,10 @@
 #include "core/profilepartprovider.h"
 #include "core/profilepartxmlparserprovider.h"
 #include "core/sysfsdatasource.h"
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <memory>
 #include <optional>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <tuple>
 #include <units.h>
@@ -86,9 +84,8 @@ class Provider final : public IGPUSensorProvider::IProvider
                       std::move(range)));
             }
             else {
-              LOG(WARNING) << std::format("Unknown data format on {}",
-                                          tempInput.string());
-              LOG(ERROR) << data.front();
+              SPDLOG_WARN("Unknown data format on {}", tempInput.string());
+              SPDLOG_DEBUG(data.front());
             }
           }
         }

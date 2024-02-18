@@ -3,18 +3,13 @@
 
 #include <catch2/catch_all.hpp>
 #include <catch2/trompeloeil.hpp>
-#include <easylogging++.h>
-
-INITIALIZE_EASYLOGGINGPP
+#include <spdlog/sinks/null_sink.h>
+#include <spdlog/spdlog.h>
 
 void setupLogger()
 {
-  el::Configurations c;
-  c.setToDefault();
-  c.setGlobally(el::ConfigurationType::Enabled, "false");
-  c.setGlobally(el::ConfigurationType::ToFile, "false");
-
-  el::Loggers::setDefaultConfigurations(c, true);
+  auto logger = spdlog::create<spdlog::sinks::null_sink_st>("null_logger");
+  spdlog::set_default_logger(logger);
 }
 
 int main(int argc, char *argv[])

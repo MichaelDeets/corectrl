@@ -7,8 +7,7 @@
 #include "core/info/infoproviderregistry.h"
 #include <algorithm>
 #include <cctype>
-#include <easylogging++.h>
-#include <format>
+#include <spdlog/spdlog.h>
 #include <utility>
 
 namespace AMD {
@@ -30,8 +29,7 @@ class GPUInfoVbiosDataSource
       return true;
     }
 
-    LOG(WARNING) << std::format("Cannot retrieve bios version from {}",
-                                filePath.c_str());
+    SPDLOG_WARN("Cannot retrieve bios version from {}", filePath.c_str());
     return false;
   }
 };

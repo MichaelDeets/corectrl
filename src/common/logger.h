@@ -3,37 +3,32 @@
 
 #pragma once
 
-#include <easylogging++.h>
 #include <filesystem>
+#include <iostream>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/spdlog.h>
 #include <string>
 
-void setupLogger(std::filesystem::path const &logFilePath,
-                 std::string const &globalLogFlushThreshold = "50")
+void setupLogger(std::filesystem::path const &logFilePath)
 {
-  el::Configurations c;
-  c.setToDefault();
+  try {
+    auto console_sink = std::make_shared<spdlog::sinks::stdout_sink_mt>();
+    console_sink->set_pattern("[%d-%m-%C %H:%M:%S.%e][%L] %v");
+    console_sink->set_level(spdlog::level::info);
 
-  // Global
-  c.setGlobally(el::ConfigurationType::Enabled, "true");
-  c.setGlobally(el::ConfigurationType::Format,
-                "[%datetime{%d-%M-%y %H:%m:%s.%g}][%levshort] %msg");
-  c.setGlobally(el::ConfigurationType::ToFile, "true");
-  c.setGlobally(el::ConfigurationType::Filename, logFilePath);
-  c.setGlobally(el::ConfigurationType::ToStandardOutput, "false");
-  c.setGlobally(el::ConfigurationType::SubsecondPrecision, "3");
-  c.setGlobally(el::ConfigurationType::PerformanceTracking, "false");
-  c.setGlobally(el::ConfigurationType::MaxLogFileSize, "524288");
-  c.setGlobally(el::ConfigurationType::LogFlushThreshold,
-                globalLogFlushThreshold);
+    auto file_sink =
+        std::make_shared<spdlog::sinks::basic_file_sink_mt>(logFilePath);
+    file_sink->set_pattern("[%d-%m-%C %H:%M:%S.%e][%L][%s:%#] %v");
+    file_sink->set_level(spdlog::level::trace);
 
-  // Error
-  c.set(el::Level::Error, el::ConfigurationType::Format,
-        "[%datetime{%d-%M-%y %H:%m:%s.%g}][%levshort] [%fbase:%line] %msg");
-  c.set(el::Level::Error, el::ConfigurationType::LogFlushThreshold, "1");
-
-  // Warning
-  c.set(el::Level::Warning, el::ConfigurationType::ToStandardOutput, "true");
-
-  el::Loggers::setDefaultConfigurations(c, true);
-  el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);
+    auto logger = std::make_shared<spdlog::logger>(
+        "logger", spdlog::sinks_init_list({console_sink, file_sink}));
+    logger->set_level(spdlog::level::trace);
+    logger->flush_on(spdlog::level::debug);
+    spdlog::set_default_logger(logger);
+  }
+  catch (spdlog::spdlog_ex const &e) {
+    std::cout << "Logger initialization failed: " << e.what() << std::endl;
+  }
 }

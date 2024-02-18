@@ -5,10 +5,10 @@
 
 #include "common/fileutils.h"
 #include "core/info/infoproviderregistry.h"
-#include <easylogging++.h>
 #include <exception>
 #include <filesystem>
 #include <memory>
+#include <spdlog/spdlog.h>
 
 AMD::GPUInfoOdFanCtrl::GPUInfoOdFanCtrl() noexcept
 {
@@ -36,7 +36,7 @@ AMD::GPUInfoOdFanCtrl::provideCapabilities(Vendor vendor, int,
       }
     }
     catch (std::exception const &e) {
-      LOG(ERROR) << e.what();
+      SPDLOG_DEBUG(e.what());
     }
   }
 

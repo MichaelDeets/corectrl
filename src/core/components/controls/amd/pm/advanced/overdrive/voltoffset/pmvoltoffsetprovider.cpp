@@ -10,10 +10,9 @@
 #include "core/info/igpuinfo.h"
 #include "core/sysfsdatasource.h"
 #include "pmvoltoffset.h"
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <vector>
 
@@ -39,9 +38,9 @@ AMD::PMVoltOffsetProvider::provideGPUControls(IGPUInfo const &gpuInfo,
               ppOdClkVolt)));
     }
     else {
-      LOG(WARNING) << std::format("Invalid data on {}", ppOdClkVolt.string());
+      SPDLOG_WARN("Invalid data on {}", ppOdClkVolt.string());
       for (auto const &line : ppOdClkVoltLines)
-        LOG(ERROR) << line;
+        SPDLOG_DEBUG(line);
     }
   }
 

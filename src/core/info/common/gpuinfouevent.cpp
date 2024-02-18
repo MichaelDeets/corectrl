@@ -8,7 +8,7 @@
 #include "gpuinfoueventdatasource.h"
 #include <algorithm>
 #include <cctype>
-#include <easylogging++.h>
+#include <spdlog/spdlog.h>
 #include <string_view>
 #include <utility>
 
@@ -61,17 +61,17 @@ GPUInfoUevent::provideInfo(Vendor, int, IGPUInfo::Path const &path,
     }
 
     if (vendorId.empty())
-      LOG(ERROR) << "Cannot retrieve vendor ID";
+      SPDLOG_DEBUG("Cannot retrieve vendor ID");
     if (deviceId.empty())
-      LOG(ERROR) << "Cannot retrieve device ID";
+      SPDLOG_DEBUG("Cannot retrieve device ID");
     if (subvendorId.empty())
-      LOG(ERROR) << "Cannot retrieve subvendor ID";
+      SPDLOG_DEBUG("Cannot retrieve subvendor ID");
     if (subdeviceId.empty())
-      LOG(ERROR) << "Cannot retrieve subdevice ID";
+      SPDLOG_DEBUG("Cannot retrieve subdevice ID");
     if (pciSlot.empty())
-      LOG(ERROR) << "Cannot retrieve pci slot";
+      SPDLOG_DEBUG("Cannot retrieve pci slot");
     if (driver.empty())
-      LOG(ERROR) << "Cannot retrieve driver";
+      SPDLOG_DEBUG("Cannot retrieve driver");
 
     // ensure that all ids are in uppercase
     std::transform(vendorId.cbegin(), vendorId.cend(), vendorId.begin(),

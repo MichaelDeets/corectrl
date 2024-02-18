@@ -11,10 +11,9 @@
 #include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
 #include "pmpowerprofile.h"
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -47,10 +46,9 @@ AMD::PMPowerProfileProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                   profileMode),
               modes.value()));
         else {
-          LOG(WARNING) << std::format("Unknown data format on {}",
-                                      profileMode.string());
+          SPDLOG_WARN("Unknown data format on {}", profileMode.string());
           for (auto const &line : modeLines)
-            LOG(ERROR) << line;
+            SPDLOG_DEBUG(line);
         }
       }
     }

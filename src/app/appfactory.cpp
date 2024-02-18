@@ -39,9 +39,9 @@
 #include <QStandardPaths>
 #include <algorithm>
 #include <cctype>
-#include <easylogging++.h>
 #include <exception>
 #include <format>
+#include <spdlog/spdlog.h>
 #include <system_error>
 #include <utility>
 
@@ -108,8 +108,8 @@ std::unique_ptr<App> AppFactory::build() const
                                  std::move(uiFactory));
   }
   catch (std::exception const &e) {
-    LOG(WARNING) << "Cannot create main application";
-    LOG(WARNING) << e.what();
+    SPDLOG_WARN("Cannot create main application");
+    SPDLOG_WARN(e.what());
   }
 
   return nullptr;
@@ -139,7 +139,7 @@ void AppFactory::createAppDirectories(std::string const &appDirectory,
     fs::create_directory(config);
     fs::permissions(config, dirPerms, ec);
     if (ec.value() != 0)
-      LOG(ERROR) << "Cannot set permissions for " << config;
+      SPDLOG_DEBUG("Cannot set permissions for {}", config.c_str());
   }
 
   if (!fs::is_directory(config))
@@ -151,7 +151,7 @@ void AppFactory::createAppDirectories(std::string const &appDirectory,
     fs::create_directory(appConfigDir);
     fs::permissions(appConfigDir, dirPerms, ec);
     if (ec.value() != 0)
-      LOG(ERROR) << "Cannot set permissions for " << appConfigDir;
+      SPDLOG_DEBUG("Cannot set permissions for {}", appConfigDir.c_str());
   }
 
   if (!fs::is_directory(appConfigDir))
@@ -162,7 +162,7 @@ void AppFactory::createAppDirectories(std::string const &appDirectory,
     fs::create_directory(cache);
     fs::permissions(cache, dirPerms, ec);
     if (ec.value() != 0)
-      LOG(ERROR) << "Cannot set permissions for " << cache;
+      SPDLOG_DEBUG("Cannot set permissions for {}", cache.c_str());
   }
 
   if (!fs::is_directory(cache))
@@ -173,7 +173,7 @@ void AppFactory::createAppDirectories(std::string const &appDirectory,
     fs::create_directory(cacheApp);
     fs::permissions(cacheApp, dirPerms, ec);
     if (ec.value() != 0)
-      LOG(ERROR) << "Cannot set permissions for " << cacheApp;
+      SPDLOG_DEBUG("Cannot set permissions for {}", cacheApp.c_str());
   }
 
   if (!fs::is_directory(cacheApp))

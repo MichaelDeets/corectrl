@@ -12,10 +12,9 @@
 #include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
 #include "pmfixedfreq.h"
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -60,17 +59,15 @@ AMD::PMFixedFreqProvider::provideGPUControls(IGPUInfo const &gpuInfo,
         }
         else {
           if (!dpmSclkValid) {
-            LOG(WARNING) << std::format("Unknown data format on {}",
-                                        dpmSclk.string());
+            SPDLOG_WARN("Unknown data format on {}", dpmSclk.string());
             for (auto const &line : dpmSclkLines)
-              LOG(ERROR) << line;
+              SPDLOG_DEBUG(line);
           }
 
           if (!dpmMclkValid) {
-            LOG(WARNING) << std::format("Unknown data format on {}",
-                                        dpmMclk.string());
+            SPDLOG_WARN("Unknown data format on {}", dpmMclk.string());
             for (auto const &line : dpmMclkLines)
-              LOG(ERROR) << line;
+              SPDLOG_DEBUG(line);
           }
         }
       }

@@ -7,9 +7,9 @@
 #include "iprofilefileparser.h"
 #include "iprofileiconcache.h"
 #include "iprofileparser.h"
-#include <easylogging++.h>
 #include <exception>
 #include <format>
+#include <spdlog/spdlog.h>
 #include <stdexcept>
 #include <utility>
 
@@ -106,7 +106,7 @@ bool ProfileStorage::loadFrom(IProfile &profile,
   if (Utils::File::isFilePathValid(path) && path.extension() == fileExtension_)
     return loadProfileFrom(path, profile);
   else
-    LOG(ERROR) << std::format("Cannot load {}. Invalid file.", path.c_str());
+    SPDLOG_DEBUG("Cannot load {}. Invalid file.", path.c_str());
 
   return false;
 }
@@ -179,7 +179,7 @@ void ProfileStorage::remove(IProfile::Info &info)
       fs::remove(path_ / fileName);
     }
     catch (std::exception const &e) {
-      LOG(ERROR) << e.what();
+      SPDLOG_DEBUG(e.what());
     }
   }
 }
@@ -203,8 +203,8 @@ bool ProfileStorage::profilesDirectoryExist() const
   if (Utils::File::isDirectoryPathValid(path_))
     return true;
 
-  LOG(ERROR) << std::format(
-      "Something went wrong with the profile storage directory: ", path_.c_str());
+  SPDLOG_DEBUG("Something went wrong with the profile storage directory: ",
+               path_.c_str());
 
   return false;
 }

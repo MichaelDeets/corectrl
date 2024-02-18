@@ -4,10 +4,9 @@
 #include "fileutils.h"
 
 #include <QFile>
-#include <easylogging++.h>
 #include <exception>
-#include <format>
 #include <fstream>
+#include <spdlog/spdlog.h>
 #include <utility>
 
 namespace fs = std::filesystem;
@@ -25,10 +24,10 @@ std::vector<char> readFile(std::filesystem::path const &path)
       file.read(data.data(), data.size());
     }
     else
-      LOG(ERROR) << std::format("Cannot open file {}", path.c_str());
+      SPDLOG_DEBUG("Cannot open file {}", path.c_str());
   }
   else
-    LOG(ERROR) << std::format("Invalid file path {}", path.c_str());
+    SPDLOG_DEBUG("Invalid file path {}", path.c_str());
 
   return data;
 }
@@ -41,7 +40,7 @@ bool writeFile(std::filesystem::path const &path, std::vector<char> const &data)
     return true;
   }
   else
-    LOG(ERROR) << std::format("Cannot open file {}", path.c_str());
+    SPDLOG_DEBUG("Cannot open file {}", path.c_str());
 
   return false;
 }
@@ -58,10 +57,10 @@ std::vector<std::string> readFileLines(std::filesystem::path const &path,
         entries.emplace_back(std::move(entry));
     }
     else
-      LOG(ERROR) << std::format("Cannot open file {}", path.c_str());
+      SPDLOG_DEBUG("Cannot open file {}", path.c_str());
   }
   else
-    LOG(ERROR) << std::format("Invalid file path {}", path.c_str());
+    SPDLOG_DEBUG("Invalid file path {}", path.c_str());
 
   return entries;
 }
@@ -72,7 +71,7 @@ bool isFilePathValid(std::filesystem::path const &path)
     return fs::exists(path) && fs::is_regular_file(path);
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
 
   return false;
@@ -84,7 +83,7 @@ bool isDirectoryPathValid(std::filesystem::path const &path)
     return fs::exists(path) && fs::is_directory(path);
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
 
   return false;
@@ -104,7 +103,7 @@ std::vector<std::filesystem::path> search(std::regex const &regex,
     }
   }
   else
-    LOG(ERROR) << std::format("Invalid directory path {}", path.c_str());
+    SPDLOG_DEBUG("Invalid directory path {}", path.c_str());
 
   return paths;
 }
@@ -116,9 +115,8 @@ findHWMonXDirectory(std::filesystem::path const &path)
   auto paths = Utils::File::search(hwmonXRegex, path);
   if (!paths.empty()) {
     if (paths.size() > 1) {
-      LOG(WARNING) << std::format(
-          "Multiple hwmon directories detected on {}.\nUsing {}", path.c_str(),
-          paths.front().c_str());
+      SPDLOG_WARN("Multiple hwmon directories detected on {}.\nUsing {}",
+                  path.c_str(), paths.front().c_str());
     }
 
     // use the first hwmon[0-*] directory from gpu sysfs/hwmon path
@@ -134,7 +132,7 @@ bool isSysFSEntryValid(std::filesystem::path const &path)
     return false;
 
   if (readFileLines(path).empty()) {
-    LOG(WARNING) << std::format("Empty sysfs entry {}", path.c_str());
+    SPDLOG_WARN("Empty sysfs entry {}", path.c_str());
     return false;
   }
 

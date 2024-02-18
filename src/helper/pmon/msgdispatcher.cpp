@@ -9,8 +9,8 @@
 #include <QDBusConnection>
 #include <QDBusError>
 #include <QString>
-#include <easylogging++.h>
 #include <format>
+#include <spdlog/spdlog.h>
 #include <stdexcept>
 #include <utility>
 
@@ -61,7 +61,7 @@ void DBusSignalDispatcher::watchApp(QByteArray const &data,
   if (cryptoLayer_->verify(data, signature))
     appRegistry_->add(data.toStdString());
   else
-    LOG(ERROR) << "Failed to verify received data from D-Bus";
+    SPDLOG_DEBUG("Failed to verify received data from D-Bus");
 }
 
 void DBusSignalDispatcher::forgetApp(QByteArray const &data,
@@ -70,7 +70,7 @@ void DBusSignalDispatcher::forgetApp(QByteArray const &data,
   if (cryptoLayer_->verify(data, signature))
     appRegistry_->remove(data.toStdString());
   else
-    LOG(ERROR) << "Failed to verify received data from D-Bus";
+    SPDLOG_DEBUG("Failed to verify received data from D-Bus");
 }
 
 MsgDispatcher::MsgDispatcher(std::shared_ptr<ICryptoLayer> cryptoLayer,

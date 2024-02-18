@@ -9,8 +9,8 @@
 #include <QDBusInterface>
 #include <QString>
 #include <algorithm>
-#include <easylogging++.h>
 #include <format>
+#include <spdlog/spdlog.h>
 #include <stdexcept>
 #include <utility>
 
@@ -86,7 +86,7 @@ void HelperMonitor::notifyAppExec(QByteArray const &data,
                                   QByteArray const &signature)
 {
   if (!cryptoLayer_->verify(data, signature)) {
-    LOG(ERROR) << "Failed to verify received data from D-Bus";
+    SPDLOG_DEBUG("Failed to verify received data from D-Bus");
     return;
   }
 
@@ -100,7 +100,7 @@ void HelperMonitor::notifyAppExit(QByteArray const &data,
                                   QByteArray const &signature)
 {
   if (!cryptoLayer_->verify(data, signature)) {
-    LOG(ERROR) << "Failed to verify received data from D-Bus";
+    SPDLOG_DEBUG("Failed to verify received data from D-Bus");
     return;
   }
 

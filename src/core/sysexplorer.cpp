@@ -6,8 +6,7 @@
 #include "common/fileutils.h"
 #include "common/stringutils.h"
 #include <algorithm>
-#include <easylogging++.h>
-#include <format>
+#include <spdlog/spdlog.h>
 #include <utility>
 
 SysExplorer::SysExplorer(std::vector<Vendor> gpuVendors) noexcept
@@ -55,8 +54,7 @@ bool SysExplorer::checkGPUVendor(std::filesystem::path sysPath) const
         return true;
     }
     else
-      LOG(ERROR) << std::format("Cannot parse vendor id from file {}.",
-                                vendorPath.c_str());
+      SPDLOG_DEBUG("Cannot parse vendor id from file {}.", vendorPath.c_str());
   }
   return false;
 }

@@ -9,7 +9,7 @@ endif()
 list(APPEND TESTS_COMPILE_DEFINITIONS
   ${3RDPARTY_DEFINITIONS}
   CATCH_CONFIG_FAST_COMPILE
-  ELPP_DISABLE_LOGS
+  SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
 )
 
 # include directories for all tests
@@ -33,6 +33,7 @@ target_compile_definitions(test_all PRIVATE ${TESTS_COMPILE_DEFINITIONS})
 target_link_libraries(test_all PRIVATE
   corectrl_lib
   Qt5::Core
+  spdlog::spdlog
   $<$<BOOL:${units_FOUND}>:units::units>
   $<$<BOOL:${Catch2_FOUND}>:Catch2::Catch2>
   $<$<BOOL:${trompeloeil_FOUND}>:trompeloeil::trompeloeil>

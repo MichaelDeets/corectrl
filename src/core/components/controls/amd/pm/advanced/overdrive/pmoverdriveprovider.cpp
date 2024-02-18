@@ -6,14 +6,11 @@
 #include "../pmadvancedprovider.h"
 #include "common/fileutils.h"
 #include "common/stringutils.h"
-#include "core/components/amdutils.h"
 #include "core/info/igpuinfo.h"
 #include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
 #include "pmoverdrive.h"
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <iterator>
 #include <tuple>
 #include <utility>

@@ -3,12 +3,10 @@
 
 #include "cpuinfoproccpuinfo.h"
 
-#include "../ihwidtranslator.h"
 #include "../infoproviderregistry.h"
 #include "common/fileutils.h"
 #include "core/components/cpuutils.h"
-#include <easylogging++.h>
-#include <format>
+#include <spdlog/spdlog.h>
 
 class CPUInfoProcCpuInfoDataSource : public IDataSource<std::vector<std::string>>
 {
@@ -26,8 +24,7 @@ class CPUInfoProcCpuInfoDataSource : public IDataSource<std::vector<std::string>
       return true;
     }
 
-    LOG(WARNING) << std::format("Cannot retrieve device information from {}",
-                                source());
+    SPDLOG_WARN("Cannot retrieve device information from {}", source());
     return false;
   }
 };

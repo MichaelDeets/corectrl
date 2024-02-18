@@ -11,10 +11,9 @@
 #include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
 #include "pmfreqod.h"
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -76,29 +75,25 @@ AMD::PMFreqOdProvider::provideGPUControls(IGPUInfo const &gpuInfo,
         }
         else {
           if (!sclkOdValid) {
-            LOG(WARNING) << std::format("Unknown data format on {}",
-                                        sclkOd.string());
-            LOG(ERROR) << sclkOdLines.front();
+            SPDLOG_WARN("Unknown data format on {}", sclkOd.string());
+            SPDLOG_DEBUG(sclkOdLines.front());
           }
 
           if (!mclkOdValid) {
-            LOG(WARNING) << std::format("Unknown data format on {}",
-                                        mclkOd.string());
-            LOG(ERROR) << mclkOdLines.front();
+            SPDLOG_WARN("Unknown data format on {}", mclkOd.string());
+            SPDLOG_DEBUG(mclkOdLines.front());
           }
 
           if (!sclkStates.has_value()) {
-            LOG(WARNING) << std::format("Unknown data format on {}",
-                                        dpmSclk.string());
+            SPDLOG_WARN("Unknown data format on {}", dpmSclk.string());
             for (auto const &line : dpmSclkLines)
-              LOG(ERROR) << line;
+              SPDLOG_DEBUG(line);
           }
 
           if (!mclkStates.has_value()) {
-            LOG(WARNING) << std::format("Unknown data format on {}",
-                                        dpmMclk.string());
+            SPDLOG_WARN("Unknown data format on {}", dpmMclk.string());
             for (auto const &line : dpmMclkLines)
-              LOG(ERROR) << line;
+              SPDLOG_DEBUG(line);
           }
         }
       }

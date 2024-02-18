@@ -6,8 +6,7 @@
 #include "../infoproviderregistry.h"
 #include <QProcess>
 #include <QStringList>
-#include <easylogging++.h>
-#include <format>
+#include <spdlog/spdlog.h>
 #include <string_view>
 #include <utility>
 
@@ -34,7 +33,7 @@ class SWInfoMesaDataSource : public IDataSource<std::string>
       return true;
     }
 
-    LOG(WARNING) << "glxinfo command failed";
+    SPDLOG_WARN("glxinfo command failed");
     return false;
   }
 };
@@ -66,12 +65,10 @@ std::vector<std::pair<std::string, std::string>> SWInfoMesa::provideInfo() const
         info.emplace_back(ISWInfo::Keys::mesaVersion, std::move(version));
       }
       else
-        LOG(ERROR) << std::format("Cannot find '{}' in glxinfo output",
-                                  versionStr.data());
+        SPDLOG_DEBUG("Cannot find '{}' in glxinfo output", versionStr.data());
     }
     else
-      LOG(ERROR) << std::format("Cannot find '{}' in glxinfo output",
-                                queryRendererStr.data());
+      SPDLOG_DEBUG("Cannot find '{}' in glxinfo output", queryRendererStr.data());
   }
 
   return info;

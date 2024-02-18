@@ -16,11 +16,11 @@
 #include "core/profilepartprovider.h"
 #include "core/profilepartxmlparserprovider.h"
 #include "core/sysfsdatasource.h"
-#include <easylogging++.h>
 #include <filesystem>
 #include <format>
 #include <memory>
 #include <optional>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <tuple>
 #include <units.h>
@@ -81,9 +81,8 @@ class Provider final : public ICPUSensorProvider::IProvider
                   CPUCoreTemp::ItemID, std::move(dataSources), std::move(range)));
         }
         else {
-          LOG(WARNING) << std::format("Unknown data format on {}",
-                                      tempInput.string());
-          LOG(ERROR) << tempInputLines.front();
+          SPDLOG_WARN("Unknown data format on {}", tempInput.string());
+          SPDLOG_DEBUG(tempInputLines.front());
         }
       }
     }

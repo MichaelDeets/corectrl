@@ -5,8 +5,8 @@
 
 #include "zipdatasink.h"
 #include "zipdatasource.h"
-#include <easylogging++.h>
 #include <exception>
+#include <spdlog/spdlog.h>
 
 std::string CCPROParser::fileExtension() const
 {
@@ -26,7 +26,7 @@ CCPROParser::load(std::filesystem::path const &path,
         return {fileData};
     }
     catch (std::exception const &e) {
-      LOG(ERROR) << e.what();
+      SPDLOG_DEBUG(e.what());
     }
   }
 
@@ -43,7 +43,7 @@ bool CCPROParser::save(
     return dataSink.write(data);
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
 
   return false;

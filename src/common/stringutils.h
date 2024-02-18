@@ -3,10 +3,9 @@
 
 #pragma once
 
-#include <easylogging++.h>
 #include <exception>
-#include <format>
 #include <optional>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <tuple>
 #include <type_traits>
@@ -63,8 +62,8 @@ bool toNumber(T &value, std::string const &rep, int base = 10)
     return true;
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << std::format(
-        "Cannot parse a number from the string '{}'. Error: {}", rep, e.what());
+    SPDLOG_DEBUG("Cannot parse a number from the string '{}'. Error: {}", rep,
+                 e.what());
   }
 
   return false;

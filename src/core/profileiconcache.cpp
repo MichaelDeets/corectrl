@@ -4,8 +4,7 @@
 #include "profileiconcache.h"
 
 #include "ifilecache.h"
-#include <easylogging++.h>
-#include <format>
+#include <spdlog/spdlog.h>
 #include <utility>
 
 ProfileIconCache::ProfileIconCache(std::unique_ptr<IFileCache> &&cache) noexcept
@@ -60,7 +59,7 @@ std::pair<bool, bool> ProfileIconCache::syncCache(IProfile::Info &info)
     return {true, updateURL};
   }
 
-  LOG(ERROR) << std::format("Failed to cache icon for {}", fileName.data());
+  SPDLOG_DEBUG("Failed to cache icon for {}", fileName.data());
   return {false, false};
 }
 
@@ -81,6 +80,6 @@ ProfileIconCache::cacheIconFromData(std::vector<char> const &iconData,
   if (cacheURL.has_value())
     return cacheURL;
 
-  LOG(ERROR) << std::format("Failed to cache icon for {}", fileName.data());
+  SPDLOG_DEBUG("Failed to cache icon for {}", fileName.data());
   return {};
 }

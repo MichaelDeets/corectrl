@@ -11,10 +11,9 @@
 #include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
 #include "fancurve.h"
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <tuple>
 
@@ -94,21 +93,18 @@ AMD::FanCurveProvider::provideGPUControls(IGPUInfo const &gpuInfo,
           }
           else {
             if (!pwmEnableValid) {
-              LOG(WARNING) << std::format("Unknown data format on {}",
-                                          pwmEnable.string());
-              LOG(ERROR) << pwmEnableLines.front();
+              SPDLOG_WARN("Unknown data format on {}", pwmEnable.string());
+              SPDLOG_DEBUG(pwmEnableLines.front());
             }
 
             if (!pwmValid) {
-              LOG(WARNING) << std::format("Unknown data format on {}",
-                                          pwm.string());
-              LOG(ERROR) << pwmLines.front();
+              SPDLOG_WARN("Unknown data format on {}", pwm.string());
+              SPDLOG_DEBUG(pwmLines.front());
             }
 
             if (!tempInputValid) {
-              LOG(WARNING) << std::format("Unknown data format on {}",
-                                          tempInput.string());
-              LOG(ERROR) << tempInputLines.front();
+              SPDLOG_WARN("Unknown data format on {}", tempInput.string());
+              SPDLOG_DEBUG(tempInputLines.front());
             }
           }
         }

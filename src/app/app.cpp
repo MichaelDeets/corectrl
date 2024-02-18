@@ -21,8 +21,7 @@
 #include <Qt>
 #include <QtGlobal>
 #include <algorithm>
-#include <easylogging++.h>
-#include <format>
+#include <spdlog/spdlog.h>
 #include <units.h>
 #include <utility>
 
@@ -56,8 +55,7 @@ int App::exec(int argc, char **argv)
 
   // Ignore QT_STYLE_OVERRIDE. It breaks the qml theme.
   if (qEnvironmentVariableIsSet("QT_STYLE_OVERRIDE")) {
-    LOG(INFO) << std::format(
-        "Ignoring QT_STYLE_OVERRIDE environment variable.");
+    SPDLOG_INFO("Ignoring QT_STYLE_OVERRIDE environment variable.");
     qunsetenv("QT_STYLE_OVERRIDE");
   }
 
@@ -85,9 +83,8 @@ int App::exec(int argc, char **argv)
                                           : QLocale().system().name();
   QTranslator translator;
   if (!translator.load(QStringLiteral(":/translations/lang_") + lang)) {
-    LOG(INFO) << std::format("No translation found for locale {}",
-                             lang.toStdString());
-    LOG(INFO) << std::format("Using en_EN translation.");
+    SPDLOG_INFO("No translation found for locale {}", lang.toStdString());
+    SPDLOG_INFO("Using en_EN translation.");
     translator.load(QStringLiteral(":/translations/lang_en_EN"));
   }
   app.installTranslator(&translator);
@@ -125,9 +122,9 @@ int App::exec(int argc, char **argv)
     return app.exec();
   }
   catch (std::exception const &e) {
-    LOG(WARNING) << e.what();
-    LOG(WARNING) << "Initialization failed";
-    LOG(WARNING) << "Exiting...";
+    SPDLOG_WARN(e.what());
+    SPDLOG_WARN("Initialization failed");
+    SPDLOG_WARN("Exiting...");
     return -1;
   }
 
@@ -139,6 +136,10 @@ void App::exit()
   if (!noop_) {
     sysSyncer_->stop();
     helperControl_->stop();
+
+    // Shutdown spdlog before QApplication quits to always flush the logs.
+    // See: https://github.com/gabime/spdlog/issues/2502
+    spdlog::shutdown();
   }
 }
 

@@ -34,11 +34,11 @@ std::tuple<int, int, int> parseVersion(std::string const &version)
                 std::stoi(version.substr(firstDot + 1, secondDot)),
                 std::stoi(version.substr(secondDot + 1, std::string::npos))};
     }
-    LOG(ERROR) << std::format("'{}' is not a valid version string", version);
+    SPDLOG_DEBUG("'{}' is not a valid version string", version);
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << std::format("Cannot parse version string '{}'. Error: {}",
-                              version, e.what());
+    SPDLOG_DEBUG("Cannot parse version string '{}'. Error: {}", version,
+                 e.what());
   }
 
   return {0, 0, 0};
@@ -62,7 +62,7 @@ std::optional<std::string> parseKernelProcVersion(std::string const &data)
 
   std::smatch result;
   if (!std::regex_search(data, result, regex)) {
-    LOG(ERROR) << "Cannot parse kernel version";
+    SPDLOG_DEBUG("Cannot parse kernel version");
     return {};
   }
 

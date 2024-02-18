@@ -6,8 +6,8 @@
 #include "../infoproviderregistry.h"
 #include <QProcess>
 #include <QStringList>
-#include <easylogging++.h>
 #include <format>
+#include <spdlog/spdlog.h>
 #include <utility>
 
 class GPUInfoVulkanDataSource : public IDataSource<std::string>
@@ -33,7 +33,7 @@ class GPUInfoVulkanDataSource : public IDataSource<std::string>
       return true;
     }
 
-    LOG(WARNING) << "vulkaninfo command failed";
+    SPDLOG_WARN("vulkaninfo command failed");
     return false;
   }
 };
@@ -107,8 +107,7 @@ std::string GPUInfoVulkan::parseApiVersion(std::string const &src,
     return version;
   }
   else
-    LOG(ERROR) << std::format("Cannot find '{}' in vulkaninfo output",
-                              apiVerStr.data());
+    SPDLOG_DEBUG("Cannot find '{}' in vulkaninfo output", apiVerStr.data());
 
   return std::string{};
 }

@@ -37,6 +37,7 @@ endif()
 find_package(Qt5 5.15 COMPONENTS Core DBus Quick Charts Widgets Network Svg REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 find_package(QuaZip-Qt5 1.0 REQUIRED)
+find_package(spdlog 1.4 REQUIRED)
 
 find_package(Botan QUIET)
 if(NOT Botan_FOUND)
@@ -68,19 +69,7 @@ list(APPEND 3RDPARTY_DEFINITIONS
   ENABLE_PREDEFINED_TEMPERATURE_UNITS
   ENABLE_PREDEFINED_CONVERT_UNITS
   ENABLE_PREDEFINED_CONCENTRATION_UNITS
-  ELPP_NO_LOG_TO_FILE
-  ELPP_NO_DEFAULT_LOG_FILE
-  ELPP_FORCE_USE_STD_THREAD
 )
-
-find_package(easyloggingpp 9.96.7 QUIET)
-if(NOT easyloggingpp_FOUND)
-  message("Using bundled easyloggingpp library")
-  list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp)
-  list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/easyloggingpp/easylogging++.cc)
-else()
-  list(APPEND 3RDPARTY_SRC ${easyloggingpp_INCLUDE_DIR}/easylogging++.cc)
-endif()
 
 # Allow pci.ids path customization using -DWITH_PCI_IDS_PATH=<path-to-pci.ids-file> (#136)
 set(WITH_PCI_IDS_PATH "/usr/share/hwdata/pci.ids" CACHE FILEPATH "Path to pci.ids file")

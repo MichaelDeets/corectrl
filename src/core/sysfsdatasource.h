@@ -4,11 +4,10 @@
 #pragma once
 
 #include "idatasource.h"
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <fstream>
 #include <functional>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -27,7 +26,7 @@ class SysFSDataSource : public IDataSource<T>
   {
     file_.open(path);
     if (!file_.is_open())
-      LOG(WARNING) << std::format("Cannot open {}", path_.c_str());
+      SPDLOG_DEBUG("Cannot open {}", path_.c_str());
   }
 
   std::string source() const override

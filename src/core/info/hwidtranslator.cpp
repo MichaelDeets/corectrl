@@ -5,9 +5,8 @@
 
 #include <algorithm>
 #include <cctype>
-#include <easylogging++.h>
 #include <exception>
-#include <format>
+#include <spdlog/spdlog.h>
 #include <sstream>
 #include <utility>
 
@@ -21,7 +20,7 @@ HWIDTranslator::HWIDTranslator(
       parseHWIDSFileData(data, std::move(vendors));
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
 }
 
@@ -148,9 +147,8 @@ void HWIDTranslator::parseHWIDSFileData(std::vector<char> &data,
         }
       }
       catch (std::exception const &e) {
-        LOG(ERROR) << std::format(
-            "Cannot convert vendor id {} from hwdata file.\nError: {}",
-            vendorID, e.what());
+        SPDLOG_DEBUG("Cannot convert vendor id {} from hwdata file.\nError: {}",
+                     vendorID, e.what());
         skipVendor = true;
       }
     }

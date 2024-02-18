@@ -5,7 +5,7 @@
 
 #include "common/fileutils.h"
 #include "core/idatasource.h"
-#include <easylogging++.h>
+#include <spdlog/spdlog.h>
 #include <string>
 
 class SWInfoKernelDataSource : public IDataSource<std::string>
@@ -24,7 +24,7 @@ class SWInfoKernelDataSource : public IDataSource<std::string>
       return true;
     }
 
-    LOG(WARNING) << "Cannot retrieve kernel version";
+    SPDLOG_WARN("Cannot retrieve kernel version");
     return false;
   }
 };

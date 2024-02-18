@@ -10,8 +10,7 @@
 #include "core/info/igpuinfo.h"
 #include "core/sysfsdatasource.h"
 #include "odfanauto.h"
-#include <easylogging++.h>
-#include <format>
+#include <spdlog/spdlog.h>
 #include <utility>
 
 std::vector<std::unique_ptr<IControl>>
@@ -51,8 +50,8 @@ AMD::OdFanAutoProvider::createOdFanTargetTempDataSource(IGPUInfo const &gpuInfo)
 
   auto data = Utils::File::readFileLines(path);
   if (!Utils::AMD::hasOverdriveFanTargetTempControl(data)) {
-    LOG(WARNING) << std::format("Unknown data format on {}", path.string());
-    LOG(ERROR) << data.front();
+    SPDLOG_WARN("Unknown data format on {}", path.string());
+    SPDLOG_DEBUG(data.front());
     return {};
   }
 
@@ -68,8 +67,8 @@ AMD::OdFanAutoProvider::createOdFanMinPWMDataSource(IGPUInfo const &gpuInfo) con
 
   auto data = Utils::File::readFileLines(path);
   if (!Utils::AMD::hasOverdriveFanMinimumPWMControl(data)) {
-    LOG(WARNING) << std::format("Unknown data format on {}", path.string());
-    LOG(ERROR) << data.front();
+    SPDLOG_WARN("Unknown data format on {}", path.string());
+    SPDLOG_DEBUG(data.front());
     return {};
   }
 
@@ -87,8 +86,8 @@ AMD::OdFanAutoProvider::createOdFanAcousticTargetDataSource(
 
   auto data = Utils::File::readFileLines(path);
   if (!Utils::AMD::hasOverdriveFanAcousticTargetControl(data)) {
-    LOG(WARNING) << std::format("Unknown data format on {}", path.string());
-    LOG(ERROR) << data.front();
+    SPDLOG_WARN("Unknown data format on {}", path.string());
+    SPDLOG_DEBUG(data.front());
     return {};
   }
 
@@ -106,8 +105,8 @@ AMD::OdFanAutoProvider::createOdFanAcousticLimitDataSource(
 
   auto data = Utils::File::readFileLines(path);
   if (!Utils::AMD::hasOverdriveFanAcousticLimitControl(data)) {
-    LOG(WARNING) << std::format("Unknown data format on {}", path.string());
-    LOG(ERROR) << data.front();
+    SPDLOG_WARN("Unknown data format on {}", path.string());
+    SPDLOG_DEBUG(data.front());
     return {};
   }
 

@@ -7,9 +7,8 @@
 #include "isyscomponentprofilepart.h"
 #include <algorithm>
 #include <cctype>
-#include <easylogging++.h>
-#include <format>
 #include <pugixml.hpp>
+#include <spdlog/spdlog.h>
 #include <utility>
 
 ProfileXMLParser::Factory::Factory(
@@ -129,8 +128,8 @@ bool ProfileXMLParser::load(std::vector<char> const &data, IProfile &profile)
     }
   }
 
-  LOG(ERROR) << std::format("Cannot parse xml data for profile {}.\nError: {}",
-                            profile.info().name, status.description());
+  SPDLOG_DEBUG("Cannot parse xml data for profile {}.\nError: {}",
+               profile.info().name, status.description());
 
   return false;
 }

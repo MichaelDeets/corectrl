@@ -6,8 +6,7 @@
 #define QT_NO_KEYWORDS
 #include <polkit/polkit.h>
 
-#include <easylogging++.h>
-#include <format>
+#include <spdlog/spdlog.h>
 
 namespace Polkit {
 
@@ -30,8 +29,7 @@ Authority::Authority() noexcept
 
   authority_ = polkit_authority_get_sync(nullptr, &error);
   if (authority_ == nullptr) {
-    LOG(ERROR) << std::format("Could not get Polkit authority: {}",
-                              error->message);
+    SPDLOG_DEBUG("Could not get Polkit authority: {}", error->message);
     g_error_free(error);
     return;
   }
@@ -91,8 +89,7 @@ AuthResult checkAuthorizationSync(std::string const &actionId,
       polkitAuthority.get(), polkitSubject.get(), actionId.c_str(), nullptr,
       POLKIT_CHECK_AUTHORIZATION_FLAGS_ALLOW_USER_INTERACTION, nullptr, &error);
   if (error) {
-    LOG(ERROR) << std::format("Could not check Polkit authorization: {}",
-                              error->message);
+    SPDLOG_DEBUG("Could not check Polkit authorization: {}", error->message);
     g_error_free(error);
     return AuthResult::Error;
   }

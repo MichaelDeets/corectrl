@@ -12,12 +12,9 @@
 #include <QString>
 #include <QStringList>
 #include <QTimer>
-#include <easylogging++.h>
 #include <exception>
 #include <signal.h>
 #include <string>
-
-INITIALIZE_EASYLOGGINGPP
 
 HelperKiller::HelperKiller(QObject *parent) noexcept
 : QDBusAbstractAdaptor(parent)

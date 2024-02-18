@@ -8,8 +8,7 @@
 #include <QProcess>
 #include <QStringList>
 #include <algorithm>
-#include <easylogging++.h>
-#include <format>
+#include <spdlog/spdlog.h>
 
 class CPUInfoLsCpuDataSource : public IDataSource<std::vector<std::string>>
 {
@@ -35,7 +34,7 @@ class CPUInfoLsCpuDataSource : public IDataSource<std::vector<std::string>>
       return true;
     }
 
-    LOG(WARNING) << "lscpu command failed";
+    SPDLOG_WARN("lscpu command failed");
     return false;
   }
 };

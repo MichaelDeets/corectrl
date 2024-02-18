@@ -20,6 +20,7 @@
 #include <filesystem>
 #include <memory>
 #include <optional>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <tuple>
 #include <units.h>
@@ -123,16 +124,14 @@ class Provider final : public IGPUSensorProvider::IProvider
                         }));
               }
               else {
-                LOG(WARNING)
-                    << std::format("Unknown data format on {}", pwm.string());
-                LOG(ERROR) << fileLines.front();
+                SPDLOG_WARN("Unknown data format on {}", pwm.string());
+                SPDLOG_DEBUG(fileLines.front());
               }
             }
           }
           else {
-            LOG(WARNING) << std::format("Unknown data format on {}",
-                                        fanInput.string());
-            LOG(ERROR) << fileLines.front();
+            SPDLOG_WARN("Unknown data format on {}", fanInput.string());
+            SPDLOG_DEBUG(fileLines.front());
           }
         }
       }

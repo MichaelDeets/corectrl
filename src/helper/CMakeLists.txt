@@ -38,10 +38,7 @@ if(NOT POLKIT_POLICY_INSTALL_DIR_RESULT EQUAL "0")
 endif()
 
 list(APPEND HELPER_COMPILE_DEFINITIONS
-  ELPP_THREAD_SAFE
-  ELPP_FORCE_USE_STD_THREAD
-  ELPP_NO_LOG_TO_FILE
-  ELPP_NO_DEFAULT_LOG_FILE
+  SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
 )
 
 list(APPEND PROCESS_MONITOR_SRC
@@ -76,6 +73,7 @@ target_compile_definitions(corectrl_helperkiller PRIVATE ${HELPER_COMPILE_DEFINI
 target_link_libraries(corectrl_helperkiller PRIVATE
   Qt5::Core
   Qt5::DBus
+  spdlog::spdlog
   ${POLKIT_LIBRARIES}
 )
 
@@ -109,6 +107,7 @@ target_link_libraries(corectrl_helper PRIVATE
   Qt5::DBus
   stdc++fs
   pthread
+  spdlog::spdlog
   ${Botan_LIBRARIES}
   ${POLKIT_LIBRARIES}
 )

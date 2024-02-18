@@ -7,8 +7,6 @@
 #include "core/components/amdutils.h"
 #include "core/info/infoproviderregistry.h"
 #include <algorithm>
-#include <easylogging++.h>
-#include <format>
 #include <utility>
 
 namespace AMD {

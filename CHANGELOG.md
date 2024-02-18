@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Require CMake 3.22.
 - Require Catch2 3.0 or later when building tests. Based on the work done by Leonidas Spyropoulos (!44).
 - Require QuaZip 1.0 or later.
+- Replace easyloggingpp with spdlog (version 1.4 or later). The new library is required to compile the application.
 - Command line arguments that affect a running instance of the application can now be used together. The argument `--minimize-systray` takes precedence over `--toggle-window-visibility`.
 - Use `org.corectrl.CoreCtrl` in both the icon name and the manifest's application ID to better conform to FreeDesktop specifications. Thanks to Reilly Brogan (!41).
 - Disable building the testing suite by default.
@@ -29,6 +30,7 @@ All notable changes to this project will be documented in this file.
 
 ### Removed
 - Bundled version of Catch2.
+- Bundled version of easyloggingpp.
 - fmt library dependency.
 
 

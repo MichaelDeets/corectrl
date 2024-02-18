@@ -7,8 +7,6 @@
 #include <QCoreApplication>
 #include <signal.h>
 
-INITIALIZE_EASYLOGGINGPP
-
 // Handle easily unix signals
 //
 // Credits: Amir Zamani
@@ -38,9 +36,8 @@ int main(int argc, char **argv)
 {
   setupLogger(std::filesystem::temp_directory_path() /
               (std::string(App::Name) + ".log"));
-  START_EASYLOGGINGPP(argc, argv);
 
-  LOG(INFO) << "----- Application started -----";
+  SPDLOG_DEBUG("----- Application started -----");
 
   catchUnixSignals({SIGQUIT, SIGINT, SIGTERM, SIGHUP});
 

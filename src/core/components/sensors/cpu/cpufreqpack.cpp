@@ -17,11 +17,10 @@
 #include "core/profilepartxmlparserprovider.h"
 #include "core/sysfsdatasource.h"
 #include <algorithm>
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <memory>
 #include <optional>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <units.h>
 #include <utility>
@@ -83,9 +82,8 @@ class Provider final : public ICPUSensorProvider::IProvider
                       }));
             }
             else {
-              LOG(WARNING) << std::format("Unknown data format on {}",
-                                          curFreqPath.string());
-              LOG(ERROR) << curFreqLines.front();
+              SPDLOG_WARN("Unknown data format on {}", curFreqPath.string());
+              SPDLOG_DEBUG(curFreqLines.front());
             }
           }
         }

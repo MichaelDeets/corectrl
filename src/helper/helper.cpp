@@ -21,9 +21,6 @@
 #include <QString>
 #include <exception>
 #include <filesystem>
-#include <format>
-
-INITIALIZE_EASYLOGGINGPP
 
 Helper::Helper(QObject *parent) noexcept
 : QDBusAbstractAdaptor(parent)
@@ -36,10 +33,9 @@ QDBusVariant Helper::start(QByteArray const &appPublicKey, int autoExitTimeout,
                            QDBusMessage const &message)
 {
   if (!started()) {
-    setupLogger(std::filesystem::temp_directory_path() / LOG_HELPER_FILE_NAME,
-                "1");
+    setupLogger(std::filesystem::temp_directory_path() / LOG_HELPER_FILE_NAME);
 
-    LOG(INFO) << "----- Helper started -----";
+    SPDLOG_DEBUG("----- Helper started -----");
 
     if (!(isAuthorized(message) && initCrypto(appPublicKey) &&
           initProcessMonitor() && initMsgReceiver())) {
@@ -68,7 +64,7 @@ void Helper::exit(QByteArray const &signature)
     exitHelper();
   }
   else
-    LOG(ERROR) << "Failed to verify 'exit' call from D-Bus";
+    SPDLOG_DEBUG("Failed to verify 'exit' call from D-Bus");
 }
 
 void Helper::exitHelper()
@@ -79,7 +75,7 @@ void Helper::exitHelper()
 
 void Helper::autoExitTimeout()
 {
-  LOG(WARNING) << "Auto exit timeout. Killing helper instance...";
+  SPDLOG_WARN("Auto exit timeout. Killing helper instance...");
   exitHelper();
 }
 
@@ -100,7 +96,7 @@ bool Helper::initCrypto(QByteArray const &appPublicKey)
     return true;
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
 
   return false;
@@ -128,11 +124,11 @@ bool Helper::initProcessMonitor()
     success = true;
   }
   catch (NLProcExecSocket::BindError &e) {
-    LOG(WARNING) << "Bind socket error: " << e.what();
-    LOG(WARNING) << "Do you have root permissions?";
+    SPDLOG_WARN("Bind socket error: {}", e.what());
+    SPDLOG_WARN("Do you have root permissions?");
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
 
   return success;
@@ -155,7 +151,7 @@ bool Helper::initMsgReceiver()
     return true;
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
 
   return false;
@@ -165,22 +161,21 @@ bool initDBusForHelperService(QObject *obj)
 {
   QDBusConnection bus = QDBusConnection::systemBus();
   if (!bus.isConnected()) {
-    LOG(ERROR) << "Could not connect to D-Bus system bus";
+    SPDLOG_DEBUG("Could not connect to D-Bus system bus");
     return false;
   }
 
   if (!bus.registerObject(QStringLiteral(DBUS_HELPER_PATH), obj)) {
-    LOG(ERROR) << std::format("Could not register D-Bus object on path {} "
-                              "using the interface {}\n.Last D-Bus error: {}",
-                              DBUS_HELPER_PATH, DBUS_HELPER_INTERFACE,
-                              bus.lastError().message().toStdString());
+    SPDLOG_DEBUG("Could not register D-Bus object on path {} "
+                 "using the interface {}\n.Last D-Bus error: {}",
+                 DBUS_HELPER_PATH, DBUS_HELPER_INTERFACE,
+                 bus.lastError().message().toStdString());
     return false;
   }
 
   if (!bus.registerService(QStringLiteral(DBUS_HELPER_SERVICE))) {
-    LOG(ERROR) << std::format(
-        "Could not register D-Bus service {}.\nLast D-Bus error: {}",
-        DBUS_HELPER_SERVICE, bus.lastError().message().toStdString());
+    SPDLOG_DEBUG("Could not register D-Bus service {}.\nLast D-Bus error: {}",
+                 DBUS_HELPER_SERVICE, bus.lastError().message().toStdString());
     return false;
   }
 
@@ -193,9 +188,8 @@ bool endDBusForHelperService()
   bus.unregisterObject(QStringLiteral(DBUS_HELPER_PATH));
   auto success = bus.unregisterService(QStringLiteral(DBUS_HELPER_SERVICE));
   if (!success) {
-    LOG(ERROR) << std::format("D-Bus error unregistering service {}: {}",
-                              DBUS_HELPER_SERVICE,
-                              bus.lastError().message().toStdString());
+    SPDLOG_DEBUG("D-Bus error unregistering service {}: {}",
+                 DBUS_HELPER_SERVICE, bus.lastError().message().toStdString());
   }
 
   return success;

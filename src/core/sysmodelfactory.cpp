@@ -22,11 +22,10 @@
 #include "isysexplorer.h"
 #include "sysmodel.h"
 #include <algorithm>
-#include <easylogging++.h>
-#include <format>
 #include <iterator>
 #include <memory>
 #include <optional>
+#include <spdlog/spdlog.h>
 #include <string_view>
 #include <utility>
 
@@ -205,7 +204,7 @@ std::vector<std::unique_ptr<ICPUInfo>> SysModelFactory::parseCPUInfo() const
         physicalId = cpuId = coreId = std::nullopt;
       }
       else {
-        LOG(ERROR) << "Cannot parse some data from /proc/cpuinfo";
+        SPDLOG_DEBUG("Cannot parse some data from /proc/cpuinfo");
         return {};
       }
     }
@@ -232,8 +231,7 @@ int SysModelFactory::computeGPUIndex(std::string const &deviceRenderDName) const
   if (Utils::String::toNumber<int>(index, indexStr))
     index -= 128;
   else
-    LOG(ERROR) << std::format("Cannot compute GPU index for device {}.",
-                              deviceRenderDName);
+    SPDLOG_DEBUG("Cannot compute GPU index for device {}.", deviceRenderDName);
   return index;
 }
 
@@ -247,8 +245,7 @@ Vendor SysModelFactory::parseVendor(std::filesystem::path const &vendorPath) con
     if (Utils::String::toNumber<int>(dataValue, lines.front(), 16))
       vendor = Vendor{dataValue};
     else
-      LOG(ERROR) << std::format("Cannot parse vendor id from file {}.",
-                                vendorPath.c_str());
+      SPDLOG_DEBUG("Cannot parse vendor id from file {}.", vendorPath.c_str());
   }
 
   return vendor;

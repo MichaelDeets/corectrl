@@ -11,9 +11,8 @@
 #include <botan/x509_key.h>
 #include <cstddef>
 #include <cstdint>
-#include <easylogging++.h>
 #include <exception>
-#include <format>
+#include <spdlog/spdlog.h>
 
 void CryptoLayer::init()
 {
@@ -45,7 +44,7 @@ bool CryptoLayer::verify(QByteArray const &data, QByteArray const &signature)
         decodedSignature.size());
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
   return false;
 }
@@ -61,7 +60,7 @@ QByteArray CryptoLayer::signature(QByteArray const &data)
     return {encodedSignature.c_str()};
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
   return {};
 }

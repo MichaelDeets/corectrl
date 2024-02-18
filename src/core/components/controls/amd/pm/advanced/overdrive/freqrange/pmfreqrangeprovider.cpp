@@ -11,10 +11,9 @@
 #include "core/sysfsdatasource.h"
 #include "pmfreqrange.h"
 #include <algorithm>
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <vector>
 
@@ -43,9 +42,8 @@ AMD::PMFreqRangeProvider::provideGPUControls(IGPUInfo const &gpuInfo,
 
         if (outOfRangeStates.has_value()) {
           for (auto stateIndex : outOfRangeStates.value()) {
-            LOG(WARNING) << std::format(
-                "Detected out of range state index {} on control {}",
-                stateIndex, controlName);
+            SPDLOG_WARN("Detected out of range state index {} on control {}",
+                        stateIndex, controlName);
           }
         }
 
@@ -75,19 +73,19 @@ AMD::PMFreqRangeProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                 std::move(disabledBound)));
           }
           else {
-            LOG(WARNING) << std::format("Unsupported control {}", controlName);
+            SPDLOG_WARN("Unsupported control {}", controlName);
           }
         }
         else {
-          LOG(WARNING) << std::format("Invalid data on {} for control {}",
-                                      ppOdClkVolt.string(), controlName);
+          SPDLOG_WARN("Invalid data on {} for control {}", ppOdClkVolt.string(),
+                      controlName);
           logPPOdClkVoltContents = true;
         }
       }
 
       if (logPPOdClkVoltContents) {
         for (auto const &line : ppOdClkVoltLines)
-          LOG(ERROR) << line;
+          SPDLOG_DEBUG(line);
       }
     }
   }

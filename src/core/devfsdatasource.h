@@ -4,11 +4,10 @@
 #pragma once
 
 #include "core/idatasource.h"
-#include <easylogging++.h>
 #include <fcntl.h>
 #include <filesystem>
-#include <format>
 #include <functional>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
 #include <utility>
@@ -24,7 +23,7 @@ class DevFSDataSource : public IDataSource<T>
   {
     fd_ = open(path.c_str(), O_RDONLY);
     if (fd_ < 0)
-      LOG(ERROR) << std::format("Cannot open {}", path.c_str());
+      SPDLOG_DEBUG("Cannot open {}", path.c_str());
   }
 
   ~DevFSDataSource() override

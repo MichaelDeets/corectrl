@@ -4,30 +4,27 @@
 #include "sysfswriter.h"
 
 #include "common/fileutils.h"
-#include <easylogging++.h>
 #include <exception>
-#include <format>
-#include <ostream>
+#include <fstream>
+#include <spdlog/spdlog.h>
 
 void SysfsWriter::write(std::filesystem::path const &sysfsEntry,
                         std::string const &value)
 {
   if (!Utils::File::isFilePathValid(sysfsEntry)) {
-    LOG(ERROR) << std::format("Invalid file path {}", sysfsEntry.c_str());
+    SPDLOG_DEBUG("Invalid file path {}", sysfsEntry.c_str());
     return;
   }
 
   if (!isSysfsPath(sysfsEntry)) {
-    LOG(ERROR) << std::format(
-        "{} is not a sysfs path. Value {} wont be written.", sysfsEntry.c_str(),
-        value);
+    SPDLOG_DEBUG("{} is not a sysfs path. Value {} wont be written.",
+                 sysfsEntry.c_str(), value);
     return;
   }
 
   std::ofstream file(sysfsEntry);
   if (!file.is_open()) {
-    LOG(ERROR) << std::format("Cannot write {} to file {}", value,
-                              sysfsEntry.c_str());
+    SPDLOG_DEBUG("Cannot write {} to file {}", value, sysfsEntry.c_str());
     return;
   }
 
@@ -42,7 +39,7 @@ bool SysfsWriter::isSysfsPath(std::filesystem::path const &path) const
                0, sysfsPath.length(), sysfsPath) == 0;
   }
   catch (std::exception const &e) {
-    LOG(ERROR) << e.what();
+    SPDLOG_DEBUG(e.what());
   }
   return false;
 }

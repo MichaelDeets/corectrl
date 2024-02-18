@@ -2,7 +2,7 @@ configure_file(config.h.in config.h)
 
 list(APPEND APP_COMPILE_DEFINITIONS
   ${3RDPARTY_DEFINITIONS}
-  ELPP_THREAD_SAFE
+  SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
 )
 
 list(APPEND COMMON_SRC
@@ -374,6 +374,7 @@ target_link_libraries(corectrl_lib PRIVATE
   QuaZip::QuaZip
   stdc++fs
   pthread
+  spdlog::spdlog
   $<$<BOOL:${pugixml_FOUND}>:pugixml::pugixml>
   $<$<BOOL:${units_FOUND}>:units::units>
 )
@@ -404,6 +405,7 @@ target_link_libraries(corectrl PRIVATE
   Qt5::Widgets
   Qt5::Network
   Qt5::DBus
+  spdlog::spdlog
   ${Botan_LIBRARIES}
 )
 

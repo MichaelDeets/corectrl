@@ -9,8 +9,8 @@
 #include <QDBusConnection>
 #include <QDBusError>
 #include <QString>
-#include <easylogging++.h>
 #include <format>
+#include <spdlog/spdlog.h>
 #include <stdexcept>
 #include <utility>
 
@@ -50,5 +50,5 @@ void MsgReceiver::apply(QByteArray const &data, QByteArray const &signature)
       sysfsWriter_->write(cmdList[i].data(), cmdList[i + 1].data());
   }
   else
-    LOG(ERROR) << "Failed to verify received data from D-Bus";
+    SPDLOG_DEBUG("Failed to verify received data from D-Bus");
 }

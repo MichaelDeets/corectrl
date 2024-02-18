@@ -13,9 +13,9 @@
 #include <QString>
 #include <QVariant>
 #include <algorithm>
-#include <easylogging++.h>
 #include <format>
 #include <limits>
+#include <spdlog/spdlog.h>
 #include <stdexcept>
 #include <utility>
 
@@ -68,7 +68,7 @@ void HelperControl::stop()
 void HelperControl::helperHealthCheckTimeout()
 {
   if (deferHelperAutoExitSignalTimer_.isActive() && !helperHasBeenStarted()) {
-    LOG(WARNING) << "The Helper has not been started. Starting it now.";
+    SPDLOG_WARN("The Helper has not been started. Starting it now.");
 
     deferHelperAutoExitSignalTimer_.stop();
     auto helperPublicKey = startHelper();
@@ -76,7 +76,7 @@ void HelperControl::helperHealthCheckTimeout()
     if (!helperPublicKey.has_value()) {
       // NOTE If the helper died and cannot be started again, it's better to not
       // crash the application throwing an exception.
-      LOG(WARNING) << "Cannot restart helper!";
+      SPDLOG_WARN("Cannot restart helper!");
     }
 
     cryptoLayer_->usePublicKey(helperPublicKey.value());
@@ -131,7 +131,7 @@ void HelperControl::stopHelper()
 void HelperControl::killOtherHelperInstance()
 {
   if (helperHasBeenStarted()) {
-    LOG(WARNING) << "Helper instance detected. Killing it now.";
+    SPDLOG_WARN("Helper instance detected. Killing it now.");
 
     if (!startHelperKiller() || helperHasBeenStarted())
       throw std::runtime_error("Failed to kill other helper instance");
@@ -145,16 +145,16 @@ bool HelperControl::startHelperKiller()
                        QStringLiteral(DBUS_HELPER_KILLER_INTERFACE),
                        QDBusConnection::systemBus());
   if (!iface.isValid()) {
-    LOG(ERROR) << std::format("Cannot connect to D-Bus interface {}: {}",
-                              DBUS_HELPER_KILLER_INTERFACE,
-                              iface.lastError().message().toStdString());
+    SPDLOG_DEBUG("Cannot connect to D-Bus interface {}: {}",
+                 DBUS_HELPER_KILLER_INTERFACE,
+                 iface.lastError().message().toStdString());
     return false;
   }
 
   QDBusReply<bool> reply = iface.call(QStringLiteral("start"));
   if (!reply.isValid()) {
-    LOG(ERROR) << std::format("Helper killer error: {}",
-                              iface.lastError().message().toStdString());
+    SPDLOG_DEBUG("Helper killer error: {}",
+                 iface.lastError().message().toStdString());
     return false;
   }
 

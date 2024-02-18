@@ -10,10 +10,9 @@
 #include "core/info/igpuinfo.h"
 #include "core/sysfsdatasource.h"
 #include "odfancurve.h"
-#include <easylogging++.h>
 #include <filesystem>
-#include <format>
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <vector>
 
@@ -33,8 +32,8 @@ AMD::OdFanCurveProvider::provideGPUControls(IGPUInfo const &gpuInfo,
 
   auto data = Utils::File::readFileLines(path);
   if (!Utils::AMD::hasOverdriveFanCurveControl(data)) {
-    LOG(WARNING) << std::format("Unknown data format on {}", path.string());
-    LOG(ERROR) << data.front();
+    SPDLOG_WARN("Unknown data format on {}", path.string());
+    SPDLOG_DEBUG(data.front());
     return {};
   }
 
