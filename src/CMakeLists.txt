@@ -375,7 +375,7 @@ target_link_libraries(corectrl_lib PRIVATE
   stdc++fs
   pthread
   spdlog::spdlog
-  $<$<BOOL:${pugixml_FOUND}>:pugixml::pugixml>
+  pugixml::pugixml
   $<$<BOOL:${units_FOUND}>:units::units>
 )
 set_target_properties(corectrl_lib PROPERTIES OUTPUT_NAME corectrl)

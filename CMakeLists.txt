@@ -38,17 +38,11 @@ find_package(Qt5 5.15 COMPONENTS Core DBus Quick Charts Widgets Network Svg REQU
 find_package(Qt5LinguistTools REQUIRED)
 find_package(QuaZip-Qt5 1.0 REQUIRED)
 find_package(spdlog 1.4 REQUIRED)
+find_package(pugixml 1.11 REQUIRED)
 
 find_package(Botan QUIET)
 if(NOT Botan_FOUND)
   message(FATAL_ERROR "Botan library not found")
-endif()
-
-find_package(pugixml 1.11 QUIET)
-if(NOT pugixml_FOUND)
-  message("Using bundled pugixml library")
-  list(APPEND 3RDPARTY_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/3rdparty/pugixml)
-  list(APPEND 3RDPARTY_SRC ${PROJECT_SOURCE_DIR}/3rdparty/pugixml/pugixml.cpp)
 endif()
 
 find_package(units 2.3.1 QUIET)
