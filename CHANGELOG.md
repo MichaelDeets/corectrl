@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Require a C++20 compiler (gcc 13.1 or later, clang 17 or later).
 - Require CMake 3.22.
 - Require Catch2 3.0 or later when building tests. Based on the work done by Leonidas Spyropoulos (!44).
+- Require trompeloeil 40 or later when building tests.
 - Require QuaZip 1.0 or later.
 - Require pugixml 1.11 or later.
 - Replace easyloggingpp with spdlog (version 1.4 or later). The new library is required to compile the application.
@@ -31,6 +32,7 @@ All notable changes to this project will be documented in this file.
 
 ### Removed
 - Bundled version of Catch2.
+- Bundled version of trompeloeil.
 - Bundled version of easyloggingpp.
 - Bundled version of pugixml.
 - fmt library dependency.

@@ -1,9 +1,5 @@
 find_package(Catch2 3.0 REQUIRED)
-find_package(trompeloeil 40 QUIET)
-if(NOT trompeloeil_FOUND)
-  message("Using bundled trompeloeil library")
-  list(APPEND TESTS_INCLUDE_DIRECTORIES $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/trompeloeil>)
-endif()
+find_package(trompeloeil 40 REQUIRED)
 
 # Compile definitions
 list(APPEND TESTS_COMPILE_DEFINITIONS
@@ -25,7 +21,7 @@ target_compile_definitions(catch_main PRIVATE ${TESTS_COMPILE_DEFINITIONS})
 target_link_libraries(catch_main PRIVATE
   spdlog::spdlog
   Catch2::Catch2
-  $<$<BOOL:${trompeloeil_FOUND}>:trompeloeil::trompeloeil>
+  trompeloeil::trompeloeil
 )
 
 # test_* files
@@ -40,8 +36,8 @@ target_link_libraries(test_all PRIVATE
   Qt5::Core
   spdlog::spdlog
   $<$<BOOL:${units_FOUND}>:units::units>
-  $<$<BOOL:${trompeloeil_FOUND}>:trompeloeil::trompeloeil>
   Catch2::Catch2
+  trompeloeil::trompeloeil
 )
 
 add_test(NAME "test_all"
