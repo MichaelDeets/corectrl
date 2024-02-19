@@ -22,6 +22,11 @@ list(APPEND TESTS_INCLUDE_DIRECTORIES
 add_library(catch_main OBJECT "src/main.cpp")
 target_include_directories(catch_main PRIVATE ${TESTS_INCLUDE_DIRECTORIES})
 target_compile_definitions(catch_main PRIVATE ${TESTS_COMPILE_DEFINITIONS})
+target_link_libraries(catch_main PRIVATE
+  spdlog::spdlog
+  Catch2::Catch2
+  $<$<BOOL:${trompeloeil_FOUND}>:trompeloeil::trompeloeil>
+)
 
 # test_* files
 file(GLOB test_files "src/test_*.cpp")
@@ -35,8 +40,8 @@ target_link_libraries(test_all PRIVATE
   Qt5::Core
   spdlog::spdlog
   $<$<BOOL:${units_FOUND}>:units::units>
-  $<$<BOOL:${Catch2_FOUND}>:Catch2::Catch2>
   $<$<BOOL:${trompeloeil_FOUND}>:trompeloeil::trompeloeil>
+  Catch2::Catch2
 )
 
 add_test(NAME "test_all"

@@ -1,5 +1,4 @@
 find_package(PkgConfig REQUIRED)
-find_package(Qt5 5.15 COMPONENTS Core DBus REQUIRED)
 
 find_package(Botan QUIET)
 if(NOT Botan_FOUND)
@@ -61,13 +60,11 @@ set(CMAKE_AUTOMOC ON)
 add_executable(corectrl_helperkiller
   helperkiller.cpp
   polkit.cpp
-  ${3RDPARTY_SRC}
 )
 set(CMAKE_AUTOMOC OFF)
 
 target_include_directories(corectrl_helperkiller PRIVATE
   ${POLKIT_INCLUDE_DIRS}
-  ${3RDPARTY_INCLUDE_DIRECTORIES}
 )
 target_compile_definitions(corectrl_helperkiller PRIVATE ${HELPER_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_helperkiller PRIVATE
@@ -87,7 +84,6 @@ set(CMAKE_AUTOMOC ON)
 add_executable(corectrl_helper
   helper.cpp
   polkit.cpp
-  ${3RDPARTY_SRC}
   ${COMMON_SRC}
   ${CRYPTO_SRC}
   ${PROCESS_MONITOR_SRC}
@@ -98,7 +94,6 @@ set(CMAKE_AUTOMOC OFF)
 target_include_directories(corectrl_helper PRIVATE
   ${Botan_INCLUDE_DIRS}
   ${POLKIT_INCLUDE_DIRS}
-  ${3RDPARTY_INCLUDE_DIRECTORIES}
   ${PROJECT_SOURCE_DIR}/src
 )
 target_compile_definitions(corectrl_helper PRIVATE ${HELPER_COMPILE_DEFINITIONS})
