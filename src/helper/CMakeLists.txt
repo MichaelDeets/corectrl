@@ -73,8 +73,8 @@ target_include_directories(corectrl_helperkiller PRIVATE
 )
 target_compile_definitions(corectrl_helperkiller PRIVATE ${HELPER_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_helperkiller PRIVATE
-  Qt5::Core
-  Qt5::DBus
+  Qt6::Core
+  Qt6::DBus
   spdlog::spdlog
   ${POLKIT_LIBRARIES}
   ${ATOMIC_LIB}
@@ -104,8 +104,8 @@ target_include_directories(corectrl_helper PRIVATE
 )
 target_compile_definitions(corectrl_helper PRIVATE ${HELPER_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_helper PRIVATE
-  Qt5::Core
-  Qt5::DBus
+  Qt6::Core
+  Qt6::DBus
   stdc++fs
   pthread
   spdlog::spdlog

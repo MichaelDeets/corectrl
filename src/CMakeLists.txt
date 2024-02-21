@@ -347,13 +347,13 @@ set_source_files_properties(${TRANSLATIONS} PROPERTIES
 
 option (UPDATE_TRANSLATIONS "Update translation files" OFF)
 if (UPDATE_TRANSLATIONS)
-  qt5_create_translation(QM_FILES ${TRANSLATABLE_FILES} ${TRANSLATIONS} OPTIONS -noobsolete)
+  qt6_create_translation(QM_FILES ${TRANSLATABLE_FILES} ${TRANSLATIONS} OPTIONS -noobsolete)
 else (UPDATE_TRANSLATIONS)
-  qt5_add_translation(QM_FILES ${TRANSLATIONS})
+  qt6_add_translation(QM_FILES ${TRANSLATIONS})
 endif (UPDATE_TRANSLATIONS)
 add_custom_target(translations DEPENDS ${QM_FILES})
 
-qt5_add_resources(CPP_QRC resources.qrc)
+qt6_add_resources(CPP_QRC resources.qrc)
 
 set(CMAKE_AUTOMOC ON)
 add_library(corectrl_lib SHARED
@@ -373,7 +373,7 @@ target_include_directories(corectrl_lib PRIVATE
 )
 target_compile_definitions(corectrl_lib PRIVATE ${APP_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_lib PRIVATE
-  Qt5::Core
+  Qt6::Core
   QuaZip::QuaZip
   stdc++fs
   pthread
@@ -403,12 +403,12 @@ target_include_directories(corectrl PRIVATE
 target_compile_definitions(corectrl PRIVATE ${APP_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl PRIVATE
   corectrl_lib
-  Qt5::Core
-  Qt5::Quick
-  Qt5::Charts
-  Qt5::Widgets
-  Qt5::Network
-  Qt5::DBus
+  Qt6::Core
+  Qt6::Quick
+  Qt6::Charts
+  Qt6::Widgets
+  Qt6::Network
+  Qt6::DBus
   spdlog::spdlog
   ${Botan_LIBRARIES}
   ${ATOMIC_LIB}

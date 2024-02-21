@@ -49,8 +49,6 @@ int App::exec(int argc, char **argv)
 {
   QCoreApplication::setApplicationName(QString(App::Name.data()).toLower());
   QCoreApplication::setApplicationVersion(App::VersionStr.data());
-  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-  QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
   QGuiApplication::setDesktopFileName(QString(App::Fqdn.data()));
 
   // Ignore QT_STYLE_OVERRIDE. It breaks the qml theme.
@@ -60,10 +58,6 @@ int App::exec(int argc, char **argv)
   }
 
   QApplication app(argc, argv);
-
-#if defined(_DEBUG)
-  QQmlDebuggingEnabler enabler;
-#endif
 
   int const minHelperTimeout = helperControl_->minExitTimeout().to<int>();
   int const helperTimeout{std::max(180000, // default helper timeout in milliseconds

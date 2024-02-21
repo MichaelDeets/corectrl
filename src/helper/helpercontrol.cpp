@@ -112,7 +112,7 @@ std::optional<QByteArray> HelperControl::startHelper()
       QStringLiteral("start"), cryptoLayer_->publicKey(),
       autoExitTimeout_.to<int>());
 
-  if (!(reply.isValid() && reply.value().variant().type() == QVariant::ByteArray))
+  if (!(reply.isValid() && reply.value().variant().typeId() == QMetaType::QByteArray))
     return std::nullopt;
 
   deferHelperAutoExitSignalTimer_.setInterval(

@@ -34,7 +34,7 @@ target_include_directories(test_all PRIVATE ${TESTS_INCLUDE_DIRECTORIES})
 target_compile_definitions(test_all PRIVATE ${TESTS_COMPILE_DEFINITIONS})
 target_link_libraries(test_all PRIVATE
   corectrl_lib
-  Qt5::Core
+  Qt6::Core
   spdlog::spdlog
   $<$<BOOL:${units_FOUND}>:units::units>
   Catch2::Catch2
