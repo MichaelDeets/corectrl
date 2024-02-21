@@ -15,70 +15,52 @@
 #include <memory>
 #include <spdlog/spdlog.h>
 #include <string>
-#include <tuple>
 
 std::vector<std::unique_ptr<IControl>>
 AMD::FanFixedProvider::provideGPUControls(IGPUInfo const &gpuInfo,
-                                          ISWInfo const &swInfo) const
+                                          ISWInfo const &) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
+  if (!(gpuInfo.vendor() == Vendor::AMD &&
+        !gpuInfo.hasCapability(GPUInfoOdFanCtrl::ID)))
+    return {};
 
-  if (gpuInfo.vendor() == Vendor::AMD &&
-      !gpuInfo.hasCapability(GPUInfoOdFanCtrl::ID)) {
-    auto kernel =
-        Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
-    auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
+  auto path = Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
+  if (!path)
+    return {};
 
-    if ((driver == "radeon" && kernel >= std::make_tuple(4, 0, 0)) ||
-        (driver == "amdgpu" && kernel >= std::make_tuple(4, 2, 0))) {
+  auto pwmEnable = path.value() / "pwm1_enable";
+  auto pwm = path.value() / "pwm1";
+  if (!(Utils::File::isSysFSEntryValid(pwm) &&
+        Utils::File::isSysFSEntryValid(pwmEnable)))
+    return {};
 
-      auto path =
-          Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
-      if (path.has_value()) {
+  unsigned int value;
 
-        auto pwmEnable = path.value() / "pwm1_enable";
-        auto pwm = path.value() / "pwm1";
-        if (Utils::File::isSysFSEntryValid(pwm) &&
-            Utils::File::isSysFSEntryValid(pwmEnable)) {
-
-          unsigned int value;
-
-          auto pwmEnableLines = Utils::File::readFileLines(pwmEnable);
-          auto pwmEnableValid = Utils::String::toNumber<unsigned int>(
-              value, pwmEnableLines.front());
-
-          auto pwmLines = Utils::File::readFileLines(pwm);
-          auto pwmValid = Utils::String::toNumber<unsigned int>(
-              value, pwmLines.front());
-
-          if (pwmEnableValid && pwmValid) {
-
-            controls.emplace_back(std::make_unique<AMD::FanFixed>(
-                std::make_unique<SysFSDataSource<unsigned int>>(
-                    pwmEnable,
-                    [](std::string const &data, unsigned int &output) {
-                      Utils::String::toNumber<unsigned int>(output, data);
-                    }),
-                std::make_unique<SysFSDataSource<unsigned int>>(
-                    pwm, [](std::string const &data, unsigned int &output) {
-                      Utils::String::toNumber<unsigned int>(output, data);
-                    })));
-          }
-          else {
-            if (!pwmEnableValid) {
-              SPDLOG_WARN("Unknown data format on {}", pwmEnable.string());
-              SPDLOG_DEBUG(pwmEnableLines.front());
-            }
-
-            if (!pwmValid) {
-              SPDLOG_WARN("Unknown data format on {}", pwm.string());
-              SPDLOG_DEBUG(pwmLines.front());
-            }
-          }
-        }
-      }
-    }
+  auto pwmEnableLines = Utils::File::readFileLines(pwmEnable);
+  if (!Utils::String::toNumber<unsigned int>(value, pwmEnableLines.front())) {
+    SPDLOG_WARN("Unknown data format on {}", pwmEnable.string());
+    SPDLOG_DEBUG(pwmEnableLines.front());
+    return {};
   }
+
+  auto pwmLines = Utils::File::readFileLines(pwm);
+  if (!Utils::String::toNumber<unsigned int>(value, pwmLines.front())) {
+    SPDLOG_WARN("Unknown data format on {}", pwm.string());
+    SPDLOG_DEBUG(pwmLines.front());
+    return {};
+  }
+
+  std::vector<std::unique_ptr<IControl>> controls;
+  controls.emplace_back(std::make_unique<AMD::FanFixed>(
+      std::make_unique<SysFSDataSource<unsigned int>>(
+          pwmEnable,
+          [](std::string const &data, unsigned int &output) {
+            Utils::String::toNumber<unsigned int>(output, data);
+          }),
+      std::make_unique<SysFSDataSource<unsigned int>>(
+          pwm, [](std::string const &data, unsigned int &output) {
+            Utils::String::toNumber<unsigned int>(output, data);
+          })));
 
   return controls;
 }

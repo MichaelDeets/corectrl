@@ -13,21 +13,23 @@ std::vector<std::unique_ptr<IControl>>
 AMD::PMAdvancedProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                                             ISWInfo const &swInfo) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
+  if (gpuInfo.vendor() != Vendor::AMD)
+    return {};
 
-  if (gpuInfo.vendor() == Vendor::AMD) {
-    std::vector<std::unique_ptr<IControl>> groupControls;
+  std::vector<std::unique_ptr<IControl>> groupControls;
 
-    for (auto const &provider : providers_()) {
-      auto newControls = provider->provideGPUControls(gpuInfo, swInfo);
-      groupControls.insert(groupControls.end(),
-                           std::make_move_iterator(newControls.begin()),
-                           std::make_move_iterator(newControls.end()));
-    }
-    if (!groupControls.empty())
-      controls.emplace_back(
-          std::make_unique<PMAdvanced>(std::move(groupControls)));
+  for (auto const &provider : providers_()) {
+    auto newControls = provider->provideGPUControls(gpuInfo, swInfo);
+    groupControls.insert(groupControls.end(),
+                         std::make_move_iterator(newControls.begin()),
+                         std::make_move_iterator(newControls.end()));
   }
+
+  if (groupControls.empty())
+    return {};
+
+  std::vector<std::unique_ptr<IControl>> controls;
+  controls.emplace_back(std::make_unique<PMAdvanced>(std::move(groupControls)));
 
   return controls;
 }

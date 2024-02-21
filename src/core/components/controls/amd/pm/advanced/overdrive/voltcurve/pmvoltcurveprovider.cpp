@@ -20,31 +20,29 @@ std::vector<std::unique_ptr<IControl>>
 AMD::PMVoltCurveProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                                              ISWInfo const &) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
+  if (!(gpuInfo.vendor() == Vendor::AMD &&
+        gpuInfo.hasCapability(GPUInfoPMOverdrive::VoltCurve)))
+    return {};
 
-  if (gpuInfo.vendor() == Vendor::AMD &&
-      gpuInfo.hasCapability(GPUInfoPMOverdrive::VoltCurve)) {
+  auto ppOdClkVolt = gpuInfo.path().sys / "pp_od_clk_voltage";
+  auto ppOdClkVoltLines = Utils::File::readFileLines(ppOdClkVolt);
 
-    auto ppOdClkVolt = gpuInfo.path().sys / "pp_od_clk_voltage";
-    auto ppOdClkVoltLines = Utils::File::readFileLines(ppOdClkVolt);
+  auto valid =
+      !Utils::AMD::ppOdClkVoltageHasKnownVoltCurveQuirks(ppOdClkVoltLines) &&
+      Utils::AMD::parseOverdriveVoltCurveRange(ppOdClkVoltLines).has_value() &&
+      Utils::AMD::parseOverdriveVoltCurve(ppOdClkVoltLines).has_value();
 
-    auto voltCurveControlValid =
-        !Utils::AMD::ppOdClkVoltageHasKnownVoltCurveQuirks(ppOdClkVoltLines) &&
-        Utils::AMD::parseOverdriveVoltCurveRange(ppOdClkVoltLines).has_value() &&
-        Utils::AMD::parseOverdriveVoltCurve(ppOdClkVoltLines).has_value();
-
-    if (voltCurveControlValid) {
-
-      controls.emplace_back(std::make_unique<AMD::PMVoltCurve>(
-          "vc", std::make_unique<SysFSDataSource<std::vector<std::string>>>(
-                    ppOdClkVolt)));
-    }
-    else {
-      SPDLOG_WARN("Invalid data on {}", ppOdClkVolt.string());
-      for (auto const &line : ppOdClkVoltLines)
-        SPDLOG_DEBUG(line);
-    }
+  if (!valid) {
+    SPDLOG_WARN("Invalid data on {}", ppOdClkVolt.string());
+    for (auto const &line : ppOdClkVoltLines)
+      SPDLOG_DEBUG(line);
+    return {};
   }
+
+  std::vector<std::unique_ptr<IControl>> controls;
+  controls.emplace_back(std::make_unique<AMD::PMVoltCurve>(
+      "vc",
+      std::make_unique<SysFSDataSource<std::vector<std::string>>>(ppOdClkVolt)));
 
   return controls;
 }

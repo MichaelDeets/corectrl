@@ -20,11 +20,9 @@ std::vector<std::unique_ptr<IControl>>
 AMD::OdFanCurveProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                                             ISWInfo const &) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
-
   if (!(gpuInfo.vendor() == Vendor::AMD &&
         gpuInfo.hasCapability(GPUInfoOdFanCtrl::ID)))
-    return controls;
+    return {};
 
   auto path = gpuInfo.path().sys / "gpu_od" / "fan_ctrl" / "fan_curve";
   if (!Utils::File::isSysFSEntryValid(path))
@@ -37,6 +35,7 @@ AMD::OdFanCurveProvider::provideGPUControls(IGPUInfo const &gpuInfo,
     return {};
   }
 
+  std::vector<std::unique_ptr<IControl>> controls;
   controls.emplace_back(std::make_unique<AMD::OdFanCurve>(
       std::make_unique<SysFSDataSource<std::vector<std::string>>>(
           std::move(path))));

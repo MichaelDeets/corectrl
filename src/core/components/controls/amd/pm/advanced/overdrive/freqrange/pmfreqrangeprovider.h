@@ -4,6 +4,11 @@
 #pragma once
 
 #include "core/components/controls/igpucontrolprovider.h"
+#include <filesystem>
+#include <memory>
+#include <optional>
+#include <string>
+#include <vector>
 
 namespace AMD {
 
@@ -15,6 +20,11 @@ class PMFreqRangeProvider final : public IGPUControlProvider::IProvider
                      ISWInfo const &swInfo) const override;
 
  private:
+  std::optional<std::unique_ptr<IControl>>
+  createControl(std::string controlName,
+                std::filesystem::path const &ppOdClkVoltPath,
+                std::vector<std::string> const &ppOdClkVoltLines) const;
+
   static bool const registered_;
 };
 

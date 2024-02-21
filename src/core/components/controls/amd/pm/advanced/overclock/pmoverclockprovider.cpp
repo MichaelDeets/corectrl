@@ -18,29 +18,31 @@ std::vector<std::unique_ptr<IControl>>
 AMD::PMOverclockProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                                              ISWInfo const &swInfo) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
+  if (gpuInfo.vendor() != Vendor::AMD)
+    return {};
 
-  if (gpuInfo.vendor() == Vendor::AMD) {
-    auto kernel =
-        Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
-    auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
+  auto kernel =
+      Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
+  auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
 
-    if (driver == "amdgpu" && (kernel >= std::make_tuple(4, 8, 0) &&
-                               kernel < std::make_tuple(4, 17, 0))) {
+  if (!(driver == "amdgpu" && (kernel >= std::make_tuple(4, 8, 0) &&
+                               kernel < std::make_tuple(4, 17, 0))))
+    return {};
 
-      std::vector<std::unique_ptr<IControl>> modeControls;
+  std::vector<std::unique_ptr<IControl>> modeControls;
 
-      for (auto const &provider : providers_()) {
-        auto newControls = provider->provideGPUControls(gpuInfo, swInfo);
-        modeControls.insert(modeControls.end(),
-                            std::make_move_iterator(newControls.begin()),
-                            std::make_move_iterator(newControls.end()));
-      }
-      if (!modeControls.empty())
-        controls.emplace_back(
-            std::make_unique<PMOverclock>(std::move(modeControls)));
-    }
+  for (auto const &provider : providers_()) {
+    auto newControls = provider->provideGPUControls(gpuInfo, swInfo);
+    modeControls.insert(modeControls.end(),
+                        std::make_move_iterator(newControls.begin()),
+                        std::make_move_iterator(newControls.end()));
   }
+
+  if (modeControls.empty())
+    return {};
+
+  std::vector<std::unique_ptr<IControl>> controls;
+  controls.emplace_back(std::make_unique<PMOverclock>(std::move(modeControls)));
 
   return controls;
 }

@@ -10,7 +10,6 @@
 #include "common/fileutils.h"
 #include "common/stringutils.h"
 #include "core/info/igpuinfo.h"
-#include "core/info/iswinfo.h"
 #include "core/info/vendor.h"
 #include "core/iprofilepart.h"
 #include "core/iprofilepartxmlparser.h"
@@ -22,7 +21,6 @@
 #include <optional>
 #include <spdlog/spdlog.h>
 #include <string>
-#include <tuple>
 #include <units.h>
 #include <utility>
 #include <vector>
@@ -33,64 +31,53 @@ class Provider final : public IGPUSensorProvider::IProvider
 {
  public:
   std::vector<std::unique_ptr<ISensor>>
-  provideGPUSensors(IGPUInfo const &gpuInfo, ISWInfo const &swInfo) const override
+  provideGPUSensors(IGPUInfo const &gpuInfo, ISWInfo const &) const override
   {
-    std::vector<std::unique_ptr<ISensor>> sensors;
+    if (gpuInfo.vendor() != Vendor::AMD)
+      return {};
 
-    if (gpuInfo.vendor() == Vendor::AMD) {
-      auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
-      auto kernel = Utils::String::parseVersion(
-          swInfo.info(ISWInfo::Keys::kernelVersion));
+    auto path = Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
+    if (!path)
+      return {};
 
-      if ((driver == "amdgpu" && kernel >= std::make_tuple(5, 3, 0))) {
+    auto tempInput = path.value() / "temp2_input";
+    if (!Utils::File::isSysFSEntryValid(tempInput))
+      return {};
 
-        auto path =
-            Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
-        if (path.has_value()) {
+    int value;
+    auto data = Utils::File::readFileLines(tempInput);
+    if (!Utils::String::toNumber<int>(value, data.front())) {
+      SPDLOG_WARN("Unknown data format on {}", tempInput.string());
+      SPDLOG_DEBUG(data.front());
+      return {};
+    }
 
-          auto tempInput = path.value() / "temp2_input";
-          if (Utils::File::isSysFSEntryValid(tempInput)) {
+    std::optional<
+        std::pair<units::temperature::celsius_t, units::temperature::celsius_t>>
+        range;
 
-            int value;
-            auto data = Utils::File::readFileLines(tempInput);
-
-            if (Utils::String::toNumber<int>(value, data.front())) {
-
-              std::optional<std::pair<units::temperature::celsius_t,
-                                      units::temperature::celsius_t>>
-                  range;
-
-              data = Utils::File::readFileLines(path.value() / "temp2_crit");
-              if (!data.empty()) {
-                if (Utils::String::toNumber<int>(value, data.front()) &&
-                    // do not use bogus values, see #103
-                    (value >= 0 && value < 150000)) {
-                  range = {units::temperature::celsius_t(0),
-                           units::temperature::celsius_t(value / 1000)};
-                }
-              }
-
-              std::vector<std::unique_ptr<IDataSource<int>>> dataSources;
-              dataSources.emplace_back(std::make_unique<SysFSDataSource<int>>(
-                  tempInput, [](std::string const &data, int &output) {
-                    int value;
-                    Utils::String::toNumber<int>(value, data);
-                    output = value / 1000;
-                  }));
-
-              sensors.emplace_back(
-                  std::make_unique<Sensor<units::temperature::celsius_t, int>>(
-                      AMD::JunctionTemp::ItemID, std::move(dataSources),
-                      std::move(range)));
-            }
-            else {
-              SPDLOG_WARN("Unknown data format on {}", tempInput.string());
-              SPDLOG_DEBUG(data.front());
-            }
-          }
-        }
+    data = Utils::File::readFileLines(path.value() / "temp2_crit");
+    if (!data.empty()) {
+      if (Utils::String::toNumber<int>(value, data.front()) &&
+          // do not use bogus values, see #103
+          (value >= 0 && value < 150000)) {
+        range = {units::temperature::celsius_t(0),
+                 units::temperature::celsius_t(value / 1000.0)};
       }
     }
+
+    std::vector<std::unique_ptr<IDataSource<int>>> dataSources;
+    dataSources.emplace_back(std::make_unique<SysFSDataSource<int>>(
+        tempInput, [](std::string const &data, int &output) {
+          int value;
+          Utils::String::toNumber<int>(value, data);
+          output = value / 1000;
+        }));
+
+    std::vector<std::unique_ptr<ISensor>> sensors;
+    sensors.emplace_back(
+        std::make_unique<Sensor<units::temperature::celsius_t, int>>(
+            AMD::JunctionTemp::ItemID, std::move(dataSources), std::move(range)));
 
     return sensors;
   }

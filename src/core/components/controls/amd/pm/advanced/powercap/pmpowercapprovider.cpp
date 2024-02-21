@@ -36,21 +36,19 @@ std::vector<std::unique_ptr<IControl>>
 AMD::PMPowerCapProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                                             ISWInfo const &) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
-
   if (gpuInfo.vendor() != Vendor::AMD)
-    return controls;
+    return {};
 
   auto path = Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
   if (!path)
-    return controls;
+    return {};
 
   auto power1CapPath = path.value() / "power1_cap";
   auto value = readPowerFrom(power1CapPath);
   auto min = readPowerFrom(path.value() / "power1_cap_min");
   auto max = readPowerFrom(path.value() / "power1_cap_max");
   if (!(value && min && max))
-    return controls;
+    return {};
 
   // Drivers might report bogus values for either (or both) upper
   // and lower range bounds. See #337.
@@ -58,11 +56,12 @@ AMD::PMPowerCapProvider::provideGPUControls(IGPUInfo const &gpuInfo,
     SPDLOG_DEBUG("Bogus power cap range bounds detected: "
                  "power1_cap_min ({}), power1_cap_max ({}).",
                  (*min).to<unsigned long>(), (*max).to<unsigned long>());
-    return controls;
+    return {};
   }
 
   auto defaultValue = readPowerFrom(path.value() / "power1_cap_default");
 
+  std::vector<std::unique_ptr<IControl>> controls;
   controls.emplace_back(std::make_unique<AMD::PMPowerCap>(
       std::make_unique<SysFSDataSource<unsigned long>>(
           power1CapPath,

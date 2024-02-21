@@ -16,27 +16,26 @@
 std::vector<std::unique_ptr<IControl>>
 CPUFreqProvider::provideCPUControls(ICPUInfo const &cpuInfo, ISWInfo const &) const
 {
+  if (!Utils::File::isDirectoryPathValid("/sys/devices/system/cpu/cpufreq"))
+    return {};
+
+  auto &executionUnits = cpuInfo.executionUnits();
+  if (executionUnits.empty())
+    return {};
+
+  auto governors = availableGovernors(cpuInfo);
+  if (governors.empty())
+    return {};
+
+  auto governor = defatultGovernor(cpuInfo, governors);
+  auto scalingGovernorDataSources = createScalingGovernorDataSources(cpuInfo);
+
+  if (scalingGovernorDataSources.empty())
+    return {};
+
   std::vector<std::unique_ptr<IControl>> controls;
-
-  if (Utils::File::isDirectoryPathValid("/sys/devices/system/cpu/cpufreq")) {
-
-    auto &executionUnits = cpuInfo.executionUnits();
-    if (!executionUnits.empty()) {
-
-      auto governors = availableGovernors(cpuInfo);
-      if (!governors.empty()) {
-
-        auto governor = defatultGovernor(cpuInfo, governors);
-        auto scalingGovernorDataSources =
-            createScalingGovernorDataSources(cpuInfo);
-
-        if (!scalingGovernorDataSources.empty())
-          controls.emplace_back(
-              std::make_unique<CPUFreq>(std::move(governors), governor,
-                                        std::move(scalingGovernorDataSources)));
-      }
-    }
-  }
+  controls.emplace_back(std::make_unique<CPUFreq>(
+      std::move(governors), governor, std::move(scalingGovernorDataSources)));
 
   return controls;
 }
@@ -50,46 +49,44 @@ CPUFreqProvider::availableGovernors(ICPUInfo const &cpuInfo) const
   auto unitAvailableGovernorsPath = cpuInfo.executionUnits().front().sysPath /
                                     availableGovernorsPath;
 
-  if (Utils::File::isSysFSEntryValid(unitAvailableGovernorsPath)) {
-    auto lines = Utils::File::readFileLines(unitAvailableGovernorsPath);
-    return Utils::String::split(lines.front());
-  }
-  else
+  if (!Utils::File::isSysFSEntryValid(unitAvailableGovernorsPath))
     return {};
+
+  auto lines = Utils::File::readFileLines(unitAvailableGovernorsPath);
+  return Utils::String::split(lines.front());
 }
 
 std::string CPUFreqProvider::defatultGovernor(
     ICPUInfo const &cpuInfo, std::vector<std::string> const &governors) const
 {
   std::string scalingDriverPath{"cpufreq/scaling_driver"};
+  std::string fallbackGovernor = governors.front();
 
   // get scaling driver from the first execution unit
   auto unitScalingDriverPath = cpuInfo.executionUnits().front().sysPath /
                                scalingDriverPath;
+  if (!Utils::File::isSysFSEntryValid(unitScalingDriverPath))
+    return fallbackGovernor;
 
-  if (Utils::File::isSysFSEntryValid(unitScalingDriverPath)) {
-    auto lines = Utils::File::readFileLines(unitScalingDriverPath);
-    if (!lines.empty()) {
+  auto lines = Utils::File::readFileLines(unitScalingDriverPath);
+  if (lines.empty())
+    return fallbackGovernor;
 
-      std::string governor("ondemand");
+  std::string governor("ondemand");
 
-      auto driver = lines.front();
-      if (driver == "intel_pstate")
-        governor = "powersave";
+  auto driver = lines.front();
+  if (driver == "intel_pstate")
+    governor = "powersave";
 
-      // clamp governor into available governors
-      auto iter = std::find_if(governors.cbegin(), governors.cend(),
-                               [&](auto const &availableGovernor) {
-                                 return governor == availableGovernor;
-                               });
-      if (iter == governors.cend()) // fallback to first available governor
-        governor = governors.front();
+  // clamp governor into available governors
+  auto iter = std::find_if(governors.cbegin(), governors.cend(),
+                           [&](auto const &availableGovernor) {
+                             return governor == availableGovernor;
+                           });
+  if (iter == governors.cend())
+    return fallbackGovernor;
 
-      return governor;
-    }
-  }
-
-  return governors.front();
+  return governor;
 }
 
 std::vector<std::unique_ptr<IDataSource<std::string>>>
@@ -99,11 +96,14 @@ CPUFreqProvider::createScalingGovernorDataSources(ICPUInfo const &cpuInfo) const
 
   std::string scalingGovernorPath{"cpufreq/scaling_governor"};
   for (auto const &executionUnit : cpuInfo.executionUnits()) {
+
     auto unitScalingGovernorPath = executionUnit.sysPath / scalingGovernorPath;
-    if (Utils::File::isSysFSEntryValid(unitScalingGovernorPath))
-      scalingGovernorDataSources.emplace_back(
-          std::make_unique<SysFSDataSource<std::string>>(executionUnit.sysPath /
-                                                         scalingGovernorPath));
+    if (!Utils::File::isSysFSEntryValid(unitScalingGovernorPath))
+      continue;
+
+    scalingGovernorDataSources.emplace_back(
+        std::make_unique<SysFSDataSource<std::string>>(executionUnit.sysPath /
+                                                       scalingGovernorPath));
   }
 
   return scalingGovernorDataSources;

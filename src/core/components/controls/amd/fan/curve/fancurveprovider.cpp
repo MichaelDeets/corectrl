@@ -8,109 +8,89 @@
 #include "common/stringutils.h"
 #include "core/info/amd/gpuinfoodfanctrl.h"
 #include "core/info/igpuinfo.h"
-#include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
 #include "fancurve.h"
 #include <filesystem>
 #include <memory>
 #include <spdlog/spdlog.h>
 #include <string>
-#include <tuple>
 
 std::vector<std::unique_ptr<IControl>>
 AMD::FanCurveProvider::provideGPUControls(IGPUInfo const &gpuInfo,
-                                          ISWInfo const &swInfo) const
+                                          ISWInfo const &) const
 {
   std::vector<std::unique_ptr<IControl>> controls;
 
-  if (gpuInfo.vendor() == Vendor::AMD &&
-      !gpuInfo.hasCapability(GPUInfoOdFanCtrl::ID)) {
-    auto kernel =
-        Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
-    auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
+  if (!(gpuInfo.vendor() == Vendor::AMD &&
+        !gpuInfo.hasCapability(GPUInfoOdFanCtrl::ID)))
+    return {};
 
-    if ((driver == "radeon" && kernel >= std::make_tuple(4, 0, 0)) ||
-        (driver == "amdgpu" && kernel >= std::make_tuple(4, 2, 0))) {
+  auto path = Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
+  if (!path)
+    return {};
 
-      auto path =
-          Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
-      if (path.has_value()) {
+  auto pwmEnable = path.value() / "pwm1_enable";
+  auto pwm = path.value() / "pwm1";
+  auto tempInput = path.value() / "temp1_input";
+  auto tempCrit = path.value() / "temp1_crit";
+  if (!(Utils::File::isSysFSEntryValid(pwm) &&
+        Utils::File::isSysFSEntryValid(pwmEnable) &&
+        Utils::File::isSysFSEntryValid(tempInput) &&
+        Utils::File::isSysFSEntryValid(tempCrit)))
+    return {};
 
-        auto pwmEnable = path.value() / "pwm1_enable";
-        auto pwm = path.value() / "pwm1";
-        auto tempInput = path.value() / "temp1_input";
-        auto tempCrit = path.value() / "temp1_crit";
-        if (Utils::File::isSysFSEntryValid(pwm) &&
-            Utils::File::isSysFSEntryValid(pwmEnable) &&
-            Utils::File::isSysFSEntryValid(tempInput) &&
-            Utils::File::isSysFSEntryValid(tempCrit)) {
+  int tempCritValue{0};
+  Utils::String::toNumber(tempCritValue,
+                          Utils::File::readFileLines(tempCrit).front());
+  tempCritValue = (tempCritValue > 0 &&
+                   tempCritValue < 150000) // check bogus values, see #103
+                      ? tempCritValue / 1000
+                      : 90;
 
-          int tempCritValue{0};
-          Utils::String::toNumber(tempCritValue,
-                                  Utils::File::readFileLines(tempCrit).front());
-          tempCritValue = (tempCritValue > 0 &&
-                           tempCritValue < 150000) // check bogus values, see #103
-                              ? tempCritValue / 1000
-                              : 90;
+  unsigned int value;
 
-          unsigned int value;
-
-          auto pwmEnableLines = Utils::File::readFileLines(pwmEnable);
-          auto pwmEnableValid = Utils::String::toNumber<unsigned int>(
-              value, pwmEnableLines.front());
-
-          auto pwmLines = Utils::File::readFileLines(pwm);
-          auto pwmValid = Utils::String::toNumber<unsigned int>(
-              value, pwmLines.front());
-
-          int tempInputValue;
-          auto tempInputLines = Utils::File::readFileLines(tempInput);
-          auto tempInputValid = Utils::String::toNumber<int>(
-              tempInputValue, tempInputLines.front());
-
-          if (pwmEnableValid && pwmValid && tempInputValid) {
-
-            controls.emplace_back(std::make_unique<AMD::FanCurve>(
-                std::make_unique<SysFSDataSource<unsigned int>>(
-                    pwmEnable,
-                    [](std::string const &data, unsigned int &output) {
-                      Utils::String::toNumber<unsigned int>(output, data);
-                    }),
-                std::make_unique<SysFSDataSource<unsigned int>>(
-                    pwm,
-                    [](std::string const &data, unsigned int &output) {
-                      Utils::String::toNumber<unsigned int>(output, data);
-                    }),
-                std::make_unique<SysFSDataSource<int>>(
-                    tempInput,
-                    [](std::string const &data, int &output) {
-                      int value;
-                      Utils::String::toNumber<int>(value, data);
-                      output = value / 1000;
-                    }),
-                units::temperature::celsius_t(0),
-                units::temperature::celsius_t(tempCritValue)));
-          }
-          else {
-            if (!pwmEnableValid) {
-              SPDLOG_WARN("Unknown data format on {}", pwmEnable.string());
-              SPDLOG_DEBUG(pwmEnableLines.front());
-            }
-
-            if (!pwmValid) {
-              SPDLOG_WARN("Unknown data format on {}", pwm.string());
-              SPDLOG_DEBUG(pwmLines.front());
-            }
-
-            if (!tempInputValid) {
-              SPDLOG_WARN("Unknown data format on {}", tempInput.string());
-              SPDLOG_DEBUG(tempInputLines.front());
-            }
-          }
-        }
-      }
-    }
+  auto pwmEnableLines = Utils::File::readFileLines(pwmEnable);
+  if (!Utils::String::toNumber<unsigned int>(value, pwmEnableLines.front())) {
+    SPDLOG_WARN("Unknown data format on {}", pwmEnable.string());
+    SPDLOG_DEBUG(pwmEnableLines.front());
+    return {};
   }
+
+  auto pwmLines = Utils::File::readFileLines(pwm);
+  if (!Utils::String::toNumber<unsigned int>(value, pwmLines.front())) {
+    SPDLOG_WARN("Unknown data format on {}", pwm.string());
+    SPDLOG_DEBUG(pwmLines.front());
+    return {};
+  }
+
+  int tempInputValue;
+  auto tempInputLines = Utils::File::readFileLines(tempInput);
+  if (!Utils::String::toNumber<int>(tempInputValue, tempInputLines.front())) {
+    SPDLOG_WARN("Unknown data format on {}", tempInput.string());
+    SPDLOG_DEBUG(tempInputLines.front());
+    return {};
+  }
+
+  controls.emplace_back(std::make_unique<AMD::FanCurve>(
+      std::make_unique<SysFSDataSource<unsigned int>>(
+          pwmEnable,
+          [](std::string const &data, unsigned int &output) {
+            Utils::String::toNumber<unsigned int>(output, data);
+          }),
+      std::make_unique<SysFSDataSource<unsigned int>>(
+          pwm,
+          [](std::string const &data, unsigned int &output) {
+            Utils::String::toNumber<unsigned int>(output, data);
+          }),
+      std::make_unique<SysFSDataSource<int>>(
+          tempInput,
+          [](std::string const &data, int &output) {
+            int value;
+            Utils::String::toNumber<int>(value, data);
+            output = value / 1000;
+          }),
+      units::temperature::celsius_t(0),
+      units::temperature::celsius_t(tempCritValue)));
 
   return controls;
 }

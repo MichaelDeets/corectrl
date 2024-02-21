@@ -20,29 +20,22 @@ std::vector<std::unique_ptr<IControl>>
 AMD::PMVoltOffsetProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                                               ISWInfo const &) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
+  if (!(gpuInfo.vendor() == Vendor::AMD &&
+        gpuInfo.hasCapability(GPUInfoPMOverdrive::VoltOffset)))
+    return {};
 
-  if (gpuInfo.vendor() == Vendor::AMD &&
-      gpuInfo.hasCapability(GPUInfoPMOverdrive::VoltOffset)) {
-
-    auto ppOdClkVolt = gpuInfo.path().sys / "pp_od_clk_voltage";
-    auto ppOdClkVoltLines = Utils::File::readFileLines(ppOdClkVolt);
-
-    auto controlIsValid =
-        Utils::AMD::parseOverdriveVoltOffset(ppOdClkVoltLines).has_value();
-
-    if (controlIsValid) {
-
-      controls.emplace_back(std::make_unique<AMD::PMVoltOffset>(
-          std::make_unique<SysFSDataSource<std::vector<std::string>>>(
-              ppOdClkVolt)));
-    }
-    else {
-      SPDLOG_WARN("Invalid data on {}", ppOdClkVolt.string());
-      for (auto const &line : ppOdClkVoltLines)
-        SPDLOG_DEBUG(line);
-    }
+  auto ppOdClkVolt = gpuInfo.path().sys / "pp_od_clk_voltage";
+  auto ppOdClkVoltLines = Utils::File::readFileLines(ppOdClkVolt);
+  if (!Utils::AMD::parseOverdriveVoltOffset(ppOdClkVoltLines)) {
+    SPDLOG_WARN("Invalid data on {}", ppOdClkVolt.string());
+    for (auto const &line : ppOdClkVoltLines)
+      SPDLOG_DEBUG(line);
+    return {};
   }
+
+  std::vector<std::unique_ptr<IControl>> controls;
+  controls.emplace_back(std::make_unique<AMD::PMVoltOffset>(
+      std::make_unique<SysFSDataSource<std::vector<std::string>>>(ppOdClkVolt)));
 
   return controls;
 }

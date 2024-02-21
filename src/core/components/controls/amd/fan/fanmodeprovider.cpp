@@ -15,22 +15,25 @@ std::vector<std::unique_ptr<IControl>>
 AMD::FanModeProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                                          ISWInfo const &swInfo) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
+  if (gpuInfo.vendor() != Vendor::AMD)
+    return {};
 
-  if (gpuInfo.vendor() == Vendor::AMD) {
-    std::vector<std::unique_ptr<IControl>> modeControls;
+  std::vector<std::unique_ptr<IControl>> modeControls;
 
-    for (auto const &provider : gpuControlProviders()) {
-      auto newControls = provider->provideGPUControls(gpuInfo, swInfo);
-      modeControls.insert(modeControls.end(),
-                          std::make_move_iterator(newControls.begin()),
-                          std::make_move_iterator(newControls.end()));
-    }
-    if (!modeControls.empty()) {
-      modeControls.emplace_back(std::make_unique<Noop>());
-      controls.emplace_back(std::make_unique<FanMode>(std::move(modeControls)));
-    }
+  for (auto const &provider : gpuControlProviders()) {
+    auto newControls = provider->provideGPUControls(gpuInfo, swInfo);
+    modeControls.insert(modeControls.end(),
+                        std::make_move_iterator(newControls.begin()),
+                        std::make_move_iterator(newControls.end()));
   }
+
+  if (modeControls.empty())
+    return {};
+
+  modeControls.emplace_back(std::make_unique<Noop>());
+
+  std::vector<std::unique_ptr<IControl>> controls;
+  controls.emplace_back(std::make_unique<FanMode>(std::move(modeControls)));
 
   return controls;
 }

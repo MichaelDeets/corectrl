@@ -12,7 +12,6 @@ std::vector<std::unique_ptr<IControl>>
 CPUFreqModeProvider::provideCPUControls(ICPUInfo const &cpuInfo,
                                         ISWInfo const &swInfo) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
   std::vector<std::unique_ptr<IControl>> modeControls;
 
   for (auto const &provider : cpuControlProviders()) {
@@ -22,10 +21,13 @@ CPUFreqModeProvider::provideCPUControls(ICPUInfo const &cpuInfo,
                         std::make_move_iterator(newControls.end()));
   }
 
-  if (!modeControls.empty()) {
-    modeControls.emplace_back(std::make_unique<Noop>());
-    controls.emplace_back(std::make_unique<CPUFreqMode>(std::move(modeControls)));
-  }
+  if (modeControls.empty())
+    return {};
+
+  modeControls.emplace_back(std::make_unique<Noop>());
+
+  std::vector<std::unique_ptr<IControl>> controls;
+  controls.emplace_back(std::make_unique<CPUFreqMode>(std::move(modeControls)));
 
   return controls;
 }

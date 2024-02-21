@@ -5,52 +5,44 @@
 
 #include "../pmperfmodeprovider.h"
 #include "common/fileutils.h"
-#include "common/stringutils.h"
 #include "core/info/amd/gpuinfopm.h"
-#include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
 #include "pmfixedlegacy.h"
 #include "pmfixedr600.h"
 #include <filesystem>
 #include <memory>
 #include <string>
-#include <tuple>
 
 std::vector<std::unique_ptr<IControl>>
 AMD::PMFixedProvider::provideGPUControls(IGPUInfo const &gpuInfo,
-                                         ISWInfo const &swInfo) const
+                                         ISWInfo const &) const
 {
   std::vector<std::unique_ptr<IControl>> controls;
 
-  if (gpuInfo.vendor() == Vendor::AMD) {
-    auto kernel =
-        Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
+  if (gpuInfo.vendor() != Vendor::AMD)
+    return {};
 
-    if (gpuInfo.hasCapability(GPUInfoPM::Legacy) &&
-        kernel >= std::make_tuple(3, 0, 0)) {
+  if (gpuInfo.hasCapability(GPUInfoPM::Legacy)) {
 
-      auto powerMethod = gpuInfo.path().sys / "power_method";
-      auto powerProfile = gpuInfo.path().sys / "power_profile";
-      if (Utils::File::isSysFSEntryValid(powerMethod) &&
-          Utils::File::isSysFSEntryValid(powerProfile)) {
+    auto powerMethod = gpuInfo.path().sys / "power_method";
+    auto powerProfile = gpuInfo.path().sys / "power_profile";
+    if (!(Utils::File::isSysFSEntryValid(powerMethod) &&
+          Utils::File::isSysFSEntryValid(powerProfile)))
+      return {};
 
-        controls.emplace_back(std::make_unique<AMD::PMFixedLegacy>(
-            std::make_unique<SysFSDataSource<std::string>>(powerMethod),
-            std::make_unique<SysFSDataSource<std::string>>(powerProfile)));
-      }
-    }
-    else if ((gpuInfo.hasCapability(GPUInfoPM::Radeon) &&
-              kernel >= std::make_tuple(3, 11, 0)) ||
-             (gpuInfo.hasCapability(GPUInfoPM::Amdgpu) &&
-              kernel >= std::make_tuple(4, 2, 0))) {
+    controls.emplace_back(std::make_unique<AMD::PMFixedLegacy>(
+        std::make_unique<SysFSDataSource<std::string>>(powerMethod),
+        std::make_unique<SysFSDataSource<std::string>>(powerProfile)));
+  }
+  else if (gpuInfo.hasCapability(GPUInfoPM::Radeon) ||
+           gpuInfo.hasCapability(GPUInfoPM::Amdgpu)) {
 
-      auto perfLevel = gpuInfo.path().sys / "power_dpm_force_performance_level";
-      if (Utils::File::isSysFSEntryValid(perfLevel)) {
+    auto perfLevel = gpuInfo.path().sys / "power_dpm_force_performance_level";
+    if (!Utils::File::isSysFSEntryValid(perfLevel))
+      return {};
 
-        controls.emplace_back(std::make_unique<AMD::PMFixedR600>(
-            std::make_unique<SysFSDataSource<std::string>>(perfLevel)));
-      }
-    }
+    controls.emplace_back(std::make_unique<AMD::PMFixedR600>(
+        std::make_unique<SysFSDataSource<std::string>>(perfLevel)));
   }
 
   return controls;

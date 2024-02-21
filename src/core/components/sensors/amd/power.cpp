@@ -22,7 +22,6 @@
 #include <memory>
 #include <optional>
 #include <string>
-#include <tuple>
 #include <units.h>
 #include <utility>
 #include <vector>
@@ -35,11 +34,8 @@ class Provider final : public IGPUSensorProvider::IProvider
   std::vector<std::unique_ptr<ISensor>>
   provideGPUSensors(IGPUInfo const &gpuInfo, ISWInfo const &) const override
   {
-    std::vector<std::unique_ptr<ISensor>> sensors;
-
-    auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
-    if (!(gpuInfo.vendor() == Vendor::AMD && driver == "amdgpu"))
-      return sensors;
+    if (gpuInfo.vendor() != Vendor::AMD)
+      return {};
 
     std::optional<std::vector<std::unique_ptr<IDataSource<unsigned int>>>> dataSource;
     std::optional<std::pair<units::power::microwatt_t, units::power::microwatt_t>>
@@ -47,20 +43,22 @@ class Provider final : public IGPUSensorProvider::IProvider
 
     auto hwmonPath =
         Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
-    if (hwmonPath.has_value()) {
+    if (hwmonPath) {
       range = getRange(*hwmonPath);
       dataSource = createHWMonDataSource(*hwmonPath);
     }
 
     // The hwmon data source is not available. Try the ioctl data source.
-    if (!dataSource.has_value())
+    if (!dataSource)
       dataSource = createIOCtlDataSource(gpuInfo);
 
-    if (dataSource.has_value()) {
-      sensors.emplace_back(
-          std::make_unique<Sensor<units::power::watt_t, unsigned int>>(
-              AMD::Power::ItemID, std::move(*dataSource), std::move(range)));
-    }
+    if (!dataSource)
+      return {};
+
+    std::vector<std::unique_ptr<ISensor>> sensors;
+    sensors.emplace_back(
+        std::make_unique<Sensor<units::power::watt_t, unsigned int>>(
+            AMD::Power::ItemID, std::move(*dataSource), std::move(range)));
 
     return sensors;
   }

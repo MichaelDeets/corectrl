@@ -5,54 +5,47 @@
 
 #include "../pmadvancedprovider.h"
 #include "common/fileutils.h"
-#include "common/stringutils.h"
 #include "core/components/amdutils.h"
 #include "core/info/igpuinfo.h"
-#include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
 #include "pmpowerprofile.h"
 #include <filesystem>
 #include <memory>
 #include <spdlog/spdlog.h>
 #include <string>
-#include <tuple>
 #include <vector>
 
 std::vector<std::unique_ptr<IControl>>
 AMD::PMPowerProfileProvider::provideGPUControls(IGPUInfo const &gpuInfo,
-                                                ISWInfo const &swInfo) const
+                                                ISWInfo const &) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
+  if (gpuInfo.vendor() != Vendor::AMD)
+    return {};
 
-  if (gpuInfo.vendor() == Vendor::AMD) {
-    auto kernel =
-        Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
-    auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
+  auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
+  if (driver != "amdgpu")
+    return {};
 
-    if (driver == "amdgpu" && kernel >= std::make_tuple(4, 18, 0)) {
+  auto perfLevel = gpuInfo.path().sys / "power_dpm_force_performance_level";
+  auto profileMode = gpuInfo.path().sys / "pp_power_profile_mode";
+  if (!(Utils::File::isSysFSEntryValid(perfLevel) &&
+        Utils::File::isSysFSEntryValid(profileMode)))
+    return {};
 
-      auto perfLevel = gpuInfo.path().sys / "power_dpm_force_performance_level";
-      auto profileMode = gpuInfo.path().sys / "pp_power_profile_mode";
-      if (Utils::File::isSysFSEntryValid(perfLevel) &&
-          Utils::File::isSysFSEntryValid(profileMode)) {
-
-        auto modeLines = Utils::File::readFileLines(profileMode);
-        auto modes = Utils::AMD::parsePowerProfileModeModes(modeLines);
-
-        if (modes.has_value())
-          controls.emplace_back(std::make_unique<AMD::PMPowerProfile>(
-              std::make_unique<SysFSDataSource<std::string>>(perfLevel),
-              std::make_unique<SysFSDataSource<std::vector<std::string>>>(
-                  profileMode),
-              modes.value()));
-        else {
-          SPDLOG_WARN("Unknown data format on {}", profileMode.string());
-          for (auto const &line : modeLines)
-            SPDLOG_DEBUG(line);
-        }
-      }
-    }
+  auto modeLines = Utils::File::readFileLines(profileMode);
+  auto modes = Utils::AMD::parsePowerProfileModeModes(modeLines);
+  if (!modes) {
+    SPDLOG_WARN("Unknown data format on {}", profileMode.string());
+    for (auto const &line : modeLines)
+      SPDLOG_DEBUG(line);
+    return {};
   }
+
+  std::vector<std::unique_ptr<IControl>> controls;
+  controls.emplace_back(std::make_unique<AMD::PMPowerProfile>(
+      std::make_unique<SysFSDataSource<std::string>>(perfLevel),
+      std::make_unique<SysFSDataSource<std::vector<std::string>>>(profileMode),
+      modes.value()));
 
   return controls;
 }

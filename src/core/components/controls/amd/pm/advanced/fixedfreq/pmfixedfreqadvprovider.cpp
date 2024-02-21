@@ -23,62 +23,55 @@ std::vector<std::unique_ptr<IControl>>
 AMD::PMFixedFreqAdvProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                                                 ISWInfo const &swInfo) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
+  if (gpuInfo.vendor() != Vendor::AMD)
+    return {};
 
-  if (gpuInfo.vendor() == Vendor::AMD) {
-    auto kernel =
-        Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
-    auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
+  auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
+  if (driver != "amdgpu")
+    return {};
 
-    auto ppOdClkVolt = gpuInfo.path().sys / "pp_od_clk_voltage";
-    if (driver == "amdgpu" && ((kernel >= std::make_tuple(4, 6, 0) &&
-                                kernel < std::make_tuple(4, 8, 0)) ||
-                               (kernel >= std::make_tuple(4, 17, 0) &&
-                                kernel < std::make_tuple(4, 18, 0)) ||
-                               (kernel >= std::make_tuple(4, 18, 0) &&
-                                !Utils::File::isSysFSEntryValid(ppOdClkVolt)))) {
+  auto ppOdClkVolt = gpuInfo.path().sys / "pp_od_clk_voltage";
+  auto kernel =
+      Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
+  if (!((kernel >= std::make_tuple(4, 6, 0) && kernel < std::make_tuple(4, 8, 0)) ||
+        (kernel >= std::make_tuple(4, 17, 0) &&
+         kernel < std::make_tuple(4, 18, 0)) ||
+        (kernel >= std::make_tuple(4, 18, 0) &&
+         !Utils::File::isSysFSEntryValid(ppOdClkVolt))))
+    return {};
 
-      auto perfLevel = gpuInfo.path().sys / "power_dpm_force_performance_level";
-      auto dpmSclk = gpuInfo.path().sys / "pp_dpm_sclk";
-      auto dpmMclk = gpuInfo.path().sys / "pp_dpm_mclk";
-      if (Utils::File::isSysFSEntryValid(perfLevel) &&
-          Utils::File::isSysFSEntryValid(dpmSclk) &&
-          Utils::File::isSysFSEntryValid(dpmMclk)) {
+  auto perfLevel = gpuInfo.path().sys / "power_dpm_force_performance_level";
+  auto dpmSclk = gpuInfo.path().sys / "pp_dpm_sclk";
+  auto dpmMclk = gpuInfo.path().sys / "pp_dpm_mclk";
+  if (!(Utils::File::isSysFSEntryValid(perfLevel) &&
+        Utils::File::isSysFSEntryValid(dpmSclk) &&
+        Utils::File::isSysFSEntryValid(dpmMclk)))
+    return {};
 
-        auto dpmSclkLines = Utils::File::readFileLines(dpmSclk);
-        auto dpmSclkValid = Utils::AMD::parseDPMStates(dpmSclkLines).has_value();
-
-        auto dpmMclkLines = Utils::File::readFileLines(dpmMclk);
-        auto dpmMclkValid = Utils::AMD::parseDPMStates(dpmMclkLines).has_value();
-
-        if (dpmSclkValid && dpmMclkValid) {
-
-          controls.emplace_back(std::make_unique<AMD::PMFixedFreq>(
-              std::make_unique<PpDpmHandler>(
-                  std::make_unique<SysFSDataSource<std::string>>(perfLevel),
-                  std::make_unique<SysFSDataSource<std::vector<std::string>>>(
-                      dpmSclk)),
-              std::make_unique<PpDpmHandler>(
-                  std::make_unique<SysFSDataSource<std::string>>(perfLevel),
-                  std::make_unique<SysFSDataSource<std::vector<std::string>>>(
-                      dpmMclk))));
-        }
-        else {
-          if (!dpmSclkValid) {
-            SPDLOG_WARN("Unknown data format on {}", dpmSclk.string());
-            for (auto const &line : dpmSclkLines)
-              SPDLOG_DEBUG(line);
-          }
-
-          if (!dpmMclkValid) {
-            SPDLOG_WARN("Unknown data format on {}", dpmMclk.string());
-            for (auto const &line : dpmMclkLines)
-              SPDLOG_DEBUG(line);
-          }
-        }
-      }
-    }
+  auto dpmSclkLines = Utils::File::readFileLines(dpmSclk);
+  if (!Utils::AMD::parseDPMStates(dpmSclkLines)) {
+    SPDLOG_WARN("Unknown data format on {}", dpmSclk.string());
+    for (auto const &line : dpmSclkLines)
+      SPDLOG_DEBUG(line);
+    return {};
   }
+
+  auto dpmMclkLines = Utils::File::readFileLines(dpmMclk);
+  if (!Utils::AMD::parseDPMStates(dpmMclkLines)) {
+    SPDLOG_WARN("Unknown data format on {}", dpmMclk.string());
+    for (auto const &line : dpmMclkLines)
+      SPDLOG_DEBUG(line);
+    return {};
+  }
+
+  std::vector<std::unique_ptr<IControl>> controls;
+  controls.emplace_back(std::make_unique<AMD::PMFixedFreq>(
+      std::make_unique<PpDpmHandler>(
+          std::make_unique<SysFSDataSource<std::string>>(perfLevel),
+          std::make_unique<SysFSDataSource<std::vector<std::string>>>(dpmSclk)),
+      std::make_unique<PpDpmHandler>(
+          std::make_unique<SysFSDataSource<std::string>>(perfLevel),
+          std::make_unique<SysFSDataSource<std::vector<std::string>>>(dpmMclk))));
 
   return controls;
 }

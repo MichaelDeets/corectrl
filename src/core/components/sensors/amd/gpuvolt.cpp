@@ -9,9 +9,7 @@
 #include "../sensor.h"
 #include "common/fileutils.h"
 #include "common/stringutils.h"
-#include "core/components/amdutils.h"
 #include "core/info/igpuinfo.h"
-#include "core/info/iswinfo.h"
 #include "core/info/vendor.h"
 #include "core/iprofilepart.h"
 #include "core/iprofilepartxmlparser.h"
@@ -23,7 +21,6 @@
 #include <optional>
 #include <spdlog/spdlog.h>
 #include <string>
-#include <tuple>
 #include <units.h>
 #include <utility>
 #include <vector>
@@ -34,54 +31,41 @@ class Provider final : public IGPUSensorProvider::IProvider
 {
  public:
   std::vector<std::unique_ptr<ISensor>>
-  provideGPUSensors(IGPUInfo const &gpuInfo, ISWInfo const &swInfo) const override
+  provideGPUSensors(IGPUInfo const &gpuInfo, ISWInfo const &) const override
   {
-    std::vector<std::unique_ptr<ISensor>> sensors;
+    if (gpuInfo.vendor() != Vendor::AMD)
+      return {};
 
-    if (gpuInfo.vendor() == Vendor::AMD) {
-      auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
-      auto kernel = Utils::String::parseVersion(
-          swInfo.info(ISWInfo::Keys::kernelVersion));
+    auto path = Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
+    if (!path.has_value())
+      return {};
 
-      if ((driver == "amdgpu" && kernel >= std::make_tuple(4, 1, 7)) ||
-          (driver == "radeon" && kernel >= std::make_tuple(5, 1, 1))) {
+    auto voltInput = path.value() / "in0_input";
+    if (!Utils::File::isSysFSEntryValid(voltInput))
+      return {};
 
-        auto path =
-            Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
-        if (path.has_value()) {
-
-          auto voltInput = path.value() / "in0_input";
-          if (Utils::File::isSysFSEntryValid(voltInput)) {
-
-            int value;
-            auto voltInputLines = Utils::File::readFileLines(voltInput);
-
-            if (Utils::String::toNumber<int>(value, voltInputLines.front())) {
-
-              // auto scaling range
-              std::optional<std::pair<units::voltage::millivolt_t,
-                                      units::voltage::millivolt_t>>
-                  range;
-
-              std::vector<std::unique_ptr<IDataSource<int>>> dataSources;
-              dataSources.emplace_back(std::make_unique<SysFSDataSource<int>>(
-                  voltInput, [](std::string const &data, int &output) {
-                    Utils::String::toNumber<int>(output, data);
-                  }));
-
-              sensors.emplace_back(
-                  std::make_unique<Sensor<units::voltage::millivolt_t, int>>(
-                      AMD::GPUVolt::ItemID, std::move(dataSources),
-                      std::move(range)));
-            }
-            else {
-              SPDLOG_WARN("Unknown data format on {}", voltInput.string());
-              SPDLOG_DEBUG(voltInputLines.front());
-            }
-          }
-        }
-      }
+    int value;
+    auto voltInputLines = Utils::File::readFileLines(voltInput);
+    if (!Utils::String::toNumber<int>(value, voltInputLines.front())) {
+      SPDLOG_WARN("Unknown data format on {}", voltInput.string());
+      SPDLOG_DEBUG(voltInputLines.front());
+      return {};
     }
+
+    // auto scaling range
+    std::optional<std::pair<units::voltage::millivolt_t, units::voltage::millivolt_t>>
+        range;
+
+    std::vector<std::unique_ptr<IDataSource<int>>> dataSources;
+    dataSources.emplace_back(std::make_unique<SysFSDataSource<int>>(
+        voltInput, [](std::string const &data, int &output) {
+          Utils::String::toNumber<int>(output, data);
+        }));
+
+    std::vector<std::unique_ptr<ISensor>> sensors;
+    sensors.emplace_back(
+        std::make_unique<Sensor<units::voltage::millivolt_t, int>>(
+            AMD::GPUVolt::ItemID, std::move(dataSources), std::move(range)));
 
     return sensors;
   }

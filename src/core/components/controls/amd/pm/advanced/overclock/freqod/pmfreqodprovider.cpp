@@ -22,83 +22,74 @@ std::vector<std::unique_ptr<IControl>>
 AMD::PMFreqOdProvider::provideGPUControls(IGPUInfo const &gpuInfo,
                                           ISWInfo const &swInfo) const
 {
-  std::vector<std::unique_ptr<IControl>> controls;
+  if (gpuInfo.vendor() != Vendor::AMD)
+    return {};
 
-  if (gpuInfo.vendor() == Vendor::AMD) {
-    auto kernel =
-        Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
-    auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
+  auto kernel =
+      Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
+  auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
 
-    if (driver == "amdgpu" && (kernel >= std::make_tuple(4, 8, 0) &&
-                               kernel < std::make_tuple(4, 17, 0))) {
+  if (!(driver == "amdgpu" && (kernel >= std::make_tuple(4, 8, 0) &&
+                               kernel < std::make_tuple(4, 17, 0))))
+    return {};
 
-      auto sclkOd = gpuInfo.path().sys / "pp_sclk_od";
-      auto mclkOd = gpuInfo.path().sys / "pp_mclk_od";
-      auto dpmSclk = gpuInfo.path().sys / "pp_dpm_sclk";
-      auto dpmMclk = gpuInfo.path().sys / "pp_dpm_mclk";
-      if (Utils::File::isSysFSEntryValid(sclkOd) &&
-          Utils::File::isSysFSEntryValid(mclkOd) &&
-          Utils::File::isSysFSEntryValid(dpmSclk) &&
-          Utils::File::isSysFSEntryValid(dpmMclk)) {
+  auto sclkOd = gpuInfo.path().sys / "pp_sclk_od";
+  auto mclkOd = gpuInfo.path().sys / "pp_mclk_od";
+  auto dpmSclk = gpuInfo.path().sys / "pp_dpm_sclk";
+  auto dpmMclk = gpuInfo.path().sys / "pp_dpm_mclk";
+  if (!(Utils::File::isSysFSEntryValid(sclkOd) &&
+        Utils::File::isSysFSEntryValid(mclkOd) &&
+        Utils::File::isSysFSEntryValid(dpmSclk) &&
+        Utils::File::isSysFSEntryValid(dpmMclk)))
+    return {};
 
-        unsigned int odValue;
+  unsigned int odValue;
 
-        auto sclkOdLines = Utils::File::readFileLines(sclkOd);
-        auto sclkOdValid = Utils::String::toNumber<unsigned int>(
-            odValue, sclkOdLines.front());
-
-        auto mclkOdLines = Utils::File::readFileLines(mclkOd);
-        auto mclkOdValid = Utils::String::toNumber<unsigned int>(
-            odValue, mclkOdLines.front());
-
-        auto dpmSclkLines = Utils::File::readFileLines(dpmSclk);
-        auto sclkStates = Utils::AMD::parseDPMStates(dpmSclkLines);
-
-        auto dpmMclkLines = Utils::File::readFileLines(dpmMclk);
-        auto mclkStates = Utils::AMD::parseDPMStates(dpmMclkLines);
-
-        if (sclkOdValid && mclkOdValid && sclkStates.has_value() &&
-            mclkStates.has_value()) {
-
-          controls.emplace_back(std::make_unique<AMD::PMFreqOd>(
-              std::make_unique<SysFSDataSource<unsigned int>>(
-                  sclkOd,
-                  [](std::string const &data, unsigned int &output) {
-                    Utils::String::toNumber<unsigned int>(output, data);
-                  }),
-              std::make_unique<SysFSDataSource<unsigned int>>(
-                  mclkOd,
-                  [](std::string const &data, unsigned int &output) {
-                    Utils::String::toNumber<unsigned int>(output, data);
-                  }),
-              sclkStates.value(), mclkStates.value()));
-        }
-        else {
-          if (!sclkOdValid) {
-            SPDLOG_WARN("Unknown data format on {}", sclkOd.string());
-            SPDLOG_DEBUG(sclkOdLines.front());
-          }
-
-          if (!mclkOdValid) {
-            SPDLOG_WARN("Unknown data format on {}", mclkOd.string());
-            SPDLOG_DEBUG(mclkOdLines.front());
-          }
-
-          if (!sclkStates.has_value()) {
-            SPDLOG_WARN("Unknown data format on {}", dpmSclk.string());
-            for (auto const &line : dpmSclkLines)
-              SPDLOG_DEBUG(line);
-          }
-
-          if (!mclkStates.has_value()) {
-            SPDLOG_WARN("Unknown data format on {}", dpmMclk.string());
-            for (auto const &line : dpmMclkLines)
-              SPDLOG_DEBUG(line);
-          }
-        }
-      }
-    }
+  auto sclkOdLines = Utils::File::readFileLines(sclkOd);
+  if (!Utils::String::toNumber<unsigned int>(odValue, sclkOdLines.front())) {
+    SPDLOG_WARN("Unknown data format on {}", sclkOd.string());
+    SPDLOG_DEBUG(sclkOdLines.front());
+    return {};
   }
+
+  auto mclkOdLines = Utils::File::readFileLines(mclkOd);
+  if (!Utils::String::toNumber<unsigned int>(odValue, mclkOdLines.front())) {
+    SPDLOG_WARN("Unknown data format on {}", mclkOd.string());
+    SPDLOG_DEBUG(mclkOdLines.front());
+    return {};
+  }
+
+  auto dpmSclkLines = Utils::File::readFileLines(dpmSclk);
+  auto sclkStates = Utils::AMD::parseDPMStates(dpmSclkLines);
+  if (!sclkStates) {
+    SPDLOG_WARN("Unknown data format on {}", dpmSclk.string());
+    for (auto const &line : dpmSclkLines)
+      SPDLOG_DEBUG(line);
+    return {};
+  }
+
+  auto dpmMclkLines = Utils::File::readFileLines(dpmMclk);
+  auto mclkStates = Utils::AMD::parseDPMStates(dpmMclkLines);
+  if (!mclkStates) {
+    SPDLOG_WARN("Unknown data format on {}", dpmMclk.string());
+    for (auto const &line : dpmMclkLines)
+      SPDLOG_DEBUG(line);
+    return {};
+  }
+
+  std::vector<std::unique_ptr<IControl>> controls;
+  controls.emplace_back(std::make_unique<AMD::PMFreqOd>(
+      std::make_unique<SysFSDataSource<unsigned int>>(
+          sclkOd,
+          [](std::string const &data, unsigned int &output) {
+            Utils::String::toNumber<unsigned int>(output, data);
+          }),
+      std::make_unique<SysFSDataSource<unsigned int>>(
+          mclkOd,
+          [](std::string const &data, unsigned int &output) {
+            Utils::String::toNumber<unsigned int>(output, data);
+          }),
+      sclkStates.value(), mclkStates.value()));
 
   return controls;
 }

@@ -35,57 +35,55 @@ class Provider final : public ICPUSensorProvider::IProvider
   std::vector<std::unique_ptr<ISensor>>
   provideCPUSensors(ICPUInfo const &cpuInfo, ISWInfo const &) const override
   {
-    std::vector<std::unique_ptr<ISensor>> sensors;
     auto hwmonPath = std::format("/sys/devices/platform/coretemp.{}/hwmon",
                                  cpuInfo.physicalId());
     auto path = Utils::File::findHWMonXDirectory(hwmonPath);
-    if (path.has_value()) {
+    if (!path)
+      return {};
 
-      std::optional<
-          std::pair<units::temperature::celsius_t, units::temperature::celsius_t>>
-          range;
+    std::optional<
+        std::pair<units::temperature::celsius_t, units::temperature::celsius_t>>
+        range;
 
-      auto critFilePath = path.value() / "temp1_crit";
-      if (Utils::File::isFilePathValid(critFilePath)) {
+    auto critFilePath = path.value() / "temp1_crit";
+    if (Utils::File::isFilePathValid(critFilePath)) {
 
-        auto data = Utils::File::readFileLines(critFilePath);
-        if (!data.empty()) {
-          int value;
-          if (Utils::String::toNumber<int>(value, data.front()) &&
-              // do not use bogus values, see #103
-              (value >= 0 && value < 150000)) {
-            range = {units::temperature::celsius_t(0),
-                     units::temperature::celsius_t(value / 1000)};
-          }
-        }
-      }
-
-      auto tempInput = path.value() / "temp1_input";
-      if (Utils::File::isSysFSEntryValid(tempInput)) {
-
+      auto data = Utils::File::readFileLines(critFilePath);
+      if (!data.empty()) {
         int value;
-        auto tempInputLines = Utils::File::readFileLines(tempInput);
-
-        if (Utils::String::toNumber<int>(value, tempInputLines.front())) {
-
-          std::vector<std::unique_ptr<IDataSource<int>>> dataSources;
-          dataSources.emplace_back(std::make_unique<SysFSDataSource<int>>(
-              tempInput, [](std::string const &data, int &output) {
-                int value;
-                Utils::String::toNumber<int>(value, data);
-                output = value / 1000;
-              }));
-
-          sensors.emplace_back(
-              std::make_unique<Sensor<units::temperature::celsius_t, int>>(
-                  CPUCoreTemp::ItemID, std::move(dataSources), std::move(range)));
-        }
-        else {
-          SPDLOG_WARN("Unknown data format on {}", tempInput.string());
-          SPDLOG_DEBUG(tempInputLines.front());
+        if (Utils::String::toNumber<int>(value, data.front()) &&
+            // do not use bogus values, see #103
+            (value >= 0 && value < 150000)) {
+          range = {units::temperature::celsius_t(0),
+                   units::temperature::celsius_t(value / 1000.0)};
         }
       }
     }
+
+    auto tempInput = path.value() / "temp1_input";
+    if (!Utils::File::isSysFSEntryValid(tempInput))
+      return {};
+
+    int value;
+    auto tempInputLines = Utils::File::readFileLines(tempInput);
+    if (!Utils::String::toNumber<int>(value, tempInputLines.front())) {
+      SPDLOG_WARN("Unknown data format on {}", tempInput.string());
+      SPDLOG_DEBUG(tempInputLines.front());
+      return {};
+    }
+
+    std::vector<std::unique_ptr<IDataSource<int>>> dataSources;
+    dataSources.emplace_back(std::make_unique<SysFSDataSource<int>>(
+        tempInput, [](std::string const &data, int &output) {
+          int value;
+          Utils::String::toNumber<int>(value, data);
+          output = value / 1000;
+        }));
+
+    std::vector<std::unique_ptr<ISensor>> sensors;
+    sensors.emplace_back(
+        std::make_unique<Sensor<units::temperature::celsius_t, int>>(
+            CPUCoreTemp::ItemID, std::move(dataSources), std::move(range)));
 
     return sensors;
   }

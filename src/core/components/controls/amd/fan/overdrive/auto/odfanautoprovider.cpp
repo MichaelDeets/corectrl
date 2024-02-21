@@ -21,19 +21,19 @@ AMD::OdFanAutoProvider::provideGPUControls(IGPUInfo const &gpuInfo,
 
   if (!(gpuInfo.vendor() == Vendor::AMD &&
         gpuInfo.hasCapability(GPUInfoOdFanCtrl::ID)))
-    return controls;
+    return {};
 
   // Attempt to create a data source from one of the overdrive fan controls that
   // triggers the auto fan mode.
   auto dataSource = createOdFanTargetTempDataSource(gpuInfo);
-  if (!dataSource.has_value())
+  if (!dataSource)
     dataSource = createOdFanMinPWMDataSource(gpuInfo);
-  if (!dataSource.has_value())
+  if (!dataSource)
     dataSource = createOdFanAcousticTargetDataSource(gpuInfo);
-  if (!dataSource.has_value())
+  if (!dataSource)
     dataSource = createOdFanAcousticLimitDataSource(gpuInfo);
 
-  if (dataSource.has_value())
+  if (dataSource)
     controls.emplace_back(
         std::make_unique<AMD::OdFanAuto>(std::move(*dataSource)));
 

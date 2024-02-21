@@ -10,7 +10,6 @@
 #include "common/fileutils.h"
 #include "common/stringutils.h"
 #include "core/info/igpuinfo.h"
-#include "core/info/iswinfo.h"
 #include "core/info/vendor.h"
 #include "core/iprofilepart.h"
 #include "core/iprofilepartxmlparser.h"
@@ -22,7 +21,6 @@
 #include <optional>
 #include <spdlog/spdlog.h>
 #include <string>
-#include <tuple>
 #include <units.h>
 #include <utility>
 #include <vector>
@@ -43,51 +41,47 @@ class Provider final : public IGPUSensorProvider::IProvider
   std::vector<std::unique_ptr<ISensor>>
   provideGPUSensors(IGPUInfo const &gpuInfo, ISWInfo const &) const override
   {
-    std::vector<std::unique_ptr<ISensor>> sensors;
+    if (gpuInfo.vendor() != Vendor::AMD)
+      return {};
 
-    if (gpuInfo.vendor() == Vendor::AMD) {
+    auto path = Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
+    if (!path)
+      return {};
 
-      auto path =
-          Utils::File::findHWMonXDirectory(gpuInfo.path().sys / "hwmon");
-      if (path.has_value()) {
+    unsigned int value;
 
-        auto pwm = path.value() / "pwm1";
-        if (Utils::File::isSysFSEntryValid(pwm)) {
+    // When available, prefer fanspeedrpm sensor over this one
+    auto fanInput = path.value() / "fan1_input";
+    if (Utils::File::isSysFSEntryValid(fanInput) &&
+        Utils::String::toNumber<unsigned int>(
+            value, Utils::File::readFileLines(fanInput).front()))
+      return {};
 
-          unsigned int value;
-          auto fileLines = Utils::File::readFileLines(pwm);
-          if (Utils::String::toNumber<unsigned int>(value, fileLines.front())) {
+    auto pwm = path.value() / "pwm1";
+    if (!Utils::File::isSysFSEntryValid(pwm))
+      return {};
 
-            // When available, prefer fanspeedrpm sensor over this one
-            auto fanInput = path.value() / "fan1_input";
-            if (!(Utils::File::isSysFSEntryValid(fanInput) &&
-                  Utils::String::toNumber<unsigned int>(
-                      value, Utils::File::readFileLines(fanInput).front()))) {
-
-              std::vector<std::unique_ptr<IDataSource<unsigned int>>> dataSources;
-              dataSources.emplace_back(
-                  std::make_unique<SysFSDataSource<unsigned int>>(
-                      pwm, [](std::string const &data, unsigned int &output) {
-                        unsigned int value;
-                        Utils::String::toNumber<unsigned int>(value, data);
-                        output = value / 2.55;
-                      }));
-
-              sensors.emplace_back(
-                  std::make_unique<
-                      Sensor<units::dimensionless::scalar_t, unsigned int>>(
-                      AMD::FanSpeedPerc::ItemID, std::move(dataSources),
-                      std::make_pair(units::dimensionless::scalar_t(0),
-                                     units::dimensionless::scalar_t(100))));
-            }
-          }
-          else {
-            SPDLOG_WARN("Unknown data format on {}", pwm.string());
-            SPDLOG_DEBUG(fileLines.front());
-          }
-        }
-      }
+    auto fileLines = Utils::File::readFileLines(pwm);
+    if (!Utils::String::toNumber<unsigned int>(value, fileLines.front())) {
+      SPDLOG_WARN("Unknown data format on {}", pwm.string());
+      SPDLOG_DEBUG(fileLines.front());
+      return {};
     }
+
+    std::vector<std::unique_ptr<IDataSource<unsigned int>>> dataSources;
+    dataSources.emplace_back(std::make_unique<SysFSDataSource<unsigned int>>(
+        pwm, [](std::string const &data, unsigned int &output) {
+          unsigned int value;
+          Utils::String::toNumber<unsigned int>(value, data);
+          output = value / 2.55;
+        }));
+
+    std::vector<std::unique_ptr<ISensor>> sensors;
+    sensors.emplace_back(
+        std::make_unique<Sensor<units::dimensionless::scalar_t, unsigned int>>(
+            AMD::FanSpeedPerc::ItemID, std::move(dataSources),
+            std::make_pair(units::dimensionless::scalar_t(0),
+                           units::dimensionless::scalar_t(100))));
 
     return sensors;
   }
