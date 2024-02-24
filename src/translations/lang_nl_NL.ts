@@ -304,21 +304,16 @@
     </message>
     <message>
         <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="19"/>
-        <source>userspace</source>
-        <translation>Userspace</translation>
-    </message>
-    <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="20"/>
         <source>schedutil</source>
         <translation>Schedutil</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="20"/>
         <source>ondemand</source>
         <translation>ondemand</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="22"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
         <source>conservative</source>
         <translation>conservative</translation>
     </message>

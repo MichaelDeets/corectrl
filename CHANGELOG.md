@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Bundled version of easyloggingpp.
 - Bundled version of pugixml.
 - fmt library dependency.
+- Unimplemented custom frequency option from CPU performance scaling governor control (#175).
 
 
 ## CoreCtrl 1.3.10 (2024-02-04)

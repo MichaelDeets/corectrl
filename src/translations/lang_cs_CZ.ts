@@ -304,21 +304,16 @@
     </message>
     <message>
         <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="19"/>
-        <source>userspace</source>
-        <translation>Uživateslký prostor</translation>
-    </message>
-    <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="20"/>
         <source>schedutil</source>
         <translation>Použití procesoru</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="20"/>
         <source>ondemand</source>
         <translation>Na vyžádání</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="22"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
         <source>conservative</source>
         <translation>Konzervativní</translation>
     </message>

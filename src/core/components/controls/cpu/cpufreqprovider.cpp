@@ -53,7 +53,12 @@ CPUFreqProvider::availableGovernors(ICPUInfo const &cpuInfo) const
     return {};
 
   auto lines = Utils::File::readFileLines(unitAvailableGovernorsPath);
-  return Utils::String::split(lines.front());
+  auto governors = Utils::String::split(lines.front());
+
+  // remove not implemented userspace option (see #175)
+  std::erase(governors, "userspace");
+
+  return governors;
 }
 
 std::string CPUFreqProvider::defatultGovernor(

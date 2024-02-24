@@ -304,21 +304,16 @@
     </message>
     <message>
         <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="19"/>
-        <source>userspace</source>
-        <translation>Fréquence personnalisée</translation>
-    </message>
-    <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="20"/>
         <source>schedutil</source>
         <translation>En fonction de l&apos;utilisation du CPU</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="20"/>
         <source>ondemand</source>
         <translation>À la demande</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="22"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
         <source>conservative</source>
         <translation>Conservateur</translation>
     </message>

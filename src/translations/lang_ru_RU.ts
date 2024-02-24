@@ -304,21 +304,16 @@
     </message>
     <message>
         <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="19"/>
-        <source>userspace</source>
-        <translation>Своя частота</translation>
-    </message>
-    <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="20"/>
         <source>schedutil</source>
         <translation>Использование CPU</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="20"/>
         <source>ondemand</source>
         <translation>По требованию</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="22"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
         <source>conservative</source>
         <translation>Консервативный</translation>
     </message>

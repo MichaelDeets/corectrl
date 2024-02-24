@@ -16,7 +16,6 @@ char const *const CPUFreqQMLItem::trStrings[] = {
     // XXX add cpufreq scaling governors here
     QT_TRANSLATE_NOOP("CPUFreqQMLItem", "performance"),
     QT_TRANSLATE_NOOP("CPUFreqQMLItem", "powersave"),
-    QT_TRANSLATE_NOOP("CPUFreqQMLItem", "userspace"),
     QT_TRANSLATE_NOOP("CPUFreqQMLItem", "schedutil"),
     QT_TRANSLATE_NOOP("CPUFreqQMLItem", "ondemand"),
     QT_TRANSLATE_NOOP("CPUFreqQMLItem", "conservative"),

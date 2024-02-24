@@ -304,21 +304,16 @@
     </message>
     <message>
         <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="19"/>
-        <source>userspace</source>
-        <translation>Anpassad frekvens</translation>
-    </message>
-    <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="20"/>
         <source>schedutil</source>
         <translation>CPU användande</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="20"/>
         <source>ondemand</source>
         <translation>Vid behov</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="22"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
         <source>conservative</source>
         <translation>Konservativ</translation>
     </message>
