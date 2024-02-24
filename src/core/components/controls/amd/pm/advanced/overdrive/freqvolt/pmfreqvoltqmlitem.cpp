@@ -148,10 +148,7 @@ void AMD::PMFreqVoltQMLItem::changeActiveState(int index, bool activate)
       }
     }
     else {
-      activeStates_.erase(std::remove(activeStates_.begin(), activeStates_.end(),
-                                      static_cast<unsigned int>(index)),
-                          activeStates_.end());
-
+      std::erase(activeStates_, static_cast<unsigned int>(index));
       emit activeStatesChanged(activeStatesIndices(activeStates_));
       emit settingsChanged();
     }

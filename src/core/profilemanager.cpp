@@ -32,8 +32,7 @@ void ProfileManager::removeObserver(
     std::shared_ptr<IProfileManager::Observer> const &observer)
 {
   std::lock_guard<std::mutex> lock(obMutex_);
-  observers_.erase(std::remove(observers_.begin(), observers_.end(), observer),
-                   observers_.end());
+  std::erase(observers_, observer);
 }
 
 void ProfileManager::init(ISysModel const &model)

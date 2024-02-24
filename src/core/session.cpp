@@ -119,10 +119,7 @@ void Session::removeManualProfileObserver(
     std::shared_ptr<ISession::ManualProfileObserver> observer)
 {
   std::lock_guard<std::mutex> lock(manualProfileObserversMutex_);
-  manualProfileObservers_.erase(std::remove(manualProfileObservers_.begin(),
-                                            manualProfileObservers_.end(),
-                                            observer),
-                                manualProfileObservers_.end());
+  std::erase(manualProfileObservers_, observer);
 }
 
 void Session::init(ISysModel const &model)

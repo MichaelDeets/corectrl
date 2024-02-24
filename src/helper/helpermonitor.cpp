@@ -34,8 +34,7 @@ void HelperMonitor::removeObserver(
     std::shared_ptr<IHelperMonitor::Observer> const &observer)
 {
   std::lock_guard<std::mutex> lock(mutex_);
-  observers_.erase(std::remove(observers_.begin(), observers_.end(), observer),
-                   observers_.end());
+  std::erase(observers_, observer);
 }
 
 void HelperMonitor::init()
