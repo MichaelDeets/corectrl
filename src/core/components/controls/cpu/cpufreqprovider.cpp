@@ -107,8 +107,7 @@ CPUFreqProvider::createScalingGovernorDataSources(ICPUInfo const &cpuInfo) const
       continue;
 
     scalingGovernorDataSources.emplace_back(
-        std::make_unique<SysFSDataSource<std::string>>(executionUnit.sysPath /
-                                                       scalingGovernorPath));
+        std::make_unique<SysFSDataSource<std::string>>(unitScalingGovernorPath));
   }
 
   return scalingGovernorDataSources;
