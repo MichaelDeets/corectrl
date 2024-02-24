@@ -89,9 +89,9 @@ std::string const &CPUFreqXMLParser::provideCPUFreqScalingGovernor() const
 
 void CPUFreqXMLParser::appendTo(pugi::xml_node &parentNode)
 {
-  auto pmFixedNode = parentNode.append_child(ID().c_str());
-  pmFixedNode.append_attribute("active") = active_;
-  pmFixedNode.append_attribute("scalingGovernor") = scalingGovernor_.c_str();
+  auto node = parentNode.append_child(ID().c_str());
+  node.append_attribute("active") = active_;
+  node.append_attribute("scalingGovernor") = scalingGovernor_.c_str();
 }
 
 void CPUFreqXMLParser::resetAttributes()
@@ -102,12 +102,12 @@ void CPUFreqXMLParser::resetAttributes()
 
 void CPUFreqXMLParser::loadPartFrom(pugi::xml_node const &parentNode)
 {
-  auto pmFixedNode = parentNode.find_child(
+  auto node = parentNode.find_child(
       [&](pugi::xml_node const &node) { return node.name() == ID(); });
 
-  active_ = pmFixedNode.attribute("active").as_bool(activeDefault_);
-  scalingGovernor_ = pmFixedNode.attribute("scalingGovernor")
-                         .as_string(scalingGovernorDefault_.c_str());
+  active_ = node.attribute("active").as_bool(activeDefault_);
+  scalingGovernor_ =
+      node.attribute("scalingGovernor").as_string(scalingGovernorDefault_.c_str());
 }
 
 bool const CPUFreqXMLParser::registered_ =
