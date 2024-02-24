@@ -4,17 +4,17 @@
 <context>
     <name>AMD::PMFixedQMLItem</name>
     <message>
-        <location filename="../core/components/controls/amd/pm/fixed/pmfixedqmlitem.cpp" line="31"/>
+        <location filename="../core/components/controls/amd/pm/fixed/pmfixedqmlitem.cpp" line="17"/>
         <source>low</source>
         <translation>Bas</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/fixed/pmfixedqmlitem.cpp" line="32"/>
+        <location filename="../core/components/controls/amd/pm/fixed/pmfixedqmlitem.cpp" line="18"/>
         <source>mid</source>
         <translation>Moyen</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/fixed/pmfixedqmlitem.cpp" line="33"/>
+        <location filename="../core/components/controls/amd/pm/fixed/pmfixedqmlitem.cpp" line="19"/>
         <source>high</source>
         <translation>Elevé</translation>
     </message>
@@ -22,12 +22,12 @@
 <context>
     <name>AMD::PMFreqRangeQMLItem</name>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/overdrive/freqrange/pmfreqrangeqmlitem.cpp" line="34"/>
+        <location filename="../core/components/controls/amd/pm/advanced/overdrive/freqrange/pmfreqrangeqmlitem.cpp" line="20"/>
         <source>SCLK</source>
         <translation>GPU</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/overdrive/freqrange/pmfreqrangeqmlitem.cpp" line="35"/>
+        <location filename="../core/components/controls/amd/pm/advanced/overdrive/freqrange/pmfreqrangeqmlitem.cpp" line="21"/>
         <source>MCLK</source>
         <translation>Mémoire</translation>
     </message>
@@ -35,12 +35,12 @@
 <context>
     <name>AMD::PMFreqVoltQMLItem</name>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/overdrive/freqvolt/pmfreqvoltqmlitem.cpp" line="32"/>
+        <location filename="../core/components/controls/amd/pm/advanced/overdrive/freqvolt/pmfreqvoltqmlitem.cpp" line="18"/>
         <source>SCLK</source>
         <translation>GPU</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/overdrive/freqvolt/pmfreqvoltqmlitem.cpp" line="33"/>
+        <location filename="../core/components/controls/amd/pm/advanced/overdrive/freqvolt/pmfreqvoltqmlitem.cpp" line="19"/>
         <source>MCLK</source>
         <translation>Mémoire</translation>
     </message>
@@ -48,27 +48,27 @@
 <context>
     <name>AMD::PMPowerProfileQMLItem</name>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileqmlitem.cpp" line="30"/>
+        <location filename="../core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileqmlitem.cpp" line="16"/>
         <source>3D_FULL_SCREEN</source>
         <translation>3D Plein écran</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileqmlitem.cpp" line="31"/>
+        <location filename="../core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileqmlitem.cpp" line="17"/>
         <source>POWER_SAVING</source>
         <translation>Économie d&apos;énergie</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileqmlitem.cpp" line="32"/>
+        <location filename="../core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileqmlitem.cpp" line="18"/>
         <source>VIDEO</source>
         <translation>Vidéo</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileqmlitem.cpp" line="33"/>
+        <location filename="../core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileqmlitem.cpp" line="19"/>
         <source>VR</source>
         <translation>Réalité Virtuelle</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileqmlitem.cpp" line="34"/>
+        <location filename="../core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileqmlitem.cpp" line="20"/>
         <source>COMPUTE</source>
         <translation>Calcul</translation>
     </message>
@@ -76,17 +76,17 @@
 <context>
     <name>AMD::PMPowerStateQMLItem</name>
     <message>
-        <location filename="../core/components/controls/amd/pm/powerstate/pmpowerstateqmlitem.cpp" line="31"/>
+        <location filename="../core/components/controls/amd/pm/powerstate/pmpowerstateqmlitem.cpp" line="17"/>
         <source>battery</source>
         <translation>Batterie</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/powerstate/pmpowerstateqmlitem.cpp" line="32"/>
+        <location filename="../core/components/controls/amd/pm/powerstate/pmpowerstateqmlitem.cpp" line="18"/>
         <source>balanced</source>
         <translation>Équilibré</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/powerstate/pmpowerstateqmlitem.cpp" line="33"/>
+        <location filename="../core/components/controls/amd/pm/powerstate/pmpowerstateqmlitem.cpp" line="19"/>
         <source>performance</source>
         <translation>Performance</translation>
     </message>
@@ -94,17 +94,17 @@
 <context>
     <name>AMDFanCurveForm</name>
     <message>
-        <location filename="../qml/AMDFanCurveForm.qml" line="56"/>
+        <location filename="../qml/AMDFanCurveForm.qml" line="42"/>
         <source>Temperature</source>
         <translation>Température</translation>
     </message>
     <message>
-        <location filename="../qml/AMDFanCurveForm.qml" line="57"/>
+        <location filename="../qml/AMDFanCurveForm.qml" line="43"/>
         <source>PWM</source>
         <translation>PWM</translation>
     </message>
     <message>
-        <location filename="../qml/AMDFanCurveForm.qml" line="133"/>
+        <location filename="../qml/AMDFanCurveForm.qml" line="119"/>
         <source>Fan start</source>
         <translation>Démarrage du ventilateur</translation>
     </message>
@@ -112,7 +112,7 @@
 <context>
     <name>AMDFanFixedForm</name>
     <message>
-        <location filename="../qml/AMDFanFixedForm.qml" line="96"/>
+        <location filename="../qml/AMDFanFixedForm.qml" line="82"/>
         <source>Fan start</source>
         <translation>Démarrage du ventilateur</translation>
     </message>
@@ -120,7 +120,7 @@
 <context>
     <name>AMDFanModeForm</name>
     <message>
-        <location filename="../qml/AMDFanModeForm.qml" line="33"/>
+        <location filename="../qml/AMDFanModeForm.qml" line="19"/>
         <source>Ventilation</source>
         <translation>Ventilation</translation>
     </message>
@@ -141,12 +141,12 @@
 <context>
     <name>AMDPMFixedFreqForm</name>
     <message>
-        <location filename="../qml/AMDPMFixedFreqForm.qml" line="89"/>
+        <location filename="../qml/AMDPMFixedFreqForm.qml" line="75"/>
         <source>GPU</source>
         <translation>GPU</translation>
     </message>
     <message>
-        <location filename="../qml/AMDPMFixedFreqForm.qml" line="119"/>
+        <location filename="../qml/AMDPMFixedFreqForm.qml" line="105"/>
         <source>Memory</source>
         <translation>Mémoire</translation>
     </message>
@@ -154,7 +154,7 @@
 <context>
     <name>AMDPMFreqModeForm</name>
     <message>
-        <location filename="../qml/AMDPMFreqModeForm.qml" line="34"/>
+        <location filename="../qml/AMDPMFreqModeForm.qml" line="20"/>
         <source>Frequency</source>
         <translation>Fréquence</translation>
     </message>
@@ -162,12 +162,12 @@
 <context>
     <name>AMDPMFreqOdForm</name>
     <message>
-        <location filename="../qml/AMDPMFreqOdForm.qml" line="60"/>
+        <location filename="../qml/AMDPMFreqOdForm.qml" line="46"/>
         <source>GPU</source>
         <translation>GPU</translation>
     </message>
     <message>
-        <location filename="../qml/AMDPMFreqOdForm.qml" line="91"/>
+        <location filename="../qml/AMDPMFreqOdForm.qml" line="77"/>
         <source>Memory</source>
         <translation>Mémoire</translation>
     </message>
@@ -175,7 +175,7 @@
 <context>
     <name>AMDPMPerfModeForm</name>
     <message>
-        <location filename="../qml/AMDPMPerfModeForm.qml" line="33"/>
+        <location filename="../qml/AMDPMPerfModeForm.qml" line="19"/>
         <source>Performance mode</source>
         <translation>Mode Performance</translation>
     </message>
@@ -183,7 +183,7 @@
 <context>
     <name>AMDPMPowerCapForm</name>
     <message>
-        <location filename="../qml/AMDPMPowerCapForm.qml" line="51"/>
+        <location filename="../qml/AMDPMPowerCapForm.qml" line="37"/>
         <source>Power limit</source>
         <translation>Limite de puissance</translation>
     </message>
@@ -191,7 +191,7 @@
 <context>
     <name>AMDPMPowerProfileForm</name>
     <message>
-        <location filename="../qml/AMDPMPowerProfileForm.qml" line="70"/>
+        <location filename="../qml/AMDPMPowerProfileForm.qml" line="56"/>
         <source>Power profile</source>
         <translation>Profil de puissance</translation>
     </message>
@@ -199,7 +199,7 @@
 <context>
     <name>AMDPMPowerStateModeForm</name>
     <message>
-        <location filename="../qml/AMDPMPowerStateModeForm.qml" line="33"/>
+        <location filename="../qml/AMDPMPowerStateModeForm.qml" line="19"/>
         <source>Power management mode</source>
         <translation>Mode de gestion d&apos;énergie</translation>
     </message>
@@ -207,13 +207,13 @@
 <context>
     <name>AMDPMVoltCurveForm</name>
     <message>
-        <location filename="../qml/AMDPMVoltCurveForm.qml" line="34"/>
+        <location filename="../qml/AMDPMVoltCurveForm.qml" line="20"/>
         <source>Frequency</source>
         <translation>Fréquence</translation>
     </message>
     <message>
-        <location filename="../qml/AMDPMVoltCurveForm.qml" line="35"/>
-        <location filename="../qml/AMDPMVoltCurveForm.qml" line="65"/>
+        <location filename="../qml/AMDPMVoltCurveForm.qml" line="21"/>
+        <location filename="../qml/AMDPMVoltCurveForm.qml" line="51"/>
         <source>Voltage</source>
         <translation>Tension</translation>
     </message>
@@ -221,17 +221,17 @@
 <context>
     <name>AMDPMVoltOffsetForm</name>
     <message>
-        <location filename="../qml/AMDPMVoltOffsetForm.qml" line="65"/>
+        <location filename="../qml/AMDPMVoltOffsetForm.qml" line="51"/>
         <source>Voltage</source>
         <translation>Tension</translation>
     </message>
     <message>
-        <location filename="../qml/AMDPMVoltOffsetForm.qml" line="78"/>
+        <location filename="../qml/AMDPMVoltOffsetForm.qml" line="64"/>
         <source>WARNING: Operating range not available. Use with caution!</source>
         <translation>AVERTISSEMENT : Plage de fonctionnement non disponible. Utiliser avec précaution!</translation>
     </message>
     <message>
-        <location filename="../qml/AMDPMVoltOffsetForm.qml" line="107"/>
+        <location filename="../qml/AMDPMVoltOffsetForm.qml" line="93"/>
         <source>OFFSET</source>
         <translation>COMPENSATION</translation>
     </message>
@@ -239,37 +239,37 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../qml/About.qml" line="54"/>
+        <location filename="../qml/About.qml" line="40"/>
         <source>Control your hardware with ease using application profiles</source>
         <translation>Contrôlez aisément votre matériel à l&apos;aide de profils applicatifs</translation>
     </message>
     <message>
-        <location filename="../qml/About.qml" line="59"/>
+        <location filename="../qml/About.qml" line="45"/>
         <source>by</source>
         <translation>par</translation>
     </message>
     <message>
-        <location filename="../qml/About.qml" line="68"/>
+        <location filename="../qml/About.qml" line="54"/>
         <source>Links</source>
         <translation>Liens</translation>
     </message>
     <message>
-        <location filename="../qml/About.qml" line="69"/>
+        <location filename="../qml/About.qml" line="55"/>
         <source>Project</source>
         <translation>Projet</translation>
     </message>
     <message>
-        <location filename="../qml/About.qml" line="70"/>
+        <location filename="../qml/About.qml" line="56"/>
         <source>Issue tracker</source>
         <translation>Tickets de support</translation>
     </message>
     <message>
-        <location filename="../qml/About.qml" line="71"/>
+        <location filename="../qml/About.qml" line="57"/>
         <source>Wiki</source>
         <translation>Wiki</translation>
     </message>
     <message>
-        <location filename="../qml/About.qml" line="72"/>
+        <location filename="../qml/About.qml" line="58"/>
         <source>FAQ</source>
         <translation>FAQ</translation>
     </message>
@@ -277,7 +277,7 @@
 <context>
     <name>CPUFreqForm</name>
     <message>
-        <location filename="../qml/CPUFreqForm.qml" line="71"/>
+        <location filename="../qml/CPUFreqForm.qml" line="57"/>
         <source>Frequency governor</source>
         <translation>Gouverneur de fréquence</translation>
     </message>
@@ -285,7 +285,7 @@
 <context>
     <name>CPUFreqModeForm</name>
     <message>
-        <location filename="../qml/CPUFreqModeForm.qml" line="33"/>
+        <location filename="../qml/CPUFreqModeForm.qml" line="19"/>
         <source>Performance scaling</source>
         <translation>Echelle de performance</translation>
     </message>
@@ -293,32 +293,32 @@
 <context>
     <name>CPUFreqQMLItem</name>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="31"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="17"/>
         <source>performance</source>
         <translation>Performance</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="32"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="18"/>
         <source>powersave</source>
         <translation>Économies d&apos;énergie</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="33"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="19"/>
         <source>userspace</source>
         <translation>Fréquence personnalisée</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="34"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="20"/>
         <source>schedutil</source>
         <translation>En fonction de l&apos;utilisation du CPU</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="35"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
         <source>ondemand</source>
         <translation>À la demande</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="36"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="22"/>
         <source>conservative</source>
         <translation>Conservateur</translation>
     </message>
@@ -326,57 +326,57 @@
 <context>
     <name>ControlModeQMLItem</name>
     <message>
-        <location filename="../core/components/controls/amd/pm/auto/pmautoqmlitem.cpp" line="30"/>
+        <location filename="../core/components/controls/amd/pm/auto/pmautoqmlitem.cpp" line="16"/>
         <source>AMD_PM_AUTO</source>
         <translation>Automatique</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/fixed/pmfixedqmlitem.cpp" line="30"/>
+        <location filename="../core/components/controls/amd/pm/fixed/pmfixedqmlitem.cpp" line="16"/>
         <source>AMD_PM_FIXED</source>
         <translation>Fixe</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/fan/auto/fanautoqmlitem.cpp" line="30"/>
+        <location filename="../core/components/controls/amd/fan/auto/fanautoqmlitem.cpp" line="16"/>
         <source>AMD_FAN_AUTO</source>
         <translation>Automatique</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/fan/fixed/fanfixedqmlitem.cpp" line="27"/>
+        <location filename="../core/components/controls/amd/fan/fixed/fanfixedqmlitem.cpp" line="13"/>
         <source>AMD_FAN_FIXED</source>
         <translation>Fixe</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/fan/curve/fancurveqmlitem.cpp" line="33"/>
+        <location filename="../core/components/controls/amd/fan/curve/fancurveqmlitem.cpp" line="19"/>
         <source>AMD_FAN_CURVE</source>
         <translation>Courbe</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/pmadvancedqmlitem.cpp" line="30"/>
+        <location filename="../core/components/controls/amd/pm/advanced/pmadvancedqmlitem.cpp" line="16"/>
         <source>AMD_PM_ADVANCED</source>
         <translation>Avancé</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/fixedfreq/pmfixedfreqqmlitem.cpp" line="31"/>
+        <location filename="../core/components/controls/amd/pm/advanced/fixedfreq/pmfixedfreqqmlitem.cpp" line="17"/>
         <source>AMD_PM_FIXED_FREQ</source>
         <translation>Fixe</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/advanced/dynamicfreq/pmdynamicfreqqmlitem.cpp" line="30"/>
+        <location filename="../core/components/controls/amd/pm/advanced/dynamicfreq/pmdynamicfreqqmlitem.cpp" line="16"/>
         <source>AMD_PM_DYNAMIC_FREQ</source>
         <translation>Dynamique</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="28"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="14"/>
         <source>CPU_CPUFREQ</source>
         <translation>Personnalisé</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/amd/pm/powerstate/pmpowerstateqmlitem.cpp" line="30"/>
+        <location filename="../core/components/controls/amd/pm/powerstate/pmpowerstateqmlitem.cpp" line="16"/>
         <source>AMD_PM_POWERSTATE</source>
         <translation>Personnalisé</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/noopqmlitem.cpp" line="30"/>
+        <location filename="../core/components/controls/noopqmlitem.cpp" line="16"/>
         <source>NOOP</source>
         <translation>Ne pas contrôler</translation>
     </message>
@@ -394,22 +394,22 @@
 <context>
     <name>FVControl</name>
     <message>
-        <location filename="../qml/FVControl.qml" line="119"/>
+        <location filename="../qml/FVControl.qml" line="105"/>
         <source>STATE</source>
         <translation>ÉTAT</translation>
     </message>
     <message>
-        <location filename="../qml/FVControl.qml" line="182"/>
+        <location filename="../qml/FVControl.qml" line="168"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../qml/FVControl.qml" line="213"/>
+        <location filename="../qml/FVControl.qml" line="201"/>
         <source>Frequency</source>
         <translation>Fréquence</translation>
     </message>
     <message>
-        <location filename="../qml/FVControl.qml" line="237"/>
+        <location filename="../qml/FVControl.qml" line="225"/>
         <source>Voltage</source>
         <translation>Voltage</translation>
     </message>
@@ -417,17 +417,17 @@
 <context>
     <name>FreqStateControl</name>
     <message>
-        <location filename="../qml/FreqStateControl.qml" line="75"/>
+        <location filename="../qml/FreqStateControl.qml" line="61"/>
         <source>MINIMUM</source>
         <translation>MINIMUM</translation>
     </message>
     <message>
-        <location filename="../qml/FreqStateControl.qml" line="77"/>
+        <location filename="../qml/FreqStateControl.qml" line="63"/>
         <source>MAXIMUM</source>
         <translation>MAXIMUM</translation>
     </message>
     <message>
-        <location filename="../qml/FreqStateControl.qml" line="79"/>
+        <location filename="../qml/FreqStateControl.qml" line="65"/>
         <source>STATE</source>
         <translation>ÉTAT</translation>
     </message>
@@ -435,12 +435,12 @@
 <context>
     <name>NoopForm</name>
     <message>
-        <location filename="../qml/NoopForm.qml" line="55"/>
+        <location filename="../qml/NoopForm.qml" line="41"/>
         <source>Warning!</source>
         <translation>Avertissement!</translation>
     </message>
     <message>
-        <location filename="../qml/NoopForm.qml" line="60"/>
+        <location filename="../qml/NoopForm.qml" line="46"/>
         <source>The component will not be controlled</source>
         <translation>Le composant ne sera pas contrôlé</translation>
     </message>
@@ -448,32 +448,32 @@
 <context>
     <name>ProfileButton</name>
     <message>
-        <location filename="../qml/ProfileButton.qml" line="160"/>
+        <location filename="../qml/ProfileButton.qml" line="146"/>
         <source>Disable</source>
         <translation>Désactiver</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileButton.qml" line="160"/>
+        <location filename="../qml/ProfileButton.qml" line="146"/>
         <source>Enable</source>
         <translation>Activer</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileButton.qml" line="168"/>
+        <location filename="../qml/ProfileButton.qml" line="154"/>
         <source>Edit...</source>
         <translation>Éditer...</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileButton.qml" line="176"/>
+        <location filename="../qml/ProfileButton.qml" line="162"/>
         <source>Clone...</source>
         <translation>Cloner...</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileButton.qml" line="183"/>
+        <location filename="../qml/ProfileButton.qml" line="169"/>
         <source>Export to...</source>
         <translation>Exporter vers...</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileButton.qml" line="192"/>
+        <location filename="../qml/ProfileButton.qml" line="178"/>
         <source>Remove</source>
         <translation>Effacer</translation>
     </message>
@@ -481,62 +481,62 @@
 <context>
     <name>ProfileInfoDialog</name>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="142"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="128"/>
         <source>Name:</source>
         <translation>Nom :</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="151"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="137"/>
         <source>Profile name</source>
         <translation>Nom du profil</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="157"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="143"/>
         <source>Activation:</source>
         <translation>Activation :</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="168"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="154"/>
         <source>Automatic</source>
         <translation>Automatique</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="169"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="155"/>
         <source>Manual</source>
         <translation>Manuel</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="180"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="166"/>
         <source>Executable:</source>
         <translation>Exécutable :</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="192"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="178"/>
         <source>Executable name</source>
         <translation>Nom de l&apos;exécutable</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="209"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="195"/>
         <source>Select an executable file</source>
         <translation>Sélectionnez un fichier exécutable</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="222"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="208"/>
         <source>Icon:</source>
         <translation>Icône :</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="252"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="238"/>
         <source>Select an icon</source>
         <translation>Sélectionnez une icône</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="253"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="239"/>
         <source>Images</source>
         <translation>Images</translation>
     </message>
     <message>
-        <location filename="../qml/ProfileInfoDialog.qml" line="270"/>
+        <location filename="../qml/ProfileInfoDialog.qml" line="256"/>
         <source>Customize icon</source>
         <translation>Personnaliser l&apos;icône</translation>
     </message>
@@ -544,7 +544,7 @@
 <context>
     <name>ProfileManagerUI</name>
     <message>
-        <location filename="../core/profilemanagerui.cpp" line="32"/>
+        <location filename="../core/profilemanagerui.cpp" line="18"/>
         <source>_global_</source>
         <translation>Profil Global</translation>
     </message>
@@ -552,129 +552,129 @@
 <context>
     <name>Profiles</name>
     <message>
-        <location filename="../qml/Profiles.qml" line="164"/>
+        <location filename="../qml/Profiles.qml" line="150"/>
         <source>Disabled</source>
         <translation>Désactivé</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="255"/>
+        <location filename="../qml/Profiles.qml" line="241"/>
         <source>Profile properties</source>
         <translation>Propriétés du profil</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="269"/>
-        <location filename="../qml/Profiles.qml" line="320"/>
+        <location filename="../qml/Profiles.qml" line="255"/>
+        <location filename="../qml/Profiles.qml" line="306"/>
         <source>New profile properties</source>
         <translation>Propriétés du nouveau profil</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="350"/>
+        <location filename="../qml/Profiles.qml" line="336"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="371"/>
-        <location filename="../qml/Profiles.qml" line="401"/>
-        <location filename="../qml/Profiles.qml" line="436"/>
-        <location filename="../qml/Profiles.qml" line="465"/>
+        <location filename="../qml/Profiles.qml" line="357"/>
+        <location filename="../qml/Profiles.qml" line="387"/>
+        <location filename="../qml/Profiles.qml" line="422"/>
+        <location filename="../qml/Profiles.qml" line="451"/>
         <source>Warning</source>
         <translation>Avertissement</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="386"/>
+        <location filename="../qml/Profiles.qml" line="372"/>
         <source>This action is permantent.
 Do you really want to remove %1?</source>
         <translation>Cette action est définitive.
 Voulez-vous vraiment effacer %1?</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="413"/>
+        <location filename="../qml/Profiles.qml" line="399"/>
         <source>Unapplied settings will be lost.
 Do you want to apply them now?</source>
         <translation>Les paramètres non-appliqués seront perdus.
 Voulez-vous les appliquer dès maintenant ?</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="500"/>
+        <location filename="../qml/Profiles.qml" line="486"/>
         <source>Manage profiles for your applications...</source>
         <translation>Gérez les profils pour vos applications...</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="573"/>
+        <location filename="../qml/Profiles.qml" line="559"/>
         <source>Load from...</source>
         <translation>Charger depuis...</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="578"/>
+        <location filename="../qml/Profiles.qml" line="564"/>
         <source>Load settings from...</source>
         <translation>Charger les paramètres depuis...</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="584"/>
+        <location filename="../qml/Profiles.qml" line="570"/>
         <source>Cannot load profile.
 Invalid or corrupted file.</source>
         <translation>Impossible de charger le profil.
 Fichier invalide ou corrompu.</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="448"/>
+        <location filename="../qml/Profiles.qml" line="434"/>
         <source>Unsaved settings will be lost.
 </source>
         <translation>Les paramètres non-appliqués seront perdus.
 </translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="449"/>
+        <location filename="../qml/Profiles.qml" line="435"/>
         <source>Do you want to load the default settings?</source>
         <translation>Voulez-vous charger les paramètres par défaut ?</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="477"/>
+        <location filename="../qml/Profiles.qml" line="463"/>
         <source>Current settings will be discarded.
 </source>
         <translation>Les paramètres actuels seront annulés.
 </translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="478"/>
+        <location filename="../qml/Profiles.qml" line="464"/>
         <source>Do you want to load the saved settings?</source>
         <translation>Voulez-vous charger les paramètres enregistrés ?</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="549"/>
+        <location filename="../qml/Profiles.qml" line="535"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="555"/>
+        <location filename="../qml/Profiles.qml" line="541"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="561"/>
+        <location filename="../qml/Profiles.qml" line="547"/>
         <source>Restore</source>
         <translation>Restaurer</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="300"/>
+        <location filename="../qml/Profiles.qml" line="286"/>
         <source>Export profile to...</source>
         <translation>Exporter le profil vers...</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="301"/>
-        <location filename="../qml/Profiles.qml" line="579"/>
+        <location filename="../qml/Profiles.qml" line="287"/>
+        <location filename="../qml/Profiles.qml" line="565"/>
         <source>CoreCtrl profile</source>
         <translation>Profil de CoreCtrl</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="309"/>
+        <location filename="../qml/Profiles.qml" line="295"/>
         <source>Cannot export profile.
 Check the permissions of the destination file and directory.</source>
         <translation>Impossible d&apos;exporter le profil.
 Vérifiez les droits sur les fichier et répertoire de destination.</translation>
     </message>
     <message>
-        <location filename="../qml/Profiles.qml" line="593"/>
+        <location filename="../qml/Profiles.qml" line="579"/>
         <source>Reset</source>
         <translation>Réinitialiser</translation>
     </message>
@@ -682,67 +682,67 @@ Vérifiez les droits sur les fichier et répertoire de destination.</translation
 <context>
     <name>SensorGraph</name>
     <message>
-        <location filename="../core/components/sensors/amd/memfreqgraphitem.cpp" line="34"/>
+        <location filename="../core/components/sensors/amd/memfreqgraphitem.cpp" line="19"/>
         <source>AMD_MEM_FREQ</source>
         <translation>Mémoire </translation>
     </message>
     <message>
-        <location filename="../core/components/sensors/amd/gpufreqgraphitem.cpp" line="34"/>
+        <location filename="../core/components/sensors/amd/gpufreqgraphitem.cpp" line="19"/>
         <source>AMD_GPU_FREQ</source>
         <translation>GPU </translation>
     </message>
     <message>
-        <location filename="../core/components/sensors/amd/gputempgraphitem.cpp" line="34"/>
+        <location filename="../core/components/sensors/amd/gputempgraphitem.cpp" line="19"/>
         <source>AMD_GPU_TEMP</source>
         <translation>Température </translation>
     </message>
     <message>
-        <location filename="../core/components/sensors/amd/powergraphitem.cpp" line="34"/>
+        <location filename="../core/components/sensors/amd/powergraphitem.cpp" line="19"/>
         <source>AMD_POWER</source>
         <translation>Puissance </translation>
     </message>
     <message>
-        <location filename="../core/components/sensors/amd/activitygraphitem.cpp" line="34"/>
+        <location filename="../core/components/sensors/amd/activitygraphitem.cpp" line="19"/>
         <source>AMD_ACTIVITY</source>
         <translation>Activité </translation>
     </message>
     <message>
-        <location filename="../core/components/sensors/amd/memusagegraphitem.cpp" line="34"/>
+        <location filename="../core/components/sensors/amd/memusagegraphitem.cpp" line="19"/>
         <source>AMD_MEM_USAGE</source>
         <translation>Mémoire utilisée </translation>
     </message>
     <message>
-        <location filename="../core/components/sensors/amd/fanspeedpercgraphitem.cpp" line="34"/>
+        <location filename="../core/components/sensors/amd/fanspeedpercgraphitem.cpp" line="19"/>
         <source>AMD_FAN_SPEED_PERC</source>
         <translation>Ventilateur (%) </translation>
     </message>
     <message>
-        <location filename="../core/components/sensors/amd/fanspeedrpmgraphitem.cpp" line="36"/>
+        <location filename="../core/components/sensors/amd/fanspeedrpmgraphitem.cpp" line="21"/>
         <source>AMD_FAN_SPEED_RPM</source>
         <translation>Ventilateur (RPM) </translation>
     </message>
     <message>
-        <location filename="../core/components/sensors/cpu/cpufreqpackgraphitem.cpp" line="33"/>
+        <location filename="../core/components/sensors/cpu/cpufreqpackgraphitem.cpp" line="19"/>
         <source>CPU_FREQ_PACK</source>
         <translation>CPU </translation>
     </message>
     <message>
-        <location filename="../qml/SensorGraph.qml" line="150"/>
+        <location filename="../qml/SensorGraph.qml" line="136"/>
         <source>n/a</source>
-        <translation type="unfinished"></translation>
+        <translation>n/a</translation>
     </message>
     <message>
-        <location filename="../core/components/sensors/amd/gpuvoltgraphitem.cpp" line="34"/>
+        <location filename="../core/components/sensors/amd/gpuvoltgraphitem.cpp" line="19"/>
         <source>AMD_GPU_VOLT</source>
-        <translation>Tension</translation>
+        <translation>Tension </translation>
     </message>
     <message>
-        <location filename="../core/components/sensors/amd/junctiontempgraphitem.cpp" line="34"/>
+        <location filename="../core/components/sensors/amd/junctiontempgraphitem.cpp" line="19"/>
         <source>AMD_GPU_JUNCTION_TEMP</source>
         <translation>Température (jonction) </translation>
     </message>
     <message>
-        <location filename="../core/components/sensors/amd/memorytempgraphitem.cpp" line="34"/>
+        <location filename="../core/components/sensors/amd/memorytempgraphitem.cpp" line="19"/>
         <source>AMD_GPU_MEMORY_TEMP</source>
         <translation>Température (mémoire) </translation>
     </message>
@@ -760,17 +760,17 @@ Vérifiez les droits sur les fichier et répertoire de destination.</translation
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../qml/SettingsDialog.qml" line="26"/>
+        <location filename="../qml/SettingsDialog.qml" line="12"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsDialog.qml" line="46"/>
+        <location filename="../qml/SettingsDialog.qml" line="32"/>
         <source>General</source>
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsDialog.qml" line="46"/>
+        <location filename="../qml/SettingsDialog.qml" line="32"/>
         <source>Workarounds</source>
         <translation>Contournements</translation>
     </message>
@@ -778,17 +778,17 @@ Vérifiez les droits sur les fichier et répertoire de destination.</translation
 <context>
     <name>SettingsGeneral</name>
     <message>
-        <location filename="../qml/SettingsGeneral.qml" line="61"/>
+        <location filename="../qml/SettingsGeneral.qml" line="64"/>
         <source>Show system tray icon</source>
         <translation>Afficher l&apos;icône dans la zone de notification</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsGeneral.qml" line="76"/>
+        <location filename="../qml/SettingsGeneral.qml" line="79"/>
         <source>Start minimized on system tray</source>
         <translation>Démarrer minimisé dans la zone de notification</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsGeneral.qml" line="90"/>
+        <location filename="../qml/SettingsGeneral.qml" line="93"/>
         <source>Save window geometry</source>
         <translation>Sauvegarder la géométrie de la fenêtre</translation>
     </message>
@@ -796,17 +796,17 @@ Vérifiez les droits sur les fichier et répertoire de destination.</translation
 <context>
     <name>SettingsWorkarounds</name>
     <message>
-        <location filename="../qml/SettingsWorkarounds.qml" line="109"/>
+        <location filename="../qml/SettingsWorkarounds.qml" line="112"/>
         <source>Sensors</source>
         <translation>Capteurs</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWorkarounds.qml" line="120"/>
+        <location filename="../qml/SettingsWorkarounds.qml" line="123"/>
         <source>Disabled sensors won&apos;t be updated from hardware</source>
         <translation>Les valeurs des capteurs désactivés ne seront pas mises à jour</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsWorkarounds.qml" line="130"/>
+        <location filename="../qml/SettingsWorkarounds.qml" line="133"/>
         <source>Device</source>
         <translation>Périphérique</translation>
     </message>
@@ -814,22 +814,22 @@ Vérifiez les droits sur les fichier et répertoire de destination.</translation
 <context>
     <name>SysTray</name>
     <message>
-        <location filename="../app/systray.cpp" line="135"/>
+        <location filename="../app/systray.cpp" line="121"/>
         <source>Hide</source>
         <translation>Cacher</translation>
     </message>
     <message>
-        <location filename="../app/systray.cpp" line="135"/>
+        <location filename="../app/systray.cpp" line="121"/>
         <source>Show</source>
         <translation>Montrer</translation>
     </message>
     <message>
-        <location filename="../app/systray.cpp" line="178"/>
+        <location filename="../app/systray.cpp" line="164"/>
         <source>Manual profiles</source>
         <translation>Profils manuels</translation>
     </message>
     <message>
-        <location filename="../app/systray.cpp" line="182"/>
+        <location filename="../app/systray.cpp" line="168"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
@@ -837,17 +837,17 @@ Vérifiez les droits sur les fichier et répertoire de destination.</translation
 <context>
     <name>System</name>
     <message>
-        <location filename="../qml/System.qml" line="102"/>
+        <location filename="../qml/System.qml" line="88"/>
         <source>Information and application settings...</source>
         <translation>Informations et paramètres de l&apos;application...</translation>
     </message>
     <message>
-        <location filename="../qml/System.qml" line="112"/>
+        <location filename="../qml/System.qml" line="98"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../qml/System.qml" line="118"/>
+        <location filename="../qml/System.qml" line="104"/>
         <source>Copy all</source>
         <translation>Tout copier</translation>
     </message>
@@ -855,187 +855,187 @@ Vérifiez les droits sur les fichier et répertoire de destination.</translation
 <context>
     <name>SystemInfoUI</name>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="33"/>
+        <location filename="../core/systeminfoui.cpp" line="19"/>
         <source>kernelv</source>
         <translation>Version du kernel</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="34"/>
+        <location filename="../core/systeminfoui.cpp" line="20"/>
         <source>mesav</source>
         <translation>Version de Mesa</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="35"/>
+        <location filename="../core/systeminfoui.cpp" line="21"/>
         <source>vkapiv</source>
         <translation>Version de l&apos;API Vulkan</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="36"/>
+        <location filename="../core/systeminfoui.cpp" line="22"/>
         <source>glcorev</source>
         <translation>Version d&apos;OpenGL (core)</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="37"/>
+        <location filename="../core/systeminfoui.cpp" line="23"/>
         <source>glcompv</source>
         <translation>Version d&apos;OpenGL (compat)</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="38"/>
+        <location filename="../core/systeminfoui.cpp" line="24"/>
         <source>vendorid</source>
         <translation>ID Vendeur</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="39"/>
+        <location filename="../core/systeminfoui.cpp" line="25"/>
         <source>deviceid</source>
         <translation>ID Périphérique</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="40"/>
+        <location filename="../core/systeminfoui.cpp" line="26"/>
         <source>svendorid</source>
         <translation>ID Vendeur sous-système</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="41"/>
+        <location filename="../core/systeminfoui.cpp" line="27"/>
         <source>sdeviceid</source>
         <translation>ID sous-système</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="42"/>
+        <location filename="../core/systeminfoui.cpp" line="28"/>
         <source>vendor</source>
         <translation>Vendeur</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="43"/>
+        <location filename="../core/systeminfoui.cpp" line="29"/>
         <source>device</source>
         <translation>Périphérique</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="44"/>
+        <location filename="../core/systeminfoui.cpp" line="30"/>
         <source>sdevice</source>
         <translation>Modèle périphérique</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="45"/>
+        <location filename="../core/systeminfoui.cpp" line="31"/>
         <source>pcislot</source>
         <translation>Emplacement PCI</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="46"/>
+        <location filename="../core/systeminfoui.cpp" line="32"/>
         <source>driver</source>
         <translation>Pilote</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="47"/>
+        <location filename="../core/systeminfoui.cpp" line="33"/>
         <source>revision</source>
         <translation>Révision</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="48"/>
+        <location filename="../core/systeminfoui.cpp" line="34"/>
         <source>memory</source>
         <translation>Mémoire</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="49"/>
+        <location filename="../core/systeminfoui.cpp" line="35"/>
         <source>gputype</source>
         <translation>Type GPU</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="50"/>
+        <location filename="../core/systeminfoui.cpp" line="36"/>
         <source>biosv</source>
         <translation>Version du BIOS</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="51"/>
+        <location filename="../core/systeminfoui.cpp" line="37"/>
         <source>cpufamily</source>
         <translation>Famille CPU</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="52"/>
+        <location filename="../core/systeminfoui.cpp" line="38"/>
         <source>model</source>
         <translation>Modèle</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="53"/>
+        <location filename="../core/systeminfoui.cpp" line="39"/>
         <source>modname</source>
         <translation>Nom du modèle</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="54"/>
+        <location filename="../core/systeminfoui.cpp" line="40"/>
         <source>stepping</source>
         <translation>Stepping</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="55"/>
+        <location filename="../core/systeminfoui.cpp" line="41"/>
         <source>ucodev</source>
         <translation>Version du Microcode</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="56"/>
+        <location filename="../core/systeminfoui.cpp" line="42"/>
         <source>l3cache</source>
         <translation>cache L3</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="58"/>
+        <location filename="../core/systeminfoui.cpp" line="44"/>
         <source>cores</source>
         <translation>Cœurs</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="59"/>
+        <location filename="../core/systeminfoui.cpp" line="45"/>
         <source>flags</source>
         <translation>Drapeaux</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="60"/>
+        <location filename="../core/systeminfoui.cpp" line="46"/>
         <source>bugs</source>
         <translation>Bugs</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="61"/>
+        <location filename="../core/systeminfoui.cpp" line="47"/>
         <source>bogomips</source>
         <translation>Bogomips</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="62"/>
+        <location filename="../core/systeminfoui.cpp" line="48"/>
         <source>arch</source>
         <translation>Architecture</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="63"/>
+        <location filename="../core/systeminfoui.cpp" line="49"/>
         <source>opmode</source>
         <translation>Modes d&apos;opération</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="64"/>
+        <location filename="../core/systeminfoui.cpp" line="50"/>
         <source>byteorder</source>
         <translation>Ordre des octets</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="65"/>
+        <location filename="../core/systeminfoui.cpp" line="51"/>
         <source>virt</source>
         <translation>Virtualisation</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="66"/>
+        <location filename="../core/systeminfoui.cpp" line="52"/>
         <source>l1dcache</source>
         <translation>Cache L1 (données)</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="67"/>
+        <location filename="../core/systeminfoui.cpp" line="53"/>
         <source>l1icache</source>
         <translation>Cache L1 (instructions)</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="68"/>
+        <location filename="../core/systeminfoui.cpp" line="54"/>
         <source>l2cache</source>
         <translation>Cache L2</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="69"/>
+        <location filename="../core/systeminfoui.cpp" line="55"/>
         <source>uniqueid</source>
         <translation>Identifiant unique</translation>
     </message>
     <message>
-        <location filename="../core/systeminfoui.cpp" line="57"/>
+        <location filename="../core/systeminfoui.cpp" line="43"/>
         <source>exeunits</source>
         <translation>Unités d&apos;exécution</translation>
     </message>
@@ -1043,12 +1043,12 @@ Vérifiez les droits sur les fichier et répertoire de destination.</translation
 <context>
     <name>main</name>
     <message>
-        <location filename="../qml/main.qml" line="57"/>
+        <location filename="../qml/main.qml" line="43"/>
         <source>Profiles</source>
         <translation>Profils</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="60"/>
+        <location filename="../qml/main.qml" line="46"/>
         <source>System</source>
         <translation>Système</translation>
     </message>
