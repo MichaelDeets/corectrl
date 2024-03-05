@@ -286,8 +286,27 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
     REQUIRE(value == defaultGovernor);
   }
 
+  SECTION("Does not generate sync control commands for EPP when this feature "
+          "is supported and the frequency scaling governor is not set "
+          "to 'powersave'")
+  {
+    auto eppHandlerMock = std::make_unique<EPPHandlerMock>();
+    FORBID_CALL(*eppHandlerMock, sync(trompeloeil::_));
+
+    scalingGovernorDataSources.emplace_back(
+        std::make_unique<StringDataSourceStub>(scalingGovernorPath,
+                                               defaultGovernor));
+    CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
+                          std::move(scalingGovernorDataSources),
+                          std::move(eppHandlerMock));
+
+    ts.scalingGovernor("performance");
+    ts.syncControl(ctlCmds);
+  }
+
   SECTION("Could generate sync control commands for EPP when this feature "
-          "is supported")
+          "is supported and the frequency scaling governor is set "
+          "to 'powersave'")
   {
     auto eppHandlerMock = std::make_unique<EPPHandlerMock>();
     REQUIRE_CALL(*eppHandlerMock, sync(trompeloeil::_));

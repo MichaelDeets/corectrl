@@ -74,7 +74,7 @@ void CPUFreq::syncControl(ICommandQueue &ctlCmds)
         ctlCmds.add({scalingGovernorDataSource->source(), scalingGovernor()});
     }
 
-  if (eppHandler_)
+  if (eppHandler_ && scalingGovernor() == eppScalingGovernor_)
     eppHandler_->sync(ctlCmds);
 }
 

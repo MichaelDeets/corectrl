@@ -68,6 +68,7 @@ class CPUFreq : public Control
       scalingGovernorDataSources_;
   std::unique_ptr<IEPPHandler> eppHandler_;
 
+  std::string const eppScalingGovernor_{"powersave"};
   std::string scalingGovernor_;
   std::string dataSourceEntry_;
 };
