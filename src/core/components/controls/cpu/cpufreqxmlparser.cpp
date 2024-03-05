@@ -23,6 +23,7 @@ class CPUFreqXMLParser::Initializer final : public CPUFreqProfilePart::Exporter
 
   void takeActive(bool active) override;
   void takeCPUFreqScalingGovernor(std::string const &governor) override;
+  void takeCPUFreqEPPHint(std::optional<std::string> const &hint) override;
 
  private:
   CPUFreqXMLParser &outer_;
@@ -37,6 +38,12 @@ void CPUFreqXMLParser::Initializer::takeCPUFreqScalingGovernor(
     std::string const &governor)
 {
   outer_.scalingGovernor_ = outer_.scalingGovernorDefault_ = governor;
+}
+
+void CPUFreqXMLParser::Initializer::takeCPUFreqEPPHint(
+    std::optional<std::string> const &hint)
+{
+  outer_.eppHint_ = outer_.eppHintDefault_ = hint;
 }
 
 CPUFreqXMLParser::CPUFreqXMLParser() noexcept
@@ -87,17 +94,31 @@ std::string const &CPUFreqXMLParser::provideCPUFreqScalingGovernor() const
   return scalingGovernor_;
 }
 
+void CPUFreqXMLParser::takeCPUFreqEPPHint(std::optional<std::string> const &hint)
+{
+  eppHint_ = hint;
+}
+
+std::optional<std::string> const &CPUFreqXMLParser::provideCPUFreqEPPHint() const
+{
+  return eppHint_;
+}
+
 void CPUFreqXMLParser::appendTo(pugi::xml_node &parentNode)
 {
   auto node = parentNode.append_child(ID().c_str());
   node.append_attribute("active") = active_;
   node.append_attribute("scalingGovernor") = scalingGovernor_.c_str();
+
+  if (eppHintDefault_)
+    node.append_attribute("eppHint") = eppHint_->c_str();
 }
 
 void CPUFreqXMLParser::resetAttributes()
 {
   active_ = activeDefault_;
   scalingGovernor_ = scalingGovernorDefault_;
+  eppHint_ = eppHintDefault_;
 }
 
 void CPUFreqXMLParser::loadPartFrom(pugi::xml_node const &parentNode)
@@ -108,6 +129,10 @@ void CPUFreqXMLParser::loadPartFrom(pugi::xml_node const &parentNode)
   active_ = node.attribute("active").as_bool(activeDefault_);
   scalingGovernor_ =
       node.attribute("scalingGovernor").as_string(scalingGovernorDefault_.c_str());
+
+  if (eppHintDefault_)
+    eppHint_ =
+        node.attribute("eppHint").as_string(scalingGovernorDefault_.c_str());
 }
 
 bool const CPUFreqXMLParser::registered_ =

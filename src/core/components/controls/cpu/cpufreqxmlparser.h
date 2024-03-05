@@ -5,6 +5,7 @@
 
 #include "core/profilepartxmlparser.h"
 #include "cpufreqprofilepart.h"
+#include <optional>
 #include <string>
 
 class CPUFreqXMLParser final
@@ -30,6 +31,9 @@ class CPUFreqXMLParser final
   void takeCPUFreqScalingGovernor(std::string const &governor) override;
   std::string const &provideCPUFreqScalingGovernor() const override;
 
+  void takeCPUFreqEPPHint(std::optional<std::string> const &hint) override;
+  std::optional<std::string> const &provideCPUFreqEPPHint() const override;
+
   void appendTo(pugi::xml_node &parentNode) override;
 
  protected:
@@ -46,6 +50,9 @@ class CPUFreqXMLParser final
 
   std::string scalingGovernor_;
   std::string scalingGovernorDefault_;
+
+  std::optional<std::string> eppHint_;
+  std::optional<std::string> eppHintDefault_;
 
   static bool const registered_;
 };

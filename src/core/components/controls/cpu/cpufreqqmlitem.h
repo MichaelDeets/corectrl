@@ -8,6 +8,7 @@
 #include <QList>
 #include <QObject>
 #include <QString>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -24,9 +25,13 @@ class CPUFreqQMLItem
  signals:
   void scalingGovernorChanged(QString const &governor);
   void scalingGovernorsChanged(QList<QString> const &governors);
+  void eppHintChanged(QString const &hint);
+  void eppHintsChanged(QList<QString> const &hints);
+  void toggleEppHint(bool enable);
 
  public slots:
   void changeScalingGovernor(QString const &governor);
+  void changeEPPHint(QString const &hint);
 
  public:
   void activate(bool active) override;
@@ -38,9 +43,11 @@ class CPUFreqQMLItem
 
   bool provideActive() const override;
   std::string const &provideCPUFreqScalingGovernor() const override;
+  std::optional<std::string> const &provideCPUFreqEPPHint() const override;
 
   void takeActive(bool active) override;
   void takeCPUFreqScalingGovernor(std::string const &governor) override;
+  void takeCPUFreqEPPHint(std::optional<std::string> const &hint) override;
 
   std::unique_ptr<Exportable::Exporter>
   initializer(IQMLComponentFactory const &qmlComponentFactory,
@@ -49,9 +56,13 @@ class CPUFreqQMLItem
  private:
   class Initializer;
   void takeCPUFreqScalingGovernors(std::vector<std::string> const &governors);
+  void takeCPUFreqEPPHints(std::optional<std::vector<std::string>> const &hints);
 
   bool active_;
   std::string scalingGovernor_;
+  std::string const eppScalingGovernor_{"powersave"};
+  std::optional<std::string> eppHint_;
+  bool enableEpp_{false};
 
   static bool register_();
   static bool const registered_;

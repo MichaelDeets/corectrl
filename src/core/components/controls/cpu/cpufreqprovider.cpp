@@ -9,6 +9,7 @@
 #include "core/sysfsdatasource.h"
 #include "cpufreq.h"
 #include "cpufreqmodeprovider.h"
+#include "handlers/epphandler.h"
 #include <algorithm>
 #include <filesystem>
 #include <utility>
@@ -35,7 +36,8 @@ CPUFreqProvider::provideCPUControls(ICPUInfo const &cpuInfo, ISWInfo const &) co
 
   std::vector<std::unique_ptr<IControl>> controls;
   controls.emplace_back(std::make_unique<CPUFreq>(
-      std::move(governors), governor, std::move(scalingGovernorDataSources)));
+      std::move(governors), governor, std::move(scalingGovernorDataSources),
+      createEPPHandler(cpuInfo)));
 
   return controls;
 }
@@ -111,6 +113,59 @@ CPUFreqProvider::createScalingGovernorDataSources(ICPUInfo const &cpuInfo) const
   }
 
   return scalingGovernorDataSources;
+}
+
+std::unique_ptr<IEPPHandler>
+CPUFreqProvider::createEPPHandler(ICPUInfo const &cpuInfo) const
+{
+  auto eppHints = availableHints(cpuInfo);
+  if (eppHints.empty())
+    return {};
+
+  auto eppHintDataSources = createHintDataSources(cpuInfo);
+  if (eppHintDataSources.empty())
+    return {};
+
+  return std::make_unique<EPPHandler>(std::move(eppHints),
+                                      std::move(eppHintDataSources));
+}
+
+std::vector<std::string>
+CPUFreqProvider::availableHints(ICPUInfo const &cpuInfo) const
+{
+  std::string availableGovernorsPath{
+      "cpufreq/energy_performance_available_preferences"};
+
+  // get available hints from the first execution unit
+  auto unitAvailableHintsPath = cpuInfo.executionUnits().front().sysPath /
+                                availableGovernorsPath;
+
+  if (!Utils::File::isSysFSEntryValid(unitAvailableHintsPath))
+    return {};
+
+  auto lines = Utils::File::readFileLines(unitAvailableHintsPath);
+  auto hints = Utils::String::split(lines.front());
+
+  return hints;
+}
+
+std::vector<std::unique_ptr<IDataSource<std::string>>>
+CPUFreqProvider::createHintDataSources(ICPUInfo const &cpuInfo) const
+{
+  std::vector<std::unique_ptr<IDataSource<std::string>>> hintDataSources;
+
+  std::string hintPath{"cpufreq/energy_performance_preference"};
+  for (auto const &executionUnit : cpuInfo.executionUnits()) {
+
+    auto unitHintPath = executionUnit.sysPath / hintPath;
+    if (!Utils::File::isSysFSEntryValid(unitHintPath))
+      continue;
+
+    hintDataSources.emplace_back(
+        std::make_unique<SysFSDataSource<std::string>>(unitHintPath));
+  }
+
+  return hintDataSources;
 }
 
 bool const CPUFreqProvider::registered_ =

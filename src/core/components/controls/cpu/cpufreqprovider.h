@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+class IEPPHandler;
+
 class CPUFreqProvider final : public ICPUControlProvider::IProvider
 {
  public:
@@ -22,6 +24,10 @@ class CPUFreqProvider final : public ICPUControlProvider::IProvider
                                std::vector<std::string> const &governors) const;
   std::vector<std::unique_ptr<IDataSource<std::string>>>
   createScalingGovernorDataSources(ICPUInfo const &cpuInfo) const;
+  std::unique_ptr<IEPPHandler> createEPPHandler(ICPUInfo const &cpuInfo) const;
+  std::vector<std::string> availableHints(ICPUInfo const &cpuInfo) const;
+  std::vector<std::unique_ptr<IDataSource<std::string>>>
+  createHintDataSources(ICPUInfo const &cpuInfo) const;
 
   static bool const registered_;
 };

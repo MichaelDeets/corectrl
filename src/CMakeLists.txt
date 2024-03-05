@@ -189,6 +189,7 @@ list(APPEND CONTROLS_SRC
   core/components/controls/cpu/cpufreqmodeprovider.cpp
   core/components/controls/cpu/cpufreqmodeprofilepart.cpp
   core/components/controls/cpu/cpufreqmodexmlparser.cpp
+  core/components/controls/cpu/handlers/epphandler.cpp
 )
 
 list(APPEND SENSORS_SRC

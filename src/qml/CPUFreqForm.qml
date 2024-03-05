@@ -38,6 +38,34 @@ CPU_CPUFREQ {
     }
   }
 
+  onEppHintsChanged: {
+    eppHintListModel.clear()
+
+    for (var i = 0; i < hints.length; i+=2) {
+      var element = eppHintListElement.createObject()
+      element.hint = hints[i]
+      element.text = hints[i + 1]
+      eppHintListModel.append(element)
+    }
+
+    cbEppHint.updateWidth()
+  }
+
+  onEppHintChanged: {
+    for (var i = 0; i < eppHintListModel.count; ++i) {
+      if (eppHintListModel.get(i).hint === hint) {
+        cbEppHint.lastIndex = i
+        cbEppHint.currentIndex = i
+        break;
+      }
+    }
+  }
+
+  onToggleEppHint: {
+    lbEppHint.visible = enable
+    cbEppHint.visible = enable
+  }
+
   ListModel { id: scalingGovernorListModel }
   Component {
     id: scalingGovernorListElement
@@ -48,19 +76,34 @@ CPU_CPUFREQ {
     }
   }
 
+    ListModel { id: eppHintListModel }
+    Component {
+      id: eppHintListElement
+
+      ListElement {
+        property string text
+        property string hint
+      }
+    }
+
   Pane {
     id: contents
     padding: Style.g_padding
 
-    RowLayout {
+    GridLayout {
+      columns: 2
+      columnSpacing: 10
+
       Label {
         text: qsTr("Frequency governor")
-        rightPadding: 6
+        Layout.alignment: Qt.AlignRight
       }
 
       CComboBox {
         id: cbScalingGovernor
         model: scalingGovernorListModel
+        Layout.alignment: Qt.AlignLeft
+        Layout.fillWidth: true
 
         property int lastIndex: 0
 
@@ -70,6 +113,32 @@ CPU_CPUFREQ {
 
             var governor = model.get(currentIndex).governor
             cpuFreq.changeScalingGovernor(governor)
+          }
+        }
+      }
+
+      Label {
+        id: lbEppHint
+        text: qsTr("Energy Performance Preference")
+        Layout.alignment: Qt.AlignRight
+        visible: false
+      }
+
+      CComboBox {
+        id: cbEppHint
+        model: eppHintListModel
+        Layout.alignment: Qt.AlignLeft
+        Layout.fillWidth: true
+        visible: false
+
+        property int lastIndex: 0
+
+        onActivated: {
+          if (lastIndex !== currentIndex) {
+            lastIndex = currentIndex
+
+            var hint = model.get(currentIndex).hint
+            cpuFreq.changeEPPHint(hint)
           }
         }
       }

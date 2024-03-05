@@ -19,6 +19,13 @@ char const *const CPUFreqQMLItem::trStrings[] = {
     QT_TRANSLATE_NOOP("CPUFreqQMLItem", "schedutil"),
     QT_TRANSLATE_NOOP("CPUFreqQMLItem", "ondemand"),
     QT_TRANSLATE_NOOP("CPUFreqQMLItem", "conservative"),
+
+    // XXX add CPU EPP available hints here
+    QT_TRANSLATE_NOOP("CPUFreqQMLItem", "default"),
+    QT_TRANSLATE_NOOP("CPUFreqQMLItem", "performance"),
+    QT_TRANSLATE_NOOP("CPUFreqQMLItem", "balance_performance"),
+    QT_TRANSLATE_NOOP("CPUFreqQMLItem", "balance_power"),
+    QT_TRANSLATE_NOOP("CPUFreqQMLItem", "power"),
 };
 
 class CPUFreqQMLItem::Initializer final
@@ -45,6 +52,10 @@ class CPUFreqQMLItem::Initializer final
   void
   takeCPUFreqScalingGovernors(std::vector<std::string> const &governors) override;
 
+  void takeCPUFreqEPPHint(std::optional<std::string> const &hint) override;
+  void takeCPUFreqEPPHints(
+      std::optional<std::vector<std::string>> const &hints) override;
+
  private:
   CPUFreqQMLItem &outer_;
 };
@@ -66,6 +77,18 @@ void CPUFreqQMLItem::Initializer::takeCPUFreqScalingGovernors(
   outer_.takeCPUFreqScalingGovernors(governors);
 }
 
+void CPUFreqQMLItem::Initializer::takeCPUFreqEPPHint(
+    std::optional<std::string> const &hint)
+{
+  outer_.takeCPUFreqEPPHint(hint);
+}
+
+void CPUFreqQMLItem::Initializer::takeCPUFreqEPPHints(
+    std::optional<std::vector<std::string>> const &hints)
+{
+  outer_.takeCPUFreqEPPHints(hints);
+}
+
 CPUFreqQMLItem::CPUFreqQMLItem() noexcept
 {
   setName(tr(CPUFreq::ItemID.data()));
@@ -77,6 +100,17 @@ void CPUFreqQMLItem::changeScalingGovernor(QString const &governor)
   if (scalingGovernor_ != newScalingGovernor) {
     std::swap(scalingGovernor_, newScalingGovernor);
     emit scalingGovernorChanged(governor);
+    emit toggleEppHint(enableEpp_ && scalingGovernor_ == eppScalingGovernor_);
+    emit settingsChanged();
+  }
+}
+
+void CPUFreqQMLItem::changeEPPHint(QString const &hint)
+{
+  auto newHint = hint.toStdString();
+  if (eppHint_ && eppHint_ != newHint) {
+    std::swap(*eppHint_, newHint);
+    emit eppHintChanged(hint);
     emit settingsChanged();
   }
 }
@@ -108,6 +142,11 @@ std::string const &CPUFreqQMLItem::provideCPUFreqScalingGovernor() const
   return scalingGovernor_;
 }
 
+std::optional<std::string> const &CPUFreqQMLItem::provideCPUFreqEPPHint() const
+{
+  return eppHint_;
+}
+
 void CPUFreqQMLItem::takeActive(bool active)
 {
   active_ = active;
@@ -119,6 +158,15 @@ void CPUFreqQMLItem::takeCPUFreqScalingGovernor(std::string const &governor)
   if (scalingGovernor_ != governor) {
     scalingGovernor_ = governor;
     emit scalingGovernorChanged(QString::fromStdString(scalingGovernor_));
+    emit toggleEppHint(enableEpp_ && scalingGovernor_ == eppScalingGovernor_);
+  }
+}
+
+void CPUFreqQMLItem::takeCPUFreqEPPHint(std::optional<std::string> const &hint)
+{
+  if (hint && eppHint_ != hint) {
+    eppHint_ = hint;
+    emit eppHintChanged(QString::fromStdString(*eppHint_));
   }
 }
 
@@ -139,6 +187,22 @@ void CPUFreqQMLItem::takeCPUFreqScalingGovernors(
     governorTextVector.push_back(tr(governor.data()));
   }
   emit scalingGovernorsChanged(governorTextVector);
+}
+
+void CPUFreqQMLItem::takeCPUFreqEPPHints(
+    std::optional<std::vector<std::string>> const &hints)
+{
+  if (!hints)
+    return;
+
+  enableEpp_ = true;
+
+  QList<QString> hintTextVector;
+  for (auto hint : *hints) {
+    hintTextVector.push_back(QString::fromStdString(hint));
+    hintTextVector.push_back(tr(hint.data()));
+  }
+  emit eppHintsChanged(hintTextVector);
 }
 
 bool CPUFreqQMLItem::register_()

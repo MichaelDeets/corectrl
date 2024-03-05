@@ -7,6 +7,7 @@
 #include "common/commandqueuestub.h"
 #include "common/stringdatasourcestub.h"
 #include "core/components/controls/cpu/cpufreq.h"
+#include "core/components/controls/cpu/handlers/iepphandler.h"
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
@@ -28,8 +29,10 @@ class CPUFreqTestAdapter : public ::CPUFreq
 class CPUFreqImporterStub : public ::CPUFreq::Importer
 {
  public:
-  CPUFreqImporterStub(std::string_view scalingGovernor)
+  CPUFreqImporterStub(std::string_view scalingGovernor,
+                      std::optional<std::string> eppHint = std::nullopt)
   : scalingGovernor_(scalingGovernor)
+  , eppHint_(eppHint)
   {
   }
 
@@ -49,8 +52,40 @@ class CPUFreqImporterStub : public ::CPUFreq::Importer
     return scalingGovernor_;
   }
 
+  std::optional<std::string> const &provideCPUFreqEPPHint() const
+  {
+    return eppHint_;
+  }
+
  private:
   std::string scalingGovernor_;
+  std::optional<std::string> eppHint_;
+};
+
+class EPPHandlerMock : public IEPPHandler
+{
+ public:
+  MAKE_CONST_MOCK0(hints, std::vector<std::string> const &(void), override);
+  MAKE_CONST_MOCK0(hint, std::string const &(), override);
+  MAKE_MOCK1(hint, void(std::string const &), override);
+  MAKE_MOCK0(saveState, void(), override);
+  MAKE_MOCK1(restoreState, void(ICommandQueue &), override);
+  MAKE_MOCK1(reset, void(ICommandQueue &), override);
+  MAKE_MOCK1(sync, void(ICommandQueue &), override);
+};
+
+class CPUFreqImporterMock : public ::CPUFreq::Importer
+{
+ public:
+  MAKE_CONST_MOCK0(provideCPUFreqScalingGovernor, std::string const &(void),
+                   override);
+  MAKE_CONST_MOCK0(provideCPUFreqEPPHint,
+                   std::optional<std::string> const &(void), override);
+  MAKE_CONST_MOCK0(provideActive, bool(void), override);
+  MAKE_MOCK1(
+      provideImporter,
+      std::optional<std::reference_wrapper<Importable::Importer>>(Item const &),
+      override);
 };
 
 class CPUFreqExporterMock : public ::CPUFreq::Exporter
@@ -59,6 +94,10 @@ class CPUFreqExporterMock : public ::CPUFreq::Exporter
   MAKE_MOCK1(takeCPUFreqScalingGovernor, void(std::string const &), override);
   MAKE_MOCK1(takeCPUFreqScalingGovernors,
              void(std::vector<std::string> const &), override);
+  MAKE_MOCK1(takeCPUFreqEPPHint, void(std::optional<std::string> const &),
+             override);
+  MAKE_MOCK1(takeCPUFreqEPPHints,
+             void(std::optional<std::vector<std::string>> const &), override);
   MAKE_MOCK1(takeActive, void(bool), override);
   MAKE_MOCK1(
       provideExporter,
@@ -142,7 +181,7 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
     REQUIRE(ctlCmds.commands().empty());
   }
 
-  SECTION("Imports its state")
+  SECTION("Imports scaling governor state")
   {
     CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
                           std::move(scalingGovernorDataSources));
@@ -152,7 +191,20 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
     REQUIRE(ts.scalingGovernor() == "performance");
   }
 
-  SECTION("Export its state and available scaling governors")
+  SECTION("Imports EPP hint state when EPP is supported")
+  {
+    std::string eppHint{"power"};
+    auto eppHandlerMock = std::make_unique<EPPHandlerMock>();
+    REQUIRE_CALL(*eppHandlerMock, hint(trompeloeil::_)).LR_WITH(_1 == eppHint);
+
+    CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
+                          std::move(scalingGovernorDataSources),
+                          std::move(eppHandlerMock));
+    CPUFreqImporterStub i("performance", eppHint);
+    ts.importControl(i);
+  }
+
+  SECTION("Export scaling governor state and available scaling governors")
   {
     auto governors = availableGovernors;
     CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
@@ -162,8 +214,36 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
     REQUIRE_CALL(e, takeCPUFreqScalingGovernors(trompeloeil::_))
         .LR_WITH(_1 == governors)
         .IN_SEQUENCE(seq);
+    REQUIRE_CALL(e, takeCPUFreqEPPHints(trompeloeil::eq(std::nullopt)))
+        .IN_SEQUENCE(seq);
     REQUIRE_CALL(e, takeCPUFreqScalingGovernor(trompeloeil::eq(defaultGovernor)))
         .IN_SEQUENCE(seq);
+    REQUIRE_CALL(e, takeCPUFreqEPPHint(trompeloeil::eq(std::nullopt)))
+        .IN_SEQUENCE(seq);
+
+    ts.exportControl(e);
+  }
+
+  SECTION("Export EPP hint state and available hints when EPP is supported")
+  {
+    std::vector<std::string> eppHints{"default", "power"};
+    std::string eppHint{"default"};
+    auto eppHandlerMock = std::make_unique<EPPHandlerMock>();
+    ALLOW_CALL(*eppHandlerMock, hints()).RETURN(eppHints);
+    ALLOW_CALL(*eppHandlerMock, hint()).RETURN(eppHint);
+
+    auto governors = availableGovernors;
+    CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
+                          std::move(scalingGovernorDataSources),
+                          std::move(eppHandlerMock));
+    trompeloeil::sequence seq;
+    CPUFreqExporterMock e;
+    ALLOW_CALL(e, takeCPUFreqScalingGovernors(trompeloeil::_)).IN_SEQUENCE(seq);
+    REQUIRE_CALL(e, takeCPUFreqEPPHints(trompeloeil::_))
+        .LR_WITH(_1 == eppHints)
+        .IN_SEQUENCE(seq);
+    ALLOW_CALL(e, takeCPUFreqScalingGovernor(trompeloeil::_)).IN_SEQUENCE(seq);
+    REQUIRE_CALL(e, takeCPUFreqEPPHint(trompeloeil::eq(eppHint))).IN_SEQUENCE(seq);
 
     ts.exportControl(e);
   }
@@ -204,6 +284,22 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
     auto &[path, value] = ctlCmds.commands().front();
     REQUIRE(path == scalingGovernorPath);
     REQUIRE(value == defaultGovernor);
+  }
+
+  SECTION("Could generate sync control commands for EPP when this feature "
+          "is supported")
+  {
+    auto eppHandlerMock = std::make_unique<EPPHandlerMock>();
+    REQUIRE_CALL(*eppHandlerMock, sync(trompeloeil::_));
+
+    scalingGovernorDataSources.emplace_back(
+        std::make_unique<StringDataSourceStub>(scalingGovernorPath,
+                                               defaultGovernor));
+    CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
+                          std::move(scalingGovernorDataSources),
+                          std::move(eppHandlerMock));
+
+    ts.syncControl(ctlCmds);
   }
 }
 

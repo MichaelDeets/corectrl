@@ -277,9 +277,14 @@
 <context>
     <name>CPUFreqForm</name>
     <message>
-        <location filename="../qml/CPUFreqForm.qml" line="57"/>
+        <location filename="../qml/CPUFreqForm.qml" line="93"/>
         <source>Frequency governor</source>
         <translation>Gouverneur de fréquence</translation>
+    </message>
+    <message>
+        <location filename="../qml/CPUFreqForm.qml" line="119"/>
+        <source>Energy Performance Preference</source>
+        <translation>Préférence pour la performance énergétique</translation>
     </message>
 </context>
 <context>
@@ -294,6 +299,7 @@
     <name>CPUFreqQMLItem</name>
     <message>
         <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="17"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="25"/>
         <source>performance</source>
         <translation>Performance</translation>
     </message>
@@ -316,6 +322,26 @@
         <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
         <source>conservative</source>
         <translation>Conservateur</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="24"/>
+        <source>default</source>
+        <translation>Par défaut</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="26"/>
+        <source>balance_performance</source>
+        <translation>Équilibrer la performance</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="27"/>
+        <source>balance_power</source>
+        <translation>Equilibrer l&apos;énergie</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="28"/>
+        <source>power</source>
+        <translation>Énergie</translation>
     </message>
 </context>
 <context>

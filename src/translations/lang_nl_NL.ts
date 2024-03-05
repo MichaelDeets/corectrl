@@ -277,9 +277,14 @@
 <context>
     <name>CPUFreqForm</name>
     <message>
-        <location filename="../qml/CPUFreqForm.qml" line="57"/>
+        <location filename="../qml/CPUFreqForm.qml" line="93"/>
         <source>Frequency governor</source>
         <translation>Frequentiegovernor</translation>
+    </message>
+    <message>
+        <location filename="../qml/CPUFreqForm.qml" line="119"/>
+        <source>Energy Performance Preference</source>
+        <translation>Energie-efficiëntie voorkeur</translation>
     </message>
 </context>
 <context>
@@ -294,6 +299,7 @@
     <name>CPUFreqQMLItem</name>
     <message>
         <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="17"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="25"/>
         <source>performance</source>
         <translation>performance</translation>
     </message>
@@ -316,6 +322,26 @@
         <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="21"/>
         <source>conservative</source>
         <translation>conservative</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="24"/>
+        <source>default</source>
+        <translation>Standaard</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="26"/>
+        <source>balance_performance</source>
+        <translation>Prestaties balanceren</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="27"/>
+        <source>balance_power</source>
+        <translation>Energie balanceren</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="28"/>
+        <source>power</source>
+        <translation>Energie</translation>
     </message>
 </context>
 <context>

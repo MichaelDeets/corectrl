@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Botan 3 compilation support (#373). Botan 2 is still supported. Botan 3 takes precedence over Botan 2 when both versions are installed in the system.
 - Manual profile activation at application startup using the command line argument `-m, --toggle-manual-profile` (#366).
 - Automatic and curve fan controls for AMD RX 7000 series (#344).
+- CPU Energy Performance Preference control (#404). This feature is only available for hardware with active governing support and can be accessed by setting the CPU frequency scaling governor to `Powersave`.
 - Swedish translation. Thanks to Jon (!45).
 
 ### Removed
