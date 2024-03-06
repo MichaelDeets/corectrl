@@ -264,7 +264,7 @@
     <message>
         <location line="+1"/>
         <source>Project</source>
-        <translation>პროექტი</translation>
+        <translation>პროექტები</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -285,9 +285,14 @@
 <context>
     <name>CPUFreqForm</name>
     <message>
-        <location filename="../qml/CPUFreqForm.qml" line="+57"/>
+        <location filename="../qml/CPUFreqForm.qml" line="+93"/>
         <source>Frequency governor</source>
         <translation>სიხშირის მმართველი</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Energy Performance Preference</source>
+        <translation>ენერგიის წარმადობის არჩევანი</translation>
     </message>
 </context>
 <context>
@@ -302,11 +307,12 @@
     <name>CPUFreqQMLItem</name>
     <message>
         <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="+17"/>
+        <location line="+8"/>
         <source>performance</source>
         <translation>წარმადობა</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-7"/>
         <source>powersave</source>
         <translation>powersave</translation>
     </message>
@@ -324,6 +330,26 @@
         <location line="+1"/>
         <source>conservative</source>
         <translation>conservative</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>default</source>
+        <translation>ნაგულისხმევი</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>balance_performance</source>
+        <translation>balance_performance</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>balance_power</source>
+        <translation>balance_power</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>power</source>
+        <translation>კვება</translation>
     </message>
 </context>
 <context>
@@ -369,7 +395,7 @@
         <translation>AMD_PM_DYNAMIC_FREQ</translation>
     </message>
     <message>
-        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="-7"/>
+        <location filename="../core/components/controls/cpu/cpufreqqmlitem.cpp" line="-14"/>
         <source>CPU_CPUFREQ</source>
         <translation>CPU_CPUFREQ</translation>
     </message>
@@ -399,7 +425,7 @@
     <message>
         <location filename="../qml/FVControl.qml" line="+105"/>
         <source>STATE</source>
-        <translation>მდგომარეობა</translation>
+        <translation>STATE</translation>
     </message>
     <message>
         <location line="+63"/>
@@ -557,7 +583,7 @@
     <message>
         <location filename="../qml/Profiles.qml" line="+150"/>
         <source>Disabled</source>
-        <translation>გამოირთო</translation>
+        <translation>გათიშულია</translation>
     </message>
     <message>
         <location line="+91"/>
@@ -679,7 +705,7 @@ Check the permissions of the destination file and directory.</source>
     <message>
         <location line="+284"/>
         <source>Reset</source>
-        <translation>საწყისი მნიშვნელობები</translation>
+        <translation>დაბრუნება</translation>
     </message>
 </context>
 <context>
@@ -732,7 +758,7 @@ Check the permissions of the destination file and directory.</source>
     <message>
         <location filename="../qml/SensorGraph.qml" line="+136"/>
         <source>n/a</source>
-        <translation>შეუსაბამო</translation>
+        <translation>n/a</translation>
     </message>
     <message>
         <location filename="../core/components/sensors/amd/gpuvoltgraphitem.cpp" line="+19"/>
@@ -860,22 +886,22 @@ Check the permissions of the destination file and directory.</source>
     <message>
         <location filename="../core/systeminfoui.cpp" line="+19"/>
         <source>kernelv</source>
-        <translation>kernelv</translation>
+        <translation>ბირთვის ვერსია</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>mesav</source>
-        <translation>mesav</translation>
+        <translation>mesa-ის ვერსია</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>vkapiv</source>
-        <translation>vkapiv</translation>
+        <translation>vk API-ის ვერსია</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>glcorev</source>
-        <translation>glcorev</translation>
+        <translation>gl-ის ბირთვის ვერსია</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1053,7 +1079,7 @@ Check the permissions of the destination file and directory.</source>
     <message>
         <location line="+3"/>
         <source>System</source>
-        <translation>სისტემური</translation>
+        <translation>სისტემა</translation>
     </message>
 </context>
 </TS>
