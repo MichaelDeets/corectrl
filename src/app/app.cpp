@@ -334,9 +334,13 @@ bool App::handleToggleManualProfileCmd()
   auto cmdHandled{false};
   if (cmdParser_.isSet("toggle-manual-profile")) {
 
-    auto profileName = cmdParser_.value("toggle-manual-profile");
-    if (!profileName.isEmpty() && profileName.length() < 512)
-      session_->toggleManualProfile(profileName.toStdString());
+    auto profileName = cmdParser_.value("toggle-manual-profile").toStdString();
+    if (profileName.empty() || profileName.length() >= 512)
+      SPDLOG_WARN("'{}' is not a valid manual profile name.", profileName);
+    else if (!session_->toggleManualProfile(profileName))
+      SPDLOG_WARN("Cannot toggle manual profile '{}': Missing profile or not a "
+                  "manual profile.",
+                  profileName);
 
     cmdHandled = true;
   }

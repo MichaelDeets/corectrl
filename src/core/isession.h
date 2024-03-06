@@ -26,7 +26,7 @@ class ISession
       std::shared_ptr<ISession::ManualProfileObserver> observer) = 0;
 
   virtual void init(ISysModel const &model) = 0;
-  virtual void toggleManualProfile(std::string const &profileName) = 0;
+  virtual bool toggleManualProfile(std::string const &profileName) = 0;
   virtual IProfileManager &profileManager() const = 0;
 
   virtual ~ISession() = default;

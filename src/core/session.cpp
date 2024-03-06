@@ -134,8 +134,12 @@ void Session::init(ISysModel const &model)
   watchProfiles();
 }
 
-void Session::toggleManualProfile(std::string const &profileName)
+bool Session::toggleManualProfile(std::string const &profileName)
 {
+  auto profile = profileManager_->profile(profileName);
+  if (!profile || profile->get().info().exe != IProfile::Info::ManualID)
+    return false;
+
   std::lock_guard<std::mutex> lock(pViewsMutex_);
   std::lock_guard<std::mutex> mLock(manualProfileMutex_);
 
@@ -161,6 +165,8 @@ void Session::toggleManualProfile(std::string const &profileName)
 
   // apply active profile view
   profileApplicator_->apply(*pViews_.back());
+
+  return true;
 }
 
 IProfileManager &Session::profileManager() const

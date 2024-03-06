@@ -33,7 +33,7 @@ class Session final : public ISession
       std::shared_ptr<ISession::ManualProfileObserver> observer) override;
 
   void init(ISysModel const &model) override;
-  void toggleManualProfile(std::string const &profileName) override;
+  bool toggleManualProfile(std::string const &profileName) override;
   IProfileManager &profileManager() const override;
 
  private:
