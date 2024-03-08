@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Bundled version of pugixml.
 - fmt library dependency.
 - Unimplemented custom frequency option from CPU performance scaling governor control (#175).
+- Workaround for automatic profiles not working with Linux 6.7 and Linux 6.6.13 (#416). The change that triggers this regression was reverted in Linux 6.7.6 and 6.6.18.
 
 
 ## CoreCtrl 1.3.10 (2024-02-04)
