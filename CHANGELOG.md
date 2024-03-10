@@ -5,9 +5,6 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - QML Connections deprecation warning (#123).
-- Typo in README. Thanks to paintdev (!43).
-- Default power limit value when power limit reset support is not available (#422).
-- Crash when toggling a non-existing manual profile through the command line (#429).
 
 ### Changed
 - Require Qt 5.15.
@@ -39,6 +36,16 @@ All notable changes to this project will be documented in this file.
 - Bundled version of pugixml.
 - fmt library dependency.
 - Unimplemented custom frequency option from CPU performance scaling governor control (#175).
+
+
+## CoreCtrl 1.3.11 (2024-03-10)
+
+### Fixed
+- Default power limit value when power limit reset support is not available (#422).
+- Crash when toggling a non-existing manual profile through the command line (#429).
+- Typo in README. Thanks to paintdev (!43).
+
+### Removed
 - Workaround for automatic profiles not working with Linux 6.7 and Linux 6.6.13 (#416). The change that triggers this regression was reverted in Linux 6.7.6 and 6.6.18.
 
 
