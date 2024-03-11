@@ -14,11 +14,11 @@ AMD_PM_FREQ_OD {
   width: contents.width
   height: contents.height
 
-  onSclkOdChanged: sclkOd.value = value
-  onMclkOdChanged: mclkOd.value = value
+  onSclkOdChanged: value => sclkOd.value = value
+  onMclkOdChanged: value => mclkOd.value = value
 
-  onSclkChanged: sclkFreq.text = value;
-  onMclkChanged: mclkFreq.text = value;
+  onSclkChanged: value => sclkFreq.text = value;
+  onMclkChanged: value => mclkFreq.text = value;
 
 
   TextMetrics {
@@ -53,7 +53,10 @@ AMD_PM_FREQ_OD {
           to: 20
           stepSize: 1
 
-          onMoved: pmFreqOd.changeSclkOd(sclkOd.value)
+          onPressedChanged: pressed => {
+            if (!pressed)
+              pmFreqOd.changeSclkOd(sclkOd.value)
+          }
         }
 
         Label {
@@ -84,7 +87,10 @@ AMD_PM_FREQ_OD {
           to: 20
           stepSize: 1
 
-          onMoved: pmFreqOd.changeMclkOd(mclkOd.value)
+          onPressedChanged: pressed => {
+            if (!pressed)
+              pmFreqOd.changeMclkOd(mclkOd.value)
+          }
         }
 
         Label {

@@ -12,7 +12,7 @@ CPU {
   id: cpu
   objectName: "CPU"
 
-  onNewGraphItem: {
+  onNewGraphItem: item => {
     sensorGraph.addItem(item)
     Settings.addComponentData("CPU" + cpu.physicalId, "CPU " + cpu.physicalId,
                               item.name,

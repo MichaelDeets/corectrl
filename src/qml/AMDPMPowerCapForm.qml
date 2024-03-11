@@ -14,11 +14,11 @@ AMD_PM_POWERCAP {
   width: contents.width
   height: contents.height
 
-  onValueChanged: {
+  onValueChanged: value => {
     powerValue.value = value
     valueInput.value = value
   }
-  onRangeChanged: {
+  onRangeChanged: (min, max) => {
     powerValue.from = min
     powerValue.to = max
   }
@@ -43,7 +43,7 @@ AMD_PM_POWERCAP {
         to: 0
         stepSize: 1
 
-        onPressedChanged: {
+        onPressedChanged: pressed => {
           if (!pressed)
             powerCap.changeValue(powerValue.value)
         }

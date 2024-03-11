@@ -13,31 +13,31 @@ AMD_PM_FREQ_VOLT {
   width: contents.width
   height: contents.height
 
-  onControlLabelChanged: fv.title = label
+  onControlLabelChanged: label => fv.title = label
 
-  onVoltRangeChanged: {
+  onVoltRangeChanged: (min, max) => {
     p.voltMin = min
     p.voltMax = max
 
     fv.setVoltRange(min, max)
   }
 
-  onFreqRangeChanged: {
+  onFreqRangeChanged: (min, max) => {
     p.freqMin = min
     p.freqMax = max
 
     fv.setFreqRange(min, max)
   }
 
-  onVoltModeChanged: fv.voltManual = mode === "manual"
+  onVoltModeChanged: mode => fv.voltManual = mode === "manual"
 
-  onStatesChanged: fv.setFVStates(states, p.activeStates,
-                                  p.freqMin, p.freqMax,
-                                  p.voltMin, p.voltMax)
+  onStatesChanged: states => fv.setFVStates(states, p.activeStates,
+                                            p.freqMin, p.freqMax,
+                                            p.voltMin, p.voltMax)
 
-  onStateChanged: fv.updateFVState(index, freq, volt)
+  onStateChanged: (index, freq, volt) => fv.updateFVState(index, freq, volt)
 
-  onActiveStatesChanged: {
+  onActiveStatesChanged: states => {
     p.activeStates.length = 0
     p.activeStates = states
     fv.activeStates(states)
@@ -64,8 +64,8 @@ AMD_PM_FREQ_VOLT {
         Layout.fillHeight: true
 
         onVoltManualChanged: pmFreqVolt.changeVoltMode(voltManual ? "manual" : "auto")
-        onStateChanged: pmFreqVolt.changeState(index, freq, volt)
-        onActiveStateChanged: pmFreqVolt.changeActiveState(index, active)
+        onStateChanged: (index, freq, volt) => pmFreqVolt.changeState(index, freq, volt)
+        onActiveStateChanged: (index, active) => pmFreqVolt.changeActiveState(index, active)
       }
     }
   }

@@ -14,9 +14,9 @@ AMD_FAN_FIXED {
   width: contents.width
   height: contents.height
 
-  onValueChanged: fanValue.value = value
-  onFanStopChanged: fanStop.checked = enabled
-  onFanStartValueChanged: fanStartValue.value = value
+  onValueChanged: value => fanValue.value = value
+  onFanStopChanged: enabled => fanStop.checked = enabled
+  onFanStartValueChanged: value => fanStartValue.value = value
 
   TextMetrics {
     id: tFMetrics
@@ -38,7 +38,7 @@ AMD_FAN_FIXED {
           to: 100
           stepSize: 1
 
-          onPressedChanged: {
+          onPressedChanged: pressed => {
             if (!pressed)
               fanFixed.changeValue(fanValue.value)
           }

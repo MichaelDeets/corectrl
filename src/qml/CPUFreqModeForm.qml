@@ -11,15 +11,15 @@ CPU_CPUFREQ_MODE {
   width: modeSelector.width
   height: modeSelector.height
 
-  onModesChanged: modeSelector.setModes(modes)
-  onModeChanged: modeSelector.select(mode)
+  onModesChanged: modes => modeSelector.setModes(modes)
+  onModeChanged: mode => modeSelector.select(mode)
 
   ModeSelector {
     id: modeSelector
     headerTitle: qsTr("Performance scaling")
     contentParentObject: "CPU_CPUFREQ_MODE_Plug"
 
-    onSelectionChanged: cpuFreqMode.changeMode(mode)
-    onChildAdded: cpuFreqMode.setupChild(child)
+    onSelectionChanged: mode => cpuFreqMode.changeMode(mode)
+    onChildAdded: child => cpuFreqMode.setupChild(child)
   }
 }

@@ -84,7 +84,7 @@ TextField {
     value: p.newText
   }
 
-  Keys.onPressed: {
+  Keys.onPressed: event => {
     if (event.key === Qt.Key_Tab ||
         event.key === Qt.Key_Enter ||
         event.key === Qt.Key_Return)

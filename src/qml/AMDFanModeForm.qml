@@ -11,15 +11,15 @@ AMD_FAN_MODE {
   width: modeSelector.width
   height: modeSelector.height
 
-  onModesChanged: modeSelector.setModes(modes)
-  onModeChanged: modeSelector.select(mode)
+  onModesChanged: modes => modeSelector.setModes(modes)
+  onModeChanged: mode => modeSelector.select(mode)
 
   ModeSelector {
     id: modeSelector
     headerTitle: qsTr("Ventilation")
     contentParentObject: "AMD_FAN_MODE_Plug"
 
-    onSelectionChanged: fMode.changeMode(mode)
-    onChildAdded: fMode.setupChild(child)
+    onSelectionChanged: mode => fMode.changeMode(mode)
+    onChildAdded: child => fMode.setupChild(child)
   }
 }

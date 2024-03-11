@@ -14,7 +14,7 @@ AMD_PM_POWER_PROFILE {
   width: contents.width
   height: contents.height
 
-  onModeChanged: {
+  onModeChanged: mode => {
     for (var i = 0; i < listModel.count; ++i) {
       if (listModel.get(i).mode === mode) {
         cbMode.lastIndex = i
@@ -24,7 +24,7 @@ AMD_PM_POWER_PROFILE {
     }
   }
 
-  onModesChanged: {
+  onModesChanged: modes => {
     listModel.clear()
 
     for (var i = 0; i < modes.length; i+=2) {

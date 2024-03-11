@@ -15,12 +15,12 @@ AMD_PM_VOLT_CURVE {
   width: contents.width
   height: contents.height
 
-  onModeChanged: modeSw.checked = mode === "manual"
-  onPointsRangeChanged: {
+  onModeChanged: mode => modeSw.checked = mode === "manual"
+  onPointsRangeChanged: (freqMin, freqMax, voltMin, voltMax) => {
     voltCurve.configureAxes(qsTr("Frequency"), "MHz", freqMin, freqMax,
                             qsTr("Voltage"), "mV", voltMin, voltMax)
   }
-  onPointsChanged: {
+  onPointsChanged: points => {
     voltCurve.removeCurve("volt")
     voltCurve.addCurve("volt", Material.accent, points)
   }
@@ -85,7 +85,7 @@ AMD_PM_VOLT_CURVE {
 
             enabled: modeSw.checked
 
-            onCurveChanged: pmVoltCurve.updatePoint(oldPoint, newPoint)
+            onCurveChanged: (name, oldPoint, newPoint) => pmVoltCurve.updatePoint(oldPoint, newPoint)
           }
         }
       }

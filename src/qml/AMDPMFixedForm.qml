@@ -22,7 +22,7 @@ AMD_PM_FIXED {
     }
   }
 
-  onModesChanged: {
+  onModesChanged: modes => {
     for (var i = 0; i < modes.length; i+=2) {
       var button = modeButton.createObject(btnContainer);
       button.mode = modes[i]
@@ -31,7 +31,7 @@ AMD_PM_FIXED {
     btnContainer.forceLayout()
   }
 
-  onModeChanged: {
+  onModeChanged: mode => {
     // check the button specified by mode
     var buttons = btnContainer.children
     for (var i = 0; i < buttons.length; i++) {
@@ -48,7 +48,7 @@ AMD_PM_FIXED {
     property var lastChecked
     buttons: btnContainer.children
 
-    onClicked: {
+    onClicked: button => {
       if (lastChecked !== button) {
         lastChecked = button
         pmFixed.changeMode(button.mode)

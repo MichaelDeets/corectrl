@@ -15,12 +15,12 @@ AMD_OD_FAN_CURVE {
   width: contents.width
   height: contents.height
 
-  onCurveChanged: {
+  onCurveChanged: curve => {
     curveControl.removeCurve("curve")
     curveControl.addCurve("curve", Material.accent, curve)
   }
 
-  onCurveRangeChanged: {
+  onCurveRangeChanged: (tempMin, tempMax, speedMin, speedMax) => {
     curveControl.configureAxes(qsTr("Temperature"), "\u00B0C", tempMin, tempMax,
                                qsTr("Speed"), "%", speedMin, speedMax)
   }
@@ -44,7 +44,7 @@ AMD_OD_FAN_CURVE {
         width: 480
         height: 240
 
-        onCurveChanged: fanCurve.updateCurvePoint(oldPoint, newPoint)
+        onCurveChanged: (name, oldPoint, newPoint) => fanCurve.updateCurvePoint(oldPoint, newPoint)
       }
     }
   }

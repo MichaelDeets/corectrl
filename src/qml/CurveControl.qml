@@ -90,9 +90,7 @@ ChartView {
     }
   }
 
-  onEnabledChanged: {
-    p.onEnableChanged(enabled)
-  }
+  onEnabledChanged: enabled => p.onEnableChanged(enabled)
 
   QtObject { // private stuff
     id: p
@@ -400,7 +398,7 @@ ChartView {
     id: mouseArea
     anchors.fill: parent
 
-    onPressed: {      
+    onPressed: mouse => {
       if (p.hasSeries()) {
         var outerPoint = p.mapToChart(Qt.point(mouse.x, mouse.y))
         var point = p.selectCloser(outerPoint)
@@ -414,14 +412,14 @@ ChartView {
       }
     }
 
-    onReleased: {
+    onReleased: mouse => {
       if (p.hasSeries()) {
         p.deselect()
         tooltip.visible = false
       }
     }
 
-    onPositionChanged: {
+    onPositionChanged: mouse => {
       if (p.hasSeries() && p.hasSelection()) {
         var point = p.mapToChart(Qt.point(mouse.x, mouse.y))
         point = p.moveSelection(point)

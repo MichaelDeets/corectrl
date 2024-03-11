@@ -11,15 +11,15 @@ AMD_PM_PERFMODE {
   width: modeSelector.width
   height: modeSelector.height
 
-  onModesChanged: modeSelector.setModes(modes)
-  onModeChanged: modeSelector.select(mode)
+  onModesChanged: modes => modeSelector.setModes(modes)
+  onModeChanged: mode => modeSelector.select(mode)
 
   ModeSelector {
     id: modeSelector
     headerTitle: qsTr("Performance mode")
     contentParentObject: "AMD_PM_PERFMODE_Plug"
 
-    onSelectionChanged: pMode.changeMode(mode)
-    onChildAdded: pMode.setupChild(child)
+    onSelectionChanged: mode => pMode.changeMode(mode)
+    onChildAdded: child => pMode.setupChild(child)
   }
 }

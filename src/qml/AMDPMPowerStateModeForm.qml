@@ -11,15 +11,15 @@ AMD_PM_POWERSTATE_MODE {
   width: modeSelector.width
   height: modeSelector.height
 
-  onModesChanged: modeSelector.setModes(modes)
-  onModeChanged: modeSelector.select(mode)
+  onModesChanged: modes => modeSelector.setModes(modes)
+  onModeChanged: mode => modeSelector.select(mode)
 
   ModeSelector {
     id: modeSelector
     headerTitle: qsTr("Power management mode")
     contentParentObject: "AMD_PM_POWERSTATE_MODE_Plug"
 
-    onSelectionChanged: pStateMode.changeMode(mode)
-    onChildAdded: pStateMode.setupChild(child)
+    onSelectionChanged: mode => pStateMode.changeMode(mode)
+    onChildAdded: child => pStateMode.setupChild(child)
   }
 }

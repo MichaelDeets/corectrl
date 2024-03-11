@@ -133,7 +133,7 @@ Pane {
         to: _freqMax
         stepSize: 1
 
-        onPressedChanged: {
+        onPressedChanged: pressed => {
           if (!pressed)
             control.stateChanged(_index, value, _volt)
         }

@@ -15,7 +15,7 @@ Page {
     id: systemInfo
     objectName: "SYSTEM_INFO"
 
-    onAddSystemInfo: p.newInfoComponent(componentName, info)
+    onAddSystemInfo: (componentName, info) => p.newInfoComponent(componentName, info)
   }
 
   QtObject {

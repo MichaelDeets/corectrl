@@ -15,7 +15,7 @@ CPU_CPUFREQ {
   width: contents.width
   height: contents.height
 
-  onScalingGovernorsChanged: {
+  onScalingGovernorsChanged: governors => {
     scalingGovernorListModel.clear()
 
     for (var i = 0; i < governors.length; i+=2) {
@@ -28,7 +28,7 @@ CPU_CPUFREQ {
     cbScalingGovernor.updateWidth()
   }
 
-  onScalingGovernorChanged: {
+  onScalingGovernorChanged: governor => {
     for (var i = 0; i < scalingGovernorListModel.count; ++i) {
       if (scalingGovernorListModel.get(i).governor === governor) {
         cbScalingGovernor.lastIndex = i
@@ -38,7 +38,7 @@ CPU_CPUFREQ {
     }
   }
 
-  onEppHintsChanged: {
+  onEppHintsChanged: hints => {
     eppHintListModel.clear()
 
     for (var i = 0; i < hints.length; i+=2) {
@@ -51,7 +51,7 @@ CPU_CPUFREQ {
     cbEppHint.updateWidth()
   }
 
-  onEppHintChanged: {
+  onEppHintChanged: hint => {
     for (var i = 0; i < eppHintListModel.count; ++i) {
       if (eppHintListModel.get(i).hint === hint) {
         cbEppHint.lastIndex = i
@@ -61,7 +61,7 @@ CPU_CPUFREQ {
     }
   }
 
-  onToggleEppHint: {
+  onToggleEppHint: enable => {
     lbEppHint.visible = enable
     cbEppHint.visible = enable
   }
@@ -76,15 +76,15 @@ CPU_CPUFREQ {
     }
   }
 
-    ListModel { id: eppHintListModel }
-    Component {
-      id: eppHintListElement
+  ListModel { id: eppHintListModel }
+  Component {
+    id: eppHintListElement
 
-      ListElement {
-        property string text
-        property string hint
-      }
+    ListElement {
+      property string text
+      property string hint
     }
+  }
 
   Pane {
     id: contents

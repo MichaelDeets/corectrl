@@ -23,7 +23,7 @@ AMD_PM_POWERSTATE {
     }
   }
 
-  onModesChanged: {
+  onModesChanged: modes => {
     for (var i = 0; i < modes.length; i+=2) {
       var button = modeButton.createObject(btnContainer);
       button.mode = modes[i]
@@ -32,7 +32,7 @@ AMD_PM_POWERSTATE {
     btnContainer.forceLayout()
   }
 
-  onModeChanged: {
+  onModeChanged: mode => {
     var buttons = btnContainer.children
     for (var i = 0; i < buttons.length; i++) {
       if (buttons[i].mode === mode) {
@@ -48,7 +48,7 @@ AMD_PM_POWERSTATE {
     property var lastChecked
     buttons: btnContainer.children
 
-    onClicked: {
+    onClicked: button => {
       if (lastChecked !== button) {
         lastChecked = button
         pmPowerState.changeMode(button.mode)

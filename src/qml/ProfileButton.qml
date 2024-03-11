@@ -38,7 +38,7 @@ Pane {
   MouseArea {
     anchors.fill: parent
     propagateComposedEvents: true
-    onClicked: btn.clicked()
+    onClicked: mouse => btn.clicked()
   }
 
   background: Rectangle {

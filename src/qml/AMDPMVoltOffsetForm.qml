@@ -15,11 +15,9 @@ AMD_PM_VOLT_OFFSET {
   width: contents.width
   height: contents.height
 
-  onValueChanged: {
-    offsetSld.value = value
-  }
+  onValueChanged: value => offsetSld.value = value
 
-  onRangeChanged: {
+  onRangeChanged: (min, max) => {
     offsetSld.from = min
     offsetSld.to = max
   }
@@ -108,7 +106,7 @@ AMD_PM_VOLT_OFFSET {
 
             stepSize: 1
 
-            onPressedChanged: {
+            onPressedChanged: pressed => {
               if (!pressed)
                 pmVoltOffset.changeValue(value)
             }

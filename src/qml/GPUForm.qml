@@ -12,7 +12,7 @@ GPU {
   id: gpu
   objectName: "GPU"
 
-  onNewGraphItem: {
+  onNewGraphItem: item => {
     sensorGraph.addItem(item)
     Settings.addComponentData("GPU" + gpu.index, "GPU " + gpu.index,
                               item.name,

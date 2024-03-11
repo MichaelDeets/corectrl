@@ -15,12 +15,12 @@ AMD_FAN_CURVE {
   width: contents.width
   height: contents.height
 
-  onCurveChanged: {
+  onCurveChanged: points => {
     curveControl.removeCurve("curve")
     curveControl.addCurve("curve", Material.accent, points)
   }
 
-  onFanStopChanged: {
+  onFanStopChanged: enabled => {
     if (enabled)
       p.showFanStartCurve()
     else
@@ -29,7 +29,7 @@ AMD_FAN_CURVE {
     fanStop.checked = enabled
   }
 
-  onFanStartValueChanged: {
+  onFanStartValueChanged: value => {
     if (fanCurve.fanStop) {
       p.hideFanStartCurve()
       p.showFanStartCurve()
@@ -38,7 +38,7 @@ AMD_FAN_CURVE {
     fanStartValue.value = value
   }
 
-  onTemperatureRangeChanged: {
+  onTemperatureRangeChanged: (min, max) => {
     curveControl.configureAxes(qsTr("Temperature"), "\u00B0C", min, max,
                                qsTr("PWM"), "%", 0, 100)
 
@@ -87,7 +87,7 @@ AMD_FAN_CURVE {
         width: 480
         height: 240
 
-        onCurveChanged: {
+        onCurveChanged: (name, oldPoint, newPoint) => {
           if (name === "curve")
             fanCurve.updateCurvePoint(oldPoint, newPoint)
           else if (name === "fanStart")

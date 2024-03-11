@@ -15,14 +15,14 @@ Page {
     id: profileManager
     objectName: "PROFILE_MANAGER"
 
-    onInitProfiles: p.initProfileButtons(profiles)
-    onProfileAdded: p.createProfileButton(name, exe, icon, hasCustomIcon, isActive)
-    onProfileRemoved: p.removeProfileButton(name)
-    onProfileSaved:  p.updateToolBarButtonsOnProfileSaved()
-    onProfileInfoChanged: p.updateProfileButton(oldName, newName, exe, icon, hasCustomIcon, isActive)
-    onProfileChanged: p.updateProfileUIState(name)
-    onProfileActiveChanged: p.updateProfileButtonActiveState(name, active);
-    onManualProfileToggled: p.updateProfileButtonManualToggle(name, active);
+    onInitProfiles: profiles => p.initProfileButtons(profiles)
+    onProfileAdded: (name, exe, icon, hasCustomIcon, isActive) => p.createProfileButton(name, exe, icon, hasCustomIcon, isActive)
+    onProfileRemoved: name => p.removeProfileButton(name)
+    onProfileSaved: name => p.updateToolBarButtonsOnProfileSaved()
+    onProfileInfoChanged: (oldName, newName, exe, icon, hasCustomIcon, isActive) => p.updateProfileButton(oldName, newName, exe, icon, hasCustomIcon, isActive)
+    onProfileChanged: name => p.updateProfileUIState(name)
+    onProfileActiveChanged: (name, active) => p.updateProfileButtonActiveState(name, active);
+    onManualProfileToggled: (name, active) => p.updateProfileButtonManualToggle(name, active);
   }
 
   QtObject { // private stuff
@@ -231,9 +231,7 @@ Page {
           p.unsavedSettings = true
       }
 
-      onEnableProfile: {
-        profileManager.activate(name, enable)
-      }
+      onEnableProfile: enable => profileManager.activate(name, enable)
 
       onEdit: {
         p.editedProfileBtn = pBtn
@@ -275,9 +273,7 @@ Page {
         removeWarningDlg.open()
       }
 
-      onToggleManualProfile: {
-        profileManager.toggleManualProfile(name)
-      }
+      onToggleManualProfile: name => profileManager.toggleManualProfile(name)
     }
   }
 
@@ -314,13 +310,13 @@ Page {
       open()
     }
 
-    onUpdateProfileNameUsed: {
+    onUpdateProfileNameUsed: profileName => {
       if (p.editedProfileBtn !== undefined && profileName === p.editedProfileBtn.name)
         profileNameUsed = false
       else
         profileNameUsed = profileManager.isProfileNameInUse(profileName)
     }
-    onUpdateExecutableNameUsed: {
+    onUpdateExecutableNameUsed: executableName => {
       if (p.editedProfileBtn !== undefined && executableName === p.editedProfileBtn.exe)
         executableNameUsed = false
       else

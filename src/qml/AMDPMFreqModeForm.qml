@@ -12,8 +12,8 @@ AMD_PM_FREQ_MODE {
   width: modeSelector.width
   height: modeSelector.height
 
-  onModesChanged: modeSelector.setModes(modes)
-  onModeChanged: modeSelector.select(mode)
+  onModesChanged: modes => modeSelector.setModes(modes)
+  onModeChanged: mode => modeSelector.select(mode)
 
   ModeSelector {
     id: modeSelector
@@ -21,7 +21,7 @@ AMD_PM_FREQ_MODE {
     headerBackground: Style.ModeSelector.body.bg_color
     contentParentObject: "AMD_PM_FREQ_MODE_Plug"
 
-    onSelectionChanged: freqMode.changeMode(mode)
-    onChildAdded: freqMode.setupChild(child)
+    onSelectionChanged: mode => freqMode.changeMode(mode)
+    onChildAdded: child => freqMode.setupChild(child)
   }
 }

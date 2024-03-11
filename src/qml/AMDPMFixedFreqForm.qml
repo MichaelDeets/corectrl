@@ -14,10 +14,10 @@ AMD_PM_FIXED_FREQ {
   width: contents.width
   height: contents.height
 
-  onSclkIndexChanged: sclkIndex.value = index
-  onMclkIndexChanged: mclkIndex.value = index
+  onSclkIndexChanged: index => sclkIndex.value = index
+  onMclkIndexChanged: index => mclkIndex.value = index
 
-  onSclkStatesChanged: {
+  onSclkStatesChanged: states => {
     if (states.length > 0) {
 
       p.sclkStateLbls.length = 0
@@ -31,7 +31,7 @@ AMD_PM_FIXED_FREQ {
     }
   }
 
-  onMclkStatesChanged: {
+  onMclkStatesChanged: states => {
     if (states.length > 0) {
 
       p.mclkStateLbls.length = 0
@@ -82,7 +82,7 @@ AMD_PM_FIXED_FREQ {
           to: 0
           stepSize: 1
 
-          onPressedChanged: {
+          onPressedChanged: pressed => {
             if (!pressed)
               pmFrequency.changeSclkIndex(p.sclkStateIndices[sclkIndex.value])
           }
@@ -112,7 +112,7 @@ AMD_PM_FIXED_FREQ {
           to: 0
           stepSize: 1
 
-          onPressedChanged: {
+          onPressedChanged: pressed => {
             if (!pressed)
               pmFrequency.changeMclkIndex(p.mclkStateIndices[mclkIndex.value])
           }

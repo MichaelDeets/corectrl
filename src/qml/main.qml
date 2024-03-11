@@ -47,7 +47,7 @@ ApplicationWindow {
     }
   }
 
-  onClosing: {
+  onClosing: close => {
     if (!systemTray.isAvailable() || !systemTray.isVisible())
       Qt.quit()
   }
