@@ -85,7 +85,8 @@ int App::exec(int argc, char **argv)
   if (!translator.load(QStringLiteral(":/translations/lang_") + lang)) {
     SPDLOG_INFO("No translation found for locale {}", lang.toStdString());
     SPDLOG_INFO("Using en_EN translation.");
-    translator.load(QStringLiteral(":/translations/lang_en_EN"));
+    if (!translator.load(QStringLiteral(":/translations/lang_en_EN")))
+      SPDLOG_ERROR("Cannot load en_EN translation.");
   }
   app.installTranslator(&translator);
   app.setWindowIcon(QIcon::fromTheme(QString(App::Name.data()).toLower()));
