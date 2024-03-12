@@ -134,7 +134,7 @@ TEST_CASE("CommandQueue tests", "[CommandQueue]")
       {
         auto data = ts.toRawData();
 
-        REQUIRE(data == QString("path\0value\0"));
+        REQUIRE(data == QByteArray("path\0value\0", 11));
 
         SECTION("The queue is cleared")
         {
