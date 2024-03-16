@@ -4,6 +4,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.15
+import QtQml 2.15
 import "Style.js" as Style
 
 TextField {
@@ -77,11 +78,13 @@ TextField {
   Binding on value {
     when: p.updateValueRequest
     value: p.newValue
+    restoreMode: Binding.RestoreBinding
   }
 
   Binding on text {
     when: p.restoreTextRequest
     value: p.newText
+    restoreMode: Binding.RestoreBinding
   }
 
   Keys.onPressed: event => {
