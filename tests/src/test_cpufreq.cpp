@@ -52,7 +52,7 @@ class CPUFreqImporterStub : public ::CPUFreq::Importer
     return scalingGovernor_;
   }
 
-  std::optional<std::string> const &provideCPUFreqEPPHint() const
+  std::optional<std::string> const &provideCPUFreqEPPHint() const override
   {
     return eppHint_;
   }
