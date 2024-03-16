@@ -14,6 +14,7 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 #include <QQuickItem>
+#include <QQuickWindow>
 #include <QString>
 #include <QUrl>
 #include <QtGlobal>
@@ -32,10 +33,8 @@ void UIFactory::build(QQmlApplicationEngine &qmlEngine,
 {
   qmlComponentFactory_->registerQMLTypes();
 
-  // Use native font rendering
-  // XXX On Qt 5.10, use QQuickWindow::setTextRenderType with native option
-  // http://doc-snapshots.qt.io/qt5-5.10/qquickwindow.html#setTextRenderType
-  qputenv("QML_DISABLE_DISTANCEFIELD", "1");
+  // Enable native font rendering.
+  QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
 
   qmlEngine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
   if (qmlEngine.rootObjects().isEmpty())
