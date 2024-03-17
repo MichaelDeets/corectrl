@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+
+## CoreCtrl 1.4.0 (2024-03-17)
+
 ### Fixed
 - QML Connections deprecation warning (#123).
 
