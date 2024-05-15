@@ -22,6 +22,7 @@ target_link_libraries(catch_main PRIVATE
   spdlog::spdlog
   Catch2::Catch2
   trompeloeil::trompeloeil
+  ${ATOMIC_LIB}
 )
 
 # test_* files
@@ -38,6 +39,7 @@ target_link_libraries(test_all PRIVATE
   $<$<BOOL:${units_FOUND}>:units::units>
   Catch2::Catch2
   trompeloeil::trompeloeil
+  ${ATOMIC_LIB}
 )
 
 include(CTest)

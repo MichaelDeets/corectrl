@@ -34,6 +34,12 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   endif()
 endif()
 
+# require libatomic on architectures without atomics support
+include(CheckAtomic)
+if(HAVE_CXX_ATOMICS_WITH_LIB OR HAVE_CXX_ATOMICS64_WITH_LIB)
+  list(APPEND ATOMIC_LIB "atomic")
+endif()
+
 find_package(Qt5 5.15 COMPONENTS Core DBus Quick Charts Widgets Network Svg REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 find_package(QuaZip-Qt5 1.0 REQUIRED)

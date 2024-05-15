@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fixed
+- Compilation on architectures without atomics support (#435).
+
 ### Added
 - Register Catch2 tests in CTest. Thanks to Leonidas Spyropoulos (!47).
 

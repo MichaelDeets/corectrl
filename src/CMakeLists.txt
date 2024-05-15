@@ -378,6 +378,7 @@ target_link_libraries(corectrl_lib PRIVATE
   spdlog::spdlog
   pugixml::pugixml
   $<$<BOOL:${units_FOUND}>:units::units>
+  ${ATOMIC_LIB}
 )
 set_target_properties(corectrl_lib PROPERTIES OUTPUT_NAME corectrl)
 
@@ -408,6 +409,7 @@ target_link_libraries(corectrl PRIVATE
   Qt5::DBus
   spdlog::spdlog
   ${Botan_LIBRARIES}
+  ${ATOMIC_LIB}
 )
 
 install(

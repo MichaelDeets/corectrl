@@ -72,6 +72,7 @@ target_link_libraries(corectrl_helperkiller PRIVATE
   Qt5::DBus
   spdlog::spdlog
   ${POLKIT_LIBRARIES}
+  ${ATOMIC_LIB}
 )
 
 configure_file(org.corectrl.helperkiller.service.in org.corectrl.helperkiller.service)
@@ -105,6 +106,7 @@ target_link_libraries(corectrl_helper PRIVATE
   spdlog::spdlog
   ${Botan_LIBRARIES}
   ${POLKIT_LIBRARIES}
+  ${ATOMIC_LIB}
 )
 
 configure_file(org.corectrl.helper.service.in org.corectrl.helper.service)
