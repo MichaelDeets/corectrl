@@ -40,6 +40,6 @@ target_link_libraries(test_all PRIVATE
   trompeloeil::trompeloeil
 )
 
-add_test(NAME "test_all"
-         COMMAND test_all
-         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+include(CTest)
+include(Catch)
+catch_discover_tests(test_all)
