@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+- Register Catch2 tests in CTest. Thanks to Leonidas Spyropoulos (!47).
+
 
 ## CoreCtrl 1.4.0 (2024-03-17)
 
