@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+
+## CoreCtrl 1.4.1 (2024-05-21)
+
 ### Fixed
 - Compilation on architectures without atomics support (#435).
 
