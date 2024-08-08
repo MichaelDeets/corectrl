@@ -186,15 +186,17 @@ void App::onSettingChanged(QString const &key, QVariant const &value)
 
 void App::initSysTrayWindowState()
 {
-  auto minimizeArgIsSet = cmdParser_.isSet("minimize-systray");
-  if (minimizeArgIsSet || settings_->getValue("sysTray", true).toBool()) {
+  bool minimizeArgIsSet = cmdParser_.isSet("minimize-systray");
+  bool enableSysTray = settings_->getValue("sysTray", true).toBool();
 
+  if (minimizeArgIsSet || enableSysTray)
     sysTray_->show();
-    bool hideMainWindow =
-        minimizeArgIsSet ? true
-                         : settings_->getValue("startOnSysTray", false).toBool();
-    showMainWindow(!hideMainWindow);
-  }
+
+  bool startOnSysTray = settings_->getValue("startOnSysTray", false).toBool();
+  bool showWindow = !minimizeArgIsSet && !(sysTray_->isAvailable() &&
+                                           enableSysTray && startOnSysTray);
+
+  showMainWindow(showWindow);
 }
 
 void App::setupCmdParser(QCommandLineParser &parser, int minHelperTimeout,

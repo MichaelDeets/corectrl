@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fixed
+- Main window not visible after application startup when the system tray icon has been disabled (#458).
+
 
 ## CoreCtrl 1.4.1 (2024-05-21)
 
