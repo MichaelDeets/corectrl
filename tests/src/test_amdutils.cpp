@@ -282,11 +282,7 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
 
     SECTION("Returns nothing for invalid input")
     {
-      // clang-format off
-      std::vector<std::string> input{""};
-      // clang-format on
-
-      auto index = ::Utils::AMD::parseDPMCurrentStateIndex(input);
+      auto index = ::Utils::AMD::parsePowerProfileModeCurrentModeIndex({""});
       REQUIRE_FALSE(index.has_value());
     }
   }
