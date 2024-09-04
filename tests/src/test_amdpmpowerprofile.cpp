@@ -6,8 +6,8 @@
 
 #include "common/commandqueuestub.h"
 #include "common/stringdatasourcestub.h"
-#include "common/vectorstringdatasourcestub.h"
 #include "core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofile.h"
+#include "core/idatasource.h"
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
@@ -67,19 +67,45 @@ class PMPowerProfileExporterMock : public ::AMD::PMPowerProfile::Exporter
       override);
 };
 
+class OptionalIntDataSourceStub : public IDataSource<std::optional<int>>
+{
+ public:
+  OptionalIntDataSourceStub(std::string_view source = "",
+                            std::optional<int> data = std::nullopt,
+                            bool success = true) noexcept
+  : source_(source)
+  , data_(data)
+  , success_(success)
+  {
+  }
+
+  std::string source() const override
+  {
+    return source_;
+  }
+
+  bool read(std::optional<int> &data) override
+  {
+    data = data_;
+    return success_;
+  }
+
+  std::string const source_;
+  std::optional<int> const data_;
+  bool success_;
+};
+
 TEST_CASE("AMD PMPowerProfile tests",
           "[GPU][AMD][PM][PMAdvanced][PMPowerProfile]")
 {
   CommandQueueStub ctlCmds;
-  std::vector<std::string> ppPowerProfileModeData{
-      "PROFILE_INDEX(NAME) ", "  0 3D_FULL_SCREEN :", "  1   POWER_SAVING*:"};
   std::vector<std::pair<std::string, int>> modes{
       std::make_pair("3D_FULL_SCREEN", 0), std::make_pair("POWER_SAVING", 1)};
 
   SECTION("Has PMPowerProfile ID")
   {
     PMPowerProfileTestAdapter ts(std::make_unique<StringDataSourceStub>(),
-                                 std::make_unique<VectorStringDataSourceStub>(),
+                                 std::make_unique<OptionalIntDataSourceStub>(),
                                  modes);
     REQUIRE(ts.ID() == ::AMD::PMPowerProfile::ItemID);
   }
@@ -87,7 +113,7 @@ TEST_CASE("AMD PMPowerProfile tests",
   SECTION("Is active by default")
   {
     PMPowerProfileTestAdapter ts(std::make_unique<StringDataSourceStub>(),
-                                 std::make_unique<VectorStringDataSourceStub>(),
+                                 std::make_unique<OptionalIntDataSourceStub>(),
                                  modes);
     REQUIRE(ts.active());
   }
@@ -96,8 +122,8 @@ TEST_CASE("AMD PMPowerProfile tests",
   {
     PMPowerProfileTestAdapter ts(
         std::make_unique<StringDataSourceStub>(),
-        std::make_unique<VectorStringDataSourceStub>("pp_power_profile_mode",
-                                                     ppPowerProfileModeData),
+        std::make_unique<OptionalIntDataSourceStub>("pp_power_profile_mode",
+                                                    std::make_optional(0)),
         modes);
     REQUIRE(ts.mode() == "3D_FULL_SCREEN");
   }
@@ -106,8 +132,8 @@ TEST_CASE("AMD PMPowerProfile tests",
   {
     PMPowerProfileTestAdapter ts(
         std::make_unique<StringDataSourceStub>(),
-        std::make_unique<VectorStringDataSourceStub>("pp_power_profile_mode",
-                                                     ppPowerProfileModeData),
+        std::make_unique<OptionalIntDataSourceStub>("pp_power_profile_mode",
+                                                    std::make_optional(0)),
         modes);
 
     ts.mode("UNKNOWN");
@@ -117,7 +143,7 @@ TEST_CASE("AMD PMPowerProfile tests",
   SECTION("Does not generate pre-init control commands")
   {
     PMPowerProfileTestAdapter ts(std::make_unique<StringDataSourceStub>(),
-                                 std::make_unique<VectorStringDataSourceStub>(),
+                                 std::make_unique<OptionalIntDataSourceStub>(),
                                  modes);
     ts.preInit(ctlCmds);
     REQUIRE(ctlCmds.commands().empty());
@@ -126,7 +152,7 @@ TEST_CASE("AMD PMPowerProfile tests",
   SECTION("Does not generate post-init control commands")
   {
     PMPowerProfileTestAdapter ts(std::make_unique<StringDataSourceStub>(),
-                                 std::make_unique<VectorStringDataSourceStub>(),
+                                 std::make_unique<OptionalIntDataSourceStub>(),
                                  modes);
     ts.postInit(ctlCmds);
     REQUIRE(ctlCmds.commands().empty());
@@ -136,8 +162,8 @@ TEST_CASE("AMD PMPowerProfile tests",
   {
     PMPowerProfileTestAdapter ts(
         std::make_unique<StringDataSourceStub>(),
-        std::make_unique<VectorStringDataSourceStub>("pp_power_profile_mode",
-                                                     ppPowerProfileModeData),
+        std::make_unique<OptionalIntDataSourceStub>("pp_power_profile_mode",
+                                                    std::make_optional(0)),
         modes);
     ts.init();
     PMPowerProfileImporterStub i("POWER_SAVING");
@@ -150,8 +176,8 @@ TEST_CASE("AMD PMPowerProfile tests",
   {
     PMPowerProfileTestAdapter ts(
         std::make_unique<StringDataSourceStub>(),
-        std::make_unique<VectorStringDataSourceStub>("pp_power_profile_mode",
-                                                     ppPowerProfileModeData),
+        std::make_unique<OptionalIntDataSourceStub>("pp_power_profile_mode",
+                                                    std::make_optional(0)),
         modes);
     ts.init();
 
@@ -171,8 +197,8 @@ TEST_CASE("AMD PMPowerProfile tests",
       PMPowerProfileTestAdapter ts(
           std::make_unique<StringDataSourceStub>(
               "power_dpm_force_performance_level", "auto"),
-          std::make_unique<VectorStringDataSourceStub>("pp_power_profile_mode",
-                                                       ppPowerProfileModeData),
+          std::make_unique<OptionalIntDataSourceStub>("pp_power_profile_mode",
+                                                      std::make_optional(0)),
           modes);
       ts.init();
       ts.cleanControl(ctlCmds);
@@ -194,8 +220,8 @@ TEST_CASE("AMD PMPowerProfile tests",
       PMPowerProfileTestAdapter ts(
           std::make_unique<StringDataSourceStub>(
               "power_dpm_force_performance_level", "manual"),
-          std::make_unique<VectorStringDataSourceStub>("pp_power_profile_mode",
-                                                       ppPowerProfileModeData),
+          std::make_unique<OptionalIntDataSourceStub>("pp_power_profile_mode",
+                                                      std::make_optional(0)),
           modes);
       ts.init();
       ts.cleanControl(ctlCmds);
@@ -214,8 +240,8 @@ TEST_CASE("AMD PMPowerProfile tests",
     PMPowerProfileTestAdapter ts(
         std::make_unique<StringDataSourceStub>(
             "power_dpm_force_performance_level", "manual"),
-        std::make_unique<VectorStringDataSourceStub>("pp_power_profile_mode",
-                                                     ppPowerProfileModeData),
+        std::make_unique<OptionalIntDataSourceStub>("pp_power_profile_mode",
+                                                    std::make_optional(1)),
         modes);
     ts.init();
     ts.mode("POWER_SAVING");
@@ -231,8 +257,8 @@ TEST_CASE("AMD PMPowerProfile tests",
       PMPowerProfileTestAdapter ts(
           std::make_unique<StringDataSourceStub>(
               "power_dpm_force_performance_level", "auto"),
-          std::make_unique<VectorStringDataSourceStub>("pp_power_profile_mode",
-                                                       ppPowerProfileModeData),
+          std::make_unique<OptionalIntDataSourceStub>("pp_power_profile_mode",
+                                                      std::make_optional(0)),
           modes);
       ts.init();
       ts.mode("POWER_SAVING");
@@ -255,8 +281,8 @@ TEST_CASE("AMD PMPowerProfile tests",
       PMPowerProfileTestAdapter ts(
           std::make_unique<StringDataSourceStub>(
               "power_dpm_force_performance_level", "manual"),
-          std::make_unique<VectorStringDataSourceStub>("pp_power_profile_mode",
-                                                       ppPowerProfileModeData),
+          std::make_unique<OptionalIntDataSourceStub>("pp_power_profile_mode",
+                                                      std::make_optional(1)),
           modes);
       ts.init();
       ts.syncControl(ctlCmds);

@@ -3,12 +3,11 @@
 
 #include "pmpowerprofile.h"
 
-#include "core/components/amdutils.h"
 #include "core/icommandqueue.h"
 
 AMD::PMPowerProfile::PMPowerProfile(
     std::unique_ptr<IDataSource<std::string>> &&perfLevelDataSource,
-    std::unique_ptr<IDataSource<std::vector<std::string>>> &&powerProfileDataSource,
+    std::unique_ptr<IDataSource<std::optional<int>>> &&powerProfileDataSource,
     std::vector<std::pair<std::string, int>> const &modes) noexcept
 : Control(true)
 , id_(AMD::PMPowerProfile::ItemID)
@@ -66,8 +65,9 @@ void AMD::PMPowerProfile::cleanControl(ICommandQueue &ctlCmds)
 
 void AMD::PMPowerProfile::syncControl(ICommandQueue &ctlCmds)
 {
+  std::optional<int> modeIndex;
   if (perfLevelDataSource_->read(dataSourceEntry_) &&
-      powerProfileDataSource_->read(dataSourceLines_)) {
+      powerProfileDataSource_->read(modeIndex)) {
 
     if (dataSourceEntry_ != "manual") {
       ctlCmds.add({perfLevelDataSource_->source(), "manual"});
@@ -75,8 +75,6 @@ void AMD::PMPowerProfile::syncControl(ICommandQueue &ctlCmds)
                    std::to_string(currentModeIndex_)});
     }
     else {
-      auto modeIndex =
-          Utils::AMD::parsePowerProfileModeCurrentModeIndex(dataSourceLines_);
       if (modeIndex.has_value() && currentModeIndex_ != modeIndex)
         ctlCmds.add({powerProfileDataSource_->source(),
                      std::to_string(currentModeIndex_)});

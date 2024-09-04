@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Main window not visible after application startup when the system tray icon has been disabled (#458).
 
+### Added
+- Power profiles support for AMD RX 7600 (#447). Requires Linux 6.11 or later.
+
 
 ## CoreCtrl 1.4.1 (2024-05-21)
 

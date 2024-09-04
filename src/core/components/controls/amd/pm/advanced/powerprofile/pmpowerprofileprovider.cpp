@@ -11,6 +11,7 @@
 #include "pmpowerprofile.h"
 #include <filesystem>
 #include <memory>
+#include <optional>
 #include <spdlog/spdlog.h>
 #include <string>
 #include <vector>
@@ -33,7 +34,10 @@ AMD::PMPowerProfileProvider::provideGPUControls(IGPUInfo const &gpuInfo,
     return {};
 
   auto modeLines = Utils::File::readFileLines(profileMode);
-  auto modes = Utils::AMD::parsePowerProfileModeModes(modeLines);
+  auto columnarData = Utils::AMD::isPowerProfileModeDataColumnar(modeLines);
+  auto modes = columnarData
+                   ? Utils::AMD::parsePowerProfileModeModesColumnar(modeLines)
+                   : Utils::AMD::parsePowerProfileModeModes(modeLines);
   if (!modes) {
     SPDLOG_WARN("Unknown data format on {}", profileMode.string());
     for (auto const &line : modeLines)
@@ -41,11 +45,20 @@ AMD::PMPowerProfileProvider::provideGPUControls(IGPUInfo const &gpuInfo,
     return {};
   }
 
+  auto indexFn = columnarData
+                 ? [](std::vector<std::string> const &data, std::optional<int> &output) {
+    output = Utils::AMD::parsePowerProfileModeCurrentModeIndexColumnar(data);
+  }
+                 : [](std::vector<std::string> const &data, std::optional<int> &output) {
+    output = Utils::AMD::parsePowerProfileModeCurrentModeIndex(data);
+  };
+
   std::vector<std::unique_ptr<IControl>> controls;
   controls.emplace_back(std::make_unique<AMD::PMPowerProfile>(
       std::make_unique<SysFSDataSource<std::string>>(perfLevel),
-      std::make_unique<SysFSDataSource<std::vector<std::string>>>(profileMode),
-      modes.value()));
+      std::make_unique<SysFSDataSource<std::optional<int>, std::vector<std::string>>>(
+          profileMode, std::move(indexFn)),
+      *modes));
 
   return controls;
 }

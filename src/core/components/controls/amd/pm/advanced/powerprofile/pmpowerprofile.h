@@ -6,6 +6,7 @@
 #include "core/components/controls/control.h"
 #include "core/idatasource.h"
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -33,10 +34,10 @@ class PMPowerProfile : public Control
     takePMPowerProfileModes(std::vector<std::string> const &modes) = 0;
   };
 
-  PMPowerProfile(std::unique_ptr<IDataSource<std::string>> &&perfLevelDataSource,
-                 std::unique_ptr<IDataSource<std::vector<std::string>>>
-                     &&powerProfileDataSource,
-                 std::vector<std::pair<std::string, int>> const &modes) noexcept;
+  PMPowerProfile(
+      std::unique_ptr<IDataSource<std::string>> &&perfLevelDataSource,
+      std::unique_ptr<IDataSource<std::optional<int>>> &&powerProfileDataSource,
+      std::vector<std::pair<std::string, int>> const &modes) noexcept;
 
   void preInit(ICommandQueue &ctlCmds) final override;
   void postInit(ICommandQueue &ctlCmds) final override;
@@ -59,7 +60,7 @@ class PMPowerProfile : public Control
   std::string const id_;
 
   std::unique_ptr<IDataSource<std::string>> const perfLevelDataSource_;
-  std::unique_ptr<IDataSource<std::vector<std::string>>> const powerProfileDataSource_;
+  std::unique_ptr<IDataSource<std::optional<int>>> const powerProfileDataSource_;
 
   int currentModeIndex_;
   int defaultModeIndex_;
@@ -67,7 +68,6 @@ class PMPowerProfile : public Control
   std::unordered_map<int, std::string> indexMode_;
 
   std::string dataSourceEntry_;
-  std::vector<std::string> dataSourceLines_;
 };
 
 } // namespace AMD
