@@ -80,13 +80,26 @@ std::optional<unsigned int>
 parseDPMCurrentStateIndex(std::vector<std::string> const &ppDpmLines);
 
 /// Returns power profile modes. (4.17+)
+/// NOTE For use with non-columnar data only.
 /// @param  ppPowerProfileModeLines pp_power_profile_mode data source contents
 std::optional<std::vector<std::pair<std::string, int>>>
 parsePowerProfileModeModes(std::vector<std::string> const &ppPowerProfileModeLines);
 
 /// Returns current power profile mode index. (4.17+)
+/// NOTE For use with non-columnar data only.
 /// @param ppPowerProfileModeLines pp_power_profile_mode data source contents
 std::optional<int> parsePowerProfileModeCurrentModeIndex(
+    std::vector<std::string> const &ppPowerProfileModeLines);
+
+/// Returns power profile modes on ASICs with columnar data. (6.11+)
+/// @param  ppPowerProfileModeLines pp_power_profile_mode data source contents
+std::optional<std::vector<std::pair<std::string, int>>>
+parsePowerProfileModeModesColumnar(
+    std::vector<std::string> const &ppPowerProfileModeLines);
+
+/// Returns current power profile mode index on ASICs with columnar data. (6.11+)
+/// @param ppPowerProfileModeLines pp_power_profile_mode data source contents
+std::optional<int> parsePowerProfileModeCurrentModeIndexColumnar(
     std::vector<std::string> const &ppPowerProfileModeLines);
 
 /// Returns the available clock + voltage states for a control. (4.17+)
@@ -181,6 +194,9 @@ parseOverdriveFanCurveTempRange(std::vector<std::string> const &fanCurveLines);
 std::optional<
     std::pair<units::concentration::percent_t, units::concentration::percent_t>>
 parseOverdriveFanCurveSpeedRange(std::vector<std::string> const &fanCurveLines);
+
+/// Returns true when pp_power_profile_mode data has columnar format.
+bool isPowerProfileModeDataColumnar(std::vector<std::string> const &data);
 
 /// Returns true when overdrive clock + voltage state control is available.
 bool hasOverdriveClkVoltControl(std::vector<std::string> const &data);

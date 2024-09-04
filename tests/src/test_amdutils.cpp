@@ -287,6 +287,57 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
     }
   }
 
+  SECTION("parsePowerProfileModeModesColumnar")
+  {
+    SECTION("Returns power profile modes on asics with columnar data")
+    {
+      // clang-format off
+      std::vector<std::string> input{"    0 3D_FULL_SCREEN*  1  VIDEO 2 CUSTOM"};
+      // clang-format on
+
+      auto modes = ::Utils::AMD::parsePowerProfileModeModesColumnar(input);
+      REQUIRE(modes.has_value());
+      REQUIRE(modes->size() == 2);
+
+      auto &[mode0, mode0Index] = modes->at(0);
+      REQUIRE(mode0 == "3D_FULL_SCREEN");
+      REQUIRE(mode0Index == 0);
+
+      auto &[mode1, mode1Index] = modes->at(1);
+      REQUIRE(mode1 == "VIDEO");
+      REQUIRE(mode1Index == 1);
+    }
+
+    SECTION("Returns nothing for invalid input")
+    {
+      auto index = ::Utils::AMD::parsePowerProfileModeModesColumnar({""});
+      REQUIRE_FALSE(index.has_value());
+    }
+  }
+
+  SECTION("parsePowerProfileModeCurrentModeIndex")
+  {
+    SECTION(
+        "Returns index of the active profile mode on asics with columnar data")
+    {
+      // clang-format off
+      std::vector<std::string> input{"    0 3D_FULL_SCREEN  1  VIDEO* 2 CUSTOM"};
+      // clang-format on
+
+      auto index =
+          ::Utils::AMD::parsePowerProfileModeCurrentModeIndexColumnar(input);
+      REQUIRE(index.has_value());
+      REQUIRE(*index == 1);
+    }
+
+    SECTION("Returns nothing for invalid input")
+    {
+      auto index =
+          ::Utils::AMD::parsePowerProfileModeCurrentModeIndexColumnar({""});
+      REQUIRE_FALSE(index.has_value());
+    }
+  }
+
   SECTION("parseOverdriveClksVolts")
   {
     // clang-format off
@@ -902,6 +953,33 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
 
       auto empty = ::Utils::AMD::parseOverdriveFanCurveTempRange(input);
       REQUIRE_FALSE(empty.has_value());
+    }
+  }
+
+  SECTION("isPowerProfileModeDataColumnar")
+  {
+    SECTION("Returns true when power profile mode data has columnar format")
+    {
+      // clang-format off
+      std::vector<std::string> data{"     0 BOOTUP_DEFAULT* 1  3D_FULL_SCREEN  2   POWER_SAVING   3 VIDEO"};
+      // clang-format on
+
+      REQUIRE(::Utils::AMD::isPowerProfileModeDataColumnar(data));
+    }
+
+    SECTION("Returns false when power profile mode data does not have columnar "
+            "format")
+    {
+      // clang-format off
+      std::vector<std::string> data{"NUM  MODE_NAME   SCLK_UP_HYST   SCLK_DOWN_HYST SCLK_ACTIVE_LEVEL"};
+      // clang-format on
+
+      REQUIRE_FALSE(::Utils::AMD::isPowerProfileModeDataColumnar(data));
+    }
+
+    SECTION("Returns false when power profile mode data is empty")
+    {
+      REQUIRE_FALSE(::Utils::AMD::isPowerProfileModeDataColumnar({}));
     }
   }
 

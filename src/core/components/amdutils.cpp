@@ -170,6 +170,70 @@ std::optional<int> parsePowerProfileModeCurrentModeIndex(
   return {};
 }
 
+std::optional<std::vector<std::pair<std::string, int>>>
+parsePowerProfileModeModesColumnar(
+    std::vector<std::string> const &ppPowerProfileModeLines)
+{
+  // Format of the first line:
+  // 0 BOOTUP_DEFAULT* 1 3D_FULL_SCREEN 2 POWER_SAVING 3 VIDEO ...
+  if (ppPowerProfileModeLines.empty())
+    return {};
+
+  auto const &data = ppPowerProfileModeLines.front();
+
+  std::regex const regex(R"(\s*(\d+)\s+(\w+)\s*\*{0,1})", std::regex::icase);
+  std::vector<std::pair<std::string, int>> modes;
+
+  auto targetIt = std::sregex_iterator(data.cbegin(), data.cend(), regex);
+  while (targetIt != std::sregex_iterator()) {
+    std::smatch match = *targetIt;
+
+    // skip BOOT and CUSTOM modes
+    std::string const mode(match[2]);
+    if (mode.find("BOOT") != std::string::npos ||
+        mode.find("CUSTOM") != std::string::npos) {
+      targetIt = std::next(targetIt);
+      continue;
+    }
+
+    int index{0};
+    if (!Utils::String::toNumber<int>(index, match[1])) {
+      targetIt = std::next(targetIt);
+      continue;
+    }
+
+    modes.emplace_back(std::move(mode), index);
+    targetIt = std::next(targetIt);
+  }
+
+  if (!modes.empty())
+    return std::move(modes);
+
+  return {};
+}
+
+std::optional<int> parsePowerProfileModeCurrentModeIndexColumnar(
+    std::vector<std::string> const &ppPowerProfileModeLines)
+{
+  // Format of the first line:
+  // 0 BOOTUP_DEFAULT* 1 3D_FULL_SCREEN 2 POWER_SAVING 3 VIDEO ...
+  if (ppPowerProfileModeLines.empty())
+    return {};
+
+  auto const &data = ppPowerProfileModeLines.front();
+
+  std::regex const regex(R"(\s*(\d+)\s+\w+\s*\*)", std::regex::icase);
+  std::smatch result;
+  if (!std::regex_search(data, result, regex))
+    return {};
+
+  int index{0};
+  if (!Utils::String::toNumber<int>(index, result[1]))
+    return {};
+
+  return index;
+}
+
 std::optional<std::tuple<unsigned int, units::frequency::megahertz_t,
                          units::voltage::millivolt_t>>
 parseOverdriveClkVoltLine(std::string const &line)
@@ -808,6 +872,22 @@ parseOverdriveFanCurveSpeedRange(std::vector<std::string> const &fanCurveLines)
   }
 
   return {};
+}
+
+bool isPowerProfileModeDataColumnar(std::vector<std::string> const &data)
+{
+  if (data.empty())
+    return false;
+
+  // The first line of the data contains the profile names and their indices:
+  // 0 BOOTUP_DEFAULT* 1 3D_FULL_SCREEN 2 POWER_SAVING 3 VIDEO ...
+  auto const &firstLine = data.front();
+
+  // Try to match at least two (index power_profile_name) pairs
+  std::regex const regex(R"(^\s*\d+\s+\w+\s*\*{0,1}\s*\d+\s+\w+\*{0,1})",
+                         std::regex::icase);
+  std::smatch result;
+  return std::regex_search(firstLine, result, regex);
 }
 
 bool hasOverdriveClkVoltControl(std::vector<std::string> const &data)
