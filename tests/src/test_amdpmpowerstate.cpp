@@ -117,8 +117,7 @@ TEST_CASE("AMD PMPowerState tests", "[GPU][AMD][PM][PMPowerState]")
   {
     PMPowerStateTestAdapter ts(std::make_unique<StringDataSourceStub>());
 
-    CommandQueueStub cmds;
-    ts.preInit(cmds);
+    ts.preInit(ctlCmds);
 
     REQUIRE(ctlCmds.commands().empty());
   }
@@ -127,8 +126,7 @@ TEST_CASE("AMD PMPowerState tests", "[GPU][AMD][PM][PMPowerState]")
   {
     PMPowerStateTestAdapter ts(std::make_unique<StringDataSourceStub>());
 
-    CommandQueueStub cmds;
-    ts.postInit(cmds);
+    ts.postInit(ctlCmds);
 
     REQUIRE(ctlCmds.commands().empty());
   }

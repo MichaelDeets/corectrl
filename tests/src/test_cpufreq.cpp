@@ -165,9 +165,7 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
   {
     CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
                           std::move(scalingGovernorDataSources));
-
-    CommandQueueStub cmds;
-    ts.preInit(cmds);
+    ts.preInit(ctlCmds);
 
     REQUIRE(ctlCmds.commands().empty());
   }
@@ -216,9 +214,7 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
   {
     CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
                           std::move(scalingGovernorDataSources));
-
-    CommandQueueStub cmds;
-    ts.postInit(cmds);
+    ts.postInit(ctlCmds);
 
     REQUIRE(ctlCmds.commands().empty());
   }
