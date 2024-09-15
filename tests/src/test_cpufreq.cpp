@@ -156,7 +156,7 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
     ts.scalingGovernor("performance");
     REQUIRE(ts.scalingGovernor() == "performance");
 
-    ts.scalingGovernor("unkown");
+    ts.scalingGovernor("unknown");
     REQUIRE(ts.scalingGovernor() == "performance");
   }
 

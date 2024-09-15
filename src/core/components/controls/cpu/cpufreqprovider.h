@@ -20,7 +20,7 @@ class CPUFreqProvider final : public ICPUControlProvider::IProvider
 
  private:
   std::vector<std::string> availableGovernors(ICPUInfo const &cpuInfo) const;
-  std::string defatultGovernor(ICPUInfo const &cpuInfo,
+  std::string defaultGovernor(ICPUInfo const &cpuInfo,
                                std::vector<std::string> const &governors) const;
   std::vector<std::unique_ptr<IDataSource<std::string>>>
   createScalingGovernorDataSources(ICPUInfo const &cpuInfo) const;

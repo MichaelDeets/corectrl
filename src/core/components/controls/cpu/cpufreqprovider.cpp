@@ -28,7 +28,7 @@ CPUFreqProvider::provideCPUControls(ICPUInfo const &cpuInfo, ISWInfo const &) co
   if (governors.empty())
     return {};
 
-  auto governor = defatultGovernor(cpuInfo, governors);
+  auto governor = defaultGovernor(cpuInfo, governors);
   auto scalingGovernorDataSources = createScalingGovernorDataSources(cpuInfo);
 
   if (scalingGovernorDataSources.empty())
@@ -63,7 +63,7 @@ CPUFreqProvider::availableGovernors(ICPUInfo const &cpuInfo) const
   return governors;
 }
 
-std::string CPUFreqProvider::defatultGovernor(
+std::string CPUFreqProvider::defaultGovernor(
     ICPUInfo const &cpuInfo, std::vector<std::string> const &governors) const
 {
   std::string scalingDriverPath{"cpufreq/scaling_driver"};
