@@ -62,6 +62,8 @@ class CPUFreq : public Control
   std::optional<std::vector<std::string>> eppHints() const;
 
  private:
+  void syncScalingGovernor(std::string const &governor, ICommandQueue &ctlCmds);
+
   std::string const id_;
   std::vector<std::string> const scalingGovernors_;
   std::vector<std::unique_ptr<IDataSource<std::string>>> const

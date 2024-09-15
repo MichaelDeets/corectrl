@@ -118,35 +118,32 @@ CPUFreqProvider::createScalingGovernorDataSources(ICPUInfo const &cpuInfo) const
 std::unique_ptr<IEPPHandler>
 CPUFreqProvider::createEPPHandler(ICPUInfo const &cpuInfo) const
 {
-  auto eppHints = availableHints(cpuInfo);
-  if (eppHints.empty())
+  auto avaiableEPPHintsDataSource = createAvailableHintsDataSource(cpuInfo);
+  if (!avaiableEPPHintsDataSource)
     return {};
 
   auto eppHintDataSources = createHintDataSources(cpuInfo);
   if (eppHintDataSources.empty())
     return {};
 
-  return std::make_unique<EPPHandler>(std::move(eppHints),
+  return std::make_unique<EPPHandler>(std::move(avaiableEPPHintsDataSource),
                                       std::move(eppHintDataSources));
 }
 
-std::vector<std::string>
-CPUFreqProvider::availableHints(ICPUInfo const &cpuInfo) const
+std::unique_ptr<IDataSource<std::string>>
+CPUFreqProvider::createAvailableHintsDataSource(ICPUInfo const &cpuInfo) const
 {
   std::string availableGovernorsPath{
       "cpufreq/energy_performance_available_preferences"};
 
-  // get available hints from the first execution unit
-  auto unitAvailableHintsPath = cpuInfo.executionUnits().front().sysPath /
-                                availableGovernorsPath;
+  // available hints will be read from the first execution unit
+  auto availableHintsPath = cpuInfo.executionUnits().front().sysPath /
+                            availableGovernorsPath;
 
-  if (!Utils::File::isSysFSEntryValid(unitAvailableHintsPath))
+  if (!Utils::File::isSysFSEntryValid(availableHintsPath))
     return {};
 
-  auto lines = Utils::File::readFileLines(unitAvailableHintsPath);
-  auto hints = Utils::String::split(lines.front());
-
-  return hints;
+  return std::make_unique<SysFSDataSource<std::string>>(availableHintsPath);
 }
 
 std::vector<std::unique_ptr<IDataSource<std::string>>>

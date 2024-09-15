@@ -25,7 +25,8 @@ class CPUFreqProvider final : public ICPUControlProvider::IProvider
   std::vector<std::unique_ptr<IDataSource<std::string>>>
   createScalingGovernorDataSources(ICPUInfo const &cpuInfo) const;
   std::unique_ptr<IEPPHandler> createEPPHandler(ICPUInfo const &cpuInfo) const;
-  std::vector<std::string> availableHints(ICPUInfo const &cpuInfo) const;
+  std::unique_ptr<IDataSource<std::string>>
+  createAvailableHintsDataSource(ICPUInfo const &cpuInfo) const;
   std::vector<std::unique_ptr<IDataSource<std::string>>>
   createHintDataSources(ICPUInfo const &cpuInfo) const;
 

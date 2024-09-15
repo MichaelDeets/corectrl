@@ -5,7 +5,6 @@
 
 #include "core/components/controls/idatasourcehandler.h"
 #include <string>
-#include <utility>
 #include <vector>
 
 class IEPPHandler : public IDataSourceHandler
@@ -15,6 +14,8 @@ class IEPPHandler : public IDataSourceHandler
 
   virtual std::string const &hint() const = 0;
   virtual void hint(std::string const &hint) = 0;
+
+  virtual void init() = 0;
 
   virtual ~IEPPHandler() = default;
 };

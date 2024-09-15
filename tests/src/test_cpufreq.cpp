@@ -68,6 +68,7 @@ class EPPHandlerMock : public IEPPHandler
   MAKE_CONST_MOCK0(hints, std::vector<std::string> const &(void), override);
   MAKE_CONST_MOCK0(hint, std::string const &(), override);
   MAKE_MOCK1(hint, void(std::string const &), override);
+  MAKE_MOCK0(init, void(), override);
   MAKE_MOCK0(saveState, void(), override);
   MAKE_MOCK1(restoreState, void(ICommandQueue &), override);
   MAKE_MOCK1(reset, void(ICommandQueue &), override);
@@ -159,7 +160,8 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
     REQUIRE(ts.scalingGovernor() == "performance");
   }
 
-  SECTION("Does not generate pre-init control commands")
+  SECTION(
+      "Does not generate pre-init control commands when EPP is not supported")
   {
     CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
                           std::move(scalingGovernorDataSources));
@@ -168,6 +170,46 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
     ts.preInit(cmds);
 
     REQUIRE(ctlCmds.commands().empty());
+  }
+
+  SECTION(
+      "Does not generate pre-init control commands when EPP is supported and "
+      "the current scaling governor is the EPP scaling governor ('powersave')")
+  {
+    auto eppHandlerMock = std::make_unique<EPPHandlerMock>();
+
+    scalingGovernorDataSources.emplace_back(
+        std::make_unique<StringDataSourceStub>(scalingGovernorPath,
+                                               "powersave"));
+
+    CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
+                          std::move(scalingGovernorDataSources),
+                          std::move(eppHandlerMock));
+    ts.preInit(ctlCmds);
+
+    REQUIRE(ctlCmds.commands().empty());
+  }
+
+  SECTION("Does generate pre-init control commands to set the scaling governor "
+          "when EPP is supported and the current scaling governor is not the "
+          "EPP scaling governor ('powersave')")
+  {
+    auto eppHandlerMock = std::make_unique<EPPHandlerMock>();
+
+    scalingGovernorDataSources.emplace_back(
+        std::make_unique<StringDataSourceStub>(scalingGovernorPath,
+                                               "performance"));
+
+    CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
+                          std::move(scalingGovernorDataSources),
+                          std::move(eppHandlerMock));
+    ts.preInit(ctlCmds);
+
+    REQUIRE(ctlCmds.commands().size() == 1);
+
+    auto &[path, value] = ctlCmds.commands().front();
+    REQUIRE(path == scalingGovernorPath);
+    REQUIRE(value == "powersave");
   }
 
   SECTION("Does not generate post-init control commands")
@@ -179,6 +221,17 @@ TEST_CASE("AMD CPUFreq tests", "[CPU][CPUFreq]")
     ts.postInit(cmds);
 
     REQUIRE(ctlCmds.commands().empty());
+  }
+
+  SECTION("Initialize EPP handler when EPP is supported")
+  {
+    auto eppHandlerMock = std::make_unique<EPPHandlerMock>();
+    REQUIRE_CALL(*eppHandlerMock, init());
+
+    CPUFreqTestAdapter ts(std::move(availableGovernors), defaultGovernor,
+                          std::move(scalingGovernorDataSources),
+                          std::move(eppHandlerMock));
+    ts.init();
   }
 
   SECTION("Imports scaling governor state")

@@ -7,13 +7,12 @@
 #include "iepphandler.h"
 #include <memory>
 #include <string>
-#include <string_view>
 #include <vector>
 
 class EPPHandler : public IEPPHandler
 {
  public:
-  EPPHandler(std::vector<std::string> &&eppHints,
+  EPPHandler(std::unique_ptr<IDataSource<std::string>> &&avaiableEPPHintsDataSource,
              std::vector<std::unique_ptr<IDataSource<std::string>>>
                  &&eppHintDataSources) noexcept;
 
@@ -22,6 +21,8 @@ class EPPHandler : public IEPPHandler
 
   std::vector<std::string> const &hints() const override;
 
+  virtual void init() override;
+
   void saveState() override;
   void restoreState(ICommandQueue &ctlCmds) override;
 
@@ -29,9 +30,10 @@ class EPPHandler : public IEPPHandler
   void sync(ICommandQueue &ctlCmds) override;
 
  private:
-  std::vector<std::string> const hints_;
+  std::unique_ptr<IDataSource<std::string>> const avaiableEPPHintsDataSource_;
   std::vector<std::unique_ptr<IDataSource<std::string>>> const eppHintDataSources_;
 
+  std::vector<std::string> hints_;
   std::string hint_;
   std::string dataSourceEntry_;
 };

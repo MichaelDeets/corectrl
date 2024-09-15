@@ -3,19 +3,17 @@
 
 #include "epphandler.h"
 
+#include "common/stringutils.h"
 #include "core/icommandqueue.h"
 #include <algorithm>
 #include <utility>
 
-EPPHandler::EPPHandler(std::vector<std::string> &&eppHints,
-                       std::vector<std::unique_ptr<IDataSource<std::string>>>
-                           &&eppHintDataSources) noexcept
-: hints_(std::move(eppHints))
+EPPHandler::EPPHandler(
+    std::unique_ptr<IDataSource<std::string>> &&avaiableEPPHintsDataSource,
+    std::vector<std::unique_ptr<IDataSource<std::string>>> &&eppHintDataSources) noexcept
+: avaiableEPPHintsDataSource_(std::move(avaiableEPPHintsDataSource))
 , eppHintDataSources_(std::move(eppHintDataSources))
 {
-  hint("default");
-  if (hint_.empty())
-    hint(hints_.front());
 }
 
 std::string const &EPPHandler::hint() const
@@ -36,6 +34,19 @@ void EPPHandler::hint(std::string const &eppHint)
 std::vector<std::string> const &EPPHandler::hints() const
 {
   return hints_;
+}
+
+void EPPHandler::init()
+{
+  if (avaiableEPPHintsDataSource_->read(dataSourceEntry_)) {
+    // set available hints
+    hints_ = Utils::String::split(dataSourceEntry_);
+
+    // set default hint
+    hint("default");
+    if (hint_.empty())
+      hint(hints_.front());
+  }
 }
 
 void EPPHandler::saveState()

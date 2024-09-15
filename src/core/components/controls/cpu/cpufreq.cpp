@@ -24,8 +24,12 @@ CPUFreq::CPUFreq(std::vector<std::string> &&scalingGovernors,
     scalingGovernor(scalingGovernors_.front());
 }
 
-void CPUFreq::preInit(ICommandQueue &)
+void CPUFreq::preInit(ICommandQueue &ctlCmds)
 {
+  if (eppHandler_)
+    // We need to set the EPP scaling governor as the current scaling governor
+    // before the initialization of the EPP handler.
+    syncScalingGovernor(eppScalingGovernor_, ctlCmds);
 }
 
 void CPUFreq::postInit(ICommandQueue &)
@@ -34,6 +38,8 @@ void CPUFreq::postInit(ICommandQueue &)
 
 void CPUFreq::init()
 {
+  if (eppHandler_)
+    eppHandler_->init();
 }
 
 std::string const &CPUFreq::ID() const
@@ -68,12 +74,7 @@ void CPUFreq::cleanControl(ICommandQueue &)
 
 void CPUFreq::syncControl(ICommandQueue &ctlCmds)
 {
-  for (auto &scalingGovernorDataSource : scalingGovernorDataSources_)
-    if (scalingGovernorDataSource->read(dataSourceEntry_)) {
-      if (dataSourceEntry_ != scalingGovernor())
-        ctlCmds.add({scalingGovernorDataSource->source(), scalingGovernor()});
-    }
-
+  syncScalingGovernor(scalingGovernor(), ctlCmds);
   if (eppHandler_ && scalingGovernor() == eppScalingGovernor_)
     eppHandler_->sync(ctlCmds);
 }
@@ -108,4 +109,14 @@ std::optional<std::string> CPUFreq::eppHint() const
 std::optional<std::vector<std::string>> CPUFreq::eppHints() const
 {
   return eppHandler_ ? std::make_optional(eppHandler_->hints()) : std::nullopt;
+}
+
+void CPUFreq::syncScalingGovernor(std::string const &governor,
+                                  ICommandQueue &ctlCmds)
+{
+  for (auto &scalingGovernorDataSource : scalingGovernorDataSources_)
+    if (scalingGovernorDataSource->read(dataSourceEntry_)) {
+      if (dataSourceEntry_ != governor)
+        ctlCmds.add({scalingGovernorDataSource->source(), governor});
+    }
 }

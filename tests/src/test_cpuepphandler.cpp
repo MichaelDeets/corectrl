@@ -14,13 +14,22 @@ TEST_CASE("AMD PpDpmHandler tests", "[CPU][DataSourceHandler][EPPHandler]")
   CommandQueueStub ctlCmds;
 
   std::string defaultHint{"default"};
-  std::vector<std::string> eppHintsData{"default", "power"};
 
-  std::vector<std::unique_ptr<IDataSource<std::string>>> cpuDataSource;
-  cpuDataSource.emplace_back(std::make_unique<StringDataSourceStub>(
+  auto availableEPPHintsDataSource = std::make_unique<StringDataSourceStub>(
+      "energy_performance_available_preferences", "default power");
+  std::vector<std::unique_ptr<IDataSource<std::string>>> eppHintDataSource{};
+  eppHintDataSource.emplace_back(std::make_unique<StringDataSourceStub>(
       "energy_performance_preference", "default"));
 
-  ::EPPHandler ts(std::move(eppHintsData), std::move(cpuDataSource));
+  ::EPPHandler ts(std::move(availableEPPHintsDataSource),
+                  std::move(eppHintDataSource));
+  ts.init();
+
+  SECTION("Initialize the available EPP hints from its data source")
+  {
+    std::vector<std::string> eppHints = {"default", "power"};
+    REQUIRE_THAT(ts.hints(), Catch::Matchers::Equals(eppHints));
+  }
 
   SECTION("Has 'default' as the active hint by default when available")
   {
