@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+
+## CoreCtrl 1.4.2 (2024-09-17)
+
 ### Fixed
 - Main window not visible after application startup when the system tray icon has been disabled (#458).
 - CPU Energy Performance Preference only shows `performance` as the available option when launching the application while the CPU governor is set to `performance` (#466).
