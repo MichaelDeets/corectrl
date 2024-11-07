@@ -90,7 +90,7 @@ ChartView {
     }
   }
 
-  onEnabledChanged: enabled => p.onEnableChanged(enabled)
+  onEnabledChanged: { p.onEnableChanged(enabled) }
 
   QtObject { // private stuff
     id: p
