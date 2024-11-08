@@ -31,62 +31,66 @@ ChartView {
           labelFormat: Style.CurveControl.axis_label_format
           minorGridVisible: true
           minorTickCount: 1
-          tickCount: 5 }
-        ,
+          tickCount: 5
+         },
          ValueAxis {
           id: yAxis
           labelFormat: Style.CurveControl.axis_label_format
           minorGridVisible: true
           minorTickCount: 1
-          tickCount: 3 }
-        ]
+          tickCount: 3
+         }]
 
   signal curveChanged(var name, var oldPoint, var newPoint)
 
   function configureAxes(xName, xUnit, xMin, xMax, yName, yUnit, yMin, yMax) {
-    p.setAxisRange(xMin, xMax, yMin, yMax)
-    p.setAxisTitleData(xName, yName, xUnit, yUnit)
-    p.refreshAxes(enabled)
 
-    // update outer range curve points
-    for (var curveName in p.lineSeries) {
-      var series = p.lineSeries[curveName]
-      var oldFirst = series.at(0)
-      var oldLast = series.at(series.count - 1)
-      series.replace(oldFirst.x, oldFirst.y, p.lineFirstX, oldFirst.y)
-      series.replace(oldLast.x, oldLast.y, p.lineLastX, oldLast.y)
+    p.axisInfo = {
+      x: {
+        name: xName,
+        unit: xUnit,
+        min: xMin,
+        max: xMax
+      },
+      y: {
+        name: yName,
+        unit: yUnit,
+        min: yMin,
+        max: yMax
+      }
     }
+
+    p.refreshAxes(p.axisInfo, enabled)
+
+    // update outer range line series points
+    p.curves.forEach(series => {
+      const oldFirst = series.line.at(0)
+      const oldLast = series.line.at(line.count - 1)
+      series.line.replace(oldFirst.x, oldFirst.y, xMin - 1, oldFirst.y)
+      series.line.replace(oldLast.x, oldLast.y, xMax + 1, oldLast.y)
+    })
   }
 
   function addCurve(name, color, points) {
-    if (p.lineSeries[name] === undefined) {
-      var line = p.createLineSeries(name, color, points)
-      p.lineSeries[name] = line
+    // remove existing curve
+    if (p.curves.has(name))
+      removeCurve(name)
 
-      // recreate control series, so control points are always on top
-      var controlColors = p.controlColors()
-      var controlPoints = p.controlPoints()
-      for (var key in controlPoints) {
-        chart.removeSeries(p.controlSeries[key])
-        p.controlSeries[key] = p.createControlSeries(name,
-                                               controlColors[key],
-                                               controlPoints[key])
-      }
+    const line = p.createLineSeries(name, color, points)
+    const controls = p.createControlSeries(name, color, points)
 
-      p.controlSeries[name] = p.createControlSeries(name, color, points)
-    }
+    p.curves.set(name, {
+      line: line,
+      points: controls
+    })
   }
 
   function removeCurve(name) {
-    var line = p.lineSeries[name]
-    if (line !== undefined) {
-      var control = p.controlSeries[name]
-
+    if (p.curves.has(name)) {
+      const {line, points} = p.curves.get(name)
       chart.removeSeries(line)
-      chart.removeSeries(control)
-
-      delete p.lineSeries[name]
-      delete p.controlSeries[name]
+      chart.removeSeries(points)
+      p.curves.delete(name)
     }
   }
 
@@ -95,28 +99,9 @@ ChartView {
   QtObject { // private stuff
     id: p
 
-    property var lineSeries: []
-    property var controlSeries: []
-
-    property string selectedCurve
-    property var selectedPoint: undefined
-    property int selectedPointIndex: -1
-
-    property real prevX: 0
-    property real nextX: 0
-
-    property string xName: ""
-    property string xUnit: ""
-    property string yName: ""
-    property string yUnit: ""
-
-    property real xMin: 0
-    property real xMax: 1
-    property real yMin: 0
-    property real yMax: 1
-
-    property real lineFirstX: xMin - 1
-    property real lineLastX: xMax + 1
+    property var curves: new Map()
+    property var selection: undefined
+    property var axisInfo: undefined
 
     function createLineSeries(name, color, points) {
       var series = chart.createSeries(ChartView.SeriesTypeLine,
@@ -128,13 +113,13 @@ ChartView {
       series.width = 2
 
       // line first outer range point
-      series.append(p.lineFirstX, points[0].y)
+      series.append(axisInfo.x.min - 1, points[0].y)
 
       for (var i = 0; i < points.length; ++i)
         series.append(points[i].x, points[i].y)
 
       // line last outer range point
-      series.append(p.lineLastX, points[points.length - 1].y)
+      series.append(axisInfo.x.max + 1, points[points.length - 1].y)
 
       return series
     }
@@ -157,83 +142,37 @@ ChartView {
     }
 
     function onEnableChanged(enabled) {
-      refreshAxes(enabled)
+      refreshAxes(axisInfo, enabled)
 
-      // series opactity
+      // series opacity
       var opacity = enabled ? Style.CurveControl.curve_opacity
                             : Style.CurveControl.curve_opacity_alt
-      for (var curveName in lineSeries) {
-        var lseries = lineSeries[curveName]
-        lseries.opacity = opacity
-        var cseries = controlSeries[curveName]
-        cseries.opacity = opacity
-      }
+      curves.forEach(series => {
+        series.line.opacity = opacity
+        series.points.opacity = opacity
+      })
     }
 
-    function controlPoints() {
-      var controlPoints = []
-      for (var key in controlSeries) {
-        var series = controlSeries[key]
-
-        var points = []
-        for (var i = 0; i < series.count; ++i)
-          points.push(series.at(i))
-
-        controlPoints[key] = points
-      }
-
-      return controlPoints
-    }
-
-    function controlColors() {
-      var controlColors = []
-      for (var key in controlSeries) {
-        var series = controlSeries[key]
-        controlColors[key] = series.color
-      }
-
-      return controlColors
-    }
-
-    function hasSeries() {
-      for (var key in lineSeries)
-        return true
-
-      return false
+    function hasCurves() {
+      return curves.size > 0
     }
 
     function hasSelection() {
-      return selectedPoint !== undefined
+      return selection !== undefined
     }
 
     function mapToChart(point) {
-      for (var key in controlSeries)
-        return chart.mapToValue(point, controlSeries[key])
+      // use the first available point series to map the point
+      for (const series of curves.values())
+        return chart.mapToValue(point, series.points)
     }
 
-    function setAxisRange(xMin, xMax, yMin, yMax) {
-      xAxis.min = xMin
-      xAxis.max = xMax
-      yAxis.min = yMin
-      yAxis.max = yMax
-
-      this.xMin = xMin;
-      this.xMax = xMax;
-      this.yMin = yMin;
-      this.yMax = yMax;
-    }
-
-    function setAxisTitleData(xName, yName, xUnit, yUnit) {
-      this.xName = xName;
-      this.yName = yName;
-      this.xUnit = xUnit
-      this.yUnit = yUnit
-    }
-
-    function refreshAxes(enabled) {
+    function refreshAxes({x, y}, enabled) {
+      xAxis.min = x.min
+      xAxis.max = x.max
       xAxis.titleText = "<font color='"+ (enabled ? Style.CurveControl.axis_title_color
                                                   : Style.CurveControl.axis_title_color_alt)
-                        + "'>" + xName + " (" + xUnit + ")</font>"
+                        + "'>" + x.name + " (" + x.unit + ")</font>"
       xAxis.labelsColor = enabled ? Style.CurveControl.axis_label_color
                                   : Style.CurveControl.axis_label_color_alt
       xAxis.color = enabled ? Style.CurveControl.axis_color
@@ -242,10 +181,11 @@ ChartView {
                                     : Style.CurveControl.axis_grid_color_alt
       xAxis.minorGridLineColor = enabled ? Style.CurveControl.axis_grid_minor_color
                                          : Style.CurveControl.axis_grid_minor_color_alt
-
+      yAxis.min = y.min
+      yAxis.max = y.max
       yAxis.titleText = "<font color='"+ (enabled ? Style.CurveControl.axis_title_color
                                                   : Style.CurveControl.axis_title_color_alt)
-                        + "'>" + yName + " (" + yUnit + ")</font>"
+                        + "'>" + y.name + " (" + y.unit + ")</font>"
       yAxis.labelsColor = enabled ? Style.CurveControl.axis_label_color
                                   : Style.CurveControl.axis_label_color_alt
       yAxis.color = enabled ? Style.CurveControl.axis_color
@@ -256,67 +196,69 @@ ChartView {
                                          : Style.CurveControl.axis_grid_minor_color_alt
     }
 
-    function updateGraphPoint(oldPoint, newPoint) {
-      lineSeries[selectedCurve].replace(oldPoint.x, oldPoint.y, newPoint.x, newPoint.y)
-      controlSeries[selectedCurve].replace(oldPoint.x, oldPoint.y, newPoint.x, newPoint.y)
+    function updateCurvePoint(curve, oldPoint, newPoint) {
+      curve.line.replace(oldPoint.x, oldPoint.y, newPoint.x, newPoint.y)
+      curve.points.replace(oldPoint.x, oldPoint.y, newPoint.x, newPoint.y)
     }
 
-    function updateOuterRangePoints(oldY, newY) {
-      if (selectedPointIndex == 0)
-        lineSeries[selectedCurve].replace(lineFirstX, oldY, lineFirstX, newY)
-      if (selectedPointIndex == controlSeries[selectedCurve].count - 1)
-        lineSeries[selectedCurve].replace(lineLastX, oldY, lineLastX, newY)
+    function updateLineOuterRangePoint(curve, pointIndex, oldY, newY) {
+      if (pointIndex === 0)
+        curve.line.replace(axisInfo.x.min - 1, oldY, axisInfo.x.min - 1, newY)
+      else if (pointIndex === curve.points.count - 1)
+        curve.line.replace(axisInfo.x.max + 1, oldY, axisInfo.x.max + 1, newY)
     }
 
     function moveSelection(point) {
       // clamp point coordinates to axes range
-      point.x = Math.min(Math.max(point.x, xMin), xMax)
-      point.y = Math.min(Math.max(point.y, yMin), yMax)
+      point.x = Math.min(Math.max(point.x, axisInfo.x.min), axisInfo.x.max)
+      point.y = Math.min(Math.max(point.y, axisInfo.y.min), axisInfo.y.max)
+
+      const curve = curves.get(selection.curve)
 
       // limit x movement between points using minXDistance
-      if (selectedPointIndex > 0)
-        point.x = Math.max(point.x, prevX + minXDistance)
-      if (selectedPointIndex < controlSeries[selectedCurve].count - 1)
-        point.x = Math.min(point.x, nextX - minXDistance)
+      if (selection.index > 0)
+        point.x = Math.max(point.x, selection.prevX + minXDistance)
+      if (selection.index < curve.points.count - 1)
+        point.x = Math.min(point.x, selection.nextX - minXDistance)
 
       if (clampPointsYCoordinate)
-        clampOtherPointsYCoordinate()
+        clampOtherPointsYCoordinate(curve, selection)
 
-      updateGraphPoint(selectedPoint, point)
-      updateOuterRangePoints(selectedPoint.y, point.y)
+      updateCurvePoint(curve, selection.point, point)
+      updateLineOuterRangePoint(curve, selection.index, selection.point.y, point.y)
 
       // emit curveChanged signal
-      curveChanged(selectedCurve, selectedPoint, point)
+      curveChanged(selection.curve, selection.point, point)
 
-      selectedPoint = point
+      selection.point = point
 
       return point
     }
 
-    function clampOtherPointsYCoordinate() {
-      var series = controlSeries[selectedCurve]
-      for (var i = 0; i < series.count; ++i) {
+    function clampOtherPointsYCoordinate(curve, selection) {
+      var points = curve.points
+      for (var i = 0; i < points.count; ++i) {
         // skip selected point
-        if (selectedPointIndex == i)
+        if (selection.index === i)
           continue
 
-        var point = series.at(i)
-        if ((i < selectedPointIndex && point.y > selectedPoint.y) ||
-            (i > selectedPointIndex && point.y < selectedPoint.y)) {
-          point.y = selectedPoint.y
-          var oldPoint = series.at(i)
-          updateGraphPoint(oldPoint, point)
-          curveChanged(selectedCurve, oldPoint, point)
+        var point = points.at(i)
+        if ((i < selection.index && point.y > selection.point.y) ||
+            (i > selection.index && point.y < selection.point.y)) {
+          point.y = selection.point.y
+          var oldPoint = points.at(i)
+          updateCurvePoint(curve, oldPoint, point)
+          curveChanged(selection.curve, oldPoint, point)
         }
       }
     }
 
-    function findCloserIndex(series, target) {
+    function findCloserIndex(points, target) {
       var distRange = (xAxis.max - xAxis.min) / 20
       var closerPointIndex = -1
       var minDist = 10000
-      for (var i = 0; i < series.count; ++i) {
-        var point = series.at(i)
+      for (var i = 0; i < points.count; ++i) {
+        var point = points.at(i)
         var distance = Math.sqrt(Math.pow(point.x - target.x, 2) +
                                  Math.pow(point.y - target.y, 2))
 
@@ -329,53 +271,36 @@ ChartView {
       return closerPointIndex
     }
 
-    function selectCloser(point) {
-
-      // pick the first closer point in controls
-      for (var key in  controlSeries) {
-        var control = controlSeries[key]
-        selectedPointIndex = findCloserIndex(control, point)
-        if (selectedPointIndex != -1)
-          break
-      }
-
-      if (selectedPointIndex != -1) {
-        selectedPoint = control.at(selectedPointIndex)
-
-        // find point's curve
-        var curveFound = false
-        for (var curveName in lineSeries) {
-          var series = lineSeries[curveName]
-          for (var i = 0; i < series.count; ++i) {
-            if (series.at(i) === selectedPoint) {
-              curveFound = true
-              break
-            }
+    function closerPointTo(point) {
+      for (const [curve, series] of curves) {
+        const selectedPointIndex = findCloserIndex(series.points, point)
+        if (selectedPointIndex !== -1)
+          return {
+            curve: curve,
+            point: series.points.at(selectedPointIndex),
+            index: selectedPointIndex
           }
-
-          if (curveFound) {
-            selectedCurve = curveName
-            break
-          }
-        }
-
-        if (selectedPointIndex > 0)
-          prevX = control.at(selectedPointIndex - 1).x
-
-        if (selectedPointIndex < control.count - 1)
-          nextX = control.at(selectedPointIndex + 1).x
-      }
-      else {
-        deselect()
       }
 
-      return selectedPoint
+      return undefined
     }
 
-    function deselect() {
-      selectedPoint = undefined
-      selectedPointIndex = -1
-      selectedCurve = ""
+    function select(pointInfo) {
+      if (pointInfo !== undefined) {
+        const { curve, point, index } = pointInfo
+        const points = curves.get(curve).points
+
+        selection = {
+          curve,
+          point,
+          index,
+          prevX: index > 0 ? points.at(index - 1).x : undefined,
+          nextX: index < points.count - 1 ? points.at(index + 1).x : undefined
+        }
+      }
+      else {
+        selection = undefined
+      }
     }
   }
 
@@ -399,36 +324,39 @@ ChartView {
     anchors.fill: parent
 
     onPressed: mouse => {
-      if (p.hasSeries()) {
+      if (p.hasCurves()) {
         var outerPoint = p.mapToChart(Qt.point(mouse.x, mouse.y))
-        var point = p.selectCloser(outerPoint)
+
+        var pointInfo = p.closerPointTo(outerPoint)
+        p.select(pointInfo)
 
         // update tooltip
-        if (point !== undefined) {
+        if (pointInfo !== undefined) {
+          const { point } = pointInfo
+
           tooltip.updatePosition(mouse.x, mouse.y)
-          tooltip.text = Math.round(point.x) + p.xUnit + " " + Math.round(point.y) + p.yUnit
+          tooltip.text = Math.round(point.x) + p.axisInfo.x.unit + " " + Math.round(point.y) + p.axisInfo.y.unit
           tooltip.visible = true
         }
       }
     }
 
     onReleased: mouse => {
-      if (p.hasSeries()) {
-        p.deselect()
+      if (p.hasCurves()) {
+        p.select(undefined)
         tooltip.visible = false
       }
     }
 
     onPositionChanged: mouse => {
-      if (p.hasSeries() && p.hasSelection()) {
+      if (p.hasCurves() && p.hasSelection()) {
         var point = p.mapToChart(Qt.point(mouse.x, mouse.y))
         point = p.moveSelection(point)
 
         // update tooltip
         tooltip.updatePosition(mouse.x, mouse.y)
-        tooltip.text = Math.round(point.x) + p.xUnit + " " + Math.round(point.y) + p.yUnit
+        tooltip.text = Math.round(point.x) + p.axisInfo.x.unit + " " + Math.round(point.y) + p.axisInfo.y.unit
       }
     }
   }
 }
-
