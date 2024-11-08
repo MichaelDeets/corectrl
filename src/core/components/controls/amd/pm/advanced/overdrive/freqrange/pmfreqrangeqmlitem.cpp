@@ -87,7 +87,7 @@ void AMD::PMFreqRangeQMLItem::changeState(int index, int freq)
     if (stateFreq.to<int>() != freq) {
       stateFreq = units::frequency::megahertz_t(freq);
 
-      emit stateChanged(index, freq);
+      emit someStateChanged(index, freq);
       emit settingsChanged();
     }
   }

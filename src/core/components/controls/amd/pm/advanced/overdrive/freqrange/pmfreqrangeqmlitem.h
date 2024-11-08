@@ -29,7 +29,7 @@ class PMFreqRangeQMLItem
   void controlLabelChanged(QString const &label);
   void stateRangeChanged(int min, int max);
   void statesChanged(QVariantList const &states);
-  void stateChanged(int index, int freq);
+  void someStateChanged(int index, int freq);
 
  public slots:
   void changeState(int index, int freq);

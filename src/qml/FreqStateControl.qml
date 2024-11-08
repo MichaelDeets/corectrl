@@ -20,7 +20,7 @@ Pane {
   property alias title: title.text
 
   signal activeStateChanged(int index, bool active)
-  signal stateChanged(int index, int freq)
+  signal someStateChanged(int index, int freq)
 
   function setFStates(states, freqMin, freqMax) {
     stateModel.clear()
@@ -94,7 +94,7 @@ Pane {
 
         onPressedChanged: pressed => {
           if (!pressed)
-            control.stateChanged(_index, value)
+            control.someStateChanged(_index, value)
         }
       }
 
@@ -105,7 +105,7 @@ Pane {
         Layout.preferredWidth: tFMetrics.width + padding * 2
         Layout.alignment: Qt.AlignHCenter
 
-        onValueChanged: control.stateChanged(_index, value)
+        onValueChanged: control.someStateChanged(_index, value)
       }
     }
   }

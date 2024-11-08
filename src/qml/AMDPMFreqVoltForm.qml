@@ -35,7 +35,7 @@ AMD_PM_FREQ_VOLT {
                                             p.freqMin, p.freqMax,
                                             p.voltMin, p.voltMax)
 
-  onStateChanged: (index, freq, volt) => fv.updateFVState(index, freq, volt)
+  onSomeStateChanged: (index, freq, volt) => fv.updateFVState(index, freq, volt)
 
   onActiveStatesChanged: states => {
     p.activeStates.length = 0
@@ -64,7 +64,7 @@ AMD_PM_FREQ_VOLT {
         Layout.fillHeight: true
 
         onVoltManualChanged: pmFreqVolt.changeVoltMode(voltManual ? "manual" : "auto")
-        onStateChanged: (index, freq, volt) => pmFreqVolt.changeState(index, freq, volt)
+        onSomeStateChanged: (index, freq, volt) => pmFreqVolt.changeState(index, freq, volt)
         onActiveStateChanged: (index, active) => pmFreqVolt.changeActiveState(index, active)
       }
     }

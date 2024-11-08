@@ -21,7 +21,7 @@ Pane {
   property alias voltManual: manualVolt.checked
 
   signal activeStateChanged(int index, bool active)
-  signal stateChanged(int index, int freq, int volt)
+  signal someStateChanged(int index, int freq, int volt)
 
   function setFVStates(states, activeStates, freqMin, freqMax, voltMin, voltMax) {
     stateModel.clear()
@@ -135,7 +135,7 @@ Pane {
 
         onPressedChanged: pressed => {
           if (!pressed)
-            control.stateChanged(_index, value, _volt)
+            control.someStateChanged(_index, value, _volt)
         }
       }
 
@@ -148,7 +148,7 @@ Pane {
         Layout.preferredWidth: tFMetrics.width + padding * 2
         Layout.alignment: Qt.AlignHCenter
 
-        onValueChanged: control.stateChanged(_index, value, _volt)
+        onValueChanged: control.someStateChanged(_index, value, _volt)
       }
 
       CIntInput {
@@ -161,7 +161,7 @@ Pane {
         Layout.preferredWidth: tFMetrics.width + padding * 2
         Layout.alignment: Qt.AlignHCenter
 
-        onValueChanged: control.stateChanged(_index, _freq, value)
+        onValueChanged: control.someStateChanged(_index, _freq, value)
       }
 
       TextField {

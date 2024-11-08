@@ -23,7 +23,7 @@ AMD_PM_FREQ_RANGE {
   }
 
   onStatesChanged: states => freqState.setFStates(states, p.min, p.max)
-  onStateChanged: (index, freq) => freqState.updateFState(index, freq)
+  onSomeStateChanged: (index, freq) => freqState.updateFState(index, freq)
 
   QtObject {
     id: p
@@ -41,7 +41,7 @@ AMD_PM_FREQ_RANGE {
         id: freqState
         Layout.fillHeight: true
 
-        onStateChanged: (index, freq) => pmFreqRange.changeState(index, freq)
+        onSomeStateChanged: (index, freq) => pmFreqRange.changeState(index, freq)
       }
     }
   }

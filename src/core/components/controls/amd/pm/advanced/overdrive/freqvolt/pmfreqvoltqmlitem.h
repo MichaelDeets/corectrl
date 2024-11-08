@@ -34,7 +34,7 @@ class PMFreqVoltQMLItem
   void voltModeChanged(QString const &mode);
   void statesChanged(QVariantList const &states);
   void activeStatesChanged(QVector<int> const &states);
-  void stateChanged(int index, int freq, int volt);
+  void someStateChanged(int index, int freq, int volt);
 
  public slots:
   void changeVoltMode(QString const &mode);

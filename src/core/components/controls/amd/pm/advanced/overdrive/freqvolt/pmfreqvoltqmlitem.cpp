@@ -128,7 +128,7 @@ void AMD::PMFreqVoltQMLItem::changeState(int index, int freq, int volt)
       stateFreq = units::frequency::megahertz_t(freq);
       stateVolt = units::voltage::millivolt_t(volt);
 
-      emit stateChanged(index, freq, volt);
+      emit someStateChanged(index, freq, volt);
       emit settingsChanged();
     }
   }
