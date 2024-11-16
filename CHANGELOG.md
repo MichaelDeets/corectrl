@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+
+## CoreCtrl 1.4.3 (2024-11-16)
+
 ### Fixed
 - Fan curve control displayed as disabled when re-enabling GPU controls.
 
