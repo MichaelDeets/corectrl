@@ -337,6 +337,7 @@ list(APPEND TRANSLATIONS
   translations/lang_nl_NL.ts
   translations/lang_de_DE.ts
   translations/lang_sv_SE.ts
+  translations/lang_ka_GE.ts
 )
 
 set_source_files_properties(${TRANSLATIONS} PROPERTIES

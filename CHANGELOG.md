@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+- Georgian translation. Thanks to NorwayFun (!46).
+
 
 ## CoreCtrl 1.4.3 (2024-11-16)
 
