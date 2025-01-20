@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Georgian translation. Thanks to NorwayFun (!46).
+- Brazilian Portuguese translation. Thanks to Leal (!49).
 
 
 ## CoreCtrl 1.4.3 (2024-11-16)
