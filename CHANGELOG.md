@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+- Allow custom Polkit policy files install directory (#477).
 - Georgian translation. Thanks to NorwayFun (!46).
 - Brazilian Portuguese translation. Thanks to Leal (!49).
 
