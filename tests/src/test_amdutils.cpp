@@ -1261,23 +1261,6 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
       REQUIRE_FALSE(::Utils::AMD::hasOverdriveFanAcousticLimitControl(data));
     }
   }
-
-  SECTION("hasOverdriveFanCurveControl")
-  {
-    SECTION("Returns true when overdrive has fan curve control")
-    {
-      std::vector<std::string> data{"OD_FAN_CURVE:"};
-
-      REQUIRE(::Utils::AMD::hasOverdriveFanCurveControl(data));
-    }
-
-    SECTION("Returns false when overdrive has no fan curve control")
-    {
-      std::vector<std::string> data{"OTHER_DATA"};
-
-      REQUIRE_FALSE(::Utils::AMD::hasOverdriveFanCurveControl(data));
-    }
-  }
 }
 
 } // namespace Tests::Utils::AMD

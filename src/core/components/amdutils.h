@@ -239,7 +239,4 @@ bool hasOverdriveFanAcousticTargetControl(std::vector<std::string> const &data);
 /// available.
 bool hasOverdriveFanAcousticLimitControl(std::vector<std::string> const &data);
 
-/// Returns true when overdrive fan curve control is available.
-bool hasOverdriveFanCurveControl(std::vector<std::string> const &data);
-
 } // namespace Utils::AMD

@@ -1080,14 +1080,4 @@ bool hasOverdriveFanAcousticLimitControl(std::vector<std::string> const &data)
   return offsetIt != data.cend();
 }
 
-bool hasOverdriveFanCurveControl(std::vector<std::string> const &data)
-{
-  auto offsetIt = std::find_if(
-      data.cbegin(), data.cend(), [&](std::string const &line) {
-        return line.find("OD_FAN_CURVE:") != std::string::npos;
-      });
-
-  return offsetIt != data.cend();
-}
-
 } // namespace Utils::AMD
