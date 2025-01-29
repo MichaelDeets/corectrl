@@ -956,6 +956,107 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
     }
   }
 
+  SECTION("parseOverdriveFanStop")
+  {
+    // clang-format off
+    std::vector<std::string> input{
+      "FAN_ZERO_RPM_ENABLE:",
+      "1",
+      "OD_RANGE:",
+      "ZERO_RPM_ENABLE: 0 1"
+    };
+    // clang-format on
+
+    SECTION("Returns fan stop state")
+    {
+      auto value = ::Utils::AMD::parseOverdriveFanStop(input);
+      REQUIRE(value.has_value());
+      REQUIRE(*value);
+    }
+
+    SECTION("Returns nothing when there is no FAN_ZERO_RPM_ENABLE: in input")
+    {
+      // clang-format off
+      std::vector<std::string> invalidInput{
+        "OTHER:",
+        "1",
+        "OD_RANGE:",
+        "ZERO_RPM_ENABLE: 0 1"
+      };
+      // clang-format on
+      auto value = ::Utils::AMD::parseOverdriveFanStop(invalidInput);
+      REQUIRE_FALSE(value.has_value());
+    }
+  }
+
+  SECTION("parseOverdriveFanStopTemp")
+  {
+    // clang-format off
+    std::vector<std::string> input{
+      "FAN_ZERO_RPM_STOP_TEMPERATURE:",
+      "20",
+      "OD_RANGE:",
+      "ZERO_RPM_STOP_TEMPERATURE: 10 100"
+    };
+    // clang-format on
+
+    SECTION("Returns fan stop temperature")
+    {
+      auto value = ::Utils::AMD::parseOverdriveFanStopTemp(input);
+      REQUIRE(value.has_value());
+      REQUIRE(*value == units::temperature::celsius_t(20));
+    }
+
+    SECTION("Returns nothing when there is no FAN_ZERO_RPM_STOP_TEMPERATURE: "
+            "in input")
+    {
+      // clang-format off
+      std::vector<std::string> invalidInput{
+        "OTHER:",
+        "20",
+        "OD_RANGE:",
+        "ZERO_RPM_STOP_TEMPERATURE: 10 100"
+      };
+      // clang-format on
+      auto value = ::Utils::AMD::parseOverdriveFanStopTemp(invalidInput);
+      REQUIRE_FALSE(value.has_value());
+    }
+  }
+
+  SECTION("parseOverdriveFanStopTempRange")
+  {
+    // clang-format off
+    std::vector<std::string> input{
+      "FAN_ZERO_RPM_STOP_TEMPERATURE:",
+      "20",
+      "OD_RANGE:",
+      "ZERO_RPM_STOP_TEMPERATURE: 10 100"
+    };
+    // clang-format on
+
+    SECTION("Returns minimum and maximum fan stop temperature")
+    {
+      auto value = ::Utils::AMD::parseOverdriveFanStopTempRange(input);
+      REQUIRE(value.has_value());
+      REQUIRE(value->first == units::temperature::celsius_t(10));
+      REQUIRE(value->second == units::temperature::celsius_t(100));
+    }
+
+    SECTION("Returns nothing when there is no OD_RANGE: in input")
+    {
+      // clang-format off
+      std::vector<std::string> invalidInput{
+        "FAN_ZERO_RPM_STOP_TEMPERATURE:",
+        "20",
+        "OTHER:",
+        "ZERO_RPM_STOP_TEMPERATURE: 10 100"
+      };
+      // clang-format on
+      auto value = ::Utils::AMD::parseOverdriveFanStopTempRange(invalidInput);
+      REQUIRE_FALSE(value.has_value());
+    }
+  }
+
   SECTION("isPowerProfileModeDataColumnar")
   {
     SECTION("Returns true when power profile mode data has columnar format")
