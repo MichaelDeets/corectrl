@@ -42,6 +42,9 @@ class AMD::OdFanCurveQMLItem::Initializer final
   takeFanCurve(std::vector<AMD::OdFanCurve::CurvePoint> const &curve) override;
   void takeFanCurveRange(AMD::OdFanCurve::TempRange temp,
                          AMD::OdFanCurve::SpeedRange speed) override;
+  void takeFanStop(bool enabled) override;
+  void takeFanStopTemp(units::temperature::celsius_t value) override;
+  void takeFanStopTempRange(AMD::OdFanCurve::TempRange value) override;
 
  private:
   AMD::OdFanCurveQMLItem &outer_;
@@ -59,10 +62,26 @@ void AMD::OdFanCurveQMLItem::Initializer::takeFanCurve(
 }
 
 void AMD::OdFanCurveQMLItem::Initializer::takeFanCurveRange(
-    std::pair<units::temperature::celsius_t, units::temperature::celsius_t> temp,
-    std::pair<units::concentration::percent_t, units::concentration::percent_t> speed)
+    AMD::OdFanCurve::TempRange temp, AMD::OdFanCurve::SpeedRange speed)
 {
   outer_.curveRange(temp, speed);
+}
+
+void AMD::OdFanCurveQMLItem::Initializer::takeFanStop(bool enabled)
+{
+  outer_.takeFanStop(enabled);
+}
+
+void AMD::OdFanCurveQMLItem::Initializer::takeFanStopTemp(
+    units::temperature::celsius_t value)
+{
+  outer_.takeFanStopTemp(value);
+}
+
+void AMD::OdFanCurveQMLItem::Initializer::takeFanStopTempRange(
+    AMD::OdFanCurve::TempRange value)
+{
+  outer_.stopTempRange(value);
 }
 
 AMD::OdFanCurveQMLItem::OdFanCurveQMLItem() noexcept
@@ -91,6 +110,26 @@ void AMD::OdFanCurveQMLItem::updateCurvePoint(QPointF const &oldPoint,
         break;
       }
     }
+  }
+}
+
+void AMD::OdFanCurveQMLItem::changeStop(bool enabled)
+{
+  if (stop_ != enabled) {
+    stop_ = enabled;
+
+    emit stopChanged(enabled);
+    emit settingsChanged();
+  }
+}
+
+void AMD::OdFanCurveQMLItem::changeStopTemp(int value)
+{
+  if (stopTemp_ != value) {
+    stopTemp_ = value;
+
+    emit stopTempChanged(value);
+    emit settingsChanged();
   }
 }
 
@@ -124,6 +163,16 @@ qreal AMD::OdFanCurveQMLItem::maxSpeed() const
   return maxSpeed_;
 }
 
+bool AMD::OdFanCurveQMLItem::stop() const
+{
+  return stop_;
+}
+
+int AMD::OdFanCurveQMLItem::stopTemp() const
+{
+  return stopTemp_;
+}
+
 std::optional<std::reference_wrapper<Importable::Importer>>
 AMD::OdFanCurveQMLItem::provideImporter(Item const &)
 {
@@ -147,6 +196,16 @@ AMD::OdFanCurveQMLItem::provideFanCurve() const
   return curve_;
 }
 
+bool AMD::OdFanCurveQMLItem::provideFanStop() const
+{
+  return stop_;
+}
+
+units::temperature::celsius_t AMD::OdFanCurveQMLItem::provideFanStopTemp() const
+{
+  return units::temperature::celsius_t(stopTemp_);
+}
+
 void AMD::OdFanCurveQMLItem::takeActive(bool active)
 {
   active_ = active;
@@ -167,6 +226,26 @@ void AMD::OdFanCurveQMLItem::takeFanCurve(
   }
 }
 
+void AMD::OdFanCurveQMLItem::takeFanStop(bool enabled)
+{
+  if (stop_ != enabled) {
+    stop_ = enabled;
+
+    emit stopChanged(stop_);
+  }
+}
+
+void AMD::OdFanCurveQMLItem::takeFanStopTemp(units::temperature::celsius_t value)
+{
+  auto newValue = value.to<int>();
+
+  if (stopTemp_ != newValue) {
+    stopTemp_ = newValue;
+
+    emit stopTempChanged(stopTemp_);
+  }
+}
+
 std::unique_ptr<Exportable::Exporter> AMD::OdFanCurveQMLItem::initializer(
     IQMLComponentFactory const &qmlComponentFactory,
     QQmlApplicationEngine &qmlEngine)
@@ -175,9 +254,8 @@ std::unique_ptr<Exportable::Exporter> AMD::OdFanCurveQMLItem::initializer(
       qmlComponentFactory, qmlEngine, *this);
 }
 
-void AMD::OdFanCurveQMLItem::curveRange(
-    std::pair<units::temperature::celsius_t, units::temperature::celsius_t> temp,
-    std::pair<units::concentration::percent_t, units::concentration::percent_t> speed)
+void AMD::OdFanCurveQMLItem::curveRange(AMD::OdFanCurve::TempRange temp,
+                                        AMD::OdFanCurve::SpeedRange speed)
 {
   minTemp_ = temp.first.to<qreal>();
   maxTemp_ = temp.second.to<qreal>();
@@ -185,6 +263,11 @@ void AMD::OdFanCurveQMLItem::curveRange(
   maxSpeed_ = speed.second.to<qreal>() * 100;
 
   emit curveRangeChanged(minTemp_, maxTemp_, minSpeed_, maxSpeed_);
+}
+
+void AMD::OdFanCurveQMLItem::stopTempRange(AMD::OdFanCurve::TempRange)
+{
+  emit stopAvailable();
 }
 
 bool AMD::OdFanCurveQMLItem::register_()

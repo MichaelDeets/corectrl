@@ -10,8 +10,6 @@
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-#include <iostream>
-
 namespace Tests::AMD::OdFanCurve {
 
 class OdFanCurveTestAdapter : public ::AMD::OdFanCurve
@@ -34,15 +32,20 @@ class OdFanCurveTestAdapter : public ::AMD::OdFanCurve
   using ::AMD::OdFanCurve::setPointCoordinatesFrom;
   using ::AMD::OdFanCurve::controlPointCmd;
   using ::AMD::OdFanCurve::toCurvePoints;
-
+  using ::AMD::OdFanCurve::stop;
+  using ::AMD::OdFanCurve::stopTemp;
+  using ::AMD::OdFanCurve::stopTempRange;
   // clang-format on
 };
 
 class FanCurveImporterStub : public ::AMD::OdFanCurve::Importer
 {
  public:
-  FanCurveImporterStub(std::vector<::AMD::OdFanCurve::CurvePoint> const &curve)
+  FanCurveImporterStub(std::vector<::AMD::OdFanCurve::CurvePoint> const &curve,
+                       bool stop, units::temperature::celsius_t stopTemp)
   : curve_(curve)
+  , stop_(stop)
+  , stopTemp_(stopTemp)
   {
   }
 
@@ -62,8 +65,20 @@ class FanCurveImporterStub : public ::AMD::OdFanCurve::Importer
     return curve_;
   }
 
+  bool provideFanStop() const override
+  {
+    return stop_;
+  }
+
+  units::temperature::celsius_t provideFanStopTemp() const override
+  {
+    return stopTemp_;
+  }
+
  private:
   std::vector<::AMD::OdFanCurve::CurvePoint> const curve_;
+  bool stop_;
+  units::temperature::celsius_t stopTemp_;
 };
 
 class FanCurveExporterMock : public ::AMD::OdFanCurve::Exporter
@@ -74,6 +89,9 @@ class FanCurveExporterMock : public ::AMD::OdFanCurve::Exporter
   MAKE_MOCK2(takeFanCurveRange,
              void(::AMD::OdFanCurve::TempRange, ::AMD::OdFanCurve::SpeedRange),
              override);
+  MAKE_MOCK1(takeFanStop, void(bool), override);
+  MAKE_MOCK1(takeFanStopTemp, void(units::temperature::celsius_t), override);
+  MAKE_MOCK1(takeFanStopTempRange, void(::AMD::OdFanCurve::TempRange), override);
   MAKE_MOCK1(takeActive, void(bool), override);
   MAKE_MOCK1(
       provideExporter,
@@ -107,7 +125,31 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
     "FAN_CURVE(hotspot temp): 10C 100C",
     "FAN_CURVE(fan speed): 10% 100%"
   };
+  std::vector<std::string> stopInput{
+    "FAN_ZERO_RPM_ENABLE:",
+    "1",
+    "OD_RANGE:",
+    "ZERO_RPM_ENABLE: 0 1"
+  };
+  std::vector<std::string> stopTempInput{
+    "FAN_ZERO_RPM_STOP_TEMPERATURE:",
+    "20",
+    "OD_RANGE:",
+    "ZERO_RPM_STOP_TEMPERATURE: 10 100"
+  };
   // clang-format on
+  auto curveTempRange = std::make_pair(units::temperature::celsius_t(10),
+                                       units::temperature::celsius_t(100));
+  auto curveSpeedRange = std::make_pair(units::concentration::percent_t(10),
+                                        units::concentration::percent_t(100));
+
+  auto stopDataSource = std::make_optional<::AMD::OdFanCurve::StopDataSource>(
+      {std::make_unique<VectorStringDataSourceStub>("fan_zero_rpm_enable",
+                                                    stopInput),
+       std::make_unique<VectorStringDataSourceStub>(
+           "fan_zero_rpm_stop_temperature", stopTempInput),
+       std::make_pair(units::temperature::celsius_t(10),
+                      units::temperature::celsius_t(100))});
 
   SECTION("toCurvePoints")
   {
@@ -133,7 +175,9 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
         };
     // clang-format on
 
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>());
+    OdFanCurveTestAdapter ts({std::make_unique<VectorStringDataSourceStub>(),
+                              std::move(curveTempRange),
+                              std::move(curveSpeedRange)});
     auto output = ts.toCurvePoints(controlCurve);
     REQUIRE_THAT(output, Catch::Matchers::Equals(curvePoints));
   }
@@ -170,7 +214,9 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
         };
     // clang-format on
 
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>());
+    OdFanCurveTestAdapter ts({std::make_unique<VectorStringDataSourceStub>(),
+                              std::move(curveTempRange),
+                              std::move(curveSpeedRange)});
     ts.setPointCoordinatesFrom(curve, values);
     REQUIRE_THAT(curve, Catch::Matchers::Equals(targetCurve));
   }
@@ -198,7 +244,9 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
         };
     // clang-format on
 
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>());
+    OdFanCurveTestAdapter ts({std::make_unique<VectorStringDataSourceStub>(),
+                              std::move(curveTempRange),
+                              std::move(curveSpeedRange)});
     REQUIRE(ts.isZeroCurve(zeroCurve));
     REQUIRE_FALSE(ts.isZeroCurve(nonZeroCurve));
   }
@@ -208,45 +256,80 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
     auto point = std::make_tuple(0, units::temperature::celsius_t(-100),
                                  units::concentration::percent_t(100));
 
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>());
+    OdFanCurveTestAdapter ts({std::make_unique<VectorStringDataSourceStub>(),
+                              std::move(curveTempRange),
+                              std::move(curveSpeedRange)});
     auto output = ts.controlPointCmd(point);
     REQUIRE(output == "0 -100 100");
   }
 
   SECTION("Has OdFanCurve ID")
   {
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>());
+    OdFanCurveTestAdapter ts({std::make_unique<VectorStringDataSourceStub>(),
+                              std::move(curveTempRange),
+                              std::move(curveSpeedRange)});
 
     REQUIRE(ts.ID() == ::AMD::OdFanCurve::ItemID);
   }
 
   SECTION("Is not active by default")
   {
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>());
+    OdFanCurveTestAdapter ts({std::make_unique<VectorStringDataSourceStub>(),
+                              std::move(curveTempRange),
+                              std::move(curveSpeedRange)});
 
     REQUIRE_FALSE(ts.active());
   }
 
-  SECTION("Generate pre-init control commands")
+  SECTION("Generate pre-init control commands...")
   {
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "fan_curve", regularInput));
-    ts.preInit(ctlCmds);
+    SECTION("for curve control only")
+    {
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)});
+      ts.preInit(ctlCmds);
 
-    REQUIRE(ctlCmds.commands().size() == 2);
-    auto &[cmd0Path, cmd0Value] = ctlCmds.commands().front();
-    REQUIRE(cmd0Path == "fan_curve");
-    REQUIRE(cmd0Value == "r");
-    auto &[cmd1Path, cmd1Value] = ctlCmds.commands().back();
-    REQUIRE(cmd1Path == "fan_curve");
-    REQUIRE(cmd1Value == "c");
+      auto const &cmds = ctlCmds.commands();
+      REQUIRE(cmds.size() == 2);
+      REQUIRE(cmds[0].first == "fan_curve");
+      REQUIRE(cmds[0].second == "r");
+      REQUIRE(cmds[1].first == "fan_curve");
+      REQUIRE(cmds[1].second == "c");
+    }
+
+    SECTION("with stop controls")
+    {
+      OdFanCurveTestAdapter ts({std::make_unique<VectorStringDataSourceStub>(
+                                    "fan_curve", std::move(regularInput)),
+                                std::move(curveTempRange),
+                                std::move(curveSpeedRange)},
+                               std::move(stopDataSource));
+      ts.preInit(ctlCmds);
+
+      auto const &cmds = ctlCmds.commands();
+      REQUIRE(cmds.size() == 6);
+      REQUIRE(cmds[0].first == "fan_curve");
+      REQUIRE(cmds[0].second == "r");
+      REQUIRE(cmds[1].first == "fan_curve");
+      REQUIRE(cmds[1].second == "c");
+      REQUIRE(cmds[2].first == "fan_zero_rpm_enable");
+      REQUIRE(cmds[2].second == "r");
+      REQUIRE(cmds[3].first == "fan_zero_rpm_enable");
+      REQUIRE(cmds[3].second == "c");
+      REQUIRE(cmds[4].first == "fan_zero_rpm_stop_temperature");
+      REQUIRE(cmds[4].second == "r");
+      REQUIRE(cmds[5].first == "fan_zero_rpm_stop_temperature");
+      REQUIRE(cmds[5].second == "c");
+    }
   }
 
   SECTION("Does not generate post-init control commands with a pre-init zero "
-          "point curve")
+          "point curve without stop controls")
   {
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "fan_curve", zeroCurveInput));
+    OdFanCurveTestAdapter ts(
+        {std::make_unique<VectorStringDataSourceStub>("fan_curve", zeroCurveInput),
+         std::move(curveTempRange), std::move(curveSpeedRange)});
     ts.preInit(ctlCmds);
     ts.init();
     ctlCmds.clear();
@@ -256,53 +339,69 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
     REQUIRE(ctlCmds.commands().empty());
   }
 
-  SECTION("Generate post-init control commands with a pre-init non-zero points "
-          "curve restoring the pre-init curve state")
+  SECTION("Generate post-init control commands...")
   {
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "fan_curve", regularInput));
-    ts.preInit(ctlCmds);
-    ts.init();
-    ctlCmds.clear();
+    SECTION("for curve control only with a pre-init non-zero points "
+            "curve restoring the pre-init curve state")
+    {
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)});
+      ts.preInit(ctlCmds);
+      ts.init();
+      ctlCmds.clear();
 
-    ts.postInit(ctlCmds);
+      ts.postInit(ctlCmds);
 
-    auto const &cmds = ctlCmds.commands();
-    REQUIRE(cmds.size() == 6);
-    REQUIRE(cmds[0].first == "fan_curve");
-    REQUIRE(cmds[0].second == "0 10 10");
-    REQUIRE(cmds[1].first == "fan_curve");
-    REQUIRE(cmds[1].second == "1 45 20");
-    REQUIRE(cmds[2].first == "fan_curve");
-    REQUIRE(cmds[2].second == "2 50 50");
-    REQUIRE(cmds[3].first == "fan_curve");
-    REQUIRE(cmds[3].second == "3 75 70");
-    REQUIRE(cmds[4].first == "fan_curve");
-    REQUIRE(cmds[4].second == "4 100 100");
-    REQUIRE(cmds[5].second == "c");
+      auto const &cmds = ctlCmds.commands();
+      REQUIRE(cmds.size() == 6);
+      REQUIRE(cmds[0].first == "fan_curve");
+      REQUIRE(cmds[0].second == "0 10 10");
+      REQUIRE(cmds[1].first == "fan_curve");
+      REQUIRE(cmds[1].second == "1 45 20");
+      REQUIRE(cmds[2].first == "fan_curve");
+      REQUIRE(cmds[2].second == "2 50 50");
+      REQUIRE(cmds[3].first == "fan_curve");
+      REQUIRE(cmds[3].second == "3 75 70");
+      REQUIRE(cmds[4].first == "fan_curve");
+      REQUIRE(cmds[4].second == "4 100 100");
+      REQUIRE(cmds[5].second == "c");
+    }
+
+    SECTION("with stop controls, restoring their pre-init state")
+    {
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve",
+                                                        zeroCurveInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)},
+          std::move(stopDataSource));
+      ts.preInit(ctlCmds);
+      ts.init();
+      ctlCmds.clear();
+
+      ts.postInit(ctlCmds);
+      auto const &cmds = ctlCmds.commands();
+      REQUIRE(cmds.size() == 4);
+      REQUIRE(cmds[0].first == "fan_zero_rpm_enable");
+      REQUIRE(cmds[0].second == "1");
+      REQUIRE(cmds[1].first == "fan_zero_rpm_enable");
+      REQUIRE(cmds[1].second == "c");
+      REQUIRE(cmds[2].first == "fan_zero_rpm_stop_temperature");
+      REQUIRE(cmds[2].second == "20");
+      REQUIRE(cmds[3].first == "fan_zero_rpm_stop_temperature");
+      REQUIRE(cmds[3].second == "c");
+    }
   }
 
   SECTION("Initializes...")
   {
-    SECTION("Both temperature and speed ranges")
-    {
-      OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-          "fan_curve", regularInput));
-      ts.init();
-
-      REQUIRE(ts.tempRange() ==
-              std::make_pair(units::temperature::celsius_t(10),
-                             units::temperature::celsius_t(100)));
-      REQUIRE(ts.speedRange() ==
-              std::make_pair(units::concentration::percent_t(10),
-                             units::concentration::percent_t(100)));
-    }
-
     SECTION("Control curve with the custom default curve when the GPU has "
             "default zero point curve")
     {
-      OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-          "fan_curve", zeroCurveInput));
+      OdFanCurveTestAdapter ts({std::make_unique<VectorStringDataSourceStub>(
+                                    "fan_curve", zeroCurveInput),
+                                std::move(curveTempRange),
+                                std::move(curveSpeedRange)});
       ts.init();
 
       auto defaultCurvePoints = ts.defaultCurve();
@@ -328,8 +427,9 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
     SECTION("Control curve with the device default curve when the GPU has "
             "default non-zero point curve")
     {
-      OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-          "fan_curve", regularInput));
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)});
       ts.init();
 
       auto controlPoints = ts.controlPoints();
@@ -367,7 +467,8 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
       };
       // clang-format on
       OdFanCurveTestAdapter ts(
-          std::make_unique<VectorStringDataSourceStub>("fan_curve", input));
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", input),
+           std::move(curveTempRange), std::move(curveSpeedRange)});
       ts.init();
 
       auto const &tempRange = ts.tempRange();
@@ -382,11 +483,24 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
                    std::get<2>(point) > speedRange.second;
           }));
     }
+
+    SECTION("Stop state")
+    {
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)},
+          std::move(stopDataSource));
+      ts.init();
+
+      REQUIRE(ts.stop());
+    }
   }
 
-  SECTION("Imports its state")
+  SECTION("Imports curve state...")
   {
-    // clang-format off
+    SECTION("for curve control only")
+    {
+      // clang-format off
     std::vector<std::pair<units::temperature::celsius_t, units::concentration::percent_t>>
         curve {
       {units::temperature::celsius_t(10), units::concentration::percent_t(15)},
@@ -395,37 +509,85 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
       {units::temperature::celsius_t(40), units::concentration::percent_t(45)},
       {units::temperature::celsius_t(50), units::concentration::percent_t(55)},
     };
-    // clang-format on
+      // clang-format on
 
-    FanCurveImporterStub i(curve);
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "fan_curve", regularInput));
-    ts.init();
+      FanCurveImporterStub i(curve, false, units::temperature::celsius_t(40));
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)});
+      ts.init();
 
-    ts.importControl(i);
+      ts.importControl(i);
 
-    auto controlPoints = ts.controlPoints();
-    REQUIRE(controlPoints.size() == 5);
-    auto const &[_i0, t0, s0] = controlPoints[0];
-    REQUIRE(t0 == units::temperature::celsius_t(10));
-    REQUIRE(s0 == units::concentration::percent_t(15));
-    auto const &[_i1, t1, s1] = controlPoints[1];
-    REQUIRE(t1 == units::temperature::celsius_t(20));
-    REQUIRE(s1 == units::concentration::percent_t(25));
-    auto const &[_i2, t2, s2] = controlPoints[2];
-    REQUIRE(t2 == units::temperature::celsius_t(30));
-    REQUIRE(s2 == units::concentration::percent_t(35));
-    auto const &[_i3, t3, s3] = controlPoints[3];
-    REQUIRE(t3 == units::temperature::celsius_t(40));
-    REQUIRE(s3 == units::concentration::percent_t(45));
-    auto const &[_i4, t4, s4] = controlPoints[4];
-    REQUIRE(t4 == units::temperature::celsius_t(50));
-    REQUIRE(s4 == units::concentration::percent_t(55));
+      auto controlPoints = ts.controlPoints();
+      REQUIRE(controlPoints.size() == 5);
+      auto const &[_i0, t0, s0] = controlPoints[0];
+      REQUIRE(t0 == units::temperature::celsius_t(10));
+      REQUIRE(s0 == units::concentration::percent_t(15));
+      auto const &[_i1, t1, s1] = controlPoints[1];
+      REQUIRE(t1 == units::temperature::celsius_t(20));
+      REQUIRE(s1 == units::concentration::percent_t(25));
+      auto const &[_i2, t2, s2] = controlPoints[2];
+      REQUIRE(t2 == units::temperature::celsius_t(30));
+      REQUIRE(s2 == units::concentration::percent_t(35));
+      auto const &[_i3, t3, s3] = controlPoints[3];
+      REQUIRE(t3 == units::temperature::celsius_t(40));
+      REQUIRE(s3 == units::concentration::percent_t(45));
+      auto const &[_i4, t4, s4] = controlPoints[4];
+      REQUIRE(t4 == units::temperature::celsius_t(50));
+      REQUIRE(s4 == units::concentration::percent_t(55));
+    }
+
+    SECTION("and stop state with stop controls")
+    {
+      // clang-format off
+    std::vector<std::pair<units::temperature::celsius_t, units::concentration::percent_t>>
+        curve {
+      {units::temperature::celsius_t(10), units::concentration::percent_t(15)},
+      {units::temperature::celsius_t(20), units::concentration::percent_t(25)},
+      {units::temperature::celsius_t(30), units::concentration::percent_t(35)},
+      {units::temperature::celsius_t(40), units::concentration::percent_t(45)},
+      {units::temperature::celsius_t(50), units::concentration::percent_t(55)},
+    };
+      // clang-format on
+
+      FanCurveImporterStub i(curve, false, units::temperature::celsius_t(40));
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)},
+          std::move(stopDataSource));
+      ts.init();
+
+      ts.importControl(i);
+
+      auto controlPoints = ts.controlPoints();
+      REQUIRE(controlPoints.size() == 5);
+      auto const &[_i0, t0, s0] = controlPoints[0];
+      REQUIRE(t0 == units::temperature::celsius_t(10));
+      REQUIRE(s0 == units::concentration::percent_t(15));
+      auto const &[_i1, t1, s1] = controlPoints[1];
+      REQUIRE(t1 == units::temperature::celsius_t(20));
+      REQUIRE(s1 == units::concentration::percent_t(25));
+      auto const &[_i2, t2, s2] = controlPoints[2];
+      REQUIRE(t2 == units::temperature::celsius_t(30));
+      REQUIRE(s2 == units::concentration::percent_t(35));
+      auto const &[_i3, t3, s3] = controlPoints[3];
+      REQUIRE(t3 == units::temperature::celsius_t(40));
+      REQUIRE(s3 == units::concentration::percent_t(45));
+      auto const &[_i4, t4, s4] = controlPoints[4];
+      REQUIRE(t4 == units::temperature::celsius_t(50));
+      REQUIRE(s4 == units::concentration::percent_t(55));
+
+      REQUIRE_FALSE(ts.stop());
+      REQUIRE(ts.stopTemp() == units::temperature::celsius_t(40));
+    }
   }
 
-  SECTION("Export its state")
+  SECTION("Export curve state...")
   {
-    // clang-format off
+    SECTION("for curve control only")
+    {
+      // clang-format off
     std::vector<std::pair<units::temperature::celsius_t, units::concentration::percent_t>>
         curve {
       {units::temperature::celsius_t(10), units::concentration::percent_t(10)},
@@ -434,47 +596,121 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
       {units::temperature::celsius_t(75), units::concentration::percent_t(70)},
       {units::temperature::celsius_t(100), units::concentration::percent_t(100)},
     };
-    // clang-format on
+      // clang-format on
 
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "fan_curve", regularInput));
-    ts.init();
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)});
+      ts.init();
 
-    trompeloeil::sequence seq;
-    FanCurveExporterMock e;
-    REQUIRE_CALL(e, takeFanCurveRange(trompeloeil::_, trompeloeil::_))
-        .WITH(_1 == std::make_pair(units::temperature::celsius_t(10),
-                                   units::temperature::celsius_t(100)))
-        .WITH(_2 == std::make_pair(units::concentration::percent_t(10),
-                                   units::concentration::percent_t(100)))
-        .IN_SEQUENCE(seq);
-    REQUIRE_CALL(e, takeFanCurve(trompeloeil::_))
-        .LR_WITH(_1 == curve)
-        .IN_SEQUENCE(seq);
+      trompeloeil::sequence seq;
+      FanCurveExporterMock e;
+      REQUIRE_CALL(e, takeFanCurveRange(trompeloeil::_, trompeloeil::_))
+          .WITH(_1 == std::make_pair(units::temperature::celsius_t(10),
+                                     units::temperature::celsius_t(100)))
+          .WITH(_2 == std::make_pair(units::concentration::percent_t(10),
+                                     units::concentration::percent_t(100)))
+          .IN_SEQUENCE(seq);
+      REQUIRE_CALL(e, takeFanCurve(trompeloeil::_))
+          .LR_WITH(_1 == curve)
+          .IN_SEQUENCE(seq);
 
-    ts.exportControl(e);
+      ts.exportControl(e);
+    }
+
+    SECTION("and stop state with stop controls")
+    {
+      // clang-format off
+    std::vector<std::pair<units::temperature::celsius_t, units::concentration::percent_t>>
+        curve {
+      {units::temperature::celsius_t(10), units::concentration::percent_t(10)},
+      {units::temperature::celsius_t(45), units::concentration::percent_t(20)},
+      {units::temperature::celsius_t(50), units::concentration::percent_t(50)},
+      {units::temperature::celsius_t(75), units::concentration::percent_t(70)},
+      {units::temperature::celsius_t(100), units::concentration::percent_t(100)},
+    };
+      // clang-format on
+
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)},
+          std::move(stopDataSource));
+      ts.init();
+
+      trompeloeil::sequence seq;
+      FanCurveExporterMock e;
+      REQUIRE_CALL(e, takeFanCurveRange(trompeloeil::_, trompeloeil::_))
+          .WITH(_1 == std::make_pair(units::temperature::celsius_t(10),
+                                     units::temperature::celsius_t(100)))
+          .WITH(_2 == std::make_pair(units::concentration::percent_t(10),
+                                     units::concentration::percent_t(100)))
+          .IN_SEQUENCE(seq);
+      REQUIRE_CALL(e, takeFanCurve(trompeloeil::_))
+          .LR_WITH(_1 == curve)
+          .IN_SEQUENCE(seq);
+      REQUIRE_CALL(e, takeFanStop(trompeloeil::_))
+          .LR_WITH(_1 == true)
+          .IN_SEQUENCE(seq);
+      REQUIRE_CALL(e, takeFanStopTempRange(trompeloeil::_))
+          .WITH(_1 == std::make_pair(units::temperature::celsius_t(10),
+                                     units::temperature::celsius_t(100)))
+          .IN_SEQUENCE(seq);
+      REQUIRE_CALL(e, takeFanStopTemp(trompeloeil::_))
+          .LR_WITH(_1 == units::temperature::celsius_t(20))
+          .IN_SEQUENCE(seq);
+
+      ts.exportControl(e);
+    }
   }
 
-  SECTION("Generate clean control commands")
+  SECTION("Generate clean control commands...")
   {
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "fan_curve", regularInput));
-    ts.cleanControl(ctlCmds);
+    SECTION("for curve control only")
+    {
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)});
+      ts.cleanControl(ctlCmds);
 
-    auto const &cmds = ctlCmds.commands();
-    REQUIRE(cmds.size() == 2);
-    auto const &[cmd0Path, cmd0Value] = cmds[0];
-    REQUIRE(cmd0Path == "fan_curve");
-    REQUIRE(cmd0Value == "r");
-    auto const &[cmd1Path, cmd1Value] = cmds[1];
-    REQUIRE(cmd1Path == "fan_curve");
-    REQUIRE(cmd1Value == "c");
+      auto const &cmds = ctlCmds.commands();
+      REQUIRE(cmds.size() == 2);
+      REQUIRE(cmds[0].first == "fan_curve");
+      REQUIRE(cmds[0].second == "r");
+      REQUIRE(cmds[1].first == "fan_curve");
+      REQUIRE(cmds[1].second == "c");
+    }
+
+    SECTION("with fan stop controls")
+    {
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)},
+          std::move(stopDataSource));
+      ts.cleanControl(ctlCmds);
+
+      auto const &cmds = ctlCmds.commands();
+      REQUIRE(cmds.size() == 6);
+      REQUIRE(cmds[0].first == "fan_curve");
+      REQUIRE(cmds[0].second == "r");
+      REQUIRE(cmds[1].first == "fan_curve");
+      REQUIRE(cmds[1].second == "c");
+      REQUIRE(cmds[2].first == "fan_zero_rpm_enable");
+      REQUIRE(cmds[2].second == "r");
+      REQUIRE(cmds[3].first == "fan_zero_rpm_enable");
+      REQUIRE(cmds[3].second == "c");
+      REQUIRE(cmds[4].first == "fan_zero_rpm_stop_temperature");
+      REQUIRE(cmds[4].second == "r");
+      REQUIRE(cmds[5].first == "fan_zero_rpm_stop_temperature");
+      REQUIRE(cmds[5].second == "c");
+    }
   }
 
   SECTION("Does not generate sync control commands when is synced")
   {
-    OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "fan_curve", regularInput));
+    OdFanCurveTestAdapter ts(
+        {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+         std::move(curveTempRange), std::move(curveSpeedRange)},
+        std::move(stopDataSource));
     ts.init();
     ts.syncControl(ctlCmds);
     ctlCmds.clear();
@@ -488,20 +724,19 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
   {
     SECTION("curve is in sync but the operation mode must be set to manual")
     {
-      OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-          "fan_curve", regularInput));
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)});
       ts.init();
 
       ts.syncControl(ctlCmds);
 
       auto const &cmds = ctlCmds.commands();
       REQUIRE(cmds.size() == 2);
-      auto const &[cmd0Path, cmd0Value] = cmds[0];
-      REQUIRE(cmd0Path == "fan_curve");
-      REQUIRE(cmd0Value == "r");
-      auto const &[cmd1Path, cmd1Value] = cmds[1];
-      REQUIRE(cmd1Path == "fan_curve");
-      REQUIRE(cmd1Value == "c");
+      REQUIRE(cmds[0].first == "fan_curve");
+      REQUIRE(cmds[0].second == "r");
+      REQUIRE(cmds[1].first == "fan_curve");
+      REQUIRE(cmds[1].second == "c");
     }
 
     SECTION("curve is out of sync")
@@ -518,9 +753,12 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
         };
       // clang-format on
 
-      OdFanCurveTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-          "fan_curve", regularInput));
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)});
       ts.init();
+      ts.syncControl(ctlCmds);
+      ctlCmds.clear();
 
       ts.fanCurve(curve);
       ts.syncControl(ctlCmds);
@@ -538,6 +776,48 @@ TEST_CASE("AMD OdFanCurve tests", "[GPU][AMD][Fan][Overdrive][OdFanCurve]")
       REQUIRE(cmds[4].first == "fan_curve");
       REQUIRE(cmds[4].second == "4 50 50");
       REQUIRE(cmds[5].second == "c");
+    }
+
+    SECTION("stop control is out of sync")
+    {
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)},
+          std::move(stopDataSource));
+      ts.init();
+      ts.syncControl(ctlCmds);
+      ctlCmds.clear();
+
+      ts.stop(false);
+      ts.syncControl(ctlCmds);
+
+      auto const &cmds = ctlCmds.commands();
+      REQUIRE(cmds.size() == 2);
+      REQUIRE(cmds[0].first == "fan_zero_rpm_enable");
+      REQUIRE(cmds[0].second == "0");
+      REQUIRE(cmds[1].first == "fan_zero_rpm_enable");
+      REQUIRE(cmds[1].second == "c");
+    }
+
+    SECTION("stop temperature control is out of sync")
+    {
+      OdFanCurveTestAdapter ts(
+          {std::make_unique<VectorStringDataSourceStub>("fan_curve", regularInput),
+           std::move(curveTempRange), std::move(curveSpeedRange)},
+          std::move(stopDataSource));
+      ts.init();
+      ts.syncControl(ctlCmds);
+      ctlCmds.clear();
+
+      ts.stopTemp(units::temperature::celsius_t(40));
+      ts.syncControl(ctlCmds);
+
+      auto const &cmds = ctlCmds.commands();
+      REQUIRE(cmds.size() == 2);
+      REQUIRE(cmds[0].first == "fan_zero_rpm_stop_temperature");
+      REQUIRE(cmds[0].second == "40");
+      REQUIRE(cmds[1].first == "fan_zero_rpm_stop_temperature");
+      REQUIRE(cmds[1].second == "c");
     }
   }
 }

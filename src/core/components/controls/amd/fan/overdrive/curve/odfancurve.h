@@ -6,6 +6,7 @@
 #include "core/components/controls/control.h"
 #include "core/idatasource.h"
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <tuple>
@@ -32,6 +33,8 @@ class OdFanCurve : public Control
    public:
     virtual std::vector<AMD::OdFanCurve::CurvePoint> const &
     provideFanCurve() const = 0;
+    virtual bool provideFanStop() const = 0;
+    virtual units::temperature::celsius_t provideFanStopTemp() const = 0;
   };
 
   class Exporter : public IControl::Exporter
@@ -41,10 +44,27 @@ class OdFanCurve : public Control
     takeFanCurve(std::vector<AMD::OdFanCurve::CurvePoint> const &curve) = 0;
     virtual void takeFanCurveRange(AMD::OdFanCurve::TempRange temp,
                                    AMD::OdFanCurve::SpeedRange speed) = 0;
+    virtual void takeFanStop(bool enabled) = 0;
+    virtual void takeFanStopTemp(units::temperature::celsius_t value) = 0;
+    virtual void takeFanStopTempRange(AMD::OdFanCurve::TempRange value) = 0;
   };
 
-  OdFanCurve(std::unique_ptr<IDataSource<std::vector<std::string>>>
-                 &&dataSource) noexcept;
+  struct CurveDataSource
+  {
+    std::unique_ptr<IDataSource<std::vector<std::string>>> curve;
+    TempRange temperatureRange;
+    SpeedRange speedRange;
+  };
+
+  struct StopDataSource
+  {
+    std::unique_ptr<IDataSource<std::vector<std::string>>> enable;
+    std::unique_ptr<IDataSource<std::vector<std::string>>> temperature;
+    TempRange temperatureRange;
+  };
+
+  OdFanCurve(CurveDataSource &&curveDataSource,
+             std::optional<StopDataSource> &&stopDataSource = std::nullopt) noexcept;
 
   void preInit(ICommandQueue &ctlCmds) final override;
   void postInit(ICommandQueue &ctlCmds) final override;
@@ -78,23 +98,39 @@ class OdFanCurve : public Control
 
   std::string controlPointCmd(ControlPoint const &point) const;
 
+  bool stop() const;
+  void stop(bool value);
+
+  units::temperature::celsius_t stopTemp() const;
+  void stopTemp(units::temperature::celsius_t value);
+  TempRange const &stopTempRange() const;
+
  private:
   void normalizeCurve(std::vector<ControlPoint> &curve,
                       TempRange const &tempRange,
                       SpeedRange const &speedRange) const;
-  bool addSyncCmds(ICommandQueue &ctlCmds) const;
+  bool addCurveSyncCmds(ICommandQueue &ctlCmds,
+                        std::vector<ControlPoint> &&curve) const;
+  bool addStopSyncCmds(ICommandQueue &ctlCmds, bool hwStop,
+                       units::temperature::celsius_t hwTemp) const;
   void addResetCmds(ICommandQueue &ctlCmds) const;
 
   std::string const id_;
 
-  std::unique_ptr<IDataSource<std::vector<std::string>>> const dataSource_;
+  CurveDataSource const curveDataSource_;
+  std::optional<StopDataSource> const stopDataSource_;
 
-  TempRange tempRange_;
-  SpeedRange speedRange_;
+  std::vector<std::string> dataSourceLines_;
 
   std::vector<ControlPoint> preInitControlPoints_;
   std::vector<ControlPoint> controlPoints_;
-  std::vector<std::string> fanCurveLines_;
+
+  bool preInitStop_;
+  bool stop_;
+
+  units::temperature::celsius_t preInitStopTemp_;
+  units::temperature::celsius_t stopTemp_;
+
   bool triggerManualOpMode_;
 };
 

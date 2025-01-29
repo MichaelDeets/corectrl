@@ -10,53 +10,82 @@
 #include <cmath>
 #include <iterator>
 
-AMD::OdFanCurve::OdFanCurve(
-    std::unique_ptr<IDataSource<std::vector<std::string>>> &&dataSource) noexcept
+AMD::OdFanCurve::OdFanCurve(CurveDataSource &&curveDataSource,
+                            std::optional<StopDataSource> &&stopDataSource) noexcept
 : Control(false)
 , id_(AMD::OdFanCurve::ItemID)
-, dataSource_(std::move(dataSource))
+, curveDataSource_(std::move(curveDataSource))
+, stopDataSource_(std::move(stopDataSource))
 , triggerManualOpMode_(true)
 {
 }
 
 void AMD::OdFanCurve::preInit(ICommandQueue &ctlCmds)
 {
-  if (!dataSource_->read(fanCurveLines_))
+  if (!curveDataSource_.curve->read(dataSourceLines_))
     return;
 
   preInitControlPoints_ =
-      Utils::AMD::parseOverdriveFanCurve(fanCurveLines_).value();
+      Utils::AMD::parseOverdriveFanCurve(dataSourceLines_).value();
+
+  if (stopDataSource_) {
+    if (!stopDataSource_->enable->read(dataSourceLines_))
+      return;
+
+    preInitStop_ = Utils::AMD::parseOverdriveFanStop(dataSourceLines_).value();
+
+    if (!stopDataSource_->temperature->read(dataSourceLines_))
+      return;
+
+    preInitStopTemp_ =
+        Utils::AMD::parseOverdriveFanStopTemp(dataSourceLines_).value();
+  }
+
   addResetCmds(ctlCmds);
 }
 
 void AMD::OdFanCurve::postInit(ICommandQueue &ctlCmds)
 {
-  if (isZeroCurve(preInitControlPoints_))
-    return;
+  if (!isZeroCurve(preInitControlPoints_)) {
+    normalizeCurve(preInitControlPoints_, tempRange(), speedRange());
+    for (auto const &point : preInitControlPoints_)
+      ctlCmds.add({curveDataSource_.curve->source(), controlPointCmd(point)});
 
-  // Restore pre-init points.
-  normalizeCurve(preInitControlPoints_, tempRange(), speedRange());
-  for (auto const &point : preInitControlPoints_)
-    ctlCmds.add({dataSource_->source(), controlPointCmd(point)});
+    ctlCmds.add({curveDataSource_.curve->source(), "c"});
+  }
 
-  ctlCmds.add({dataSource_->source(), "c"});
+  if (stopDataSource_) {
+    ctlCmds.add(
+        {stopDataSource_->enable->source(), std::to_string(preInitStop_)});
+    ctlCmds.add({stopDataSource_->enable->source(), "c"});
+    ctlCmds.add({stopDataSource_->temperature->source(),
+                 std::to_string(preInitStopTemp_.to<int>())});
+    ctlCmds.add({stopDataSource_->temperature->source(), "c"});
+  }
 }
 
 void AMD::OdFanCurve::init()
 {
-  if (!dataSource_->read(fanCurveLines_))
+  if (!curveDataSource_.curve->read(dataSourceLines_))
     return;
 
-  tempRange_ =
-      Utils::AMD::parseOverdriveFanCurveTempRange(fanCurveLines_).value();
-  speedRange_ =
-      Utils::AMD::parseOverdriveFanCurveSpeedRange(fanCurveLines_).value();
-
-  controlPoints_ = Utils::AMD::parseOverdriveFanCurve(fanCurveLines_).value();
+  controlPoints_ = Utils::AMD::parseOverdriveFanCurve(dataSourceLines_).value();
   if (isZeroCurve(controlPoints_))
     setPointCoordinatesFrom(controlPoints_, defaultCurve());
 
-  normalizeCurve(controlPoints_, tempRange_, speedRange_);
+  normalizeCurve(controlPoints_, tempRange(), speedRange());
+
+  if (stopDataSource_) {
+    if (!stopDataSource_->enable->read(dataSourceLines_))
+      return;
+
+    stop_ = Utils::AMD::parseOverdriveFanStop(dataSourceLines_).value();
+
+    if (!stopDataSource_->temperature->read(dataSourceLines_))
+      return;
+
+    stopTemp_ = Utils::AMD::parseOverdriveFanStopTemp(dataSourceLines_).value();
+  }
 }
 
 std::string const &AMD::OdFanCurve::ID() const
@@ -68,6 +97,11 @@ void AMD::OdFanCurve::importControl(IControl::Importer &i)
 {
   auto &fanCurveImporter = dynamic_cast<AMD::OdFanCurve::Importer &>(i);
   fanCurve(fanCurveImporter.provideFanCurve());
+
+  if (stopDataSource_) {
+    stop(fanCurveImporter.provideFanStop());
+    stopTemp(fanCurveImporter.provideFanStopTemp());
+  }
 }
 
 void AMD::OdFanCurve::exportControl(IControl::Exporter &e) const
@@ -75,6 +109,12 @@ void AMD::OdFanCurve::exportControl(IControl::Exporter &e) const
   auto &fanCurveExporter = dynamic_cast<AMD::OdFanCurve::Exporter &>(e);
   fanCurveExporter.takeFanCurveRange(tempRange(), speedRange());
   fanCurveExporter.takeFanCurve(fanCurve());
+
+  if (stopDataSource_) {
+    fanCurveExporter.takeFanStop(stop());
+    fanCurveExporter.takeFanStopTempRange(stopTempRange());
+    fanCurveExporter.takeFanStopTemp(stopTemp());
+  }
 }
 
 void AMD::OdFanCurve::cleanControl(ICommandQueue &ctlCmds)
@@ -85,10 +125,22 @@ void AMD::OdFanCurve::cleanControl(ICommandQueue &ctlCmds)
 
 void AMD::OdFanCurve::syncControl(ICommandQueue &ctlCmds)
 {
-  if (!dataSource_->read(fanCurveLines_))
+  if (!curveDataSource_.curve->read(dataSourceLines_))
     return;
+  auto curve = Utils::AMD::parseOverdriveFanCurve(dataSourceLines_).value();
+  bool outOfSync = addCurveSyncCmds(ctlCmds, std::move(curve));
 
-  bool outOfSync = addSyncCmds(ctlCmds);
+  if (stopDataSource_) {
+    if (!stopDataSource_->enable->read(dataSourceLines_))
+      return;
+    auto stop = Utils::AMD::parseOverdriveFanStop(dataSourceLines_).value();
+
+    if (!stopDataSource_->temperature->read(dataSourceLines_))
+      return;
+    auto temp = Utils::AMD::parseOverdriveFanStopTemp(dataSourceLines_).value();
+
+    outOfSync |= addStopSyncCmds(ctlCmds, stop, temp);
+  }
 
   if (triggerManualOpMode_ && !outOfSync) {
     // NOTE The new fan overdrive interfaces has an implicit operation mode [1]
@@ -141,12 +193,12 @@ AMD::OdFanCurve::controlPoints() const
 
 AMD::OdFanCurve::TempRange const &AMD::OdFanCurve::tempRange() const
 {
-  return tempRange_;
+  return curveDataSource_.temperatureRange;
 }
 
 AMD::OdFanCurve::SpeedRange const &AMD::OdFanCurve::speedRange() const
 {
-  return speedRange_;
+  return curveDataSource_.speedRange;
 }
 
 std::vector<AMD::OdFanCurve::CurvePoint> AMD::OdFanCurve::toCurvePoints(
@@ -203,6 +255,31 @@ std::string AMD::OdFanCurve::controlPointCmd(ControlPoint const &point) const
   return cmd;
 }
 
+bool AMD::OdFanCurve::stop() const
+{
+  return stop_;
+}
+
+void AMD::OdFanCurve::stop(bool value)
+{
+  stop_ = value;
+}
+
+units::temperature::celsius_t AMD::OdFanCurve::stopTemp() const
+{
+  return stopTemp_;
+}
+
+void AMD::OdFanCurve::stopTemp(units::temperature::celsius_t value)
+{
+  stopTemp_ = value;
+}
+
+AMD::OdFanCurve::TempRange const &AMD::OdFanCurve::stopTempRange() const
+{
+  return stopDataSource_->temperatureRange;
+}
+
 void AMD::OdFanCurve::normalizeCurve(
     std::vector<AMD::OdFanCurve::ControlPoint> &curve,
     AMD::OdFanCurve::TempRange const &tempRange,
@@ -213,28 +290,49 @@ void AMD::OdFanCurve::normalizeCurve(
   setPointCoordinatesFrom(curve, normalizedPoints);
 }
 
-bool AMD::OdFanCurve::addSyncCmds(ICommandQueue &ctlCmds) const
+bool AMD::OdFanCurve::addCurveSyncCmds(ICommandQueue &ctlCmds,
+                                       std::vector<ControlPoint> &&curve) const
 {
   bool commit = false;
-  auto const curve = Utils::AMD::parseOverdriveFanCurve(fanCurveLines_).value();
   size_t curveIndex = 0;
   for (auto const &point : controlPoints()) {
     auto const [_, temp, speed] = curve[curveIndex++];
     if (temp != std::get<1>(point) || speed != std::get<2>(point)) {
-      ctlCmds.add({dataSource_->source(), controlPointCmd(point)});
+      ctlCmds.add({curveDataSource_.curve->source(), controlPointCmd(point)});
       commit = true;
     }
   }
 
   if (commit)
-    ctlCmds.add({dataSource_->source(), "c"});
+    ctlCmds.add({curveDataSource_.curve->source(), "c"});
 
   return commit;
 }
 
+bool AMD::OdFanCurve::addStopSyncCmds(ICommandQueue &ctlCmds, bool hwStop,
+                                      units::temperature::celsius_t hwTemp) const
+{
+  bool sync = false;
+
+  if (stop() != hwStop) {
+    ctlCmds.add({stopDataSource_->enable->source(), std::to_string(stop())});
+    ctlCmds.add({stopDataSource_->enable->source(), "c"});
+    sync |= true;
+  }
+
+  if (stopTemp() != hwTemp) {
+    ctlCmds.add({stopDataSource_->temperature->source(),
+                 std::to_string(stopTemp().to<int>())});
+    ctlCmds.add({stopDataSource_->temperature->source(), "c"});
+    sync |= true;
+  }
+
+  return sync;
+}
+
 void AMD::OdFanCurve::addResetCmds(ICommandQueue &ctlCmds) const
 {
-  ctlCmds.add({dataSource_->source(), "r"});
+  ctlCmds.add({curveDataSource_.curve->source(), "r"});
 
   // NOTE Apparently, there is no need to submit the commit command after the
   // reset one on the new fan overdrive interfaces [1]. This interaction model
@@ -245,5 +343,12 @@ void AMD::OdFanCurve::addResetCmds(ICommandQueue &ctlCmds) const
   // original overdrive interface interaction model.
   //
   // [1] https://gitlab.freedesktop.org/drm/amd/-/issues/2402#note_2211197
-  ctlCmds.add({dataSource_->source(), "c"});
+  ctlCmds.add({curveDataSource_.curve->source(), "c"});
+
+  if (stopDataSource_) {
+    ctlCmds.add({stopDataSource_->enable->source(), "r"});
+    ctlCmds.add({stopDataSource_->enable->source(), "c"});
+    ctlCmds.add({stopDataSource_->temperature->source(), "r"});
+    ctlCmds.add({stopDataSource_->temperature->source(), "c"});
+  }
 }
