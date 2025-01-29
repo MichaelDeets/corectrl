@@ -71,17 +71,18 @@ ChartView {
     })
   }
 
-  function addCurve(name, color, points) {
+  function addCurve(name, color, points, vertical) {
     // remove existing curve
     if (p.curves.has(name))
       removeCurve(name)
 
-    const line = p.createLineSeries(name, color, points)
+    const line = p.createLineSeries(name, color, points, vertical)
     const controls = p.createControlSeries(name, color, points)
 
     p.curves.set(name, {
       line: line,
-      points: controls
+      points: controls,
+      vertical: vertical
     })
   }
 
@@ -103,7 +104,7 @@ ChartView {
     property var selection: undefined
     property var axisInfo: undefined
 
-    function createLineSeries(name, color, points) {
+    function createLineSeries(name, color, points, vertical) {
       var series = chart.createSeries(ChartView.SeriesTypeLine,
                                       name, xAxis, yAxis)
       series.name = name
@@ -113,13 +114,19 @@ ChartView {
       series.width = 2
 
       // line first outer range point
-      series.append(axisInfo.x.min - 1, points[0].y)
+      if (vertical)
+        series.append(points[0].x, axisInfo.y.min - 1)
+      else
+        series.append(axisInfo.x.min - 1, points[0].y)
 
       for (var i = 0; i < points.length; ++i)
         series.append(points[i].x, points[i].y)
 
       // line last outer range point
-      series.append(axisInfo.x.max + 1, points[points.length - 1].y)
+      if (vertical)
+        series.append(points[points.length - 1].x, axisInfo.y.max + 1)
+      else
+        series.append(axisInfo.x.max + 1, points[points.length - 1].y)
 
       return series
     }
@@ -201,11 +208,18 @@ ChartView {
       curve.points.replace(oldPoint.x, oldPoint.y, newPoint.x, newPoint.y)
     }
 
-    function updateLineOuterRangePoint(curve, pointIndex, oldY, newY) {
-      if (pointIndex === 0)
-        curve.line.replace(axisInfo.x.min - 1, oldY, axisInfo.x.min - 1, newY)
-      else if (pointIndex === curve.points.count - 1)
-        curve.line.replace(axisInfo.x.max + 1, oldY, axisInfo.x.max + 1, newY)
+    function updateLineOuterRangePoint(curve, pointIndex, oldPoint, newPoint) {
+      if (curve.vertical) {
+        if (pointIndex === 0)
+          curve.line.replace(oldPoint.x, axisInfo.y.min - 1, newPoint.x, axisInfo.y.min - 1)
+        if (pointIndex === curve.points.count - 1)
+          curve.line.replace(oldPoint.x, axisInfo.y.max + 1, newPoint.x, axisInfo.y.max + 1)
+      } else {
+        if (pointIndex === 0)
+          curve.line.replace(axisInfo.x.min - 1, oldPoint.y, axisInfo.x.min - 1, newPoint.y)
+        if (pointIndex === curve.points.count - 1)
+          curve.line.replace(axisInfo.x.max + 1, oldPoint.y, axisInfo.x.max + 1, newPoint.y)
+      }
     }
 
     function moveSelection(point) {
@@ -225,7 +239,7 @@ ChartView {
         clampOtherPointsYCoordinate(curve, selection)
 
       updateCurvePoint(curve, selection.point, point)
-      updateLineOuterRangePoint(curve, selection.index, selection.point.y, point.y)
+      updateLineOuterRangePoint(curve, selection.index, selection.point, point)
 
       // emit curveChanged signal
       curveChanged(selection.curve, selection.point, point)
