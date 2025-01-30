@@ -5,7 +5,7 @@
 
 #include "core/profilepartxmlparser.h"
 #include "odfancurveprofilepart.h"
-#include <string>
+#include <optional>
 #include <string_view>
 #include <vector>
 
@@ -34,6 +34,12 @@ class OdFanCurveXMLParser final
   void takeFanCurve(std::vector<OdFanCurve::CurvePoint> const &curve) override;
   std::vector<OdFanCurve::CurvePoint> const &provideFanCurve() const override;
 
+  void takeFanStop(bool enabled) override;
+  bool provideFanStop() const override;
+
+  void takeFanStopTemp(units::temperature::celsius_t value) override;
+  units::temperature::celsius_t provideFanStopTemp() const override;
+
   void appendTo(pugi::xml_node &parentNode) override;
 
  protected:
@@ -51,6 +57,11 @@ class OdFanCurveXMLParser final
 
   std::vector<OdFanCurve::CurvePoint> curve_;
   std::vector<OdFanCurve::CurvePoint> curveDefault_;
+
+  std::optional<bool> stop_{std::nullopt};
+  std::optional<bool> stopDefault_{std::nullopt};
+  std::optional<units::temperature::celsius_t> stopTemp_{std::nullopt};
+  std::optional<units::temperature::celsius_t> stopTempDefault_{std::nullopt};
 
   static bool const registered_;
 };

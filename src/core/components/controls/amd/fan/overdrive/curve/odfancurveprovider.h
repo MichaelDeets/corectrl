@@ -4,6 +4,8 @@
 #pragma once
 
 #include "core/components/controls/igpucontrolprovider.h"
+#include "odfancurve.h"
+#include <optional>
 
 namespace AMD {
 
@@ -15,6 +17,11 @@ class OdFanCurveProvider final : public IGPUControlProvider::IProvider
                      ISWInfo const &swInfo) const override;
 
  private:
+  std::optional<AMD::OdFanCurve::CurveDataSource>
+  createCurveDataSource(IGPUInfo const &gpuInfo) const;
+  std::optional<AMD::OdFanCurve::StopDataSource>
+  createStopDataSource(IGPUInfo const &gpuInfo) const;
+
   static bool const registered_;
 };
 

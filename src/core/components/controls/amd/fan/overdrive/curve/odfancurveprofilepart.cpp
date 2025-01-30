@@ -27,6 +27,9 @@ class AMD::OdFanCurveProfilePart::Initializer final
   takeFanCurve(std::vector<AMD::OdFanCurve::CurvePoint> const &curve) override;
   void takeFanCurveRange(AMD::OdFanCurve::TempRange temp,
                          AMD::OdFanCurve::SpeedRange speed) override;
+  void takeFanStop(bool enabled) override;
+  void takeFanStopTemp(units::temperature::celsius_t value) override;
+  void takeFanStopTempRange(AMD::OdFanCurve::TempRange value) override;
 
  private:
   AMD::OdFanCurveProfilePart &outer_;
@@ -48,6 +51,23 @@ void AMD::OdFanCurveProfilePart::Initializer::takeFanCurveRange(
 {
   outer_.tempRange_ = temp;
   outer_.speedRange_ = speed;
+}
+
+void AMD::OdFanCurveProfilePart::Initializer::takeFanStop(bool enable)
+{
+  outer_.stop_ = enable;
+}
+
+void AMD::OdFanCurveProfilePart::Initializer::takeFanStopTemp(
+    units::temperature::celsius_t value)
+{
+  outer_.stopTemp_ = value;
+}
+
+void AMD::OdFanCurveProfilePart::Initializer::takeFanStopTempRange(
+    AMD::OdFanCurve::TempRange value)
+{
+  outer_.stopTempRange_ = value;
 }
 
 AMD::OdFanCurveProfilePart::OdFanCurveProfilePart() noexcept
@@ -88,25 +108,47 @@ AMD::OdFanCurveProfilePart::provideFanCurve() const
   return curve_;
 }
 
+bool AMD::OdFanCurveProfilePart::provideFanStop() const
+{
+  return *stop_;
+}
+
+units::temperature::celsius_t AMD::OdFanCurveProfilePart::provideFanStopTemp() const
+{
+  return *stopTemp_;
+}
+
 void AMD::OdFanCurveProfilePart::importProfilePart(IProfilePart::Importer &i)
 {
-  auto &pmfImporter = dynamic_cast<AMD::OdFanCurveProfilePart::Importer &>(i);
-  curve(pmfImporter.provideFanCurve());
+  auto &importer = dynamic_cast<AMD::OdFanCurveProfilePart::Importer &>(i);
+  curve(importer.provideFanCurve());
+
+  if (stop_) {
+    stop_ = importer.provideFanStop();
+    stopTemp_ = importer.provideFanStopTemp();
+  }
 }
 
 void AMD::OdFanCurveProfilePart::exportProfilePart(IProfilePart::Exporter &e) const
 {
-  auto &pmfExporter = dynamic_cast<AMD::OdFanCurveProfilePart::Exporter &>(e);
-  pmfExporter.takeFanCurve(curve_);
+  auto &exporter = dynamic_cast<AMD::OdFanCurveProfilePart::Exporter &>(e);
+  exporter.takeFanCurve(curve_);
+
+  if (stop_) {
+    exporter.takeFanStop(*stop_);
+    exporter.takeFanStopTemp(*stopTemp_);
+  }
 }
 
 std::unique_ptr<IProfilePart> AMD::OdFanCurveProfilePart::cloneProfilePart() const
 {
   auto clone = std::make_unique<AMD::OdFanCurveProfilePart>();
-  clone->tempRange_ = tempRange_;
   clone->curve_ = curve_;
   clone->tempRange_ = tempRange_;
   clone->speedRange_ = speedRange_;
+  clone->stop_ = stop_;
+  clone->stopTemp_ = stopTemp_;
+  clone->stopTempRange_ = stopTempRange_;
 
   return std::move(clone);
 }

@@ -23,6 +23,8 @@ class OdFanCurveQMLItem
   Q_PROPERTY(qreal maxTemp READ maxTemp)
   Q_PROPERTY(qreal minSpeed READ minSpeed)
   Q_PROPERTY(qreal maxSpeed READ maxSpeed)
+  Q_PROPERTY(bool stop READ stop WRITE changeStop NOTIFY stopChanged)
+  Q_PROPERTY(int stopTemp READ stopTemp WRITE changeStopTemp NOTIFY stopTempChanged)
 
  public:
   explicit OdFanCurveQMLItem() noexcept;
@@ -31,9 +33,14 @@ class OdFanCurveQMLItem
   void curveChanged(QVariantList const &curve);
   void curveRangeChanged(qreal tempMin, qreal tempMax, qreal speedMin,
                          qreal speedMax);
+  void stopAvailable();
+  void stopChanged(bool enabled);
+  void stopTempChanged(int value);
 
  public slots:
   void updateCurvePoint(QPointF const &oldPoint, QPointF const &newPoint);
+  void changeStop(bool enabled);
+  void changeStopTemp(int value);
 
  public:
   void activate(bool active) override;
@@ -42,6 +49,8 @@ class OdFanCurveQMLItem
   qreal maxTemp() const;
   qreal minSpeed() const;
   qreal maxSpeed() const;
+  bool stop() const;
+  int stopTemp() const;
 
   std::optional<std::reference_wrapper<Importable::Importer>>
   provideImporter(Item const &i) override;
@@ -50,19 +59,23 @@ class OdFanCurveQMLItem
 
   bool provideActive() const override;
   std::vector<OdFanCurve::CurvePoint> const &provideFanCurve() const override;
+  bool provideFanStop() const override;
+  units::temperature::celsius_t provideFanStopTemp() const override;
 
   void takeActive(bool active) override;
   void takeFanCurve(std::vector<OdFanCurve::CurvePoint> const &curve) override;
+  void takeFanStop(bool enabled) override;
+  void takeFanStopTemp(units::temperature::celsius_t value) override;
 
   std::unique_ptr<Exportable::Exporter>
   initializer(IQMLComponentFactory const &qmlComponentFactory,
               QQmlApplicationEngine &qmlEngine) override;
 
  private:
-  void curveRange(
-      std::pair<units::temperature::celsius_t, units::temperature::celsius_t> temp,
-      std::pair<units::concentration::percent_t, units::concentration::percent_t>
-          speed);
+  void curveRange(AMD::OdFanCurve::TempRange temp,
+                  AMD::OdFanCurve::SpeedRange speed);
+  void stopTempRange(AMD::OdFanCurve::TempRange value);
+
   class Initializer;
 
   bool active_;
@@ -74,6 +87,9 @@ class OdFanCurveQMLItem
   qreal maxTemp_;
   qreal minSpeed_;
   qreal maxSpeed_;
+
+  bool stop_;
+  int stopTemp_;
 
   static bool register_();
   static bool const registered_;

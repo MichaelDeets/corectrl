@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Allow custom Polkit policy files install directory (#477).
+- Fan stop and fan stop temperature controls for AMD RX 7000 series. Requires Linux 6.13 or later.
 - Georgian translation. Thanks to NorwayFun (!46).
 - Brazilian Portuguese translation. Thanks to Leal (!49).
 

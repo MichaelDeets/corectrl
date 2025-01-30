@@ -195,6 +195,21 @@ std::optional<
     std::pair<units::concentration::percent_t, units::concentration::percent_t>>
 parseOverdriveFanCurveSpeedRange(std::vector<std::string> const &fanCurveLines);
 
+/// Returns the fan stop value for the overdrive based fan control. (6.13+, RDNA3+)
+/// @param fanStopLines fan_zero_rpm_enable data source contents
+std::optional<bool>
+parseOverdriveFanStop(std::vector<std::string> const &fanStopLines);
+
+/// Returns the fan stop temperature value for the overdrive based fan control. (6.13+, RDNA3+)
+/// @param fanStopTempLines fan_zero_rpm_stop_temperature data source contents
+std::optional<units::temperature::celsius_t>
+parseOverdriveFanStopTemp(std::vector<std::string> const &fanStopTempLines);
+
+/// Returns the fan stop temperature range for the overdrive based fan control. (6.13+, RDNA3+)
+/// @param fanStopTempLines fan_zero_rpm_stop_temperature data source contents
+std::optional<std::pair<units::temperature::celsius_t, units::temperature::celsius_t>>
+parseOverdriveFanStopTempRange(std::vector<std::string> const &fanStopTempLines);
+
 /// Returns true when pp_power_profile_mode data has columnar format.
 bool isPowerProfileModeDataColumnar(std::vector<std::string> const &data);
 
@@ -223,8 +238,5 @@ bool hasOverdriveFanAcousticTargetControl(std::vector<std::string> const &data);
 /// Returns true when overdrive fan acoustic limit rpm threshold control is
 /// available.
 bool hasOverdriveFanAcousticLimitControl(std::vector<std::string> const &data);
-
-/// Returns true when overdrive fan curve control is available.
-bool hasOverdriveFanCurveControl(std::vector<std::string> const &data);
 
 } // namespace Utils::AMD

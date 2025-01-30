@@ -5,8 +5,8 @@
 
 #include "core/profilepart.h"
 #include "odfancurve.h"
+#include <optional>
 #include <string>
-#include <utility>
 #include <vector>
 
 namespace AMD {
@@ -21,6 +21,8 @@ class OdFanCurveProfilePart final
    public:
     virtual std::vector<AMD::OdFanCurve::CurvePoint> const &
     provideFanCurve() const = 0;
+    virtual bool provideFanStop() const = 0;
+    virtual units::temperature::celsius_t provideFanStopTemp() const = 0;
   };
 
   class Exporter : public IProfilePart::Exporter
@@ -28,6 +30,8 @@ class OdFanCurveProfilePart final
    public:
     virtual void
     takeFanCurve(std::vector<AMD::OdFanCurve::CurvePoint> const &curve) = 0;
+    virtual void takeFanStop(bool enabled) = 0;
+    virtual void takeFanStopTemp(units::temperature::celsius_t value) = 0;
   };
 
   OdFanCurveProfilePart() noexcept;
@@ -43,6 +47,8 @@ class OdFanCurveProfilePart final
 
   bool provideActive() const override;
   std::vector<OdFanCurve::CurvePoint> const &provideFanCurve() const override;
+  bool provideFanStop() const override;
+  units::temperature::celsius_t provideFanStopTemp() const override;
 
  protected:
   void importProfilePart(IProfilePart::Importer &i) override;
@@ -51,12 +57,16 @@ class OdFanCurveProfilePart final
 
  private:
   void curve(std::vector<OdFanCurve::CurvePoint> const &points);
+
   class Initializer;
 
   std::string const id_;
   std::vector<OdFanCurve::CurvePoint> curve_;
   OdFanCurve::TempRange tempRange_;
   OdFanCurve::SpeedRange speedRange_;
+  std::optional<bool> stop_{std::nullopt};
+  std::optional<units::temperature::celsius_t> stopTemp_{std::nullopt};
+  std::optional<OdFanCurve::TempRange> stopTempRange_{std::nullopt};
 
   static bool const registered_;
 };

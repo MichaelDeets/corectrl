@@ -874,6 +874,95 @@ parseOverdriveFanCurveSpeedRange(std::vector<std::string> const &fanCurveLines)
   return {};
 }
 
+std::optional<bool>
+parseOverdriveFanStop(std::vector<std::string> const &fanStopLines)
+{
+  // Relevant lines format (kernel 6.13+):
+  // FAN_ZERO_RPM_ENABLE:
+  // 1
+  // OD_RANGE:
+  // ZERO_RPM_ENABLE: 0 1
+
+  auto targetIt = std::find_if(
+      fanStopLines.cbegin(), fanStopLines.cend(), [&](std::string const &line) {
+        return line.find("FAN_ZERO_RPM_ENABLE:") != std::string::npos;
+      });
+  if (targetIt != fanStopLines.cend() &&
+      std::next(targetIt) != fanStopLines.cend()) {
+    std::regex const regex(R"(^\s*(\d+)\s*$)", std::regex::icase);
+
+    std::smatch result;
+    if (std::regex_search(*std::next(targetIt), result, regex)) {
+      int value;
+      if (Utils::String::toNumber(value, result[1]))
+        return value > 0;
+    }
+  }
+
+  return {};
+}
+
+std::optional<units::temperature::celsius_t>
+parseOverdriveFanStopTemp(std::vector<std::string> const &fanStopTempLines)
+{
+  // Relevant lines format (kernel 6.13+):
+  // FAN_ZERO_RPM_STOP_TEMPERATURE:
+  // 20
+  // OD_RANGE:
+  // ZERO_RPM_STOP_TEMPERATURE: 10 100
+
+  auto targetIt = std::find_if(
+      fanStopTempLines.cbegin(), fanStopTempLines.cend(),
+      [&](std::string const &line) {
+        return line.find("FAN_ZERO_RPM_STOP_TEMPERATURE:") != std::string::npos;
+      });
+  if (targetIt != fanStopTempLines.cend() &&
+      std::next(targetIt) != fanStopTempLines.cend()) {
+    std::regex const regex(R"(^\s*(-?\d+)\s*$)", std::regex::icase);
+
+    std::smatch result;
+    if (std::regex_search(*std::next(targetIt), result, regex)) {
+      int value;
+      if (Utils::String::toNumber(value, result[1]))
+        return units::temperature::celsius_t(value);
+    }
+  }
+
+  return {};
+}
+
+std::optional<std::pair<units::temperature::celsius_t, units::temperature::celsius_t>>
+parseOverdriveFanStopTempRange(std::vector<std::string> const &fanStopTempLines)
+{
+  // Relevant lines format (kernel 6.13+):
+  // FAN_ZERO_RPM_STOP_TEMPERATURE:
+  // 20
+  // OD_RANGE:
+  // ZERO_RPM_STOP_TEMPERATURE: 10 100
+
+  auto targetIt = std::find_if(
+      fanStopTempLines.cbegin(), fanStopTempLines.cend(),
+      [&](std::string const &line) {
+        return line.find("OD_RANGE:") != std::string::npos;
+      });
+  if (targetIt != fanStopTempLines.cend() &&
+      std::next(targetIt) != fanStopTempLines.cend()) {
+    std::regex const regex(R"(^ZERO_RPM_STOP_TEMPERATURE\s*:\s*(\d+)\s*(\d+)$)",
+                           std::regex::icase);
+    std::smatch result;
+    if (std::regex_search(*std::next(targetIt), result, regex)) {
+      int min{0}, max{0};
+      if (Utils::String::toNumber<int>(min, result[1]) &&
+          Utils::String::toNumber<int>(max, result[2]))
+        return std::make_pair(
+            units::make_unit<units::temperature::celsius_t>(min),
+            units::make_unit<units::temperature::celsius_t>(max));
+    }
+  }
+
+  return {};
+}
+
 bool isPowerProfileModeDataColumnar(std::vector<std::string> const &data)
 {
   if (data.empty())
@@ -986,16 +1075,6 @@ bool hasOverdriveFanAcousticLimitControl(std::vector<std::string> const &data)
   auto offsetIt = std::find_if(
       data.cbegin(), data.cend(), [&](std::string const &line) {
         return line.find("OD_ACOUSTIC_LIMIT:") != std::string::npos;
-      });
-
-  return offsetIt != data.cend();
-}
-
-bool hasOverdriveFanCurveControl(std::vector<std::string> const &data)
-{
-  auto offsetIt = std::find_if(
-      data.cbegin(), data.cend(), [&](std::string const &line) {
-        return line.find("OD_FAN_CURVE:") != std::string::npos;
       });
 
   return offsetIt != data.cend();

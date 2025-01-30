@@ -26,6 +26,8 @@ class AMD::OdFanCurveXMLParser::Initializer final
   void takeActive(bool active) override;
   void
   takeFanCurve(std::vector<AMD::OdFanCurve::CurvePoint> const &curve) override;
+  void takeFanStop(bool enabled) override;
+  void takeFanStopTemp(units::temperature::celsius_t value) override;
 
  private:
   AMD::OdFanCurveXMLParser &outer_;
@@ -40,6 +42,17 @@ void AMD::OdFanCurveXMLParser::Initializer::takeFanCurve(
     std::vector<AMD::OdFanCurve::CurvePoint> const &curve)
 {
   outer_.curve_ = outer_.curveDefault_ = curve;
+}
+
+void AMD::OdFanCurveXMLParser::Initializer::takeFanStop(bool enabled)
+{
+  outer_.stop_ = outer_.stopDefault_ = enabled;
+}
+
+void AMD::OdFanCurveXMLParser::Initializer::takeFanStopTemp(
+    units::temperature::celsius_t value)
+{
+  outer_.stopTemp_ = outer_.stopTempDefault_ = value;
 }
 
 AMD::OdFanCurveXMLParser::OdFanCurveXMLParser() noexcept
@@ -91,15 +104,41 @@ AMD::OdFanCurveXMLParser::provideFanCurve() const
   return curve_;
 }
 
+void AMD::OdFanCurveXMLParser::takeFanStop(bool enabled)
+{
+  stop_ = enabled;
+}
+
+bool AMD::OdFanCurveXMLParser::provideFanStop() const
+{
+  return *stop_;
+}
+
+void AMD::OdFanCurveXMLParser::takeFanStopTemp(units::temperature::celsius_t value)
+{
+  stopTemp_ = value;
+}
+
+units::temperature::celsius_t AMD::OdFanCurveXMLParser::provideFanStopTemp() const
+{
+  return *stopTemp_;
+}
+
 void AMD::OdFanCurveXMLParser::appendTo(pugi::xml_node &parentNode)
 {
-  auto pmFixedNode = parentNode.append_child(ID().c_str());
-  pmFixedNode.append_attribute("active") = active_;
-  auto curveNode = pmFixedNode.append_child(CurveNodeName.data());
+  auto node = parentNode.append_child(ID().c_str());
+  node.append_attribute("active") = active_;
+
+  auto curveNode = node.append_child(CurveNodeName.data());
   for (auto const &[temp, speed] : curve_) {
     auto pointNode = curveNode.append_child(PointNodeName.data());
     pointNode.append_attribute("temp") = temp.to<int>();
     pointNode.append_attribute("speed") = std::lround(speed.to<double>() * 100);
+  }
+
+  if (stopDefault_) {
+    node.append_attribute("stop") = *stop_;
+    node.append_attribute("stopTemp") = stopTemp_->to<int>();
   }
 }
 
@@ -107,16 +146,18 @@ void AMD::OdFanCurveXMLParser::resetAttributes()
 {
   active_ = activeDefault_;
   curve_ = curveDefault_;
+  stop_ = stopDefault_;
+  stopTemp_ = stopTempDefault_;
 }
 
 void AMD::OdFanCurveXMLParser::loadPartFrom(pugi::xml_node const &parentNode)
 {
-  auto pmFixedNode = parentNode.find_child(
+  auto node = parentNode.find_child(
       [&](pugi::xml_node const &node) { return node.name() == ID(); });
 
-  active_ = pmFixedNode.attribute("active").as_bool(activeDefault_);
+  active_ = node.attribute("active").as_bool(activeDefault_);
 
-  auto curveNode = pmFixedNode.find_child(
+  auto curveNode = node.find_child(
       [&](pugi::xml_node const &node) { return node.name() == CurveNodeName; });
 
   if (!curveNode) {
@@ -139,6 +180,12 @@ void AMD::OdFanCurveXMLParser::loadPartFrom(pugi::xml_node const &parentNode)
 
     if (curve_.size() < 2) // two or more points are needed
       curve_ = curveDefault_;
+  }
+
+  if (stopDefault_) {
+    stop_ = node.attribute("stop").as_bool(*stopDefault_);
+    stopTemp_ = units::temperature::celsius_t(
+        node.attribute("stopTemp").as_int(stopTempDefault_->to<int>()));
   }
 }
 
