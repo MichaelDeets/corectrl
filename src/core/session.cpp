@@ -169,6 +169,63 @@ bool Session::toggleManualProfile(std::string const &profileName)
   return true;
 }
 
+bool Session::activateManualProfile(std::string const &profileName)
+{
+  auto profile = profileManager_->profile(profileName);
+  if (!profile || profile->get().info().exe != IProfile::Info::ManualID)
+    return false;
+
+  std::lock_guard<std::mutex> mLock(manualProfileMutex_);
+  if (manualProfile_.has_value() && manualProfile_ == profileName)
+    return true; // NOOP
+
+  std::lock_guard<std::mutex> lock(pViewsMutex_);
+  auto baseView = getBaseView(pViews_, manualProfile_);
+
+  // remove profile view of the current active manual profile
+  if (manualProfile_.has_value()) {
+    pViews_.pop_back();
+    notifyManualProfileToggled(*manualProfile_, false);
+  }
+
+  // update manual profile state
+  manualProfile_ = profileName;
+
+  // create the profile view of the manual profile
+  createProfileViews(baseView, {*manualProfile_});
+  notifyManualProfileToggled(*manualProfile_, true);
+
+  // apply active profile view
+  profileApplicator_->apply(*pViews_.back());
+
+  return true;
+}
+
+bool Session::deactivateManualProfile(std::string const &profileName)
+{
+  auto profile = profileManager_->profile(profileName);
+  if (!profile || profile->get().info().exe != IProfile::Info::ManualID)
+    return false;
+
+  std::lock_guard<std::mutex> mLock(manualProfileMutex_);
+  if (!(manualProfile_.has_value() && manualProfile_ == profileName))
+    return true; // NOOP
+
+  // remove profile view of the manual profile
+  pViews_.pop_back();
+  notifyManualProfileToggled(*manualProfile_, false);
+
+  // update manual profile state
+  manualProfile_ = std::nullopt;
+
+  std::lock_guard<std::mutex> lock(pViewsMutex_);
+
+  // apply active profile view
+  profileApplicator_->apply(*pViews_.back());
+
+  return true;
+}
+
 IProfileManager &Session::profileManager() const
 {
   return *profileManager_;

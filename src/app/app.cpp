@@ -118,7 +118,7 @@ int App::exec(int argc, char **argv)
     settings_->signalSettings();
 
     initSysTrayWindowState();
-    handleToggleManualProfileCmd();
+    handleManualProfileCmd();
 
     return app.exec();
   }
@@ -164,7 +164,7 @@ void App::onNewInstance(QStringList args)
   cmdParser_.parse(args);
 
   bool runtimeCmds{false};
-  runtimeCmds |= handleToggleManualProfileCmd();
+  runtimeCmds |= handleManualProfileCmd();
   runtimeCmds |= handleWindowVisibilityCmds();
 
   // No runtime commands were used as arguments.
@@ -212,6 +212,16 @@ void App::setupCmdParser(QCommandLineParser &parser, int minHelperTimeout,
       {{"m", "toggle-manual-profile"},
        "Activate the manual profile whose name is <\"profile name\">.\nWhen an "
        "instance of the application is already running, it will toggle "
+       "the manual profile whose name is <\"profile name\">.",
+       "\"profile name\""},
+      {"activate-manual-profile",
+       "Activate the manual profile whose name is <\"profile name\">.\nWhen an "
+       "instance of the application is already running, it will activate "
+       "the manual profile whose name is <\"profile name\">.",
+       "\"profile name\""},
+      {"deactivate-manual-profile",
+       "Deactivate the manual profile whose name is <\"profile name\">.\nWhen "
+       "an instance of the application is already running, it will deactivate "
        "the manual profile whose name is <\"profile name\">.",
        "\"profile name\""},
       {"minimize-systray",
@@ -332,18 +342,44 @@ void App::restoreMainWindowGeometry()
   mainWindow_->setGeometry(x, y, width, height);
 }
 
-bool App::handleToggleManualProfileCmd()
+bool App::handleManualProfileCmd()
 {
   auto cmdHandled{false};
   if (cmdParser_.isSet("toggle-manual-profile")) {
 
-    auto profileName = cmdParser_.value("toggle-manual-profile").toStdString();
-    if (profileName.empty() || profileName.length() >= 512)
-      SPDLOG_WARN("'{}' is not a valid manual profile name.", profileName);
-    else if (!session_->toggleManualProfile(profileName))
+    auto profile = cmdParser_.value("toggle-manual-profile").toStdString();
+    if (profile.empty() || profile.length() >= 512)
+      SPDLOG_WARN("'{}' is not a valid manual profile name.", profile);
+    else if (!session_->toggleManualProfile(profile))
       SPDLOG_WARN("Cannot toggle manual profile '{}': Missing profile or not a "
                   "manual profile.",
-                  profileName);
+                  profile);
+
+    cmdHandled = true;
+  }
+  else if (cmdParser_.isSet("activate-manual-profile")) {
+
+    auto profile = cmdParser_.value("activate-manual-profile").toStdString();
+    if (profile.empty() || profile.length() >= 512)
+      SPDLOG_WARN("'{}' is not a valid manual profile name.", profile);
+    else if (!session_->activateManualProfile(profile))
+      SPDLOG_WARN(
+          "Cannot activate manual profile '{}': Missing profile or not a "
+          "manual profile.",
+          profile);
+
+    cmdHandled = true;
+  }
+  else if (cmdParser_.isSet("deactivate-manual-profile")) {
+
+    auto profile = cmdParser_.value("deactivate-manual-profile").toStdString();
+    if (profile.empty() || profile.length() >= 512)
+      SPDLOG_WARN("'{}' is not a valid manual profile name.", profile);
+    else if (!session_->deactivateManualProfile(profile))
+      SPDLOG_WARN(
+          "Cannot deactivate manual profile '{}': Missing profile or not a "
+          "manual profile.",
+          profile);
 
     cmdHandled = true;
   }

@@ -34,6 +34,8 @@ class Session final : public ISession
 
   void init(ISysModel const &model) override;
   bool toggleManualProfile(std::string const &profileName) override;
+  bool activateManualProfile(std::string const &profileName) override;
+  bool deactivateManualProfile(std::string const &profileName) override;
   IProfileManager &profileManager() const override;
 
  private:

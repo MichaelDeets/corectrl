@@ -27,6 +27,8 @@ class ISession
 
   virtual void init(ISysModel const &model) = 0;
   virtual bool toggleManualProfile(std::string const &profileName) = 0;
+  virtual bool activateManualProfile(std::string const &profileName) = 0;
+  virtual bool deactivateManualProfile(std::string const &profileName) = 0;
   virtual IProfileManager &profileManager() const = 0;
 
   virtual ~ISession() = default;
