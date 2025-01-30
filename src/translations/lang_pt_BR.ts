@@ -137,6 +137,11 @@
         <source>Speed</source>
         <translation>Velocidade</translation>
     </message>
+    <message>
+        <location filename="../qml/AMDOdFanCurveForm.qml" line="116"/>
+        <source>Fan stop</source>
+        <translation>Parada do ventilador</translation>
+    </message>
 </context>
 <context>
     <name>AMDPMFixedFreqForm</name>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en_US">
+<TS version="2.1" language="sv_SE">
 <context>
     <name>AMD::PMFixedQMLItem</name>
     <message>
@@ -136,6 +136,11 @@
         <location filename="../qml/AMDOdFanCurveForm.qml" line="25"/>
         <source>Speed</source>
         <translation>Hastighet</translation>
+    </message>
+    <message>
+        <location filename="../qml/AMDOdFanCurveForm.qml" line="116"/>
+        <source>Fan stop</source>
+        <translation>Fläktstopp</translation>
     </message>
 </context>
 <context>
