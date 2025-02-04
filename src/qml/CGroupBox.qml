@@ -22,9 +22,9 @@ GroupBox {
   background: Rectangle {
     id: bg
 
-    color: Style.GroupBox.bg_color
-    border.color: enabled ? Style.GroupBox.bg_border_color
-                          : Style.GroupBox.bg_border_color_alt
-    radius: Style.GroupBox.bg_radius
+    color: Style.GroupBox.background
+    border.color: enabled ? Style.GroupBox.border_color
+                          : Style.GroupBox.border_color_alt
+    radius: Style.GroupBox.radius
   }
 }

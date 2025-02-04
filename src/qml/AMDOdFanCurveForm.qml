@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import CoreCtrl.UIComponents 1.0
 import "Style.js" as Style
@@ -17,7 +16,7 @@ AMD_OD_FAN_CURVE {
 
   onCurveChanged: curve => {
     curveControl.removeCurve("curve")
-    curveControl.addCurve("curve", Material.accent, curve)
+    curveControl.addCurve("curve", Style.Theme.accent, curve)
   }
 
   onCurveRangeChanged: (tempMin, tempMax, speedMin, speedMax) => {
@@ -68,9 +67,8 @@ AMD_OD_FAN_CURVE {
     text: "100"
   }
 
-  Pane {
+  CPane {
     id: contents
-    padding: Style.g_padding
 
     ColumnLayout {
       spacing: 8

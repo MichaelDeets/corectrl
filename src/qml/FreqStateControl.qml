@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import "Style.js" as Style
 
@@ -123,7 +122,7 @@ Pane {
         Layout.columnSpan: 2
       }
 
-      Pane {
+      CPane {
         padding: Style.FVControl.inner_padding
         bottomPadding: 0
         Layout.columnSpan: 2

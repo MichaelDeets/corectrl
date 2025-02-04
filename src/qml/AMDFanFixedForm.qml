@@ -23,9 +23,8 @@ AMD_FAN_FIXED {
     text: "100"
   }
 
-  Pane {
+  CPane {
     id: contents
-    padding: Style.g_padding
 
     ColumnLayout {
       RowLayout {

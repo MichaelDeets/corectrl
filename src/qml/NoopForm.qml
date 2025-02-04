@@ -13,9 +13,8 @@ NOOP {
   width: contents.width
   height: contents.height
 
-  Pane {
+  CPane {
     id: contents
-    padding: Style.g_padding
 
     RowLayout {
       anchors.fill: parent

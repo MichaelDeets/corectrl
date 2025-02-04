@@ -20,6 +20,8 @@ Dialog {
   x: (parent.width - width) / 2
   y: (parent.height - height) / 2
 
+  spacing: 10
+
   ColumnLayout {
     anchors.fill: parent
 
@@ -31,13 +33,8 @@ Dialog {
       Repeater {
         model: [qsTr("General"), qsTr("Workarounds")]
 
-        TabButton {
+        CTabButton {
           text: modelData
-
-          background: Rectangle {
-            color: hovered ? Style.Dialog.tabs.bg_color_alt
-                           : Style.Dialog.tabs.bg_color
-          }
         }
       }
     }

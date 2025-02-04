@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import CoreCtrl.UIComponents 1.0
 import "Style.js" as Style
@@ -472,9 +471,6 @@ Page {
   }
 
   header: ToolBar {
-    Material.elevation: Style.ToolBar.Material.elevation
-    Material.background: Style.ToolBar.bg_color
-
     RowLayout {
       anchors.fill: parent
 
@@ -488,6 +484,7 @@ Page {
       ToolButton {
         text: Style.g_icon.BACK
         font.pointSize: Style.g_text.icon_size_tabbar
+        implicitWidth: 48
         visible: stack.depth > 1
         onClicked: p.goToProfileView()
       }
@@ -523,6 +520,7 @@ Page {
       ToolButton {
         text: Style.g_icon.ADD
         font.pointSize: Style.g_text.icon_size_tabbar
+        implicitWidth: 48
         visible: stack.depth === 1
         onClicked: infoDlg.openNewProfileDialog()
       }
@@ -614,7 +612,7 @@ Page {
         Flow {
           width: scrollview.availableWidth
           height: scrollview.availableHeight
-          spacing: Style.RectItemList.items_spacing
+          spacing: Style.RectItemList.spacing
 
           Repeater {
             model: profileModel

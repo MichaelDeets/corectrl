@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import "Style.js" as Style
 
@@ -202,11 +201,9 @@ Pane {
           Layout.alignment: Qt.AlignRight
         }
 
-        Item { Layout.preferredHeight: 10 }
+        Item { Layout.preferredHeight: 7 }
 
         ColumnLayout {
-
-          Item { Layout.preferredHeight: 5 }
 
           RowLayout {
             Item { Layout.fillWidth: true }
@@ -225,7 +222,7 @@ Pane {
             Label { text: qsTr("Voltage") + " (mV)" }
           }
 
-          Item { Layout.preferredHeight: 10 }
+          Item { Layout.preferredHeight: 3 }
         }
       }
 

@@ -3,14 +3,12 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import "Style.js" as Style
 
 ComboBox {
   id: comboBox
   textRole: 'text'
   implicitWidth: modelWidth + rightPadding + leftPadding
-  Material.elevation: Style.Material.elevation
   wheelEnabled: true
 
   property real modelWidth

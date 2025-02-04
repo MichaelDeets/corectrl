@@ -118,6 +118,7 @@ ColumnLayout {
 
     ColumnLayout {
       anchors.fill: parent
+      spacing: 10
 
       TextArea {
         text: qsTr("Disabled sensors won't be updated from hardware")
@@ -157,7 +158,7 @@ ColumnLayout {
 
         Layout.fillWidth: true
         height: 120
-        color: Style.Dialog.bg_list_color
+        color: Style.Dialog.list_color
       }
     }
   }

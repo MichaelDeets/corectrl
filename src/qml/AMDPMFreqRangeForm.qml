@@ -32,7 +32,7 @@ AMD_PM_FREQ_RANGE {
     property int max: 0
   }
 
-  Pane {
+  CPane {
     id: contents
     padding: 0
 

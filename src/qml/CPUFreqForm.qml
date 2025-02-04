@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import CoreCtrl.UIComponents 1.0
 import "Style.js" as Style
@@ -86,9 +85,8 @@ CPU_CPUFREQ {
     }
   }
 
-  Pane {
+  CPane {
     id: contents
-    padding: Style.g_padding
 
     GridLayout {
       columns: 2

@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import CoreCtrl.UIComponents 1.0
 import "Style.js" as Style
@@ -22,10 +21,10 @@ AMD_PM_VOLT_CURVE {
   }
   onPointsChanged: points => {
     voltCurve.removeCurve("volt")
-    voltCurve.addCurve("volt", Material.accent, points)
+    voltCurve.addCurve("volt", Style.Theme.accent, points)
   }
 
-  Pane {
+  CPane {
     id: contents
     padding: 0
     anchors.fill: parent
@@ -47,12 +46,6 @@ AMD_PM_VOLT_CURVE {
           anchors.fill: parent
 
           RowLayout {
-            Label {
-              text: qsTr("Voltage")
-              font.pointSize: 11
-              font.bold: true
-            }
-
             Item {
               implicitWidth: modeSw.width / (1 + Style.g_tweakScale)
 
@@ -64,6 +57,11 @@ AMD_PM_VOLT_CURVE {
 
                 onToggled: pmVoltCurve.changeMode(checked ? "manual" : "auto")
               }
+            }
+            Label {
+              text: qsTr("Voltage")
+              font.pointSize: 11
+              font.bold: true
             }
 
             Item { Layout.fillWidth: true }
@@ -81,7 +79,7 @@ AMD_PM_VOLT_CURVE {
             yMinorTickCount: 1
 
             width: 400
-            height: 299
+            height: 290
 
             enabled: modeSw.checked
 

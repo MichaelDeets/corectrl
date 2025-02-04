@@ -31,9 +31,8 @@ AMD_PM_FREQ_OD {
     text: "+ 00 %"
   }
 
-  Pane {
+  CPane {
     id: contents
-    padding: Style.g_padding
 
     ColumnLayout {
       spacing: 0

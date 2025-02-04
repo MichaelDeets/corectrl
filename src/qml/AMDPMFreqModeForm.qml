@@ -18,7 +18,7 @@ AMD_PM_FREQ_MODE {
   ModeSelector {
     id: modeSelector
     headerTitle: qsTr("Frequency")
-    headerBackground: Style.ModeSelector.body.bg_color
+    headerBackground: Style.ModeSelector.Body.background
     contentParentObject: "AMD_PM_FREQ_MODE_Plug"
 
     onSelectionChanged: mode => freqMode.changeMode(mode)

@@ -59,9 +59,8 @@ AMD_PM_FIXED_FREQ {
     text: "0000 MHz"
   }
 
-  Pane {
+  CPane {
     id: contents
-    padding: Style.g_padding
 
     ColumnLayout {
       spacing: 0

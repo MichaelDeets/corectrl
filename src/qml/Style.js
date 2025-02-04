@@ -27,71 +27,68 @@ var g_icon = {
   SPLIT:   "|",
 };
 
+var Theme = {
+  accent: "orangered",
+  accent_alt: "#909090",
+  foreground: "white",
+  background: "#303030",
+};
+
+var Menu = {
+  background: "#424242"
+};
+
 var ToolBar = {
-  bg_color: "#2A2A2A",
   text_color_msg: "#DADADA",
-  text_color: "#FFFFFF",
-  text_color_alt: "#909090",
+  text_color: "white",
+  text_color_alt: "#909090"
+};
 
-  Material: {
-    elevation: 1
+var Split = {
+  background: "#353535",
+  thickness: 6,
+
+  Handle: {
+    background: "#797979",
+    thickness: 2,
+    length: 9
   }
-}
-
-var RectItem = {
-  bg_color: "#484848",
-  bg_color_alt: "#404040",
-  bg_color_hover: "#505050",
-
-  text_color: "#FAFAFA",
-  text_color_alt: "#909090",
-
-  padding: 10
-}
-
-var RectItemList = {
-  items_spacing: 2
 };
 
 var TabBar = {
-  main_footer: {
-    bg_color: "#555555",
-  }
-};
+  Button: {
+    accent_size: 2,
+    background: "#383838",
+    background_alt: "#484848",
 
-var TabButton = {
-  bg_color: "#FF383838",
-  bg_color_alt: "#FF484848"
+    MainFooter: {
+      background: "#555555",
+      background_alt: "#6A6A6A"
+    }
+  }
 };
 
 var TextField = {
   padding: 8,
 };
 
-
-var Material = {
-  elevation: 1,
-  accent: "orangered",
-  accent_alt: "#909090"
-};
-
-var ModeSelector = {
-  header: {
-    bg_color: "#FF404040",
-    padding: 8,
-  },
-  body: {
-    bg_color: "#FF393939"
-  }
-};
-
 var Controls = {
   items_spacing: 4
 };
 
+var ModeSelector = {
+  Header: {
+    background: "#404040",
+    padding: 8,
+  },
+  Body: {
+    background: "#393939"
+  }
+};
+
 var Graph = {
-  bg_color: "#20FFFFFF",
-  ctl_bg_color: "#AA202020"
+  background: "#20FFFFFF",
+  ctl_background: "#AA202020"
 };
 
 var Profiles = {
@@ -134,18 +131,29 @@ var FVControl = {
 };
 
 var Dialog = {
-  bg_list_color: "#FF343434",
-  tabs: {
-    bg_color: "#FF525252",
-    bg_color_alt: "#FF626262",
-  },
+  list_color: "#FF343434"
 };
 
 var GroupBox = {
   text_size: 11,
   text_bold: true,
-  bg_color: "transparent",
-  bg_border_color: "#FF747474",
-  bg_border_color_alt: "#40747474",
-  bg_radius: 2
+  background: "transparent",
+  border_color: "#FF747474",
+  border_color_alt: "#40747474",
+  radius: 2
+};
+
+var RectItem = {
+  background: "#484848",
+  background_alt: "#404040",
+  background_hover: "#505050",
+
+  text_color: "#FAFAFA",
+  text_color_alt: "#909090",
+
+  padding: 10
+};
+
+var RectItemList = {
+  spacing: 2
 };

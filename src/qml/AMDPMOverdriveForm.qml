@@ -13,9 +13,8 @@ AMD_PM_OVERDRIVE {
   width: controls.width
   height: controls.height
 
-  Pane {
+  CPane {
     id: controls
-    padding: Style.g_padding
 
     Row {
       objectName: "AMD_PM_OVERDRIVE_Plug"

@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import "Style.js" as Style
 
@@ -35,8 +34,8 @@ Pane {
       padding: Style.RectItem.padding
 
       background: Rectangle {
-        color: hovered ? Style.RectItem.bg_color_hover
-                       : Style.RectItem.bg_color
+        color: hovered ? Style.RectItem.background_hover
+                       : Style.RectItem.background
       }
 
       ToolTip.delay: Style.ToolTip.delay
@@ -80,7 +79,7 @@ Pane {
       id: flow
       width: scrollview.availableWidth
       height: scrollview.availableHeight
-      spacing: Style.RectItemList.items_spacing
+      spacing: Style.RectItemList.spacing
 
       Repeater {
         model: infoModel
