@@ -9,7 +9,7 @@ StartupWMClass=corectrl
 Terminal=false
 Type=Application
 Categories=System;Settings;Utility;
-Keywords=core;control;system;hardware;
+Keywords=control;system;hardware;frequency;fan;voltage;overclock;underclock;gpu;cpu;
 
 # Translations
 GenericName[bg]=Централен Контрол

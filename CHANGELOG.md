@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
   - `--activate-manual-profile`: activate the given manual profile (#448).
   - `--deactivate-manual-profile`: deactivate the given manual profile (#448).
 - Port to Qt 6 (#430).
+- More keywords in desktop entry (#453).
 - Georgian translation. Thanks to NorwayFun (!46).
 - Brazilian Portuguese translation. Thanks to Leal (!49).
 
