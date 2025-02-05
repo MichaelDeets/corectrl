@@ -3,12 +3,18 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Changed
+- Require Qt 6.8 or later.
+- Require Qt6LinguistTools.
+- Require QuaZip 1.0 or later (Qt 6 version).
+
 ### Added
 - Allow custom Polkit policy files install directory (#477).
 - Fan stop and fan stop temperature controls for AMD RX 7000 series. Requires Linux 6.13 or later.
 - New command line options:
   - `--activate-manual-profile`: activate the given manual profile (#448).
   - `--deactivate-manual-profile`: deactivate the given manual profile (#448).
+- Port to Qt 6 (#430).
 - Georgian translation. Thanks to NorwayFun (!46).
 - Brazilian Portuguese translation. Thanks to Leal (!49).
 
