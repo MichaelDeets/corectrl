@@ -80,6 +80,7 @@ AMD_PM_FIXED_FREQ {
           from: 0
           to: 0
           stepSize: 1
+          snapMode: Slider.SnapAlways
 
           onPressedChanged: pressed => {
             if (!pressed)
@@ -110,6 +111,7 @@ AMD_PM_FIXED_FREQ {
           from: 0
           to: 0
           stepSize: 1
+          snapMode: Slider.SnapAlways
 
           onPressedChanged: pressed => {
             if (!pressed)
