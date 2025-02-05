@@ -3,7 +3,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
+import QtQuick.Controls.Universal 2.12
 import QtQuick.Layouts 1.15
 import "Style.js" as Style
 import "Settings.js" as Settings
@@ -15,10 +15,13 @@ ApplicationWindow {
 
   font.family: Style.g_text.family
   font.pointSize: Style.g_text.size
+  font.weight: Font.Normal
   font.capitalization: Font.MixedCase
 
-  Material.theme: Material.Dark
-  Material.accent: Style.Material.accent
+  Universal.theme: Universal.Dark
+  Universal.accent: Style.Theme.accent
+  Universal.foreground: Style.Theme.foreground
+  Universal.background: Style.Theme.background
 
   StackLayout {
     id: components
@@ -36,15 +39,16 @@ ApplicationWindow {
     id: tabBar
     font.bold: true
     font.capitalization: Font.AllUppercase
-    Material.background: Style.TabBar.main_footer.bg_color
     hoverEnabled: Style.g_hover
 
-    TabButton {
-        text: qsTr("Profiles")
+    TabButtonMainFooter {
+      text: qsTr("Profiles")
     }
-    TabButton {
-        text: qsTr("System")
+    TabButtonMainFooter {
+      text: qsTr("System")
     }
+
+    background: Rectangle {} // HACK: avoid empty space bellow buttons
   }
 
   onClosing: close => {

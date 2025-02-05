@@ -40,9 +40,9 @@ if(HAVE_CXX_ATOMICS_WITH_LIB OR HAVE_CXX_ATOMICS64_WITH_LIB)
   list(APPEND ATOMIC_LIB "atomic")
 endif()
 
-find_package(Qt5 5.15 COMPONENTS Core DBus Quick Charts Widgets Network Svg REQUIRED)
-find_package(Qt5LinguistTools REQUIRED)
-find_package(QuaZip-Qt5 1.0 REQUIRED)
+find_package(Qt6 6.8 COMPONENTS Core DBus Quick Charts Widgets Network Svg REQUIRED)
+find_package(Qt6LinguistTools REQUIRED)
+find_package(QuaZip-Qt6 1.0 REQUIRED)
 find_package(spdlog 1.4 REQUIRED)
 find_package(pugixml 1.11 REQUIRED)
 

@@ -4,7 +4,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import QtQuick.Controls.Material 2.15
 import CoreCtrl.UIComponents 1.0
 import "Style.js" as Style
 
@@ -22,9 +21,8 @@ AMD_PM_VOLT_OFFSET {
     offsetSld.to = max
   }
 
-  Pane {
+  CPane {
     id: contents
-    padding: Style.g_padding
 
     background: Rectangle {
       border.color: Style.FVControl.border_color
@@ -79,7 +77,7 @@ AMD_PM_VOLT_OFFSET {
         }
       }
 
-      Pane {
+      CPane {
         padding: Style.FVControl.inner_padding
         bottomPadding: 0
         Layout.columnSpan: 2

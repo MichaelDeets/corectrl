@@ -56,9 +56,8 @@ AMD_PM_FIXED {
     }
   }
 
-  Pane {
+  CPane {
     id: contents
-    padding: Style.g_padding
 
     Row {
       id: btnContainer

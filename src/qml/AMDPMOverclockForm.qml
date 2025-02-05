@@ -12,7 +12,7 @@ AMD_PM_OVERCLOCK {
   width: controls.width
   height: controls.height
 
-  Pane {
+  CPane {
     id: controls
     padding: 0
 

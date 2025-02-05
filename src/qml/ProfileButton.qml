@@ -42,9 +42,9 @@ Pane {
   }
 
   background: Rectangle {
-    color: btn.hovered ? Style.RectItem.bg_color_hover
-                       : btn.profileActivated ? Style.RectItem.bg_color
-                                              : Style.RectItem.bg_color_alt
+    color: btn.hovered ? Style.RectItem.background_hover
+                       : btn.profileActivated ? Style.RectItem.background
+                                              : Style.RectItem.background_alt
   }
 
   RowLayout {
@@ -103,84 +103,69 @@ Pane {
       }
     }
 
-    Item {
+    Switch {
+      id: manualSwc
+      visible: exe.length == 0
+
+      padding: 0
+      rotation: -90
+      scale: Style.g_tweakScale
+
       Layout.fillHeight: true
       Layout.alignment: Qt.AlignRight
+      Layout.preferredWidth: 30
 
-      implicitWidth: manualSwc.width / 3
-
-      Switch {
-        id: manualSwc
-        visible: exe.length == 0
-
-        padding: 0
-        rotation: -90
-        scale: Style.g_tweakScale
-        anchors.centerIn: parent
-
-        onToggled: btn.toggleManualProfile(name)
-      }
+      onToggled: btn.toggleManualProfile(name)
     }
 
-    Item {
+    ToolButton {
+      id: editBtn
+
+      text: Style.g_icon.MENU;
+      font.pointSize: Style.g_text.icon_size
+
       Layout.fillHeight: true
       Layout.alignment: Qt.AlignRight
-      Layout.rightMargin: 0
+      Layout.preferredWidth: 30
 
-      implicitWidth: editBtn.width
+      onClicked: menu.open()
 
-      ToolButton {
-        id: editBtn
+      Menu {
+        id: menu
+        background: Rectangle {
+          implicitWidth: 200
+          implicitHeight: 40
+          color: Style.Menu.background
+        }
 
-        text: Style.g_icon.MENU;
-        font.pointSize: Style.g_text.icon_size
+        MenuItem {
+          text: btn.profileActivated ? qsTr("Disable") : qsTr("Enable")
+          enabled: !isGlobal && exe.length > 0
+          onTriggered: btn.enableProfile(!btn.profileActivated)
+        }
 
-        anchors.centerIn: parent
+        MenuItem {
+          text: qsTr("Edit...")
+          enabled: !isGlobal
+          onTriggered: btn.edit()
+        }
 
-        onClicked: menu.open()
+        MenuItem {
+          text: qsTr("Clone...")
+          onTriggered: btn.clone()
+        }
 
-        Menu {
-          id: menu
+        MenuItem {
+          text: qsTr("Export to...")
+          onTriggered: btn.exportTo()
+        }
 
-          MenuItem {
-            text: btn.profileActivated ? qsTr("Disable") : qsTr("Enable")
-            enabled: !isGlobal && exe.length > 0
-            hoverEnabled: Style.g_hover
+        MenuSeparator {}
 
-            onTriggered: btn.enableProfile(!btn.profileActivated)
-          }
-
-          MenuItem {
-            text: qsTr("Edit...")
-            enabled: !isGlobal
-            hoverEnabled: Style.g_hover
-
-            onTriggered: btn.edit()
-          }
-
-          MenuItem {
-            text: qsTr("Clone...")
-            hoverEnabled: Style.g_hover
-
-            onTriggered: btn.clone()
-          }
-
-          MenuItem {
-            text: qsTr("Export to...")
-            hoverEnabled: Style.g_hover
-
-            onTriggered: btn.exportTo()
-          }
-
-          MenuSeparator {}
-
-          MenuItem {
-            text: qsTr("Remove")
-            enabled: !isGlobal
-            hoverEnabled: Style.g_hover
-
-            onTriggered: btn.remove()
-          }
+        MenuItem {
+          text: qsTr("Remove")
+          enabled: !isGlobal
+          onTriggered: btn.remove()
         }
       }
     }

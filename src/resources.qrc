@@ -52,6 +52,10 @@
         <file>qml/SettingsDialog.qml</file>
         <file>qml/SettingsWorkarounds.qml</file>
         <file>qml/SettingsGeneral.qml</file>
+        <file>qml/CTabButton.qml</file>
+        <file>qml/TabButtonMainFooter.qml</file>
+        <file>qml/CPane.qml</file>
+        <file>qml/CSplitView.qml</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="lang_en_EN">translations/lang_en_EN.qm</file>

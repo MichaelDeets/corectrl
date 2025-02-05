@@ -28,9 +28,8 @@ AMD_PM_POWERCAP {
     text: "999"
   }
 
-  Pane {
+  CPane {
     id: contents
-    padding: Style.g_padding
 
     RowLayout {
 

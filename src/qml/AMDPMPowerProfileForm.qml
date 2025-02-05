@@ -47,9 +47,8 @@ AMD_PM_POWER_PROFILE {
     }
   }
 
-  Pane {
+  CPane {
     id: contents
-    padding: Style.g_padding
 
     RowLayout {
       Label {

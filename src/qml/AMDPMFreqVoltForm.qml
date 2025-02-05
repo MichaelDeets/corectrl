@@ -54,7 +54,7 @@ AMD_PM_FREQ_VOLT {
     property var activeStates: []
   }
 
-  Pane {
+  CPane {
     id: contents
     padding: 0
 

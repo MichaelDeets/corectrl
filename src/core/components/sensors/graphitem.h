@@ -15,7 +15,7 @@
 #include <string>
 #include <string_view>
 
-QT_CHARTS_USE_NAMESPACE
+QT_USE_NAMESPACE
 
 class GraphItem
 : public QQuickItem

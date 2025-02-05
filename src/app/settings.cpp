@@ -17,7 +17,7 @@ void Settings::setValue(QString const &key, QVariant const &value)
 QVariant Settings::getValue(QString const &key, QVariant const &defaultValue) const
 {
   auto value = QSettings::value(key, defaultValue);
-  value.convert(static_cast<int>(defaultValue.type()));
+  value.convert(defaultValue.metaType());
   return value;
 }
 

@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import CoreCtrl.UIComponents 1.0
 import "Style.js" as Style
 
@@ -56,9 +55,8 @@ AMD_PM_POWERSTATE {
     }
   }
 
-  Pane {
+  CPane {
     id: contents
-    padding: Style.g_padding
 
     Row {
       id: btnContainer

@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import CoreCtrl.UIComponents 1.0
 import "Style.js" as Style
 import "Settings.js" as Settings
@@ -34,8 +33,7 @@ GPU {
     }
   }
 
-  SplitView {
-    spacing: 0
+  CSplitView {
     anchors.fill: parent
     orientation: Qt.Vertical
 

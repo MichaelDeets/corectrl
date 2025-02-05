@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import "Style.js" as Style
 
@@ -11,9 +10,9 @@ Page {
   id: modeSelector
 
   property alias headerTitle: label.text
-  property var headerBackground: Style.ModeSelector.header.bg_color
+  property var headerBackground: Style.ModeSelector.Header.background
   property alias contentParentObject: contentsAnchor.objectName
-  property var contentBackground: Style.ModeSelector.body.bg_color
+  property var contentBackground: Style.ModeSelector.Body.background
 
   /// Fired when the selected mode changed.
   /// @param mode key of the new selected mode
@@ -61,8 +60,7 @@ Page {
   }
 
   header: Pane {
-    padding: Style.ModeSelector.header.padding
-    Material.background: headerBackground
+    padding: Style.ModeSelector.Header.padding
 
     RowLayout {
       Label {
@@ -101,12 +99,16 @@ Page {
         Layout.fillWidth: true
       }
     }
+
+    background: Rectangle {
+      anchors.fill: parent
+      color: headerBackground
+    }
   }
 
   Pane {
     padding: 0
     anchors.fill: parent
-    Material.background: contentBackground
 
     Row {
       id: contentsAnchor
@@ -133,6 +135,11 @@ Page {
           }
         }
       }
+    }
+
+    background: Rectangle {
+      anchors.fill: parent
+      color: contentBackground
     }
   }
 }

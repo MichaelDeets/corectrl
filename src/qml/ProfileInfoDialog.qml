@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import "Style.js" as Style
 
@@ -33,6 +32,9 @@ Dialog {
   // center in parent
   x: (parent.width - width) / 2
   y: (parent.height - height) / 2
+
+  spacing: 10
+  implicitWidth: 360
 
   QtObject { // private stuff
     id: p
@@ -123,6 +125,7 @@ Dialog {
     anchors.fill: parent
     columns: 2
     columnSpacing: 10
+    rowSpacing: 10
 
     Label {
       text: qsTr("Name:")
@@ -132,6 +135,7 @@ Dialog {
     TextField {
       id: nameTf
       Layout.alignment: Qt.AlignLeft
+      Layout.fillWidth: true
       selectByMouse: true
       hoverEnabled: Style.g_hover
       placeholderText: qsTr("Profile name")
@@ -167,8 +171,11 @@ Dialog {
       Layout.alignment: Qt.AlignRight
       visible: activationCb.currentIndex === 0
     }
-    Row {
+
+    RowLayout {
       visible: activationCb.currentIndex === 0
+      Layout.alignment: Qt.AlignLeft
+      Layout.fillWidth: true
       spacing: 5
 
       TextField {
@@ -176,6 +183,7 @@ Dialog {
         selectByMouse: true
         hoverEnabled: Style.g_hover
         placeholderText: qsTr("Executable name")
+        Layout.fillWidth: true
 
         onTextEdited: dlg.exe = text
       }
@@ -184,11 +192,10 @@ Dialog {
         text: Style.g_icon.MORE
         font.pointSize: Style.g_text.icon_size
         implicitWidth: 25
-        implicitHeight: 35
+        implicitHeight: exeTf.height
         spacing: 0
         padding: 0
         hoverEnabled: Style.g_hover
-        Material.elevation: Style.Material.elevation
 
         NativeFileDialog {
           id: exeFDialog
@@ -217,7 +224,6 @@ Dialog {
       property alias path: icnBtnImage.source
 
       hoverEnabled: Style.g_hover
-      Material.elevation: Style.Material.elevation
 
       contentItem: Item {
         implicitWidth: icnBtnImage.width

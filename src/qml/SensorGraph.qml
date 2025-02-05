@@ -3,7 +3,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
+import QtQuick.Controls.Universal 2.12
 import QtQuick.Layouts 1.15
 import QtCharts 2.15
 import "Style.js" as Style
@@ -15,7 +15,7 @@ Rectangle {
   implicitWidth: parent.width
   implicitHeight: 210
 
-  color: Style.Graph.bg_color
+  color: Style.Graph.background
 
   function addItem(item) {
     p.addGrapItem(item)
@@ -117,11 +117,11 @@ Rectangle {
 
         leftPadding: -5
         rightPadding: 0
-        topPadding: -2
-        bottomPadding: -2
+        topPadding: -3
+        bottomPadding: -3
 
         scale: 0.75
-        Material.accent: _color
+        Universal.accent: _color
 
         onToggled: p.activateGraphItem(index, checked)
       }
@@ -161,8 +161,7 @@ Rectangle {
     }
   }
 
-  SplitView {
-    spacing: 0
+  CSplitView {
     anchors.fill: parent
     orientation: Qt.Horizontal
 
@@ -176,7 +175,7 @@ Rectangle {
     Rectangle {
       id: controls
       implicitWidth: 220
-      color: Style.Graph.ctl_bg_color
+      color: Style.Graph.ctl_background
 
       ScrollView {
         id: ctlScrollView

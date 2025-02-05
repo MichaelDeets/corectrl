@@ -3,7 +3,6 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import CoreCtrl.UIComponents 1.0
 import "Style.js" as Style
@@ -40,14 +39,7 @@ Page {
   Component {
     id: tabBtnComponent
 
-    TabButton {
-      id: tabBtn
-
-      background: Rectangle {
-        color: tabBtn.hovered ? Style.TabButton.bg_color_alt
-                              : Style.TabButton.bg_color
-      }
-    }
+    CTabButton {}
   }
 
   SettingsDialog {
@@ -78,9 +70,6 @@ Page {
   }
 
   header: ToolBar {
-    Material.elevation: Style.ToolBar.Material.elevation
-    Material.background: Style.ToolBar.bg_color
-
     RowLayout {
       anchors.fill: parent
 
