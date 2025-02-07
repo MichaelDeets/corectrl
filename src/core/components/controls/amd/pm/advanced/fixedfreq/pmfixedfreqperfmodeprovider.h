@@ -7,7 +7,7 @@
 
 namespace AMD {
 
-class PMFixedFreqAdvProvider final : public IGPUControlProvider::IProvider
+class PMFixedFreqPerfModeProvider final : public IGPUControlProvider::IProvider
 {
  public:
   std::vector<std::unique_ptr<IControl>>

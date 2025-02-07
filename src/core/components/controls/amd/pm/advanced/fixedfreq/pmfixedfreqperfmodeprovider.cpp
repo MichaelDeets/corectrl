@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include "pmfixedfreqadvprovider.h"
+#include "pmfixedfreqperfmodeprovider.h"
 
-#include "../pmadvancedprovider.h"
+#include "../../pmperfmodeprovider.h"
 #include "common/fileutils.h"
 #include "common/stringutils.h"
 #include "core/components/amdutils.h"
@@ -20,8 +20,8 @@
 #include <vector>
 
 std::vector<std::unique_ptr<IControl>>
-AMD::PMFixedFreqAdvProvider::provideGPUControls(IGPUInfo const &gpuInfo,
-                                                ISWInfo const &swInfo) const
+AMD::PMFixedFreqPerfModeProvider::provideGPUControls(IGPUInfo const &gpuInfo,
+                                                     ISWInfo const &swInfo) const
 {
   if (gpuInfo.vendor() != Vendor::AMD)
     return {};
@@ -30,14 +30,9 @@ AMD::PMFixedFreqAdvProvider::provideGPUControls(IGPUInfo const &gpuInfo,
   if (driver != "amdgpu")
     return {};
 
-  auto ppOdClkVolt = gpuInfo.path().sys / "pp_od_clk_voltage";
   auto kernel =
       Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
-  if (!((kernel >= std::make_tuple(4, 6, 0) && kernel < std::make_tuple(4, 8, 0)) ||
-        (kernel >= std::make_tuple(4, 17, 0) &&
-         kernel < std::make_tuple(4, 18, 0)) ||
-        (kernel >= std::make_tuple(4, 18, 0) &&
-         !Utils::File::isSysFSEntryValid(ppOdClkVolt))))
+  if (kernel < std::make_tuple(4, 18, 0))
     return {};
 
   auto perfLevel = gpuInfo.path().sys / "power_dpm_force_performance_level";
@@ -76,6 +71,6 @@ AMD::PMFixedFreqAdvProvider::provideGPUControls(IGPUInfo const &gpuInfo,
   return controls;
 }
 
-bool const AMD::PMFixedFreqAdvProvider::registered_ =
-    AMD::PMAdvancedProvider::registerProvider(
-        std::make_unique<AMD::PMFixedFreqAdvProvider>());
+bool const AMD::PMFixedFreqPerfModeProvider::registered_ =
+    AMD::PMPerfModeProvider::registerProvider(
+        std::make_unique<AMD::PMFixedFreqPerfModeProvider>());

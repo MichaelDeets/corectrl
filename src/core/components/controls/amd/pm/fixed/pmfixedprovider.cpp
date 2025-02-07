@@ -5,7 +5,9 @@
 
 #include "../pmperfmodeprovider.h"
 #include "common/fileutils.h"
+#include "common/stringutils.h"
 #include "core/info/amd/gpuinfopm.h"
+#include "core/info/iswinfo.h"
 #include "core/sysfsdatasource.h"
 #include "pmfixedlegacy.h"
 #include "pmfixedr600.h"
@@ -15,13 +17,16 @@
 
 std::vector<std::unique_ptr<IControl>>
 AMD::PMFixedProvider::provideGPUControls(IGPUInfo const &gpuInfo,
-                                         ISWInfo const &) const
+                                         ISWInfo const &swInfo) const
 {
   std::vector<std::unique_ptr<IControl>> controls;
 
   if (gpuInfo.vendor() != Vendor::AMD)
     return {};
 
+  auto driver = gpuInfo.info(IGPUInfo::Keys::driver);
+  auto kernel =
+      Utils::String::parseVersion(swInfo.info(ISWInfo::Keys::kernelVersion));
   if (gpuInfo.hasCapability(GPUInfoPM::Legacy)) {
 
     auto powerMethod = gpuInfo.path().sys / "power_method";
@@ -35,7 +40,7 @@ AMD::PMFixedProvider::provideGPUControls(IGPUInfo const &gpuInfo,
         std::make_unique<SysFSDataSource<std::string>>(powerProfile)));
   }
   else if (gpuInfo.hasCapability(GPUInfoPM::Radeon) ||
-           gpuInfo.hasCapability(GPUInfoPM::Amdgpu)) {
+           (driver == "amdgpu" && kernel < std::make_tuple(4, 18, 0))) {
 
     auto perfLevel = gpuInfo.path().sys / "power_dpm_force_performance_level";
     if (!Utils::File::isSysFSEntryValid(perfLevel))

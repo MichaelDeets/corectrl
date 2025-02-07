@@ -384,7 +384,7 @@
     <message>
         <location filename="../core/components/controls/amd/pm/advanced/fixedfreq/pmfixedfreqqmlitem.cpp" line="17"/>
         <source>AMD_PM_FIXED_FREQ</source>
-        <translation>Fija</translation>
+        <translation>Fijo</translation>
     </message>
     <message>
         <location filename="../core/components/controls/amd/pm/advanced/dynamicfreq/pmdynamicfreqqmlitem.cpp" line="16"/>
