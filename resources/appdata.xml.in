@@ -5,6 +5,7 @@
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <name>@PROJECT_NAME@</name>
+  <launchable type="desktop-id">org.corectrl.CoreCtrl.desktop</launchable>
   <summary>A friendly hardware control</summary>
   <description>
     <p>CoreCtrl is a Free and Open Source GNU/Linux application that allows you
@@ -19,7 +20,10 @@
       <image>@PROJECT_HOMEPAGE_URL@/wikis/img/screenshot1.png</image>
     </screenshot>
   </screenshots>
-  <developer_name>Juan Palacios</developer_name>
+  <developer>
+    <name>Juan Palacios</name>
+  </developer>
+  <content_rating type="oars-1.1" />
   <url type="homepage">@PROJECT_HOMEPAGE_URL@</url>
   <url type="bugtracker">@PROJECT_HOMEPAGE_URL@/issues</url>
   <url type="translate">@PROJECT_HOMEPAGE_URL@/tree/master/src/translations</url>
