@@ -110,7 +110,6 @@ list(APPEND CONTROLS_SRC
   core/components/controls/amd/pm/advanced/dynamicfreq/pmdynamicfreqxmlparser.cpp
   core/components/controls/amd/pm/advanced/fixedfreq/pmfixedfreq.cpp
   core/components/controls/amd/pm/advanced/fixedfreq/pmfixedfreqprovider.cpp
-  core/components/controls/amd/pm/advanced/fixedfreq/pmfixedfreqperfmodeprovider.cpp
   core/components/controls/amd/pm/advanced/fixedfreq/pmfixedfreqprofilepart.cpp
   core/components/controls/amd/pm/advanced/fixedfreq/pmfixedfreqxmlparser.cpp
   core/components/controls/amd/pm/advanced/freqmode/pmfreqmodeprovider.cpp
