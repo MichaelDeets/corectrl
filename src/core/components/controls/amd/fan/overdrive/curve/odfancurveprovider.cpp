@@ -72,25 +72,31 @@ AMD::OdFanCurveProvider::createStopDataSource(IGPUInfo const &gpuInfo) const
     return {};
   }
 
+  std::optional<AMD::OdFanCurve::StopTemperatureDataSource> stopTempDataSource;
+
   auto tempPath = gpuInfo.path().sys / "gpu_od" / "fan_ctrl" /
                   "fan_zero_rpm_stop_temperature";
-  if (!Utils::File::isSysFSEntryValid(tempPath))
-    return {};
+  if (Utils::File::isSysFSEntryValid(tempPath)) {
 
-  data = Utils::File::readFileLines(tempPath);
-  auto tempRange = Utils::AMD::parseOverdriveFanStopTempRange(data);
-  if (!(Utils::AMD::parseOverdriveFanStopTemp(data) && tempRange)) {
-    SPDLOG_WARN("Unknown data format on {}", tempPath.string());
-    SPDLOG_DEBUG(data.front());
-    return {};
+    data = Utils::File::readFileLines(tempPath);
+    auto tempRange = Utils::AMD::parseOverdriveFanStopTempRange(data);
+
+    if (tempRange && Utils::AMD::parseOverdriveFanStopTemp(data)) {
+      stopTempDataSource = AMD::OdFanCurve::StopTemperatureDataSource{
+          std::make_unique<SysFSDataSource<std::vector<std::string>>>(
+              std::move(tempPath)),
+          std::move(*tempRange)};
+    }
+    else {
+      SPDLOG_WARN("Unknown data format on {}", tempPath.string());
+      SPDLOG_DEBUG(data.front());
+    }
   }
 
   return AMD::OdFanCurve::StopDataSource{
       std::make_unique<SysFSDataSource<std::vector<std::string>>>(
           std::move(stopPath)),
-      std::make_unique<SysFSDataSource<std::vector<std::string>>>(
-          std::move(tempPath)),
-      std::move(*tempRange)};
+      std::move(stopTempDataSource)};
 }
 
 bool const AMD::OdFanCurveProvider::registered_ =

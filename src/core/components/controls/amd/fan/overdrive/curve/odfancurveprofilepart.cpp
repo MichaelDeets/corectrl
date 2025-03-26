@@ -5,6 +5,7 @@
 
 #include "core/components/commonutils.h"
 #include "core/profilepartprovider.h"
+#include <algorithm>
 #include <memory>
 
 class AMD::OdFanCurveProfilePart::Initializer final
@@ -123,10 +124,11 @@ void AMD::OdFanCurveProfilePart::importProfilePart(IProfilePart::Importer &i)
   auto &importer = dynamic_cast<AMD::OdFanCurveProfilePart::Importer &>(i);
   curve(importer.provideFanCurve());
 
-  if (stop_) {
+  if (stop_)
     stop_ = importer.provideFanStop();
-    stopTemp_ = importer.provideFanStopTemp();
-  }
+
+  if (stopTemp_)
+    stopTemp(importer.provideFanStopTemp());
 }
 
 void AMD::OdFanCurveProfilePart::exportProfilePart(IProfilePart::Exporter &e) const
@@ -134,10 +136,11 @@ void AMD::OdFanCurveProfilePart::exportProfilePart(IProfilePart::Exporter &e) co
   auto &exporter = dynamic_cast<AMD::OdFanCurveProfilePart::Exporter &>(e);
   exporter.takeFanCurve(curve_);
 
-  if (stop_) {
+  if (stop_)
     exporter.takeFanStop(*stop_);
+
+  if (stopTemp_)
     exporter.takeFanStopTemp(*stopTemp_);
-  }
 }
 
 std::unique_ptr<IProfilePart> AMD::OdFanCurveProfilePart::cloneProfilePart() const
@@ -158,6 +161,11 @@ void AMD::OdFanCurveProfilePart::curve(
 {
   curve_ = curve;
   Utils::Common::normalizePoints(curve_, tempRange_, speedRange_);
+}
+
+void AMD::OdFanCurveProfilePart::stopTemp(units::temperature::celsius_t value)
+{
+  stopTemp_ = std::clamp(value, stopTempRange_->first, stopTempRange_->second);
 }
 
 bool const AMD::OdFanCurveProfilePart::registered_ =

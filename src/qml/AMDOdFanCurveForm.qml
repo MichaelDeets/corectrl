@@ -24,19 +24,22 @@ AMD_OD_FAN_CURVE {
                                qsTr("Speed"), "%", speedMin, speedMax)
   }
 
-  onStopAvailable: rlStop.visible = true
+  onStopAvailable: { p.showFanStopControl() }
+  onStopTempAvailable: { p.showFanStopTempControl() }
 
   onStopChanged: enabled => {
-    if (enabled)
-      p.showStopCurve()
-    else
-      p.hideStopCurve()
+    if (p.fanStopTempAvailable) {
+      if (enabled)
+        p.showStopCurve()
+      else
+        p.hideStopCurve()
+    }
 
     swStop.checked = enabled
   }
 
   onStopTempChanged: value => {
-    if (fanCurve.stop) {
+    if (p.fanStopTempAvailable && fanCurve.stop) {
       p.hideStopCurve()
       p.showStopCurve()
     }
@@ -46,6 +49,25 @@ AMD_OD_FAN_CURVE {
 
   QtObject { // private stuff
     id: p
+
+    property bool fanStopAvailable: false
+    property bool fanStopTempAvailable: false
+
+    function showFanStopControl() {
+      fanStopAvailable = true
+      rlStop.visible = fanStopAvailable
+      // The stop temperature input field is a child of rlStop and
+      // it will be set to visible automatically when rsStop is set
+      // to visible.
+      // Make sure that iStopTemp visible state is in sync with
+      // fanStopTempAvailable state.
+      iStopTemp.visible = fanStopTempAvailable
+    }
+
+    function showFanStopTempControl() {
+      fanStopTempAvailable = true
+      iStopTemp.visible = fanStopTempAvailable
+    }
 
     function hideStopCurve() {
       curveControl.removeCurve("stop")
@@ -111,7 +133,7 @@ AMD_OD_FAN_CURVE {
         }
 
         Label {
-          text: qsTr("Fan stop") + " (\u00B0C)"
+          text: qsTr("Fan stop") + (p.fanStopTempAvailable ? " (\u00B0C)" : "")
           enabled: swStop.checked
         }
 

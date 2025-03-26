@@ -34,11 +34,13 @@ void AMD::OdFanCurve::preInit(ICommandQueue &ctlCmds)
 
     preInitStop_ = Utils::AMD::parseOverdriveFanStop(dataSourceLines_).value();
 
-    if (!stopDataSource_->temperature->read(dataSourceLines_))
-      return;
+    if (stopDataSource_->stopTemp) {
+      if (!stopDataSource_->stopTemp->temperature->read(dataSourceLines_))
+        return;
 
-    preInitStopTemp_ =
-        Utils::AMD::parseOverdriveFanStopTemp(dataSourceLines_).value();
+      preInitStopTemp_ =
+          Utils::AMD::parseOverdriveFanStopTemp(dataSourceLines_).value();
+    }
   }
 
   addResetCmds(ctlCmds);
@@ -58,9 +60,12 @@ void AMD::OdFanCurve::postInit(ICommandQueue &ctlCmds)
     ctlCmds.add(
         {stopDataSource_->enable->source(), std::to_string(preInitStop_)});
     ctlCmds.add({stopDataSource_->enable->source(), "c"});
-    ctlCmds.add({stopDataSource_->temperature->source(),
-                 std::to_string(preInitStopTemp_.to<int>())});
-    ctlCmds.add({stopDataSource_->temperature->source(), "c"});
+
+    if (stopDataSource_->stopTemp) {
+      ctlCmds.add({stopDataSource_->stopTemp->temperature->source(),
+                   std::to_string(preInitStopTemp_.to<int>())});
+      ctlCmds.add({stopDataSource_->stopTemp->temperature->source(), "c"});
+    }
   }
 }
 
@@ -81,10 +86,11 @@ void AMD::OdFanCurve::init()
 
     stop_ = Utils::AMD::parseOverdriveFanStop(dataSourceLines_).value();
 
-    if (!stopDataSource_->temperature->read(dataSourceLines_))
-      return;
-
-    stopTemp_ = Utils::AMD::parseOverdriveFanStopTemp(dataSourceLines_).value();
+    if (stopDataSource_->stopTemp) {
+      if (!stopDataSource_->stopTemp->temperature->read(dataSourceLines_))
+        return;
+      stopTemp_ = Utils::AMD::parseOverdriveFanStopTemp(dataSourceLines_).value();
+    }
   }
 }
 
@@ -100,7 +106,9 @@ void AMD::OdFanCurve::importControl(IControl::Importer &i)
 
   if (stopDataSource_) {
     stop(fanCurveImporter.provideFanStop());
-    stopTemp(fanCurveImporter.provideFanStopTemp());
+
+    if (stopDataSource_->stopTemp)
+      stopTemp(fanCurveImporter.provideFanStopTemp());
   }
 }
 
@@ -112,8 +120,11 @@ void AMD::OdFanCurve::exportControl(IControl::Exporter &e) const
 
   if (stopDataSource_) {
     fanCurveExporter.takeFanStop(stop());
-    fanCurveExporter.takeFanStopTempRange(stopTempRange());
-    fanCurveExporter.takeFanStopTemp(stopTemp());
+
+    if (stopDataSource_->stopTemp) {
+      fanCurveExporter.takeFanStopTempRange(stopTempRange());
+      fanCurveExporter.takeFanStopTemp(stopTemp());
+    }
   }
 }
 
@@ -135,9 +146,12 @@ void AMD::OdFanCurve::syncControl(ICommandQueue &ctlCmds)
       return;
     auto stop = Utils::AMD::parseOverdriveFanStop(dataSourceLines_).value();
 
-    if (!stopDataSource_->temperature->read(dataSourceLines_))
-      return;
-    auto temp = Utils::AMD::parseOverdriveFanStopTemp(dataSourceLines_).value();
+    std::optional<units::temperature::celsius_t> temp;
+    if (stopDataSource_->stopTemp) {
+      if (!stopDataSource_->stopTemp->temperature->read(dataSourceLines_))
+        return;
+      temp = Utils::AMD::parseOverdriveFanStopTemp(dataSourceLines_);
+    }
 
     outOfSync |= addStopSyncCmds(ctlCmds, stop, temp);
   }
@@ -277,7 +291,7 @@ void AMD::OdFanCurve::stopTemp(units::temperature::celsius_t value)
 
 AMD::OdFanCurve::TempRange const &AMD::OdFanCurve::stopTempRange() const
 {
-  return stopDataSource_->temperatureRange;
+  return stopDataSource_->stopTemp->range;
 }
 
 void AMD::OdFanCurve::normalizeCurve(
@@ -309,8 +323,9 @@ bool AMD::OdFanCurve::addCurveSyncCmds(ICommandQueue &ctlCmds,
   return commit;
 }
 
-bool AMD::OdFanCurve::addStopSyncCmds(ICommandQueue &ctlCmds, bool hwStop,
-                                      units::temperature::celsius_t hwTemp) const
+bool AMD::OdFanCurve::addStopSyncCmds(
+    ICommandQueue &ctlCmds, bool hwStop,
+    std::optional<units::temperature::celsius_t> hwTemp) const
 {
   bool sync = false;
 
@@ -320,10 +335,10 @@ bool AMD::OdFanCurve::addStopSyncCmds(ICommandQueue &ctlCmds, bool hwStop,
     sync |= true;
   }
 
-  if (stopTemp() != hwTemp) {
-    ctlCmds.add({stopDataSource_->temperature->source(),
+  if (stopDataSource_->stopTemp && hwTemp && stopTemp() != *hwTemp) {
+    ctlCmds.add({stopDataSource_->stopTemp->temperature->source(),
                  std::to_string(stopTemp().to<int>())});
-    ctlCmds.add({stopDataSource_->temperature->source(), "c"});
+    ctlCmds.add({stopDataSource_->stopTemp->temperature->source(), "c"});
     sync |= true;
   }
 
@@ -348,7 +363,10 @@ void AMD::OdFanCurve::addResetCmds(ICommandQueue &ctlCmds) const
   if (stopDataSource_) {
     ctlCmds.add({stopDataSource_->enable->source(), "r"});
     ctlCmds.add({stopDataSource_->enable->source(), "c"});
-    ctlCmds.add({stopDataSource_->temperature->source(), "r"});
-    ctlCmds.add({stopDataSource_->temperature->source(), "c"});
+
+    if (stopDataSource_->stopTemp) {
+      ctlCmds.add({stopDataSource_->stopTemp->temperature->source(), "r"});
+      ctlCmds.add({stopDataSource_->stopTemp->temperature->source(), "c"});
+    }
   }
 }

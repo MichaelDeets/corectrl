@@ -69,19 +69,20 @@ void AMD::OdFanCurveQMLItem::Initializer::takeFanCurveRange(
 
 void AMD::OdFanCurveQMLItem::Initializer::takeFanStop(bool enabled)
 {
+  outer_.notifyStopAvailable();
   outer_.takeFanStop(enabled);
 }
 
 void AMD::OdFanCurveQMLItem::Initializer::takeFanStopTemp(
     units::temperature::celsius_t value)
 {
+  outer_.notifyStopTempAvailable();
   outer_.takeFanStopTemp(value);
 }
 
 void AMD::OdFanCurveQMLItem::Initializer::takeFanStopTempRange(
-    AMD::OdFanCurve::TempRange value)
+    AMD::OdFanCurve::TempRange)
 {
-  outer_.stopTempRange(value);
 }
 
 AMD::OdFanCurveQMLItem::OdFanCurveQMLItem() noexcept
@@ -265,9 +266,14 @@ void AMD::OdFanCurveQMLItem::curveRange(AMD::OdFanCurve::TempRange temp,
   emit curveRangeChanged(minTemp_, maxTemp_, minSpeed_, maxSpeed_);
 }
 
-void AMD::OdFanCurveQMLItem::stopTempRange(AMD::OdFanCurve::TempRange)
+void AMD::OdFanCurveQMLItem::notifyStopAvailable()
 {
   emit stopAvailable();
+}
+
+void AMD::OdFanCurveQMLItem::notifyStopTempAvailable()
+{
+  emit stopTempAvailable();
 }
 
 bool AMD::OdFanCurveQMLItem::register_()
