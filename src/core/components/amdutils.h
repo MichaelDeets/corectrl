@@ -147,6 +147,11 @@ parseOverdriveVoltCurveRange(std::vector<std::string> const &ppOdClkVoltageLines
 std::optional<units::voltage::millivolt_t>
 parseOverdriveVoltOffset(std::vector<std::string> const &ppOdClkVoltageLines);
 
+/// Returns voltage offset range. (6.14+)
+/// @param ppOdClkVoltageLines pp_od_clk_voltage data source contents
+std::optional<std::pair<units::voltage::millivolt_t, units::voltage::millivolt_t>>
+parseOverdriveVoltOffsetRange(std::vector<std::string> const &ppOdClkVoltageLines);
+
 /// Returns a list containing the name of the available CLK controls.
 /// @param ppOdClkVoltageLines pp_od_clk_voltage data source contents
 std::optional<std::vector<std::string>>

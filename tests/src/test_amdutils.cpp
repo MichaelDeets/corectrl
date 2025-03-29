@@ -663,6 +663,33 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
     }
   }
 
+  SECTION("parseOverdriveVoltOffsetRange")
+  {
+    // clang-format off
+    std::vector<std::string> input{"OD_RANGE:",
+                                   "VDDGFX_OFFSET:     -200mV       0mV"};
+    // clang-format on
+
+    SECTION("Returns minimum and maximum voltage offset")
+    {
+      auto values = ::Utils::AMD::parseOverdriveVoltOffsetRange(input);
+      REQUIRE(values.has_value());
+      REQUIRE(values->first == units::voltage::millivolt_t(-200));
+      REQUIRE(values->second == units::voltage::millivolt_t(0));
+    }
+
+    SECTION("Returns nothing when there is no OD_RANGE in input")
+    {
+      // clang-format off
+      std::vector<std::string> input{"OTHER:",
+                                     "VDDGFX_OFFSET:     -200mV       0mV"};
+      // clang-format on
+
+      auto empty = ::Utils::AMD::parseOverdriveVoltOffsetRange(input);
+      REQUIRE_FALSE(empty.has_value());
+    }
+  }
+
   SECTION("getOverdriveClkControlCmdId")
   {
     SECTION("Returns 's' command id for SCLK control")

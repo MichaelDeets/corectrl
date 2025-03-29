@@ -597,6 +597,55 @@ parseOverdriveVoltOffset(std::vector<std::string> const &ppOdClkVoltageLines)
   return {};
 }
 
+std::optional<std::pair<units::voltage::millivolt_t, units::voltage::millivolt_t>>
+parseOverdriveVoltOffsetRangeLine(std::string const &line)
+{
+  // Relevant lines format (kernel 6.14+):
+  // ...
+  // label:     -200mv          0mv
+  // ...
+  std::regex const regex(R"(^(?:[^\:\s]+)\s*:\s*(-?\d+)\s*mV\s*(\d+)\s*mV\s*$)",
+                         std::regex::icase);
+  std::smatch result;
+
+  if (std::regex_search(line, result, regex)) {
+    int min{0}, max{0};
+    if (Utils::String::toNumber<int>(min, result[1]) &&
+        Utils::String::toNumber<int>(max, result[2]))
+      return std::make_pair(units::make_unit<units::voltage::millivolt_t>(min),
+                            units::make_unit<units::voltage::millivolt_t>(max));
+  }
+
+  return {};
+}
+
+std::optional<std::pair<units::voltage::millivolt_t, units::voltage::millivolt_t>>
+parseOverdriveVoltOffsetRange(std::vector<std::string> const &ppOdClkVoltageLines)
+{
+  // Relevant lines format (kernel 6.14+):
+  // ...
+  // OD_RANGE:
+  // ...
+  // VDDGFX_OFFSET:     -200mv          0mv
+  // ...
+  auto rangeIt = std::find_if(
+      ppOdClkVoltageLines.cbegin(), ppOdClkVoltageLines.cend(),
+      [&](std::string const &line) {
+        return line.find("OD_RANGE:") != std::string::npos;
+      });
+  if (rangeIt != ppOdClkVoltageLines.cend()) {
+    auto targetIt = std::find_if(
+        rangeIt, ppOdClkVoltageLines.cend(), [&](std::string const &line) {
+          return line.find("VDDGFX_OFFSET:") != std::string::npos;
+        });
+
+    if (targetIt != ppOdClkVoltageLines.cend())
+      return parseOverdriveVoltOffsetRangeLine(*targetIt);
+  }
+
+  return {};
+}
+
 std::optional<std::vector<std::string>>
 parseOverdriveClkControls(std::vector<std::string> const &ppOdClkVoltageLines)
 {
