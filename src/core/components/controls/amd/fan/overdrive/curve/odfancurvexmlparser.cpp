@@ -136,10 +136,11 @@ void AMD::OdFanCurveXMLParser::appendTo(pugi::xml_node &parentNode)
     pointNode.append_attribute("speed") = std::lround(speed.to<double>() * 100);
   }
 
-  if (stopDefault_) {
+  if (stopDefault_)
     node.append_attribute("stop") = *stop_;
+
+  if (stopTempDefault_)
     node.append_attribute("stopTemp") = stopTemp_->to<int>();
-  }
 }
 
 void AMD::OdFanCurveXMLParser::resetAttributes()
@@ -182,11 +183,12 @@ void AMD::OdFanCurveXMLParser::loadPartFrom(pugi::xml_node const &parentNode)
       curve_ = curveDefault_;
   }
 
-  if (stopDefault_) {
+  if (stopDefault_)
     stop_ = node.attribute("stop").as_bool(*stopDefault_);
+
+  if (stopTempDefault_)
     stopTemp_ = units::temperature::celsius_t(
         node.attribute("stopTemp").as_int(stopTempDefault_->to<int>()));
-  }
 }
 
 bool const AMD::OdFanCurveXMLParser::registered_ =

@@ -147,6 +147,11 @@ parseOverdriveVoltCurveRange(std::vector<std::string> const &ppOdClkVoltageLines
 std::optional<units::voltage::millivolt_t>
 parseOverdriveVoltOffset(std::vector<std::string> const &ppOdClkVoltageLines);
 
+/// Returns voltage offset range. (6.14+)
+/// @param ppOdClkVoltageLines pp_od_clk_voltage data source contents
+std::optional<std::pair<units::voltage::millivolt_t, units::voltage::millivolt_t>>
+parseOverdriveVoltOffsetRange(std::vector<std::string> const &ppOdClkVoltageLines);
+
 /// Returns a list containing the name of the available CLK controls.
 /// @param ppOdClkVoltageLines pp_od_clk_voltage data source contents
 std::optional<std::vector<std::string>>
@@ -157,6 +162,30 @@ parseOverdriveClkControls(std::vector<std::string> const &ppOdClkVoltageLines);
 /// @returns commit command id
 std::optional<std::string>
 getOverdriveClkControlCmdId(std::string_view controlName);
+
+/// Translates a CLK offset control name to the control commit command id.
+/// @param controlName name of the control
+/// @returns commit command id
+std::optional<std::string>
+getOverdriveClkOffsetControlCmdId(std::string_view controlName);
+
+/// Returns a list containing the name of the available CLK offset controls (6.14+).
+/// @param ppOdClkVoltageLines pp_od_clk_voltage data source contents
+std::optional<std::vector<std::string>> parseOverdriveClkOffsetControls(
+    std::vector<std::string> const &ppOdClkVoltageLines);
+
+/// Returns the frequency offset value of a control. (6.14+)
+/// @param controlName name of the control
+/// @param ppOdClkVoltageLines pp_od_clk_voltage data source contents
+std::optional<units::frequency::megahertz_t>
+parseOverdriveClkOffset(std::string_view controlName,
+                        std::vector<std::string> const &ppOdClkVoltageLines);
+
+/// Returns the frequency offset range of a control. (6.14+)
+/// @param ppOdClkVoltageLines pp_od_clk_voltage data source contents
+std::optional<std::pair<units::frequency::megahertz_t, units::frequency::megahertz_t>>
+parseOverdriveClkOffsetRange(std::string_view controlName,
+                             std::vector<std::string> const &ppOdClkVoltageLines);
 
 /// Returns a list containing the indices of all out of range states present on
 /// pp_od_clk_voltage for the given control name.
@@ -218,6 +247,9 @@ bool hasOverdriveClkVoltControl(std::vector<std::string> const &data);
 
 /// Returns true when overdrive clock control is available.
 bool hasOverdriveClkControl(std::vector<std::string> const &data);
+
+/// Returns true when overdrive clock offset control is available.
+bool hasOverdriveClkOffsetControl(std::vector<std::string> const &data);
 
 /// Returns true when overdrive voltage curve control is available.
 bool hasOverdriveVoltCurveControl(std::vector<std::string> const &data);

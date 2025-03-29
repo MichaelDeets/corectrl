@@ -57,6 +57,7 @@ class OdFanCurveProfilePart final
 
  private:
   void curve(std::vector<OdFanCurve::CurvePoint> const &points);
+  void stopTemp(units::temperature::celsius_t value);
 
   class Initializer;
 

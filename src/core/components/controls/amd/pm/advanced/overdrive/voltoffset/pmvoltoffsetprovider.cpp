@@ -33,8 +33,14 @@ AMD::PMVoltOffsetProvider::provideGPUControls(IGPUInfo const &gpuInfo,
     return {};
   }
 
+  auto range = Utils::AMD::parseOverdriveVoltOffsetRange(ppOdClkVoltLines);
+  if (!range)
+    range = std::make_pair(units::voltage::millivolt_t(-250),
+                           units::voltage::millivolt_t(250));
+
   std::vector<std::unique_ptr<IControl>> controls;
   controls.emplace_back(std::make_unique<AMD::PMVoltOffset>(
+      std::move(*range),
       std::make_unique<SysFSDataSource<std::vector<std::string>>>(ppOdClkVolt)));
 
   return controls;

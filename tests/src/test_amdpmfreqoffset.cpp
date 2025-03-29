@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright 2021 Juan Palacios <jpalaciosdev@gmail.com>
+// Copyright 2025 Juan Palacios <jpalaciosdev@gmail.com>
 
 #include <catch2/catch_all.hpp>
 #include <catch2/trompeloeil.hpp>
@@ -7,30 +7,30 @@
 #include "common/commandqueuestub.h"
 #include "common/stringdatasourcestub.h"
 #include "common/vectorstringdatasourcestub.h"
-#include "core/components/controls/amd/pm/advanced/overdrive/voltoffset/pmvoltoffset.h"
+#include "core/components/controls/amd/pm/advanced/overdrive/freqoffset/pmfreqoffset.h"
 #include <units.h>
 
 extern template struct trompeloeil::reporter<trompeloeil::specialized>;
 
-namespace Tests::AMD::PMVoltOffset {
+namespace Tests::AMD::PMFreqOffset {
 
-class PMVoltOffsetTestAdapter : public ::AMD::PMVoltOffset
+class PMFreqOffsetTestAdapter : public ::AMD::PMFreqOffset
 {
  public:
-  using ::AMD::PMVoltOffset::PMVoltOffset;
+  using ::AMD::PMFreqOffset::PMFreqOffset;
 
-  using ::AMD::PMVoltOffset::cleanControl;
-  using ::AMD::PMVoltOffset::exportControl;
-  using ::AMD::PMVoltOffset::importControl;
-  using ::AMD::PMVoltOffset::range;
-  using ::AMD::PMVoltOffset::syncControl;
-  using ::AMD::PMVoltOffset::value;
+  using ::AMD::PMFreqOffset::cleanControl;
+  using ::AMD::PMFreqOffset::exportControl;
+  using ::AMD::PMFreqOffset::importControl;
+  using ::AMD::PMFreqOffset::offset;
+  using ::AMD::PMFreqOffset::range;
+  using ::AMD::PMFreqOffset::syncControl;
 };
 
-class PMVoltOffsetImporterStub final : public ::AMD::PMVoltOffset::Importer
+class PMFreqOffsetImporterStub final : public ::AMD::PMFreqOffset::Importer
 {
  public:
-  PMVoltOffsetImporterStub(units::voltage::millivolt_t const offset)
+  PMFreqOffsetImporterStub(units::frequency::megahertz_t const offset)
   : offset_(offset)
   {
   }
@@ -46,22 +46,24 @@ class PMVoltOffsetImporterStub final : public ::AMD::PMVoltOffset::Importer
     return false;
   }
 
-  units::voltage::millivolt_t providePMVoltOffsetValue() const override
+  units::frequency::megahertz_t providePMFreqOffsetValue() const override
   {
     return offset_;
   }
 
  private:
-  units::voltage::millivolt_t const offset_;
+  units::frequency::megahertz_t const offset_;
 };
 
-class PMVoltOffsetExporterMock : public ::AMD::PMVoltOffset::Exporter
+class PMFreqOffsetExporterMock : public ::AMD::PMFreqOffset::Exporter
 {
  public:
-  MAKE_MOCK2(takePMVoltOffsetRange,
-             void(units::voltage::millivolt_t, units::voltage::millivolt_t),
+  MAKE_MOCK1(takePMFreqOffsetControlName, void(std::string const &), override);
+  MAKE_MOCK2(takePMFreqOffsetRange,
+             void(units::frequency::megahertz_t, units::frequency::megahertz_t),
              override);
-  MAKE_MOCK1(takePMVoltOffsetValue, void(units::voltage::millivolt_t), override);
+  MAKE_MOCK1(takePMFreqOffsetValue, void(units::frequency::megahertz_t),
+             override);
 
   MAKE_MOCK1(takeActive, void(bool), override);
   MAKE_MOCK1(
@@ -70,40 +72,39 @@ class PMVoltOffsetExporterMock : public ::AMD::PMVoltOffset::Exporter
       override);
 };
 
-TEST_CASE("AMD PMVoltOffset tests",
-          "[GPU][AMD][PM][PMAdvanced][PMOverdrive][PMVoltOffset]")
+TEST_CASE("AMD PMFreqOffset tests",
+          "[GPU][AMD][PM][PMAdvanced][PMOverdrive][PMFreqOffset]")
 {
   // clang-format off
   std::vector<std::string> ppOdClkVoltageData {
-                             "OD_VDDGFX_OFFSET:",
-                             "0mV"};
-  // NOTE The voltage offset range can be exposed in pp_od_clk_voltage for certain
-  // hardware (Linux 6.14+, RX 9000) with the following format:
-  // OD_RANGE:
-  // VDDGFX_OFFSET:    -200mv          0mv
+                             "OD_SCLK_OFFSET:",
+                             "0Mhz",
+                             "OD_RANGE:",
+                             "SCLK_OFFSET:  -500Mhz   1000Mhz"};
   // clang-format on
-  ::AMD::PMVoltOffset::Range range{units::voltage::millivolt_t(-250),
-                                   units::voltage::millivolt_t(250)};
+  ::AMD::PMFreqOffset::Range range = std::make_pair(
+      units::make_unit<units::frequency::megahertz_t>(-500),
+      units::make_unit<units::frequency::megahertz_t>(1000));
 
   CommandQueueStub ctlCmds;
 
-  SECTION("Has PMVoltOffset ID")
+  SECTION("Has PMFreqOffset ID")
   {
-    PMVoltOffsetTestAdapter ts(std::move(range),
+    PMFreqOffsetTestAdapter ts("SCLK", "s", std::move(range),
                                std::make_unique<VectorStringDataSourceStub>());
-    REQUIRE(ts.ID() == ::AMD::PMVoltOffset::ItemID);
+    REQUIRE(ts.ID() == ::AMD::PMFreqOffset::ItemID);
   }
 
   SECTION("Is active by default")
   {
-    PMVoltOffsetTestAdapter ts(std::move(range),
+    PMFreqOffsetTestAdapter ts("SCLK", "s", std::move(range),
                                std::make_unique<VectorStringDataSourceStub>());
     REQUIRE(ts.active());
   }
 
   SECTION("Does not generate pre-init control commands")
   {
-    PMVoltOffsetTestAdapter ts(std::move(range),
+    PMFreqOffsetTestAdapter ts("SCLK", "s", std::move(range),
                                std::make_unique<VectorStringDataSourceStub>(
                                    "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.preInit(ctlCmds);
@@ -114,7 +115,7 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Generates post-init control commands")
   {
-    PMVoltOffsetTestAdapter ts(std::move(range),
+    PMFreqOffsetTestAdapter ts("SCLK", "s", std::move(range),
                                std::make_unique<VectorStringDataSourceStub>(
                                    "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.preInit(ctlCmds);
@@ -126,23 +127,22 @@ TEST_CASE("AMD PMVoltOffset tests",
 
     auto &[cmd0Path, cmd0Value] = commands.at(0);
     REQUIRE(cmd0Path == "pp_od_clk_voltage");
-    REQUIRE(cmd0Value == "vo 0");
+    REQUIRE(cmd0Value == "s 0");
   }
 
   SECTION("Initializes offset from pp_od_clk_voltage data source")
   {
-    PMVoltOffsetTestAdapter ts(std::move(range),
+    PMFreqOffsetTestAdapter ts("SCLK", "s", std::move(range),
                                std::make_unique<VectorStringDataSourceStub>(
                                    "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
 
-    auto offset = ts.value();
-    REQUIRE(offset == units::voltage::millivolt_t(0));
+    REQUIRE(ts.offset() == units::frequency::megahertz_t(0));
   }
 
   SECTION("Clamps offset value in range")
   {
-    PMVoltOffsetTestAdapter ts(std::move(range),
+    PMFreqOffsetTestAdapter ts("SCLK", "s", std::move(range),
                                std::make_unique<VectorStringDataSourceStub>(
                                    "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
@@ -150,32 +150,32 @@ TEST_CASE("AMD PMVoltOffset tests",
     auto range = ts.range();
 
     // min
-    ts.value(units::voltage::millivolt_t(-1) + range.first);
-    REQUIRE(ts.value() == range.first);
+    ts.offset(units::frequency::megahertz_t(-1) + range.first);
+    REQUIRE(ts.offset() == range.first);
 
     // max
-    ts.value(units::voltage::millivolt_t(1) + range.second);
-    REQUIRE(ts.value() == range.second);
+    ts.offset(units::frequency::megahertz_t(1) + range.second);
+    REQUIRE(ts.offset() == range.second);
   }
 
   SECTION("Imports its state")
   {
-    PMVoltOffsetTestAdapter ts(std::move(range),
+    PMFreqOffsetTestAdapter ts("SCLK", "s", std::move(range),
                                std::make_unique<VectorStringDataSourceStub>(
                                    "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
 
-    auto offset = units::voltage::millivolt_t(-20);
-    PMVoltOffsetImporterStub i(offset);
+    auto offset = units::frequency::megahertz_t(-20);
+    PMFreqOffsetImporterStub i(offset);
 
     ts.importControl(i);
 
-    REQUIRE(ts.value() == offset);
+    REQUIRE(ts.offset() == offset);
   }
 
   SECTION("Exports its state")
   {
-    PMVoltOffsetTestAdapter ts(std::move(range),
+    PMFreqOffsetTestAdapter ts("SCLK", "s", std::move(range),
                                std::make_unique<VectorStringDataSourceStub>(
                                    "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
@@ -183,11 +183,12 @@ TEST_CASE("AMD PMVoltOffset tests",
     auto range = ts.range();
 
     trompeloeil::sequence seq;
-    PMVoltOffsetExporterMock e;
-    REQUIRE_CALL(e, takePMVoltOffsetRange(trompeloeil::eq(range.first),
+    PMFreqOffsetExporterMock e;
+    REQUIRE_CALL(e, takePMFreqOffsetControlName("SCLK")).IN_SEQUENCE(seq);
+    REQUIRE_CALL(e, takePMFreqOffsetRange(trompeloeil::eq(range.first),
                                           trompeloeil::eq(range.second)))
         .IN_SEQUENCE(seq);
-    REQUIRE_CALL(e, takePMVoltOffsetValue(units::voltage::millivolt_t(0)))
+    REQUIRE_CALL(e, takePMFreqOffsetValue(units::frequency::megahertz_t(0)))
         .IN_SEQUENCE(seq);
 
     ts.exportControl(e);
@@ -195,7 +196,7 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Does not generate clean control commands")
   {
-    PMVoltOffsetTestAdapter ts(std::move(range),
+    PMFreqOffsetTestAdapter ts("SCLK", "s", std::move(range),
                                std::make_unique<VectorStringDataSourceStub>(
                                    "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
@@ -207,7 +208,7 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Does not generate sync control commands when is synced")
   {
-    PMVoltOffsetTestAdapter ts(std::move(range),
+    PMFreqOffsetTestAdapter ts("SCLK", "s", std::move(range),
                                std::make_unique<VectorStringDataSourceStub>(
                                    "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
@@ -218,12 +219,12 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Generates sync control commands when is out of sync")
   {
-    PMVoltOffsetTestAdapter ts(std::move(range),
+    PMFreqOffsetTestAdapter ts("SCLK", "s", std::move(range),
                                std::make_unique<VectorStringDataSourceStub>(
                                    "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
 
-    ts.value(units::voltage::millivolt_t(-20));
+    ts.offset(units::frequency::megahertz_t(-20));
     ts.syncControl(ctlCmds);
 
     auto &commands = ctlCmds.commands();
@@ -231,8 +232,8 @@ TEST_CASE("AMD PMVoltOffset tests",
 
     auto &[cmd0Path, cmd0Value] = commands.at(0);
     REQUIRE(cmd0Path == "pp_od_clk_voltage");
-    REQUIRE(cmd0Value == "vo -20");
+    REQUIRE(cmd0Value == "s -20");
   }
 }
 
-} // namespace Tests::AMD::PMVoltOffset
+} // namespace Tests::AMD::PMFreqOffset

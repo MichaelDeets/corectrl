@@ -56,11 +56,16 @@ class OdFanCurve : public Control
     SpeedRange speedRange;
   };
 
+  struct StopTemperatureDataSource
+  {
+    std::unique_ptr<IDataSource<std::vector<std::string>>> temperature;
+    TempRange range;
+  };
+
   struct StopDataSource
   {
     std::unique_ptr<IDataSource<std::vector<std::string>>> enable;
-    std::unique_ptr<IDataSource<std::vector<std::string>>> temperature;
-    TempRange temperatureRange;
+    std::optional<StopTemperatureDataSource> stopTemp;
   };
 
   OdFanCurve(CurveDataSource &&curveDataSource,
@@ -112,7 +117,7 @@ class OdFanCurve : public Control
   bool addCurveSyncCmds(ICommandQueue &ctlCmds,
                         std::vector<ControlPoint> &&curve) const;
   bool addStopSyncCmds(ICommandQueue &ctlCmds, bool hwStop,
-                       units::temperature::celsius_t hwTemp) const;
+                       std::optional<units::temperature::celsius_t> hwTemp) const;
   void addResetCmds(ICommandQueue &ctlCmds) const;
 
   std::string const id_;

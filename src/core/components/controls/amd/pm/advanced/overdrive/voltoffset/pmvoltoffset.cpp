@@ -9,13 +9,13 @@
 #include <utility>
 
 AMD::PMVoltOffset::PMVoltOffset(
+    AMD::PMVoltOffset::Range &&range,
     std::unique_ptr<IDataSource<std::vector<std::string>>>
         &&ppOdClkVoltDataSource) noexcept
 : Control(true)
 , id_(AMD::PMVoltOffset::ItemID)
 , ppOdClkVoltDataSource_(std::move(ppOdClkVoltDataSource))
-, range_(std::make_pair(units::voltage::millivolt_t(-250),
-                        units::voltage::millivolt_t(250)))
+, range_(std::move(range))
 {
 }
 

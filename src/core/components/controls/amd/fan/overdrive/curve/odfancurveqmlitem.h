@@ -34,6 +34,7 @@ class OdFanCurveQMLItem
   void curveRangeChanged(qreal tempMin, qreal tempMax, qreal speedMin,
                          qreal speedMax);
   void stopAvailable();
+  void stopTempAvailable();
   void stopChanged(bool enabled);
   void stopTempChanged(int value);
 
@@ -74,7 +75,8 @@ class OdFanCurveQMLItem
  private:
   void curveRange(AMD::OdFanCurve::TempRange temp,
                   AMD::OdFanCurve::SpeedRange speed);
-  void stopTempRange(AMD::OdFanCurve::TempRange value);
+  void notifyStopAvailable();
+  void notifyStopTempAvailable();
 
   class Initializer;
 

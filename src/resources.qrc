@@ -12,6 +12,7 @@
         <file>qml/CurveControl.qml</file>
         <file>qml/FVControl.qml</file>
         <file>qml/FreqStateControl.qml</file>
+        <file>qml/FreqOffsetControl.qml</file>
         <file>qml/SensorGraph.qml</file>
         <file>qml/ModeSelector.qml</file>
         <file>qml/SysModelForm.qml</file>
@@ -33,6 +34,7 @@
         <file>qml/AMDPMFreqRangeForm.qml</file>
         <file>qml/AMDPMVoltCurveForm.qml</file>
         <file>qml/AMDPMVoltOffsetForm.qml</file>
+        <file>qml/AMDPMFreqOffsetForm.qml</file>
         <file>qml/AMDPMPowerProfileForm.qml</file>
         <file>qml/AMDPMPowerStateForm.qml</file>
         <file>qml/AMDPMPowerStateModeForm.qml</file>

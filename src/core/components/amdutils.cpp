@@ -597,6 +597,55 @@ parseOverdriveVoltOffset(std::vector<std::string> const &ppOdClkVoltageLines)
   return {};
 }
 
+std::optional<std::pair<units::voltage::millivolt_t, units::voltage::millivolt_t>>
+parseOverdriveVoltOffsetRangeLine(std::string const &line)
+{
+  // Relevant lines format (kernel 6.14+):
+  // ...
+  // label:     -200mv          0mv
+  // ...
+  std::regex const regex(R"(^(?:[^\:\s]+)\s*:\s*(-?\d+)\s*mV\s*(\d+)\s*mV\s*$)",
+                         std::regex::icase);
+  std::smatch result;
+
+  if (std::regex_search(line, result, regex)) {
+    int min{0}, max{0};
+    if (Utils::String::toNumber<int>(min, result[1]) &&
+        Utils::String::toNumber<int>(max, result[2]))
+      return std::make_pair(units::make_unit<units::voltage::millivolt_t>(min),
+                            units::make_unit<units::voltage::millivolt_t>(max));
+  }
+
+  return {};
+}
+
+std::optional<std::pair<units::voltage::millivolt_t, units::voltage::millivolt_t>>
+parseOverdriveVoltOffsetRange(std::vector<std::string> const &ppOdClkVoltageLines)
+{
+  // Relevant lines format (kernel 6.14+):
+  // ...
+  // OD_RANGE:
+  // ...
+  // VDDGFX_OFFSET:     -200mv          0mv
+  // ...
+  auto rangeIt = std::find_if(
+      ppOdClkVoltageLines.cbegin(), ppOdClkVoltageLines.cend(),
+      [&](std::string const &line) {
+        return line.find("OD_RANGE:") != std::string::npos;
+      });
+  if (rangeIt != ppOdClkVoltageLines.cend()) {
+    auto targetIt = std::find_if(
+        rangeIt, ppOdClkVoltageLines.cend(), [&](std::string const &line) {
+          return line.find("VDDGFX_OFFSET:") != std::string::npos;
+        });
+
+    if (targetIt != ppOdClkVoltageLines.cend())
+      return parseOverdriveVoltOffsetRangeLine(*targetIt);
+  }
+
+  return {};
+}
+
 std::optional<std::vector<std::string>>
 parseOverdriveClkControls(std::vector<std::string> const &ppOdClkVoltageLines)
 {
@@ -625,6 +674,128 @@ getOverdriveClkControlCmdId(std::string_view controlName)
 
   if (nameCmdIdMap.count(controlName) > 0)
     return nameCmdIdMap.at(controlName);
+
+  return {};
+}
+
+std::optional<std::string>
+getOverdriveClkOffsetControlCmdId(std::string_view controlName)
+{
+  // NOTE: Clock offsets implementation uses the same command ids of clock
+  // control commands. This deviates from the voltage offset command, which is
+  // terminated by the 'o' character.
+  return getOverdriveClkControlCmdId(controlName);
+}
+
+std::optional<std::vector<std::string>> parseOverdriveClkOffsetControls(
+    std::vector<std::string> const &ppOdClkVoltageLines)
+{
+  std::regex const regex(R"(^OD_(\wCLK)_OFFSET:\s*$)", std::regex::icase);
+  std::vector<std::string> controlNames;
+
+  for (auto const &line : ppOdClkVoltageLines) {
+    std::smatch result;
+    if (!std::regex_search(line, result, regex))
+      continue;
+
+    controlNames.emplace_back(result[1]);
+  }
+
+  if (!controlNames.empty())
+    return controlNames;
+
+  return {};
+}
+
+std::optional<units::frequency::megahertz_t>
+parseOverdriveClkOffsetLine(std::string const &line)
+{
+  // Relevant lines format (kernel 6.14+):
+  // OD_SCLK_OFFSET:
+  // -200MHz
+  // ...
+  std::regex const regex(R"(^(-?\d+)\s*Mhz\s*$)", std::regex::icase);
+
+  std::smatch result;
+  if (std::regex_search(line, result, regex)) {
+    int value;
+    if (Utils::String::toNumber(value, result[1]))
+      return units::frequency::megahertz_t(value);
+  }
+
+  return {};
+}
+
+std::optional<units::frequency::megahertz_t>
+parseOverdriveClkOffset(std::string_view controlName,
+                        std::vector<std::string> const &ppOdClkVoltageLines)
+{
+  // Relevant lines format (kernel 6.14+):
+  // ...
+  // OD_controlName_OFFSET:
+  // -100Mhz
+  // OD_otherLbl:
+  // ...
+  auto targetIt = std::find_if(
+      ppOdClkVoltageLines.cbegin(), ppOdClkVoltageLines.cend(),
+      [&](std::string const &line) {
+        return line.find("OD_" + std::string(controlName) + "_OFFSET:") !=
+               std::string::npos;
+      });
+  if (targetIt != ppOdClkVoltageLines.cend() &&
+      std::next(targetIt) != ppOdClkVoltageLines.cend())
+    return parseOverdriveClkOffsetLine(*std::next(targetIt));
+
+  return {};
+}
+
+std::optional<std::pair<units::frequency::megahertz_t, units::frequency::megahertz_t>>
+parseOverdriveClkRangeLine(std::string const &line)
+{
+  // Relevant lines format (kernel 6.14+):
+  // ...
+  // label:     -500Mhz       1000Mhz
+  // ...
+  std::regex const regex(R"(^(?:[^\:\s]+)\s*:\s*(-?\d+)\s*Mhz\s*(\d+)\s*Mhz\s*$)",
+                         std::regex::icase);
+  std::smatch result;
+
+  if (std::regex_search(line, result, regex)) {
+    int min{0}, max{0};
+    if (Utils::String::toNumber<int>(min, result[1]) &&
+        Utils::String::toNumber<int>(max, result[2]))
+      return std::make_pair(units::make_unit<units::frequency::megahertz_t>(min),
+                            units::make_unit<units::frequency::megahertz_t>(max));
+  }
+
+  return {};
+}
+
+std::optional<std::pair<units::frequency::megahertz_t, units::frequency::megahertz_t>>
+parseOverdriveClkOffsetRange(std::string_view controlName,
+                             std::vector<std::string> const &ppOdClkVoltageLines)
+{
+  // Relevant lines format (kernel 6.14+):
+  // ...
+  // OD_RANGE:
+  // ...
+  // controlName_OFFSET:     -500Mhz       1000Mhz
+  // ...
+  auto rangeIt = std::find_if(
+      ppOdClkVoltageLines.cbegin(), ppOdClkVoltageLines.cend(),
+      [&](std::string const &line) {
+        return line.find("OD_RANGE:") != std::string::npos;
+      });
+  if (rangeIt != ppOdClkVoltageLines.cend()) {
+    auto targetIt = std::find_if(
+        rangeIt, ppOdClkVoltageLines.cend(), [&](std::string const &line) {
+          return line.find(std::string(controlName) + "_OFFSET:") !=
+                 std::string::npos;
+        });
+
+    if (targetIt != ppOdClkVoltageLines.cend())
+      return parseOverdriveClkRangeLine(*targetIt);
+  }
 
   return {};
 }
@@ -1009,6 +1180,24 @@ bool hasOverdriveClkControl(std::vector<std::string> const &data)
 
   if (clkIt != data.cend() && std::next(clkIt) != data.cend()) {
     auto state = parseOverdriveClksLine(*std::next(clkIt));
+    return state.has_value();
+  }
+
+  return false;
+}
+
+bool hasOverdriveClkOffsetControl(std::vector<std::string> const &data)
+{
+  std::regex const clkRegex(R"(^OD_\wCLK_OFFSET:)", std::regex::icase);
+  std::smatch result;
+
+  auto clkIt = std::find_if(data.cbegin(), data.cend(),
+                            [&](std::string const &line) {
+                              return std::regex_match(line, result, clkRegex);
+                            });
+
+  if (clkIt != data.cend() && std::next(clkIt) != data.cend()) {
+    auto state = parseOverdriveClkOffsetLine(*std::next(clkIt));
     return state.has_value();
   }
 

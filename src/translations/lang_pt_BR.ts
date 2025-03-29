@@ -20,6 +20,19 @@
     </message>
 </context>
 <context>
+    <name>AMD::PMFreqOffsetQMLItem</name>
+    <message>
+        <location filename="../core/components/controls/amd/pm/advanced/overdrive/freqoffset/pmfreqoffsetqmlitem.cpp" line="17"/>
+        <source>SCLK</source>
+        <translation>GPU</translation>
+    </message>
+    <message>
+        <location filename="../core/components/controls/amd/pm/advanced/overdrive/freqoffset/pmfreqoffsetqmlitem.cpp" line="18"/>
+        <source>MCLK</source>
+        <translation>Memória</translation>
+    </message>
+</context>
+<context>
     <name>AMD::PMFreqRangeQMLItem</name>
     <message>
         <location filename="../core/components/controls/amd/pm/advanced/overdrive/freqrange/pmfreqrangeqmlitem.cpp" line="20"/>
@@ -438,6 +451,14 @@
         <location filename="../qml/FVControl.qml" line="225"/>
         <source>Voltage</source>
         <translation>Voltagem</translation>
+    </message>
+</context>
+<context>
+    <name>FreqOffsetControl</name>
+    <message>
+        <location filename="../qml/FreqOffsetControl.qml" line="48"/>
+        <source>OFFSET</source>
+        <translation>DESVIO</translation>
     </message>
 </context>
 <context>
