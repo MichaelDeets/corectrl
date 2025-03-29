@@ -678,6 +678,100 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
     }
   }
 
+  SECTION("getOverdriveClkOffsetControlCmdId")
+  {
+    SECTION("Returns 's' command id for SCLK_OFFSET control")
+    {
+      auto cmdId = ::Utils::AMD::getOverdriveClkOffsetControlCmdId("SCLK");
+      REQUIRE(cmdId == "s");
+    }
+  }
+
+  SECTION("parseOverdriveClkOffsetControls")
+  {
+    SECTION("Returns available CLK_OFFSET controls")
+    {
+      // clang-format off
+      std::vector<std::string> input{"OD_SCLK_OFFSET:",
+                                     "..."};
+      // clang-format on
+
+      auto values = ::Utils::AMD::parseOverdriveClkOffsetControls(input);
+      REQUIRE(values.has_value());
+      REQUIRE(values->size() == 1);
+
+      REQUIRE(values->at(0) == "SCLK");
+    }
+
+    SECTION("Returns nothing when there is no available CLK controls")
+    {
+      std::vector<std::string> input{"OTHER_DATA"};
+
+      auto empty = ::Utils::AMD::parseOverdriveClkOffsetControls(input);
+      REQUIRE_FALSE(empty.has_value());
+    }
+  }
+
+  SECTION("parseOverdriveClkOffset")
+  {
+    // clang-format off
+    std::vector<std::string> input{"OD_SCLK_OFFSET:",
+                                   "-10MHz"};
+    // clang-format on
+
+    SECTION("Returns the offset control value")
+    {
+      auto value = ::Utils::AMD::parseOverdriveClkOffset("SCLK", input);
+      REQUIRE(value.has_value());
+      REQUIRE(*value == units::frequency::megahertz_t(-10));
+    }
+
+    SECTION("Returns nothing when there is no OD_controlName_OFFSET in input")
+    {
+      // clang-format off
+      std::vector<std::string> input{"OTHER:",
+                                     "300MHz",
+                                     "OD_MCLK:"};
+      // clang-format on
+
+      auto empty = ::Utils::AMD::parseOverdriveClkOffset("SCLK", input);
+      REQUIRE_FALSE(empty.has_value());
+    }
+  }
+
+  SECTION("parseOverdriveClkOffsetRange")
+  {
+    // clang-format off
+    std::vector<std::string> input{"OD_RANGE:",
+                                   "SCLK_OFFSET:     -500MHz       1000MHz"};
+    // clang-format on
+
+    SECTION("Returns minimum and maximum SCLK frequency offset")
+    {
+      auto values = ::Utils::AMD::parseOverdriveClkOffsetRange("SCLK", input);
+      REQUIRE(values.has_value());
+      REQUIRE(values->first == units::frequency::megahertz_t(-500));
+      REQUIRE(values->second == units::frequency::megahertz_t(1000));
+    }
+
+    SECTION("Returns nothing when there is no OD_RANGE in input")
+    {
+      // clang-format off
+      std::vector<std::string> input{"OTHER:",
+                                     "SCLK_OFFSET:     300MHz       2000MHz"};
+      // clang-format on
+
+      auto empty = ::Utils::AMD::parseOverdriveClkOffsetRange("SLCK", input);
+      REQUIRE_FALSE(empty.has_value());
+    }
+
+    SECTION("Returns nothing for unknown controls names")
+    {
+      auto empty = ::Utils::AMD::parseOverdriveClkOffsetRange("OTHER", input);
+      REQUIRE_FALSE(empty.has_value());
+    }
+  }
+
   SECTION("ppOdClkVoltageHasKnownFreqVoltQuirks")
   {
     SECTION("Pre-Vega20 missing range section")
@@ -1133,6 +1227,39 @@ TEST_CASE("AMD utils tests", "[Utils][AMD]")
 
       REQUIRE_FALSE(::Utils::AMD::hasOverdriveClkControl(otherClkControlData));
       REQUIRE_FALSE(::Utils::AMD::hasOverdriveClkControl(noClkControlData));
+    }
+  }
+
+  SECTION("hasOverdriveClkOffsetControl")
+  {
+    SECTION("Returns true when overdrive has clock offset controls")
+    {
+      // clang-format off
+      std::vector<std::string> negativeOffsetData{"OD_SCLK_OFFSET:",
+                                                  "-300Mhz"};
+      std::vector<std::string> zeroOffsetData{"OD_SCLK_OFFSET:",
+                                              "0Mhz"};
+      std::vector<std::string> positiveOffsetData{"OD_SCLK_OFFSET:",
+                                                  "1000Mhz"};
+      // clang-format on
+
+      REQUIRE(::Utils::AMD::hasOverdriveClkOffsetControl(negativeOffsetData));
+      REQUIRE(::Utils::AMD::hasOverdriveClkOffsetControl(zeroOffsetData));
+      REQUIRE(::Utils::AMD::hasOverdriveClkOffsetControl(positiveOffsetData));
+    }
+
+    SECTION("Returns false when overdrive has no clock offset controls")
+    {
+      // clang-format off
+      std::vector<std::string> otherClkOffsetControlData{"OD_SCLK:",
+                                                         "0: 300MHz 800mV"};
+      std::vector<std::string> noClkOffsetControlData{"OTHER_DATA"};
+      // clang-format on
+
+      REQUIRE_FALSE(
+          ::Utils::AMD::hasOverdriveClkOffsetControl(otherClkOffsetControlData));
+      REQUIRE_FALSE(
+          ::Utils::AMD::hasOverdriveClkOffsetControl(noClkOffsetControlData));
     }
   }
 
