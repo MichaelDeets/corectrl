@@ -77,25 +77,35 @@ TEST_CASE("AMD PMVoltOffset tests",
   std::vector<std::string> ppOdClkVoltageData {
                              "OD_VDDGFX_OFFSET:",
                              "0mV"};
+  // NOTE The voltage offset range can be exposed in pp_od_clk_voltage for certain
+  // hardware (Linux 6.14+, RX 9000) with the following format:
+  // OD_RANGE:
+  // VDDGFX_OFFSET:    -200mv          0mv
   // clang-format on
+  ::AMD::PMVoltOffset::Range range{units::voltage::millivolt_t(-250),
+                                   units::voltage::millivolt_t(250)};
+
   CommandQueueStub ctlCmds;
 
   SECTION("Has PMVoltOffset ID")
   {
-    PMVoltOffsetTestAdapter ts(std::make_unique<VectorStringDataSourceStub>());
+    PMVoltOffsetTestAdapter ts(std::move(range),
+                               std::make_unique<VectorStringDataSourceStub>());
     REQUIRE(ts.ID() == ::AMD::PMVoltOffset::ItemID);
   }
 
   SECTION("Is active by default")
   {
-    PMVoltOffsetTestAdapter ts(std::make_unique<VectorStringDataSourceStub>());
+    PMVoltOffsetTestAdapter ts(std::move(range),
+                               std::make_unique<VectorStringDataSourceStub>());
     REQUIRE(ts.active());
   }
 
   SECTION("Does not generate pre-init control commands")
   {
-    PMVoltOffsetTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "pp_od_clk_voltage", ppOdClkVoltageData));
+    PMVoltOffsetTestAdapter ts(std::move(range),
+                               std::make_unique<VectorStringDataSourceStub>(
+                                   "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.preInit(ctlCmds);
 
     auto &commands = ctlCmds.commands();
@@ -104,8 +114,9 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Generates post-init control commands")
   {
-    PMVoltOffsetTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "pp_od_clk_voltage", ppOdClkVoltageData));
+    PMVoltOffsetTestAdapter ts(std::move(range),
+                               std::make_unique<VectorStringDataSourceStub>(
+                                   "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.preInit(ctlCmds);
     ctlCmds.clear();
     ts.postInit(ctlCmds);
@@ -120,8 +131,9 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Initializes offset from pp_od_clk_voltage data source")
   {
-    PMVoltOffsetTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "pp_od_clk_voltage", ppOdClkVoltageData));
+    PMVoltOffsetTestAdapter ts(std::move(range),
+                               std::make_unique<VectorStringDataSourceStub>(
+                                   "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
 
     auto offset = ts.value();
@@ -130,8 +142,9 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Clamps offset value in range")
   {
-    PMVoltOffsetTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "pp_od_clk_voltage", ppOdClkVoltageData));
+    PMVoltOffsetTestAdapter ts(std::move(range),
+                               std::make_unique<VectorStringDataSourceStub>(
+                                   "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
 
     auto range = ts.range();
@@ -147,8 +160,9 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Imports its state")
   {
-    PMVoltOffsetTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "pp_od_clk_voltage", ppOdClkVoltageData));
+    PMVoltOffsetTestAdapter ts(std::move(range),
+                               std::make_unique<VectorStringDataSourceStub>(
+                                   "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
 
     auto offset = units::voltage::millivolt_t(-20);
@@ -161,8 +175,9 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Exports its state")
   {
-    PMVoltOffsetTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "pp_od_clk_voltage", ppOdClkVoltageData));
+    PMVoltOffsetTestAdapter ts(std::move(range),
+                               std::make_unique<VectorStringDataSourceStub>(
+                                   "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
 
     auto range = ts.range();
@@ -180,8 +195,9 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Does not generate clean control commands")
   {
-    PMVoltOffsetTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "pp_od_clk_voltage", ppOdClkVoltageData));
+    PMVoltOffsetTestAdapter ts(std::move(range),
+                               std::make_unique<VectorStringDataSourceStub>(
+                                   "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
     ts.cleanControl(ctlCmds);
 
@@ -191,8 +207,9 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Does not generate sync control commands when is synced")
   {
-    PMVoltOffsetTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "pp_od_clk_voltage", ppOdClkVoltageData));
+    PMVoltOffsetTestAdapter ts(std::move(range),
+                               std::make_unique<VectorStringDataSourceStub>(
+                                   "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
     ts.syncControl(ctlCmds);
 
@@ -201,8 +218,9 @@ TEST_CASE("AMD PMVoltOffset tests",
 
   SECTION("Generates sync control commands when is out of sync")
   {
-    PMVoltOffsetTestAdapter ts(std::make_unique<VectorStringDataSourceStub>(
-        "pp_od_clk_voltage", ppOdClkVoltageData));
+    PMVoltOffsetTestAdapter ts(std::move(range),
+                               std::make_unique<VectorStringDataSourceStub>(
+                                   "pp_od_clk_voltage", ppOdClkVoltageData));
     ts.init();
 
     ts.value(units::voltage::millivolt_t(-20));

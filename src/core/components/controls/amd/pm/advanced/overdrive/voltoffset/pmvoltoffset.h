@@ -20,6 +20,9 @@ class PMVoltOffset : public Control
  public:
   static constexpr std::string_view ItemID{"AMD_PM_VOLT_OFFSET"};
 
+  using Range =
+      std::pair<units::voltage::millivolt_t, units::voltage::millivolt_t>;
+
   class Importer : public IControl::Importer
   {
    public:
@@ -34,7 +37,8 @@ class PMVoltOffset : public Control
     virtual void takePMVoltOffsetValue(units::voltage::millivolt_t value) = 0;
   };
 
-  PMVoltOffset(std::unique_ptr<IDataSource<std::vector<std::string>>>
+  PMVoltOffset(AMD::PMVoltOffset::Range &&range,
+               std::unique_ptr<IDataSource<std::vector<std::string>>>
                    &&ppOdClkVoltDataSource) noexcept;
 
   void preInit(ICommandQueue &ctlCmds) final override;
@@ -66,7 +70,7 @@ class PMVoltOffset : public Control
 
   units::voltage::millivolt_t preInitOffset_;
   units::voltage::millivolt_t value_;
-  std::pair<units::voltage::millivolt_t, units::voltage::millivolt_t> const range_;
+  Range const range_;
 };
 
 } // namespace AMD
