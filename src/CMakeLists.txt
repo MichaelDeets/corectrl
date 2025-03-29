@@ -142,6 +142,10 @@ list(APPEND CONTROLS_SRC
   core/components/controls/amd/pm/advanced/overdrive/voltoffset/pmvoltoffsetprovider.cpp
   core/components/controls/amd/pm/advanced/overdrive/voltoffset/pmvoltoffsetprofilepart.cpp
   core/components/controls/amd/pm/advanced/overdrive/voltoffset/pmvoltoffsetxmlparser.cpp
+  core/components/controls/amd/pm/advanced/overdrive/freqoffset/pmfreqoffset.cpp
+  core/components/controls/amd/pm/advanced/overdrive/freqoffset/pmfreqoffsetprovider.cpp
+  core/components/controls/amd/pm/advanced/overdrive/freqoffset/pmfreqoffsetprofilepart.cpp
+  core/components/controls/amd/pm/advanced/overdrive/freqoffset/pmfreqoffsetxmlparser.cpp
   core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofile.cpp
   core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileprovider.cpp
   core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileprofilepart.cpp
@@ -254,6 +258,7 @@ list(APPEND UI_COMPONENTS_SRC
   core/components/controls/amd/pm/advanced/overdrive/freqrange/pmfreqrangeqmlitem.cpp
   core/components/controls/amd/pm/advanced/overdrive/voltcurve/pmvoltcurveqmlitem.cpp
   core/components/controls/amd/pm/advanced/overdrive/voltoffset/pmvoltoffsetqmlitem.cpp
+  core/components/controls/amd/pm/advanced/overdrive/freqoffset/pmfreqoffsetqmlitem.cpp
   core/components/controls/amd/pm/advanced/powerprofile/pmpowerprofileqmlitem.cpp
   core/components/controls/amd/pm/advanced/powercap/pmpowercapqmlitem.cpp
   core/components/controls/amd/pm/powerstate/pmpowerstateqmlitem.cpp
@@ -287,6 +292,7 @@ list (APPEND TRANSLATABLE_FILES
   qml/ProfileInfoDialog.qml
   qml/FVControl.qml
   qml/FreqStateControl.qml
+  qml/FreqOffsetControl.qml
   qml/Profiles.qml
   qml/System.qml
   qml/About.qml
@@ -310,6 +316,7 @@ list (APPEND TRANSLATABLE_FILES
   qml/AMDPMFreqRangeForm.qml
   qml/AMDPMVoltCurveForm.qml
   qml/AMDPMVoltOffsetForm.qml
+  qml/AMDPMFreqOffsetForm.qml
   qml/AMDPMFreqOdForm.qml
   qml/AMDPMPowerProfileForm.qml
   qml/AMDPMPowerCapForm.qml
