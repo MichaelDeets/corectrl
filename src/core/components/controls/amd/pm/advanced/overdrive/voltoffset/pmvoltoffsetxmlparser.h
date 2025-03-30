@@ -5,7 +5,6 @@
 
 #include "core/profilepartxmlparser.h"
 #include "pmvoltoffsetprofilepart.h"
-#include <string>
 
 namespace AMD {
 

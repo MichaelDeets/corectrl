@@ -6,7 +6,6 @@
 #include "core/qmlitem.h"
 #include "pmvoltoffsetprofilepart.h"
 #include <QObject>
-#include <string>
 
 namespace AMD {
 
@@ -46,8 +45,8 @@ class PMVoltOffsetQMLItem
               QQmlApplicationEngine &qmlEngine) override;
 
  private:
-  void takePMVoltOffsetRange(units::voltage::millivolt_t min,
-                             units::voltage::millivolt_t max);
+  void offsetRange(units::voltage::millivolt_t min,
+                   units::voltage::millivolt_t max);
 
   class Initializer;
 
