@@ -59,7 +59,7 @@ int App::exec(int argc, char **argv)
 
   QApplication app(argc, argv);
 
-  int const minHelperTimeout = helperControl_->minExitTimeout().to<int>();
+  int const minHelperTimeout = IHelperControl::MinExitTimeout::value().to<int>();
   int const helperTimeout{std::max(180000, // default helper timeout in milliseconds
                                    minHelperTimeout)};
   setupCmdParser(cmdParser_, minHelperTimeout, helperTimeout);
@@ -97,7 +97,7 @@ int App::exec(int argc, char **argv)
     if (cmdParser_.isSet("helper-timeout") &&
         Utils::String::toNumber<int>(
             timeoutValue, cmdParser_.value("helper-timeout").toStdString())) {
-      timeoutValue = std::max(helperControl_->minExitTimeout().to<int>(),
+      timeoutValue = std::max(IHelperControl::MinExitTimeout::value().to<int>(),
                               timeoutValue);
     }
 
