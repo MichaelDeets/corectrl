@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
-#include "appfactory.h"
+#include "corefactory.h"
 
-#include "app.h"
 #include "common/cryptolayer.h"
 #include "config.h"
 #include "core/ccpro/ccproparser.h"
@@ -47,15 +46,14 @@
 
 namespace fs = std::filesystem;
 
-AppFactory::AppFactory() noexcept
+CoreFactory::CoreFactory() noexcept
 : gpuVendors_{Vendor::AMD}
 {
 }
 
-std::unique_ptr<App> AppFactory::build() const
+std::optional<CoreFactory::Components> CoreFactory::build(std::string &&appName) const
 {
   try {
-    std::string appName(App::Name);
     std::transform(appName.cbegin(), appName.cend(), appName.begin(), ::tolower);
 
     auto [config, cache] = standardDirectories();
@@ -86,7 +84,7 @@ std::unique_ptr<App> AppFactory::build() const
     auto profileParser = parserFactory.build(*defaultProfile);
     auto profileFileParser = std::make_unique<CCPROParser>();
     auto iconCache = std::make_unique<ProfileIconCache>(
-        std::make_unique<FileCache>(cache / appName / "icons"));
+        std::make_unique<FileCache>(cache / "icons"));
     auto profileManager = std::make_unique<ProfileManager>(
         std::move(defaultProfile),
         std::make_unique<ProfileStorage>(
@@ -103,20 +101,19 @@ std::unique_ptr<App> AppFactory::build() const
         std::make_unique<UIFactory>(std::make_unique<QMLComponentFactory>(
             std::make_unique<QMLComponentRegistry>()));
 
-    return std::make_unique<App>(std::move(helperControl),
-                                 std::move(sysModelSyncer), std::move(session),
-                                 std::move(uiFactory));
+    return Components{std::move(helperControl), std::move(sysModelSyncer),
+                      std::move(session), std::move(uiFactory)};
   }
   catch (std::exception const &e) {
-    SPDLOG_WARN("Cannot create main application");
+    SPDLOG_WARN("Cannot create core components");
     SPDLOG_WARN(e.what());
   }
 
-  return nullptr;
+  return {};
 }
 
 std::tuple<std::filesystem::path, std::filesystem::path>
-AppFactory::standardDirectories() const
+CoreFactory::standardDirectories() const
 {
   return {QStandardPaths::standardLocations(QStandardPaths::ConfigLocation)
               .first()
@@ -126,9 +123,9 @@ AppFactory::standardDirectories() const
               .toStdString()};
 }
 
-void AppFactory::createAppDirectories(std::string const &appDirectory,
-                                      std::filesystem::path const &config,
-                                      std::filesystem::path const &cache) const
+void CoreFactory::createAppDirectories(std::string const &appDirectory,
+                                       std::filesystem::path const &config,
+                                       std::filesystem::path const &cache) const
 {
   std::error_code ec;
   fs::perms dirPerms = fs::perms::owner_all | fs::perms::group_read |
@@ -167,16 +164,4 @@ void AppFactory::createAppDirectories(std::string const &appDirectory,
 
   if (!fs::is_directory(cache))
     throw std::runtime_error(std::format("{} is not a directory", cache.c_str()));
-
-  fs::path cacheApp = cache / appDirectory;
-  if (!fs::exists(cacheApp)) {
-    fs::create_directory(cacheApp);
-    fs::permissions(cacheApp, dirPerms, ec);
-    if (ec.value() != 0)
-      SPDLOG_DEBUG("Cannot set permissions for {}", cacheApp.c_str());
-  }
-
-  if (!fs::is_directory(cacheApp))
-    throw std::runtime_error(
-        std::format("{} is not a directory", cacheApp.c_str()));
 }

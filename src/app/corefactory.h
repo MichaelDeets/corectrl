@@ -6,18 +6,29 @@
 #include "core/info/vendor.h"
 #include <filesystem>
 #include <memory>
+#include <optional>
 #include <string>
 #include <tuple>
 #include <vector>
 
-class App;
+class IHelperControl;
+class ISysModelSyncer;
+class ISession;
+class IUIFactory;
 
-class AppFactory final
+class CoreFactory final
 {
  public:
-  AppFactory() noexcept;
+  struct Components
+  {
+    std::unique_ptr<IHelperControl> helperControl;
+    std::shared_ptr<ISysModelSyncer> sysSyncer;
+    std::unique_ptr<ISession> session;
+    std::unique_ptr<IUIFactory> uiFactory;
+  };
 
-  std::unique_ptr<App> build() const;
+  CoreFactory() noexcept;
+  std::optional<Components> build(std::string &&appName) const;
 
  private:
   std::tuple<std::filesystem::path, std::filesystem::path>

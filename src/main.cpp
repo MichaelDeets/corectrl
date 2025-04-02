@@ -2,7 +2,6 @@
 // Copyright 2019 Juan Palacios <jpalaciosdev@gmail.com>
 
 #include "app/app.h"
-#include "app/appfactory.h"
 #include "common/logger.h"
 #include <QCoreApplication>
 #include <signal.h>
@@ -41,10 +40,5 @@ int main(int argc, char **argv)
 
   catchUnixSignals({SIGQUIT, SIGINT, SIGTERM, SIGHUP});
 
-  AppFactory appFactory;
-  auto app = appFactory.build();
-  if (app != nullptr)
-    return app->exec(argc, argv);
-  else
-    return -1;
+  return App().exec(argc, argv);
 }

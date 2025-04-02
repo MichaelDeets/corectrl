@@ -19,8 +19,10 @@ class IHelperControl;
 class ISession;
 class ISysModelSyncer;
 class IUIFactory;
+class QApplication;
 class QQmlApplicationEngine;
 class QQuickWindow;
+class QTranslator;
 class Settings;
 class SysTray;
 
@@ -63,11 +65,7 @@ class App final : public QObject
   static constexpr std::string_view Fqdn{PROJECT_FQDN};
   static constexpr QRect DefaultWindowGeometry{0, 0, 970, 600};
 
-  App(std::unique_ptr<IHelperControl> &&helperControl,
-      std::shared_ptr<ISysModelSyncer> sysSyncer,
-      std::unique_ptr<ISession> &&session,
-      std::unique_ptr<IUIFactory> &&uiFactory) noexcept;
-
+  App() noexcept;
   ~App();
 
   int exec(int argc, char **argv);
@@ -81,10 +79,14 @@ class App final : public QObject
   void saveMainWindowGeometry();
 
  private:
-  void initSysTrayWindowState();
-  void setupCmdParser(QCommandLineParser &parser, int minHelperTimeout,
-                      int helperTimeout) const;
-  void buildUI(QQmlApplicationEngine &qmlEngine);
+  std::unique_ptr<QApplication> createApplication(int &argc, char **argv);
+  bool buildComponents(QQmlApplicationEngine &qmlEngine, int helperTimeout);
+  void buildUI(std::unique_ptr<IUIFactory> &&uiFactory,
+               QQmlApplicationEngine &qmlEngine);
+  void loadTranslation(QApplication &app, QTranslator &translator);
+  int helperTimeout(int defaultTimeout) const;
+  void setupCmdParser(QApplication &app, int defaultHelperTimeout);
+  void setupSysTrayWindowState();
   void setupMainWindowGeometry();
   void restoreMainWindowGeometry();
   bool handleManualProfileCmd();
@@ -98,7 +100,6 @@ class App final : public QObject
   std::unique_ptr<IHelperControl> helperControl_;
   std::shared_ptr<ISysModelSyncer> sysSyncer_;
   std::unique_ptr<ISession> session_;
-  std::unique_ptr<IUIFactory> uiFactory_;
   std::unique_ptr<Settings> settings_;
 
   bool noop_{false};
