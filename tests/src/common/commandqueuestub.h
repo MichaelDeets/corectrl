@@ -39,7 +39,7 @@ class CommandQueueStub final : public ICommandQueue
     commands_.clear();
   }
 
-  void logCommands() const
+  void logCommands() const override
   {
   }
 
