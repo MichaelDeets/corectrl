@@ -7,6 +7,7 @@
 #include "core/isession.h"
 #include "core/isysmodelsyncer.h"
 #include "core/iuifactory.h"
+#include "corefactory.h"
 #include "helper/ihelpercontrol.h"
 #include "settings.h"
 #include "systray.h"
@@ -29,17 +30,10 @@
 #include <QQmlDebuggingEnabler>
 #endif
 
-App::App(std::unique_ptr<IHelperControl> &&helperControl,
-         std::shared_ptr<ISysModelSyncer> sysSyncer,
-         std::unique_ptr<ISession> &&session,
-         std::unique_ptr<IUIFactory> &&uiFactory) noexcept
+App::App() noexcept
 : QObject()
 , appInfo_(App::Name, App::VersionStr)
 , singleInstance_(App::Name)
-, helperControl_(std::move(helperControl))
-, sysSyncer_(std::move(sysSyncer))
-, session_(std::move(session))
-, uiFactory_(std::move(uiFactory))
 {
 }
 
@@ -47,83 +41,37 @@ App::~App() = default;
 
 int App::exec(int argc, char **argv)
 {
-  QCoreApplication::setApplicationName(QString(App::Name.data()).toLower());
-  QCoreApplication::setApplicationVersion(App::VersionStr.data());
-  QGuiApplication::setDesktopFileName(QString(App::Fqdn.data()));
+  auto defaultHelperTimeout = std::max(
+      180000, // default helper timeout in milliseconds
+      IHelperControl::MinExitTimeout::value().to<int>());
 
-  // Ignore QT_STYLE_OVERRIDE. It breaks the qml theme.
-  if (qEnvironmentVariableIsSet("QT_STYLE_OVERRIDE")) {
-    SPDLOG_INFO("Ignoring QT_STYLE_OVERRIDE environment variable.");
-    qunsetenv("QT_STYLE_OVERRIDE");
-  }
-
-  QApplication app(argc, argv);
-
-  int const minHelperTimeout = helperControl_->minExitTimeout().to<int>();
-  int const helperTimeout{std::max(180000, // default helper timeout in milliseconds
-                                   minHelperTimeout)};
-  setupCmdParser(cmdParser_, minHelperTimeout, helperTimeout);
-  cmdParser_.process(app);
-
-  // exit if there is another instance running
-  if (!singleInstance_.mainInstance(app.arguments()))
-    return 0;
+  auto app = createApplication(argc, argv);
+  setupCmdParser(*app, defaultHelperTimeout);
 
   noop_ = cmdParser_.isSet("help") || cmdParser_.isSet("version");
   if (noop_)
     return 0;
 
-  QString lang = cmdParser_.isSet("lang") ? cmdParser_.value("lang")
-                                          : QLocale().system().name();
+  // Exit if there is another instance running.
+  if (!singleInstance_.mainInstance(app->arguments()))
+    return 0;
+
   QTranslator translator;
-  if (!translator.load(QStringLiteral(":/translations/lang_") + lang)) {
-    SPDLOG_INFO("No translation found for locale {}", lang.toStdString());
-    SPDLOG_INFO("Using en_EN translation.");
-    if (!translator.load(QStringLiteral(":/translations/lang_en_EN")))
-      SPDLOG_ERROR("Cannot load en_EN translation.");
-  }
-  app.installTranslator(&translator);
-  app.setWindowIcon(QIcon::fromTheme(QString(App::Name.data()).toLower()));
+  loadTranslation(*app, translator);
 
-  // Ensure that the application do not implicitly call to quit after closing
-  // the last window, which is not the desired behaviour when minimize to
-  // system tray is being used.
-  app.setQuitOnLastWindowClosed(false);
-
-  try {
-    settings_ = std::make_unique<Settings>(QString(App::Name.data()).toLower());
-
-    int timeoutValue = helperTimeout;
-    if (cmdParser_.isSet("helper-timeout") &&
-        Utils::String::toNumber<int>(
-            timeoutValue, cmdParser_.value("helper-timeout").toStdString())) {
-      timeoutValue = std::max(helperControl_->minExitTimeout().to<int>(),
-                              timeoutValue);
-    }
-
-    helperControl_->init(units::time::millisecond_t(timeoutValue));
-    sysSyncer_->init();
-    session_->init(sysSyncer_->sysModel());
-
-    QQmlApplicationEngine qmlEngine;
-    buildUI(qmlEngine);
-
-    // Load and apply stored settings
-    settings_->signalSettings();
-
-    initSysTrayWindowState();
-    handleManualProfileCmd();
-
-    return app.exec();
-  }
-  catch (std::exception const &e) {
-    SPDLOG_WARN(e.what());
-    SPDLOG_WARN("Initialization failed");
-    SPDLOG_WARN("Exiting...");
+  QQmlApplicationEngine qmlEngine;
+  bool logCommands = cmdParser_.isSet("enable-log-commands");
+  if (!buildComponents(qmlEngine, helperTimeout(defaultHelperTimeout),
+                       logCommands))
     return -1;
-  }
 
-  return 0;
+  // Load and apply stored settings.
+  settings_->signalSettings();
+
+  setupSysTrayWindowState();
+  handleManualProfileCmd();
+
+  return app->exec();
 }
 
 void App::exit()
@@ -158,6 +106,7 @@ void App::onNewInstance(QStringList args)
   cmdParser_.parse(args);
 
   bool runtimeCmds{false};
+  runtimeCmds |= handleLoggingCmds();
   runtimeCmds |= handleManualProfileCmd();
   runtimeCmds |= handleWindowVisibilityCmds();
 
@@ -178,27 +127,115 @@ void App::onSettingChanged(QString const &key, QVariant const &value)
   sysSyncer_->settingChanged(key, value);
 }
 
-void App::initSysTrayWindowState()
+std::unique_ptr<QApplication> App::createApplication(int &argc, char **argv)
 {
-  bool minimizeArgIsSet = cmdParser_.isSet("minimize-systray");
-  bool enableSysTray = settings_->getValue("sysTray", true).toBool();
+  // Ignore QT_STYLE_OVERRIDE. It breaks the QML theme.
+  if (qEnvironmentVariableIsSet("QT_STYLE_OVERRIDE")) {
+    SPDLOG_INFO("Ignoring QT_STYLE_OVERRIDE environment variable.");
+    qunsetenv("QT_STYLE_OVERRIDE");
+  }
 
-  if (minimizeArgIsSet || enableSysTray)
-    sysTray_->show();
+  QCoreApplication::setApplicationName(QString(App::Name.data()).toLower());
+  QCoreApplication::setApplicationVersion(App::VersionStr.data());
+  QGuiApplication::setDesktopFileName(QString(App::Fqdn.data()));
 
-  bool startOnSysTray = settings_->getValue("startOnSysTray", false).toBool();
-  bool showWindow = !minimizeArgIsSet && !(sysTray_->isAvailable() &&
-                                           enableSysTray && startOnSysTray);
+  auto app = std::make_unique<QApplication>(argc, argv);
+  app->setWindowIcon(QIcon::fromTheme(QString(App::Name.data()).toLower()));
 
-  showMainWindow(showWindow);
+  // Ensure that the application do not implicitly call to quit after closing
+  // the last window, which is not the desired behaviour when minimize to
+  // system tray is being used.
+  app->setQuitOnLastWindowClosed(false);
+
+  return app;
 }
 
-void App::setupCmdParser(QCommandLineParser &parser, int minHelperTimeout,
-                         int helperTimeout) const
+bool App::buildComponents(QQmlApplicationEngine &qmlEngine, int helperTimeout,
+                          bool logCommands)
 {
-  parser.addHelpOption();
-  parser.addVersionOption();
-  parser.addOptions({
+  try {
+    auto core = CoreFactory().build(std::string(App::Name), logCommands);
+    if (!core)
+      return false;
+
+    std::swap(helperControl_, core->helperControl);
+    std::swap(sysSyncer_, core->sysSyncer);
+    std::swap(session_, core->session);
+
+    settings_ = std::make_unique<Settings>(QString(App::Name.data()).toLower());
+
+    helperControl_->init(units::time::millisecond_t(helperTimeout));
+    sysSyncer_->init();
+    session_->init(sysSyncer_->sysModel());
+
+    buildUI(std::move(core->uiFactory), qmlEngine);
+  }
+  catch (std::exception const &e) {
+    SPDLOG_WARN(e.what());
+    SPDLOG_WARN("Initialization failed");
+    SPDLOG_WARN("Exiting...");
+    return false;
+  }
+
+  return true;
+}
+
+void App::buildUI(std::unique_ptr<IUIFactory> &&uiFactory,
+                  QQmlApplicationEngine &qmlEngine)
+{
+  qmlEngine.rootContext()->setContextProperty("appInfo", &appInfo_);
+  qmlEngine.rootContext()->setContextProperty("settings", &*settings_);
+
+  uiFactory->build(qmlEngine, sysSyncer_->sysModel(), *session_);
+
+  mainWindow_ = qobject_cast<QQuickWindow *>(qmlEngine.rootObjects().value(0));
+  setupMainWindowGeometry();
+
+  connect(&qmlEngine, &QQmlApplicationEngine::quit, QApplication::instance(),
+          &QApplication::quit);
+  connect(QApplication::instance(), &QApplication::aboutToQuit, this, &App::exit);
+  connect(&*settings_, &Settings::settingChanged, this, &App::onSettingChanged);
+  connect(&singleInstance_, &SingleInstance::newInstance, this,
+          &App::onNewInstance);
+
+  sysTray_ = new SysTray(&*session_, mainWindow_);
+  connect(sysTray_, &SysTray::quit, this, &QApplication::quit);
+  connect(sysTray_, &SysTray::activated, this, &App::onSysTrayActivated);
+  connect(sysTray_, &SysTray::showMainWindowToggled, this, &App::showMainWindow);
+  connect(mainWindow_, &QQuickWindow::visibleChanged, &*sysTray_,
+          &SysTray::onMainWindowVisibleChanged);
+  qmlEngine.rootContext()->setContextProperty("systemTray", sysTray_);
+}
+
+void App::loadTranslation(QApplication &app, QTranslator &translator)
+{
+  QString lang = cmdParser_.isSet("lang") ? cmdParser_.value("lang")
+                                          : QLocale().system().name();
+  if (!translator.load(QStringLiteral(":/translations/lang_") + lang)) {
+    SPDLOG_INFO("No translation found for locale {}", lang.toStdString());
+    SPDLOG_INFO("Using en_EN translation.");
+    if (!translator.load(QStringLiteral(":/translations/lang_en_EN")))
+      SPDLOG_ERROR("Cannot load en_EN translation.");
+  }
+  app.installTranslator(&translator);
+}
+
+int App::helperTimeout(int defaultTimeout) const
+{
+  int value = defaultTimeout;
+  if (cmdParser_.isSet("helper-timeout") &&
+      Utils::String::toNumber<int>(
+          value, cmdParser_.value("helper-timeout").toStdString())) {
+    value = std::max(IHelperControl::MinExitTimeout::value().to<int>(), value);
+  }
+  return value;
+}
+
+void App::setupCmdParser(QApplication &app, int defaultHelperTimeout)
+{
+  cmdParser_.addHelpOption();
+  cmdParser_.addVersionOption();
+  cmdParser_.addOptions({
       {{"l", "lang"},
        "Forces a specific <language>, given in locale format. Example: "
        "en_EN.",
@@ -226,40 +263,39 @@ void App::setupCmdParser(QCommandLineParser &parser, int minHelperTimeout,
        "Sets helper auto exit timeout. "
        "The helper process kills himself when no signals are received from "
        "the application before the timeout expires.\nValues lesser than " +
-           QString::number(minHelperTimeout) +
+           QString::number(IHelperControl::MinExitTimeout::value().to<int>()) +
            +" milliseconds will be ignored.\nDefault value: " +
-           QString::number(helperTimeout) + " milliseconds.",
+           QString::number(defaultHelperTimeout) + " milliseconds.",
        "milliseconds"},
       {"toggle-window-visibility",
        "When an instance of the application is already running, it will toggle "
        "the main window visibility showing or minimizing it, either to the "
        "taskbar or to system tray."},
+      {"enable-log-commands",
+       "Enables logging of control commands. It takes precedence over "
+       "disable-log-commands.\nIt can be used to activate commands logging on "
+       "a running instance of the application or while starting it."},
+      {"disable-log-commands",
+       "Disables logging of control commands.\nIt can be used to deactivate "
+       "commands logging on a running instance of the application or while "
+       "starting it (no-op)."},
   });
+  cmdParser_.process(app);
 }
 
-void App::buildUI(QQmlApplicationEngine &qmlEngine)
+void App::setupSysTrayWindowState()
 {
-  qmlEngine.rootContext()->setContextProperty("appInfo", &appInfo_);
-  qmlEngine.rootContext()->setContextProperty("settings", &*settings_);
+  bool minimizeArgIsSet = cmdParser_.isSet("minimize-systray");
+  bool enableSysTray = settings_->getValue("sysTray", true).toBool();
 
-  uiFactory_->build(qmlEngine, sysSyncer_->sysModel(), *session_);
-  mainWindow_ = qobject_cast<QQuickWindow *>(qmlEngine.rootObjects().value(0));
-  setupMainWindowGeometry();
+  if (minimizeArgIsSet || enableSysTray)
+    sysTray_->show();
 
-  connect(&qmlEngine, &QQmlApplicationEngine::quit, QApplication::instance(),
-          &QApplication::quit);
-  connect(QApplication::instance(), &QApplication::aboutToQuit, this, &App::exit);
-  connect(&*settings_, &Settings::settingChanged, this, &App::onSettingChanged);
-  connect(&singleInstance_, &SingleInstance::newInstance, this,
-          &App::onNewInstance);
+  bool startOnSysTray = settings_->getValue("startOnSysTray", false).toBool();
+  bool showWindow = !minimizeArgIsSet && !(sysTray_->isAvailable() &&
+                                           enableSysTray && startOnSysTray);
 
-  sysTray_ = new SysTray(&*session_, mainWindow_);
-  connect(sysTray_, &SysTray::quit, this, &QApplication::quit);
-  connect(sysTray_, &SysTray::activated, this, &App::onSysTrayActivated);
-  connect(sysTray_, &SysTray::showMainWindowToggled, this, &App::showMainWindow);
-  connect(mainWindow_, &QQuickWindow::visibleChanged, &*sysTray_,
-          &SysTray::onMainWindowVisibleChanged);
-  qmlEngine.rootContext()->setContextProperty("systemTray", sysTray_);
+  showMainWindow(showWindow);
 }
 
 void App::setupMainWindowGeometry()
@@ -334,6 +370,22 @@ void App::restoreMainWindowGeometry()
           .toInt();
 
   mainWindow_->setGeometry(x, y, width, height);
+}
+
+bool App::handleLoggingCmds()
+{
+  auto cmdHandled{false};
+
+  if (cmdParser_.isSet("enable-log-commands")) {
+    sysSyncer_->logCommands(true);
+    cmdHandled = true;
+  }
+  else if (cmdParser_.isSet("disable-log-commands")) {
+    sysSyncer_->logCommands(false);
+    cmdHandled = true;
+  }
+
+  return cmdHandled;
 }
 
 bool App::handleManualProfileCmd()

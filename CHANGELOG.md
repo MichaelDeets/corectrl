@@ -16,6 +16,8 @@ All notable changes to this project will be documented in this file.
 - New command line options:
   - `--activate-manual-profile`: activate the given manual profile (#448).
   - `--deactivate-manual-profile`: deactivate the given manual profile (#448).
+  - `--enable-log-commads`: enables logging of control commands (#348).
+  - `--disable-log-commads`: disables logging of control commands (#348).
 - Port to Qt 6 (#430).
 - More keywords in desktop entry (#453).
 - Georgian translation. Thanks to NorwayFun (!46).

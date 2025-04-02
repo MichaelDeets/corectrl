@@ -15,8 +15,10 @@
 #include <stdexcept>
 #include <utility>
 
-HelperSysCtl::HelperSysCtl(std::shared_ptr<ICryptoLayer> cryptoLayer) noexcept
+HelperSysCtl::HelperSysCtl(std::shared_ptr<ICryptoLayer> cryptoLayer,
+                           bool logCommands) noexcept
 : cryptoLayer_(std::move(cryptoLayer))
+, logCommands_(logCommands)
 {
 }
 
@@ -37,9 +39,17 @@ void HelperSysCtl::init()
 
 void HelperSysCtl::apply(ICommandQueue &ctlCmds)
 {
+  if (logCommands_)
+    ctlCmds.logCommands();
+
   auto data = ctlCmds.toRawData();
   if (!data.isEmpty()) {
     auto signature = cryptoLayer_->signature(data);
     sysCtlInterface_->asyncCall(QStringLiteral("apply"), data, signature);
   }
+}
+
+void HelperSysCtl::logCommands(bool enable)
+{
+  logCommands_ = enable;
 }

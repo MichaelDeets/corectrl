@@ -8,7 +8,7 @@
 class IHelperControl
 {
  public:
-  virtual units::time::millisecond_t minExitTimeout() const = 0;
+  using MinExitTimeout = units::unit_value_t<units::time::milliseconds, 1000>;
 
   virtual void init(units::time::millisecond_t autoExitTimeout) = 0;
   virtual void stop() = 0;

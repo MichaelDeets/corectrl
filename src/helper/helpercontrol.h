@@ -24,7 +24,6 @@ class HelperControl final
   HelperControl(std::shared_ptr<ICryptoLayer> cryptoLayer,
                 QObject *parent = nullptr) noexcept;
 
-  units::time::millisecond_t minExitTimeout() const override;
   void init(units::time::millisecond_t autoExitTimeout) override;
   void stop() override;
 

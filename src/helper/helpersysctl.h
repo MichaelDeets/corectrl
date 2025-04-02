@@ -12,12 +12,15 @@ class QDBusInterface;
 class HelperSysCtl final : public IHelperSysCtl
 {
  public:
-  HelperSysCtl(std::shared_ptr<ICryptoLayer> cryptoLayer) noexcept;
+  HelperSysCtl(std::shared_ptr<ICryptoLayer> cryptoLayer,
+               bool logCommands = false) noexcept;
 
   void init() override;
   void apply(ICommandQueue &ctlCmds) override;
+  void logCommands(bool enable) override;
 
  private:
   std::shared_ptr<ICryptoLayer> cryptoLayer_;
   std::unique_ptr<QDBusInterface> sysCtlInterface_;
+  bool logCommands_;
 };

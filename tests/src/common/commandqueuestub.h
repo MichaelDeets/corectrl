@@ -39,6 +39,10 @@ class CommandQueueStub final : public ICommandQueue
     commands_.clear();
   }
 
+  void logCommands() const
+  {
+  }
+
  private:
   std::vector<std::pair<std::string, std::string>> commands_;
 };

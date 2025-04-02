@@ -275,7 +275,7 @@ list(APPEND UI_COMPONENTS_SRC
 
 list(APPEND APP_SRC
   app/app.cpp
-  app/appfactory.cpp
+  app/corefactory.cpp
   app/settings.cpp
   app/singleinstance.cpp
   app/systray.cpp

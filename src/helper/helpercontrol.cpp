@@ -23,8 +23,8 @@ HelperControl::HelperControl(std::shared_ptr<ICryptoLayer> cryptoLayer,
                              QObject *parent) noexcept
 : QObject(parent)
 , cryptoLayer_(std::move(cryptoLayer))
-, autoExitTimeout_(minExitTimeout())
-, deferAutoExitSignalInterval_(minExitTimeout() * .667)
+, autoExitTimeout_(IHelperControl::MinExitTimeout::value())
+, deferAutoExitSignalInterval_(IHelperControl::MinExitTimeout::value() * .667)
 {
   connect(&deferHelperHealthCheckTimer_, &QTimer::timeout, this,
           &HelperControl::helperHealthCheckTimeout);
@@ -32,14 +32,10 @@ HelperControl::HelperControl(std::shared_ptr<ICryptoLayer> cryptoLayer,
           &HelperControl::helperExitDeferrerTimeout);
 }
 
-units::time::millisecond_t HelperControl::minExitTimeout() const
-{
-  return units::time::millisecond_t(1000);
-}
-
 void HelperControl::init(units::time::millisecond_t autoExitTimeout)
 {
-  autoExitTimeout_ = std::max(autoExitTimeout, minExitTimeout());
+  autoExitTimeout_ = std::max(autoExitTimeout,
+                              IHelperControl::MinExitTimeout::value());
   deferAutoExitSignalInterval_ = autoExitTimeout * .667;
 
   cryptoLayer_->init();
@@ -112,7 +108,8 @@ std::optional<QByteArray> HelperControl::startHelper()
       QStringLiteral("start"), cryptoLayer_->publicKey(),
       autoExitTimeout_.to<int>());
 
-  if (!(reply.isValid() && reply.value().variant().typeId() == QMetaType::QByteArray))
+  if (!(reply.isValid() &&
+        reply.value().variant().typeId() == QMetaType::QByteArray))
     return std::nullopt;
 
   deferHelperAutoExitSignalTimer_.setInterval(
