@@ -60,7 +60,9 @@ int App::exec(int argc, char **argv)
   loadTranslation(*app, translator);
 
   QQmlApplicationEngine qmlEngine;
-  if (!buildComponents(qmlEngine, helperTimeout(defaultHelperTimeout)))
+  bool logCommands = cmdParser_.isSet("enable-log-commands");
+  if (!buildComponents(qmlEngine, helperTimeout(defaultHelperTimeout),
+                       logCommands))
     return -1;
 
   // Load and apply stored settings.
@@ -104,6 +106,7 @@ void App::onNewInstance(QStringList args)
   cmdParser_.parse(args);
 
   bool runtimeCmds{false};
+  runtimeCmds |= handleLoggingCmds();
   runtimeCmds |= handleManualProfileCmd();
   runtimeCmds |= handleWindowVisibilityCmds();
 
@@ -147,10 +150,11 @@ std::unique_ptr<QApplication> App::createApplication(int &argc, char **argv)
   return app;
 }
 
-bool App::buildComponents(QQmlApplicationEngine &qmlEngine, int helperTimeout)
+bool App::buildComponents(QQmlApplicationEngine &qmlEngine, int helperTimeout,
+                          bool logCommands)
 {
   try {
-    auto core = CoreFactory().build(std::string(App::Name));
+    auto core = CoreFactory().build(std::string(App::Name), logCommands);
     if (!core)
       return false;
 
@@ -267,6 +271,14 @@ void App::setupCmdParser(QApplication &app, int defaultHelperTimeout)
        "When an instance of the application is already running, it will toggle "
        "the main window visibility showing or minimizing it, either to the "
        "taskbar or to system tray."},
+      {"enable-log-commands",
+       "Enables logging of control commands. It takes precedence over "
+       "disable-log-commands.\nIt can be used to activate commands logging on "
+       "a running instance of the application or while starting it."},
+      {"disable-log-commands",
+       "Disables logging of control commands.\nIt can be used to deactivate "
+       "commands logging on a running instance of the application or while "
+       "starting it (no-op)."},
   });
   cmdParser_.process(app);
 }
@@ -358,6 +370,22 @@ void App::restoreMainWindowGeometry()
           .toInt();
 
   mainWindow_->setGeometry(x, y, width, height);
+}
+
+bool App::handleLoggingCmds()
+{
+  auto cmdHandled{false};
+
+  if (cmdParser_.isSet("enable-log-commands")) {
+    sysSyncer_->logCommands(true);
+    cmdHandled = true;
+  }
+  else if (cmdParser_.isSet("disable-log-commands")) {
+    sysSyncer_->logCommands(false);
+    cmdHandled = true;
+  }
+
+  return cmdHandled;
 }
 
 bool App::handleManualProfileCmd()

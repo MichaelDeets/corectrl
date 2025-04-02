@@ -33,5 +33,8 @@ class ICommandQueue
   /// Transform all commands into raw data, cleaning the command queue.
   virtual QByteArray toRawData() = 0;
 
+  /// Write the queued commands to the log.
+  virtual void logCommands() const = 0;
+
   virtual ~ICommandQueue() = default;
 };

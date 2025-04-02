@@ -32,6 +32,7 @@ class SysModelSyncer final
 
   ISysModel &sysModel() const override;
   void settingChanged(QString const &key, QVariant const &value) override;
+  void logCommands(bool enable) override;
 
   void init() override;
   void stop() override;

@@ -5,8 +5,10 @@
 
 #include <QByteArray>
 #include <algorithm>
+#include <format>
 #include <iterator>
 #include <optional>
+#include <spdlog/spdlog.h>
 
 CommandQueue::CommandQueue() noexcept
 : packIndex_(std::nullopt)
@@ -80,6 +82,12 @@ QByteArray CommandQueue::toRawData()
   commands().clear();
   packIndex_ = std::nullopt;
   return data;
+}
+
+void CommandQueue::logCommands() const
+{
+  for (auto const &[path, value] : commands_)
+    SPDLOG_INFO("{}: {}", path, value);
 }
 
 std::vector<std::pair<std::string, std::string>> &CommandQueue::commands()

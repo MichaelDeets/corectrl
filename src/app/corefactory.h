@@ -28,7 +28,7 @@ class CoreFactory final
   };
 
   CoreFactory() noexcept;
-  std::optional<Components> build(std::string &&appName) const;
+  std::optional<Components> build(std::string &&appName, bool logCommands) const;
 
  private:
   std::tuple<std::filesystem::path, std::filesystem::path>

@@ -43,6 +43,11 @@ void SysModelSyncer::settingChanged(QString const &key, QVariant const &value)
   }
 }
 
+void SysModelSyncer::logCommands(bool enable)
+{
+  helperSysCtl_->logCommands(enable);
+}
+
 void SysModelSyncer::init()
 {
   helperSysCtl_->init();

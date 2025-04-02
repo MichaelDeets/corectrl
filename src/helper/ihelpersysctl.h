@@ -10,6 +10,7 @@ class IHelperSysCtl
  public:
   virtual void init() = 0;
   virtual void apply(ICommandQueue &ctlCmds) = 0;
+  virtual void logCommands(bool enabled) = 0;
 
   virtual ~IHelperSysCtl() = default;
 };

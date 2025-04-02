@@ -80,7 +80,8 @@ class App final : public QObject
 
  private:
   std::unique_ptr<QApplication> createApplication(int &argc, char **argv);
-  bool buildComponents(QQmlApplicationEngine &qmlEngine, int helperTimeout);
+  bool buildComponents(QQmlApplicationEngine &qmlEngine, int helperTimeout,
+                       bool logCommands);
   void buildUI(std::unique_ptr<IUIFactory> &&uiFactory,
                QQmlApplicationEngine &qmlEngine);
   void loadTranslation(QApplication &app, QTranslator &translator);
@@ -89,6 +90,7 @@ class App final : public QObject
   void setupSysTrayWindowState();
   void setupMainWindowGeometry();
   void restoreMainWindowGeometry();
+  bool handleLoggingCmds();
   bool handleManualProfileCmd();
   bool handleWindowVisibilityCmds();
 

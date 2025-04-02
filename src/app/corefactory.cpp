@@ -51,7 +51,8 @@ CoreFactory::CoreFactory() noexcept
 {
 }
 
-std::optional<CoreFactory::Components> CoreFactory::build(std::string &&appName) const
+std::optional<CoreFactory::Components> CoreFactory::build(std::string &&appName,
+                                                          bool logCommands) const
 {
   try {
     std::transform(appName.cbegin(), appName.cend(), appName.begin(), ::tolower);
@@ -92,7 +93,9 @@ std::optional<CoreFactory::Components> CoreFactory::build(std::string &&appName)
             std::move(profileFileParser), std::move(iconCache)));
 
     auto sysModelSyncer = std::make_shared<SysModelSyncer>(
-        std::move(sysModel), std::make_unique<HelperSysCtl>(cryptoLayer));
+        std::move(sysModel),
+        std::make_unique<HelperSysCtl>(cryptoLayer, logCommands));
+
     auto session = std::make_unique<Session>(
         sysModelSyncer, std::move(profileManager),
         std::make_unique<ProfileViewFactory>(),
