@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - Require Qt 6.8 or later.
 - Require Qt6LinguistTools.
 - Require QuaZip 1.0 or later (Qt 6 version).
-- Limit the creation of the fixed frequency control to hardware using the amdgpu driver on kernels earlier than version 4.17. This control will no longer be available under advanced performance mode when ppfeaturemask has not been set (#478).
+- Restrict the fixed frequency control to hardware running the amdgpu driver with Linux kernel versions 4.8 and later, but earlier than 4.17. This control will no longer be available by default under advanced performance mode when ppfeaturemask has not been set (#478).
 
 ### Added
 - Allow custom Polkit policy files install directory (#477).
