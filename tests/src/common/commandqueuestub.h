@@ -10,13 +10,9 @@
 class CommandQueueStub final : public ICommandQueue
 {
  public:
-  void pack(bool) override
+  bool hasCommandQueuedFor(std::string const &) override
   {
-  }
-
-  std::optional<bool> packWritesTo(std::string const &) override
-  {
-    return std::nullopt;
+    return false;
   }
 
   void add(std::pair<std::string, std::string> &&cmd) override

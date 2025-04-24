@@ -13,6 +13,10 @@ SysModelSyncer::SysModelSyncer(std::unique_ptr<ISysModel> &&sysModel,
                                std::unique_ptr<IHelperSysCtl> &&helperSysCtl) noexcept
 : sysModel_(std::move(sysModel))
 , helperSysCtl_(std::move(helperSysCtl))
+, cmds_({"pp_od_clk_voltage", "fan_curve", "fan_zero_rpm_enable",
+         "fan_zero_rpm_stop_temperature", "fan_target_temperature",
+         "fan_minimum_pwm", "acoustic_target_rpm_threshold",
+         "acoustic_limit_rpm_threshold"})
 {
 }
 

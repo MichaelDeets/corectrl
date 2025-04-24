@@ -14,16 +14,14 @@ class CommandQueueTestAdapter : public ::CommandQueue
   using ::CommandQueue::CommandQueue;
 
   using ::CommandQueue::add;
+  using ::CommandQueue::hasCommandQueuedFor;
   using ::CommandQueue::commands;
-  using ::CommandQueue::pack;
-  using ::CommandQueue::packIndex;
-  using ::CommandQueue::packWritesTo;
   using ::CommandQueue::toRawData;
 };
 
 TEST_CASE("CommandQueue tests", "[CommandQueue]")
 {
-  CommandQueueTestAdapter ts;
+  CommandQueueTestAdapter ts({"multi-cmd-file"});
 
   SECTION("Initially, is empty")
   {
@@ -38,96 +36,53 @@ TEST_CASE("CommandQueue tests", "[CommandQueue]")
       std::pair<std::string, std::string> cmd{"path", "value"};
       REQUIRE(ts.commands().front() == cmd);
 
-      SECTION("Adding a command already queued has no effect")
+      SECTION("Queuing an already queued command has no effect")
       {
         ts.add({"path", "value"});
 
         REQUIRE(ts.commands().size() == 1);
       }
 
-      SECTION("Command packing mode...")
+      SECTION("Queuing a command for a multi-command file inserts the command "
+              "just after the last queued command for that file")
       {
-        SECTION("Only has effect the first time it's activated")
-        {
-          REQUIRE_FALSE(ts.packIndex().has_value());
+        ts.add({"multi-cmd-file", "1"});
+        ts.add({"other", "value"});
+        ts.add({"multi-cmd-file", "2"});
 
-          ts.pack(true);
+        auto &commands = ts.commands();
+        REQUIRE(commands.size() == 4);
 
-          REQUIRE(ts.packIndex().has_value());
-          REQUIRE(*ts.packIndex() == 1);
-
-          ts.add({"path1", "value1"});
-
-          ts.pack(true);
-
-          REQUIRE(ts.packIndex().has_value());
-          REQUIRE(*ts.packIndex() == 1);
-        }
-
-        SECTION("Packs commands by file path")
-        {
-          ts.pack(true);
-          ts.add({"other_path", "other_value"});
-          ts.add({"path", "value1"});
-          ts.add({"other_path", "other_value1"});
-
-          auto commands = ts.commands();
-          REQUIRE(commands.size() == 4);
-
-          auto [path0, value0] = commands.at(0);
-          REQUIRE(path0 == "path");
-          REQUIRE(value0 == "value");
-
-          auto [path1, value1] = commands.at(1);
-          REQUIRE(path1 == "other_path");
-          REQUIRE(value1 == "other_value");
-
-          auto [path2, value2] = commands.at(2);
-          REQUIRE(path2 == "other_path");
-          REQUIRE(value2 == "other_value1");
-
-          auto [path3, value3] = commands.at(3);
-          REQUIRE(path3 == "path");
-          REQUIRE(value3 == "value1");
-
-          SECTION("Restores command queue behavior when it's deactivated")
-          {
-            ts.pack(false);
-            ts.add({"other_path", "other_value2"});
-
-            std::pair<std::string, std::string> last{"other_path",
-                                                     "other_value2"};
-            REQUIRE(ts.commands().back() == last);
-          }
-        }
+        REQUIRE(commands[0].first == "path");
+        REQUIRE(commands[0].second == "value");
+        REQUIRE(commands[1].first == "multi-cmd-file");
+        REQUIRE(commands[1].second == "1");
+        REQUIRE(commands[2].first == "multi-cmd-file");
+        REQUIRE(commands[2].second == "2");
+        REQUIRE(commands[3].first == "other");
+        REQUIRE(commands[3].second == "value");
       }
 
-      SECTION("Check if queued commands writes to a file...")
+      SECTION(
+          "Queuing a command for a non multi-command file removes the last "
+          "queued command for that file and inserts the new command at the end")
       {
-        SECTION("Returns nullopt when pack mode is not active")
-        {
-          REQUIRE(ts.packWritesTo("path") == std::nullopt);
-        }
+        ts.add({"other", "value"});
 
-        SECTION("Returns false when there is no queued command in the pack")
-        {
-          ts.pack(true);
-          ts.add({"other_path", "other_value"});
+        auto &commands = ts.commands();
+        REQUIRE(commands.size() == 2);
 
-          auto res = ts.packWritesTo("path");
-          REQUIRE(res.has_value());
-          REQUIRE_FALSE(*res);
-        }
+        REQUIRE(commands[0].first == "path");
+        REQUIRE(commands[0].second == "value");
+        REQUIRE(commands[1].first == "other");
+        REQUIRE(commands[1].second == "value");
 
-        SECTION("Returns true when there is a queued command in the pack")
-        {
-          ts.pack(true);
-          ts.add({"other_path", "other_value"});
+        ts.add({"path", "value1"});
 
-          auto res = ts.packWritesTo("other_path");
-          REQUIRE(res.has_value());
-          REQUIRE(*res);
-        }
+        REQUIRE(commands[0].first == "other");
+        REQUIRE(commands[0].second == "value");
+        REQUIRE(commands[1].first == "path");
+        REQUIRE(commands[1].second == "value1");
       }
 
       SECTION("Commands are transformed into raw data...")
@@ -139,14 +94,6 @@ TEST_CASE("CommandQueue tests", "[CommandQueue]")
         SECTION("The queue is cleared")
         {
           REQUIRE(ts.commands().size() == 0);
-        }
-
-        SECTION("Pack commands mode is deactivated")
-        {
-          ts.pack(true);
-          auto _ = ts.toRawData();
-
-          REQUIRE_FALSE(ts.packIndex().has_value());
         }
       }
     }

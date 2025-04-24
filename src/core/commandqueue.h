@@ -5,25 +5,23 @@
 
 #include "icommandqueue.h"
 #include <string>
-#include <utility>
+#include <unordered_set>
 #include <vector>
 
 class CommandQueue : public ICommandQueue
 {
  public:
-  CommandQueue() noexcept;
+  CommandQueue(std::unordered_set<std::string> &&multiCommandFiles = {}) noexcept;
 
-  void pack(bool activate) override;
-  std::optional<bool> packWritesTo(std::string const &file) override;
+  bool hasCommandQueuedFor(std::string const &file) override;
   void add(std::pair<std::string, std::string> &&cmd) override;
   QByteArray toRawData() override;
   void logCommands() const override;
 
  protected:
   std::vector<std::pair<std::string, std::string>> &commands();
-  std::optional<unsigned int> const &packIndex() const;
 
  private:
-  std::optional<unsigned int> packIndex_;
+  std::unordered_set<std::string> multiCommandFiles_;
   std::vector<std::pair<std::string, std::string>> commands_;
 };

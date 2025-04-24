@@ -61,15 +61,10 @@ void AMD::PMOverdrive::syncControl(ICommandQueue &ctlCmds)
     if (perfLevelEntry_ != "manual")
       ctlCmds.add({perfLevelDataSource_->source(), "manual"});
 
-    ctlCmds.pack(true);
-
     ControlGroup::syncControl(ctlCmds);
 
-    auto commit = ctlCmds.packWritesTo(ppOdClkVoltDataSource_->source());
-    if (commit.has_value() && *commit)
+    if (ctlCmds.hasCommandQueuedFor(ppOdClkVoltDataSource_->source()))
       ctlCmds.add({ppOdClkVoltDataSource_->source(), "c"});
-
-    ctlCmds.pack(false);
   }
 }
 
