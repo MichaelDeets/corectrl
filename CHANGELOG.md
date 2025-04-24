@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
   - `--deactivate-manual-profile`: deactivate the given manual profile (#448).
   - `--enable-log-commads`: enables logging of control commands (#348).
   - `--disable-log-commads`: disables logging of control commands (#348).
+  - `--enable-log-profile-stack`: enables logging of the profile stack (#249).
+  - `--disable-log-profile-stack`: disables logging of the profile stack (#249).
 - Port to Qt 6 (#430).
 - More keywords in desktop entry (#453).
 - Georgian translation. Thanks to NorwayFun (!46).

@@ -25,7 +25,8 @@ class Session final : public ISession
   Session(std::shared_ptr<IProfileApplicator> profileApplicator,
           std::unique_ptr<IProfileManager> &&profileManager,
           std::unique_ptr<IProfileViewFactory> &&profileViewFactory,
-          std::unique_ptr<IHelperMonitor> &&helperMonitor) noexcept;
+          std::unique_ptr<IHelperMonitor> &&helperMonitor,
+          bool logProfileStack = false) noexcept;
 
   void addManualProfileObserver(
       std::shared_ptr<ISession::ManualProfileObserver> observer) override;
@@ -37,6 +38,8 @@ class Session final : public ISession
   bool activateManualProfile(std::string const &profileName) override;
   bool deactivateManualProfile(std::string const &profileName) override;
   IProfileManager &profileManager() const override;
+
+  void logProfileStack(bool enable) override;
 
  private:
   void profileAdded(std::string const &profileName);
@@ -66,6 +69,8 @@ class Session final : public ISession
 
   void notifyManualProfileToggled(std::string const &profileName, bool active);
 
+  void logProfileStack() const;
+
   std::shared_ptr<IProfileApplicator> profileApplicator_;
   std::unique_ptr<IProfileManager> profileManager_;
   std::unique_ptr<IProfileViewFactory> profileViewFactory_;
@@ -90,4 +95,6 @@ class Session final : public ISession
 
   std::vector<std::shared_ptr<ISession::ManualProfileObserver>> manualProfileObservers_;
   std::mutex manualProfileObserversMutex_;
+
+  bool logProfileStack_;
 };

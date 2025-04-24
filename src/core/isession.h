@@ -31,5 +31,7 @@ class ISession
   virtual bool deactivateManualProfile(std::string const &profileName) = 0;
   virtual IProfileManager &profileManager() const = 0;
 
+  virtual void logProfileStack(bool enable) = 0;
+
   virtual ~ISession() = default;
 };

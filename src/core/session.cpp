@@ -9,7 +9,10 @@
 #include "iprofileview.h"
 #include "iprofileviewfactory.h"
 #include <algorithm>
+#include <format>
 #include <iterator>
+#include <spdlog/spdlog.h>
+#include <sstream>
 #include <utility>
 
 class Session::ProfileManagerObserver : public IProfileManager::Observer
@@ -92,7 +95,8 @@ void Session::HelperMonitorObserver::appExit(std::string appExe)
 Session::Session(std::shared_ptr<IProfileApplicator> profileApplicator,
                  std::unique_ptr<IProfileManager> &&profileManager,
                  std::unique_ptr<IProfileViewFactory> &&profileViewFactory,
-                 std::unique_ptr<IHelperMonitor> &&helperMonitor) noexcept
+                 std::unique_ptr<IHelperMonitor> &&helperMonitor,
+                 bool logProfileStack) noexcept
 : profileApplicator_(std::move(profileApplicator))
 , profileManager_(std::move(profileManager))
 , profileViewFactory_(std::move(profileViewFactory))
@@ -100,6 +104,7 @@ Session::Session(std::shared_ptr<IProfileApplicator> profileApplicator,
 , profileManagerObserver_(
       std::make_shared<Session::ProfileManagerObserver>(*this))
 , helperMonitorObserver_(std::make_shared<Session::HelperMonitorObserver>(*this))
+, logProfileStack_(logProfileStack)
 {
   profileManager_->addObserver(profileManagerObserver_);
   helperMonitor_->addObserver(helperMonitorObserver_);
@@ -132,6 +137,8 @@ void Session::init(ISysModel const &model)
 
   helperMonitor_->init();
   watchProfiles();
+
+  logProfileStack();
 }
 
 bool Session::toggleManualProfile(std::string const &profileName)
@@ -166,6 +173,8 @@ bool Session::toggleManualProfile(std::string const &profileName)
   // apply active profile view
   profileApplicator_->apply(*pViews_.back());
 
+  logProfileStack();
+
   return true;
 }
 
@@ -198,6 +207,8 @@ bool Session::activateManualProfile(std::string const &profileName)
   // apply active profile view
   profileApplicator_->apply(*pViews_.back());
 
+  logProfileStack();
+
   return true;
 }
 
@@ -223,12 +234,19 @@ bool Session::deactivateManualProfile(std::string const &profileName)
   // apply active profile view
   profileApplicator_->apply(*pViews_.back());
 
+  logProfileStack();
+
   return true;
 }
 
 IProfileManager &Session::profileManager() const
 {
   return *profileManager_;
+}
+
+void Session::logProfileStack(bool enable)
+{
+  logProfileStack_ = enable;
 }
 
 void Session::profileAdded(std::string const &profileName)
@@ -302,6 +320,8 @@ void Session::profileChanged(std::string const &profileName)
 
     // apply active profile view
     profileApplicator_->apply(*pViews_.back());
+
+    logProfileStack();
   }
 }
 
@@ -396,6 +416,8 @@ void Session::profileInfoChanged(IProfile::Info const &oldInfo,
         profileApplicator_->apply(*pViews_.back());
       }
     }
+
+    logProfileStack();
   }
 }
 
@@ -498,6 +520,8 @@ void Session::queueProfileView(std::string const &profileName)
 
   // apply active profile view
   profileApplicator_->apply(*pViews_.back());
+
+  logProfileStack();
 }
 
 void Session::dequeueProfileView(std::string const &profileName)
@@ -531,6 +555,8 @@ void Session::dequeueProfileView(std::string const &profileName)
 
     // apply active profile view
     profileApplicator_->apply(*pViews_.back());
+
+    logProfileStack();
   }
 }
 
@@ -540,4 +566,16 @@ void Session::notifyManualProfileToggled(std::string const &profileName,
   std::lock_guard<std::mutex> lock(manualProfileObserversMutex_);
   for (auto &o : manualProfileObservers_)
     o->toggled(profileName, active);
+}
+
+void Session::logProfileStack() const
+{
+  if (logProfileStack_) {
+
+    std::ostringstream os;
+    for (auto &view : pViews_)
+      os << std::format("> {} ", view->name());
+
+    SPDLOG_INFO("{}", os.str());
+  }
 }

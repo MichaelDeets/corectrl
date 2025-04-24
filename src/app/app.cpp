@@ -61,8 +61,9 @@ int App::exec(int argc, char **argv)
 
   QQmlApplicationEngine qmlEngine;
   bool logCommands = cmdParser_.isSet("enable-log-commands");
+  bool logProfileStack = cmdParser_.isSet("enable-log-profile-stack");
   if (!buildComponents(qmlEngine, helperTimeout(defaultHelperTimeout),
-                       logCommands))
+                       logCommands, logProfileStack))
     return -1;
 
   // Load and apply stored settings.
@@ -151,10 +152,11 @@ std::unique_ptr<QApplication> App::createApplication(int &argc, char **argv)
 }
 
 bool App::buildComponents(QQmlApplicationEngine &qmlEngine, int helperTimeout,
-                          bool logCommands)
+                          bool logCommands, bool logProfileStack)
 {
   try {
-    auto core = CoreFactory().build(std::string(App::Name), logCommands);
+    auto core = CoreFactory().build(std::string(App::Name), logCommands,
+                                    logProfileStack);
     if (!core)
       return false;
 
@@ -279,6 +281,15 @@ void App::setupCmdParser(QApplication &app, int defaultHelperTimeout)
        "Disables logging of control commands.\nIt can be used to deactivate "
        "commands logging on a running instance of the application or while "
        "starting it (no-op)."},
+      {"enable-log-profile-stack",
+       "Enables logging of the profile stack. It takes precedence over "
+       "disable-log-profile-stack.\nIt can be used to activate the profile "
+       "stack logging on a running instance of the application or while "
+       "starting it."},
+      {"disable-log-profile-stack",
+       "Disables logging of the profile stack.\nIt can be used to deactivate "
+       "the profile stack logging on a running instance of the application or "
+       "while starting it (no-op)."},
   });
   cmdParser_.process(app);
 }
@@ -382,6 +393,15 @@ bool App::handleLoggingCmds()
   }
   else if (cmdParser_.isSet("disable-log-commands")) {
     sysSyncer_->logCommands(false);
+    cmdHandled = true;
+  }
+
+  if (cmdParser_.isSet("enable-log-profile-stack")) {
+    session_->logProfileStack(true);
+    cmdHandled = true;
+  }
+  else if (cmdParser_.isSet("disable-log-profile-stack")) {
+    session_->logProfileStack(false);
     cmdHandled = true;
   }
 

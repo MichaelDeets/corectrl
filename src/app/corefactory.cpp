@@ -51,8 +51,9 @@ CoreFactory::CoreFactory() noexcept
 {
 }
 
-std::optional<CoreFactory::Components> CoreFactory::build(std::string &&appName,
-                                                          bool logCommands) const
+std::optional<CoreFactory::Components>
+CoreFactory::build(std::string &&appName, bool logCommands,
+                   bool logProfileStack) const
 {
   try {
     std::transform(appName.cbegin(), appName.cend(), appName.begin(), ::tolower);
@@ -99,7 +100,7 @@ std::optional<CoreFactory::Components> CoreFactory::build(std::string &&appName,
     auto session = std::make_unique<Session>(
         sysModelSyncer, std::move(profileManager),
         std::make_unique<ProfileViewFactory>(),
-        std::make_unique<HelperMonitor>(cryptoLayer));
+        std::make_unique<HelperMonitor>(cryptoLayer), logProfileStack);
     auto uiFactory =
         std::make_unique<UIFactory>(std::make_unique<QMLComponentFactory>(
             std::make_unique<QMLComponentRegistry>()));
