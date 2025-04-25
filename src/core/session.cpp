@@ -415,9 +415,9 @@ void Session::profileInfoChanged(IProfile::Info const &oldInfo,
         // apply active profile view
         profileApplicator_->apply(*pViews_.back());
       }
-    }
 
-    logProfileStack();
+      logProfileStack();
+    }
   }
 }
 
