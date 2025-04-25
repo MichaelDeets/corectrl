@@ -121,8 +121,8 @@ std::unique_ptr<Exportable::Exporter> AMD::PMVoltOffsetQMLItem::initializer(
       qmlComponentFactory, qmlEngine, *this);
 }
 
-void AMD::PMVoltOffsetQMLItem::offsetRange(
-    units::voltage::millivolt_t min, units::voltage::millivolt_t max)
+void AMD::PMVoltOffsetQMLItem::offsetRange(units::voltage::millivolt_t min,
+                                           units::voltage::millivolt_t max)
 {
   emit rangeChanged(min.to<int>(), max.to<int>());
 }

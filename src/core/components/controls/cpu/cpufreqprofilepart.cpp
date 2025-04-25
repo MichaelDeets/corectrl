@@ -27,8 +27,8 @@ class CPUFreqProfilePart::Initializer final : public CPUFreq::Exporter
   void
   takeCPUFreqScalingGovernors(std::vector<std::string> const &governors) override;
   void takeCPUFreqEPPHint(std::optional<std::string> const &hint) override;
-  void
-  takeCPUFreqEPPHints(std::optional<std::vector<std::string>> const &hints) override;
+  void takeCPUFreqEPPHints(
+      std::optional<std::vector<std::string>> const &hints) override;
 
  private:
   CPUFreqProfilePart &outer_;

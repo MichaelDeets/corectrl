@@ -14,8 +14,8 @@ class CommandQueueTestAdapter : public ::CommandQueue
   using ::CommandQueue::CommandQueue;
 
   using ::CommandQueue::add;
-  using ::CommandQueue::hasCommandQueuedFor;
   using ::CommandQueue::commands;
+  using ::CommandQueue::hasCommandQueuedFor;
   using ::CommandQueue::toRawData;
 };
 
