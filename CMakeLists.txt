@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(CoreCtrl HOMEPAGE_URL "https://gitlab.com/corectrl/corectrl")
 set(PROJECT_FQDN "org.corectrl.CoreCtrl")
-set(PROJECT_VERSION 1.5.0-dev)
+set(PROJECT_VERSION 1.5.0)
 
 include(GNUInstallDirs)
 

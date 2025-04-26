@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+
+## CoreCtrl 1.5.0 (2025-04-27)
+
 ### Changed
 - Require Qt 6.8 or later.
 - Require Qt6LinguistTools.
