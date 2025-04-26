@@ -466,6 +466,8 @@ void Session::createProfileViews(
     auto profile = profileManager_->profile(profileName);
     if (profile.has_value()) {
       auto profileView = profileViewFactory_->build(*profile, baseProfileView);
+      // use the new view as the base for the next profile view
+      baseProfileView = *profileView;
       pViews_.emplace_back(std::move(profileView));
     }
   }
