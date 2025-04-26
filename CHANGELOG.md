@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Incorrect settings being applied in certain situations when a manual profile is active.
 - Settings composition of active profiles with disabled components.
+- Fix appdata.xml warnings and errors.
 
 ### Changed
 - Require Qt 6.8 or later.
