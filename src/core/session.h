@@ -60,10 +60,6 @@ class Session final : public ISession
       std::optional<std::reference_wrapper<IProfileView>> baseProfileView,
       std::vector<std::string> const &profileNames);
 
-  std::optional<std::reference_wrapper<IProfileView>>
-  getBaseView(std::deque<std::unique_ptr<IProfileView>> const &pViews,
-              std::optional<std::string> const &manualProfile) const;
-
   void queueProfileView(std::string const &profileName);
   void dequeueProfileView(std::string const &profileName);
 

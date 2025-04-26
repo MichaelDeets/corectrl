@@ -150,9 +150,7 @@ bool Session::toggleManualProfile(std::string const &profileName)
   std::lock_guard<std::mutex> lock(pViewsMutex_);
   std::lock_guard<std::mutex> mLock(manualProfileMutex_);
 
-  auto baseView = getBaseView(pViews_, manualProfile_);
-
-  // remove profile view of the active manual profile
+  // remove the profile view of the current active manual profile
   if (manualProfile_.has_value()) {
     pViews_.pop_back();
     notifyManualProfileToggled(*manualProfile_, false);
@@ -166,7 +164,7 @@ bool Session::toggleManualProfile(std::string const &profileName)
 
   // create the profile view of the manual profile
   if (manualProfile_.has_value()) {
-    createProfileViews(baseView, {*manualProfile_});
+    createProfileViews(*pViews_.back(), {*manualProfile_});
     notifyManualProfileToggled(*manualProfile_, true);
   }
 
@@ -189,9 +187,8 @@ bool Session::activateManualProfile(std::string const &profileName)
     return true; // NOOP
 
   std::lock_guard<std::mutex> lock(pViewsMutex_);
-  auto baseView = getBaseView(pViews_, manualProfile_);
 
-  // remove profile view of the current active manual profile
+  // remove the profile view of the current active manual profile
   if (manualProfile_.has_value()) {
     pViews_.pop_back();
     notifyManualProfileToggled(*manualProfile_, false);
@@ -201,7 +198,7 @@ bool Session::activateManualProfile(std::string const &profileName)
   manualProfile_ = profileName;
 
   // create the profile view of the manual profile
-  createProfileViews(baseView, {*manualProfile_});
+  createProfileViews(*pViews_.back(), {*manualProfile_});
   notifyManualProfileToggled(*manualProfile_, true);
 
   // apply active profile view
@@ -313,10 +310,7 @@ void Session::profileChanged(std::string const &profileName)
     pViews_.erase(profileViewIter, pViews_.cend());
 
     // recreate the list of profile views
-    {
-      std::lock_guard<std::mutex> lock(manualProfileMutex_);
-      createProfileViews(getBaseView(pViews_, manualProfile_), pViewsToRecreate);
-    }
+    createProfileViews(*pViews_.back(), pViewsToRecreate);
 
     // apply active profile view
     profileApplicator_->apply(*pViews_.back());
@@ -406,11 +400,7 @@ void Session::profileInfoChanged(IProfile::Info const &oldInfo,
         pViews_.erase(profileViewIter, pViews_.cend());
 
         // recreate the list of profile views
-        {
-          std::lock_guard<std::mutex> lock(manualProfileMutex_);
-          createProfileViews(getBaseView(pViews_, manualProfile_),
-                             pViewsToRecreate);
-        }
+        createProfileViews(*pViews_.back(), pViewsToRecreate);
 
         // apply active profile view
         profileApplicator_->apply(*pViews_.back());
@@ -481,25 +471,6 @@ void Session::createProfileViews(
   }
 }
 
-std::optional<std::reference_wrapper<IProfileView>>
-Session::getBaseView(std::deque<std::unique_ptr<IProfileView>> const &pViews,
-                     std::optional<std::string> const &manualProfile) const
-{
-  std::optional<std::reference_wrapper<IProfileView>> base;
-
-  if (!pViews.empty()) {
-    if (!manualProfile.has_value())
-      base = *pViews.back();
-    else {
-      auto baseIt = std::next(pViews.rbegin());
-      if (baseIt != pViews.rend())
-        base = **baseIt;
-    }
-  }
-
-  return base;
-}
-
 void Session::queueProfileView(std::string const &profileName)
 {
   // compute a list of profile views to create including the profile
@@ -508,15 +479,13 @@ void Session::queueProfileView(std::string const &profileName)
   std::lock_guard<std::mutex> lock(pViewsMutex_);
   std::lock_guard<std::mutex> mLock(manualProfileMutex_);
 
-  auto baseView = getBaseView(pViews_, manualProfile_);
-
   // recreate active manual profile view
   if (manualProfile_.has_value()) {
     pViewsToRecreate.push_back(*manualProfile_);
     pViews_.pop_back();
   }
 
-  createProfileViews(baseView, pViewsToRecreate);
+  createProfileViews(*pViews_.back(), pViewsToRecreate);
 
   // apply active profile view
   profileApplicator_->apply(*pViews_.back());
@@ -544,14 +513,11 @@ void Session::dequeueProfileView(std::string const &profileName)
                      [](auto const &pv) { return pv->name(); });
     }
 
-    // remove profile view and the outdated profile views
+    // remove the profile view and the outdated profile views
     pViews_.erase(profileViewIter, pViews_.cend());
 
     // recreate the list of profile views
-    {
-      std::lock_guard<std::mutex> lock(manualProfileMutex_);
-      createProfileViews(getBaseView(pViews_, manualProfile_), pViewsToRecreate);
-    }
+    createProfileViews(*pViews_.back(), pViewsToRecreate);
 
     // apply active profile view
     profileApplicator_->apply(*pViews_.back());

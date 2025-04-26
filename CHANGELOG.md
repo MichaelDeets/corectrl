@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fixed
+- Incorrect settings being applied in certain situations when a manual profile is active.
+
 ### Changed
 - Require Qt 6.8 or later.
 - Require Qt6LinguistTools.
