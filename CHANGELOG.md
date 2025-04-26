@@ -3,11 +3,6 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-### Fixed
-- Incorrect settings being applied in certain situations when a manual profile is active.
-- Settings composition of active profiles with disabled components.
-- Fix appdata.xml warnings and errors.
-
 ### Changed
 - Require Qt 6.8 or later.
 - Require Qt6LinguistTools.
@@ -29,6 +24,14 @@ All notable changes to this project will be documented in this file.
 - More keywords in desktop entry (#453).
 - Georgian translation. Thanks to NorwayFun (!46).
 - Brazilian Portuguese translation. Thanks to Leal (!49).
+
+
+## CoreCtrl 1.4.4 (2025-04-27)
+
+### Fixed
+- Incorrect settings being applied in certain situations when a manual profile is active.
+- Settings composition of active profiles with disabled components.
+- Fix appdata.xml warnings and errors.
 
 
 ## CoreCtrl 1.4.3 (2024-11-16)
