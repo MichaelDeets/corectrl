@@ -5,7 +5,7 @@
 > [!note]
 > **CoreCtrl is in maintenance mode.** This means no new features or hardware support will be added, and development will focus solely on bug fixes and maintenance-related changes.
 >
-> It supports AMD GPUs up to the RX 9000 series, though some series may have limitations due to long-standing and unresolved driver or firmware issues (see [known issues wiki page](https://gitlab.com/corectrl/corectrl/-/wikis/Known-issues#amd-gpus)). Partial or full functionality on newer hardware is possible but not guaranteed. See [alternatives](README#alternatives) for applications with similar functionality.
+> It supports AMD GPUs up to the RX 9000 series, though some series may have limitations due to long-standing and unresolved driver or firmware issues (see [known issues wiki page](https://gitlab.com/corectrl/corectrl/-/wikis/Known-issues#amd-gpus)). Partial or full functionality on newer hardware is possible but not guaranteed. See [alternatives](#alternatives) for applications with similar functionality.
 
 **CoreCtrl** is a Free and Open Source GNU/Linux application that allows you to control with ease your computer hardware using application profiles. It aims to be flexible, comfortable and accessible to regular users.
 
