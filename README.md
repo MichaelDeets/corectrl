@@ -78,3 +78,9 @@ It's **strongly recommended** to [setup your system](https://gitlab.com/corectrl
 ## More info
 
 Check the [Wiki](https://gitlab.com/corectrl/corectrl/wikis/home) for more useful info.
+
+## Alternatives
+
+Here is a non-exhaustive list of alternative applications with similar functionality:
+- [LACT](https://github.com/ilya-zlobintsev/LACT)
+- [TuxClocker](https://github.com/Lurkki14/tuxclocker)
