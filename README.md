@@ -13,9 +13,9 @@ There are already others GNU/Linux applications that allow you to control your h
 
 All of this is perceived by regular users as a big burden or even a barrier that impedes them to migrate to GNU/Linux for some specific tasks (as gaming).
 
-**CoreCtrl** aims to be a game changer in this particular field. You can use it to automatically configure your system when a program is launched (works for Windows applications too). It doesn't matter what the program is, a game, a 3D modelling application, a video editor or... even a compiler! It offers you full hardware control per application.
+This program aims to be a game changer in this particular field. You can use it to automatically configure your system when a program is launched (works for Windows applications too). It doesn't matter what the program is, a game, a 3D modelling application, a video editor or... even a compiler! It offers you full hardware control per application.
 
-**CoreCtrl** works with Linux and Windows applications, has basic CPU controls and full AMD GPUs controls (for both old and new models up to RX 9000 series).
+It works with Linux and Windows applications, has basic CPU controls and full AMD GPUs controls (for both old and new models up to RX 9000 series).
 
 ## Installation
 
