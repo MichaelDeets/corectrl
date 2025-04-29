@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fixed
+- Application crashes when applying settings to the global profile while no other profiles are active.
+
 
 ## CoreCtrl 1.5.0 (2025-04-27)
 

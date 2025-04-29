@@ -310,7 +310,12 @@ void Session::profileChanged(std::string const &profileName)
     pViews_.erase(profileViewIter, pViews_.cend());
 
     // recreate the list of profile views
-    createProfileViews(*pViews_.back(), pViewsToRecreate);
+    createProfileViews(
+        pViews_.empty()
+            ? std::nullopt
+            : std::make_optional<std::reference_wrapper<IProfileView>>(
+                  *pViews_.back()),
+        pViewsToRecreate);
 
     // apply active profile view
     profileApplicator_->apply(*pViews_.back());
