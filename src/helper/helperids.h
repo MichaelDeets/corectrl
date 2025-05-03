@@ -4,12 +4,10 @@
 #pragma once
 
 // clang-format off
-#define POLKIT_HELPER_KILLER_ACTION   "org.corectrl.helperkiller.init"
 #define DBUS_HELPER_KILLER_SERVICE    "org.corectrl.helperkiller"
 #define DBUS_HELPER_KILLER_INTERFACE  "org.corectrl.helperkiller"
 #define DBUS_HELPER_KILLER_PATH       "/"
 
-#define POLKIT_HELPER_ACTION          "org.corectrl.helper.init"
 #define DBUS_HELPER_SERVICE           "org.corectrl.helper"
 #define DBUS_HELPER_INTERFACE         "org.corectrl.helper"
 #define DBUS_HELPER_PATH              "/Helper"

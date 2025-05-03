@@ -11,7 +11,6 @@
 #include "pmon/nlprocexecmonitor.h"
 #include "pmon/nlprocexecsocket.h"
 #include "pmon/procpidsolver.h"
-#include "polkit.h"
 #include "sysctl/msgreceiver.h"
 #include "sysctl/sysfswriter.h"
 #include <QByteArray>
@@ -77,13 +76,6 @@ void Helper::autoExitTimeout()
 {
   SPDLOG_WARN("Auto exit timeout. Killing helper instance...");
   exitHelper();
-}
-
-bool Helper::isAuthorized(QDBusMessage const &message) const
-{
-  auto subject = Polkit::BusNameSubject{message.service().toStdString()};
-  return Polkit::checkAuthorizationSync(POLKIT_HELPER_ACTION, subject) ==
-         Polkit::AuthResult::Yes;
 }
 
 bool Helper::initCrypto(QByteArray const &appPublicKey)

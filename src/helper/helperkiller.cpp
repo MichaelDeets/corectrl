@@ -4,7 +4,6 @@
 #include "helperkiller.h"
 
 #include "helperids.h"
-#include "polkit.h"
 #include <QCoreApplication>
 #include <QDBusConnection>
 #include <QDBusMessage>
@@ -46,13 +45,6 @@ bool HelperKiller::start(QDBusMessage const &message) const
   QTimer::singleShot(0, QCoreApplication::instance(), &QCoreApplication::quit);
 
   return result;
-}
-
-bool HelperKiller::isAuthorized(QDBusMessage const &message) const
-{
-  auto subject = Polkit::BusNameSubject{message.service().toStdString()};
-  return Polkit::checkAuthorizationSync(POLKIT_HELPER_KILLER_ACTION, subject) ==
-         Polkit::AuthResult::Yes;
 }
 
 bool initDBusForHelperKillerService(QObject *obj)
