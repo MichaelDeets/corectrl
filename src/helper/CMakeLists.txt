@@ -50,15 +50,11 @@ add_executable(corectrl_helperkiller
 )
 set(CMAKE_AUTOMOC OFF)
 
-target_include_directories(corectrl_helperkiller PRIVATE
-  ${POLKIT_INCLUDE_DIRS}
-)
 target_compile_definitions(corectrl_helperkiller PRIVATE ${HELPER_COMPILE_DEFINITIONS})
 target_link_libraries(corectrl_helperkiller PRIVATE
   Qt6::Core
   Qt6::DBus
   spdlog::spdlog
-  ${POLKIT_LIBRARIES}
   ${ATOMIC_LIB}
 )
 
@@ -66,7 +62,6 @@ configure_file(org.corectrl.helperkiller.service.in org.corectrl.helperkiller.se
 install(TARGETS corectrl_helperkiller DESTINATION "${CMAKE_INSTALL_FULL_LIBEXECDIR}/corectrl")
 install(FILES org.corectrl.helperkiller.conf DESTINATION "${DBUS_DATADIR_PREFIX_DIR}/dbus-1/system.d")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/org.corectrl.helperkiller.service" DESTINATION "${DBUS_DATADIR_PREFIX_DIR}/dbus-1/system-services")
-install(FILES org.corectrl.helperkiller.policy DESTINATION "${POLKIT_POLICY_INSTALL_DIR}")
 
 set(CMAKE_AUTOMOC ON)
 add_executable(corectrl_helper
@@ -80,7 +75,6 @@ set(CMAKE_AUTOMOC OFF)
 
 target_include_directories(corectrl_helper PRIVATE
   ${Botan_INCLUDE_DIRS}
-  ${POLKIT_INCLUDE_DIRS}
   ${PROJECT_SOURCE_DIR}/src
 )
 target_compile_definitions(corectrl_helper PRIVATE ${HELPER_COMPILE_DEFINITIONS})
@@ -91,7 +85,6 @@ target_link_libraries(corectrl_helper PRIVATE
   pthread
   spdlog::spdlog
   ${Botan_LIBRARIES}
-  ${POLKIT_LIBRARIES}
   ${ATOMIC_LIB}
 )
 
@@ -99,4 +92,3 @@ configure_file(org.corectrl.helper.service.in org.corectrl.helper.service)
 install(TARGETS corectrl_helper DESTINATION "${CMAKE_INSTALL_FULL_LIBEXECDIR}/corectrl")
 install(FILES org.corectrl.helper.conf DESTINATION "${DBUS_DATADIR_PREFIX_DIR}/dbus-1/system.d")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/org.corectrl.helper.service" DESTINATION "${DBUS_DATADIR_PREFIX_DIR}/dbus-1/system-services")
-install(FILES org.corectrl.helper.policy DESTINATION "${POLKIT_POLICY_INSTALL_DIR}")
