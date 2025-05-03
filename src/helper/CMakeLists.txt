@@ -24,23 +24,6 @@ if(NOT INSTALL_DBUS_FILES_IN_PREFIX)
 endif()
 message("D-Bus files will be installed into ${DBUS_DATADIR_PREFIX_DIR}/dbus-1")
 
-option(POLKIT_POLICY_INSTALL_DIR "Polkit policy files installation directory" OFF)
-
-# Find polkit
-if(NOT POLKIT_POLICY_INSTALL_DIR)
-  pkg_check_modules(POLKIT REQUIRED polkit-gobject-1)
-  execute_process(
-    COMMAND pkg-config --variable=policydir polkit-gobject-1
-    RESULT_VARIABLE POLKIT_POLICY_INSTALL_DIR_RESULT
-    OUTPUT_VARIABLE POLKIT_POLICY_INSTALL_DIR
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  if(NOT POLKIT_POLICY_INSTALL_DIR_RESULT EQUAL "0")
-    message(FATAL_ERROR "Failed to retrieve Polkit `policydir` variable using pkg-config")
-  endif()
-endif()
-message("Polkit policy files will be installed into ${POLKIT_POLICY_INSTALL_DIR}")
-
 list(APPEND HELPER_COMPILE_DEFINITIONS
   SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
 )
@@ -64,7 +47,6 @@ list(APPEND SYSTEM_CONTROL_SRC
 set(CMAKE_AUTOMOC ON)
 add_executable(corectrl_helperkiller
   helperkiller.cpp
-  polkit.cpp
 )
 set(CMAKE_AUTOMOC OFF)
 
@@ -89,7 +71,6 @@ install(FILES org.corectrl.helperkiller.policy DESTINATION "${POLKIT_POLICY_INST
 set(CMAKE_AUTOMOC ON)
 add_executable(corectrl_helper
   helper.cpp
-  polkit.cpp
   ${COMMON_SRC}
   ${CRYPTO_SRC}
   ${PROCESS_MONITOR_SRC}
