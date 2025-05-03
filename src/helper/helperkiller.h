@@ -19,7 +19,4 @@ class HelperKiller final : public QDBusAbstractAdaptor
 
  public slots: // D-Bus interface slots
   bool start(QDBusMessage const &message) const;
-
- private:
-  bool isAuthorized(QDBusMessage const &message) const;
 };

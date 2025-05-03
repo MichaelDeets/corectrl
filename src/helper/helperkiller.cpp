@@ -24,9 +24,6 @@ HelperKiller::~HelperKiller() = default;
 
 bool HelperKiller::start(QDBusMessage const &message) const
 {
-  if (!isAuthorized(message))
-    return false;
-
   QProcess cmd;
   cmd.start(QStringLiteral("pidof"), QStringList(HELPER_EXE));
 

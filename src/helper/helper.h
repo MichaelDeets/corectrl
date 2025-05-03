@@ -39,7 +39,6 @@ class Helper final : public QDBusAbstractAdaptor
   void autoExitTimeout();
 
  private:
-  bool isAuthorized(QDBusMessage const &message) const;
   bool initCrypto(QByteArray const &appPublicKey);
   bool initProcessMonitor();
   void endProcessMonitor();

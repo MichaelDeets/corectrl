@@ -36,12 +36,6 @@ QDBusVariant Helper::start(QByteArray const &appPublicKey, int autoExitTimeout,
 
     SPDLOG_DEBUG("----- Helper started -----");
 
-    if (!(isAuthorized(message) && initCrypto(appPublicKey) &&
-          initProcessMonitor() && initMsgReceiver())) {
-      exitHelper();
-      return QDBusVariant(false);
-    }
-
     autoExitTimer_.setInterval(autoExitTimeout);
     autoExitTimer_.setSingleShot(true);
     connect(&autoExitTimer_, &QTimer::timeout, this, &Helper::autoExitTimeout);
